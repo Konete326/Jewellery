@@ -31,6 +31,12 @@ export function Navbar({ onOpenSearch, onOpenCart, cartCount = 0 }) {
               Atelier
             </a>
             <Link
+              to="/auth"
+              className="text-neutral-600 hover:text-neutral-900 text-[11px] tracking-[0.1em] uppercase transition-colors"
+            >
+              Sign In
+            </Link>
+            <Link
               to="/admin"
               className="text-[#aa820a] hover:text-[#d4af37] font-semibold text-[11px] tracking-[0.1em] uppercase transition-colors"
             >
