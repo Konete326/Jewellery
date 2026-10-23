@@ -6,10 +6,12 @@ import { useScroll } from "@/hooks/use-scroll";
 import { Button } from "@/components/ui/button";
 import { DesktopNav } from "@/components/desktop-nav";
 import { MobileNav } from "@/components/mobile-nav";
+import { isAdmin } from "@/lib/auth";
 import { Search, ShoppingBag, Sparkles } from "lucide-react";
 
 export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 	const scrolled = useScroll(10);
+	const adminLoggedIn = isAdmin();
 
 	return (
 		<header
@@ -67,15 +69,17 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 					)}
 
 					<Button asChild variant="outline" size="sm" className="h-8 text-xs px-3">
-						<Link to="/auth">Sign In</Link>
+						<Link to="/auth">{adminLoggedIn ? "Account" : "Sign In"}</Link>
 					</Button>
 
-					<Button asChild size="sm" className="h-8 text-xs px-3 bg-foreground text-background">
-						<Link to="/admin" className="flex items-center gap-1.5">
-							<span className="text-amber-500 font-semibold">Admin Portal</span>
-							<span>→</span>
-						</Link>
-					</Button>
+					{adminLoggedIn && (
+						<Button asChild size="sm" className="h-8 text-xs px-3 bg-foreground text-background">
+							<Link to="/admin" className="flex items-center gap-1.5">
+								<span className="text-amber-500 font-semibold">Admin Portal</span>
+								<span>→</span>
+							</Link>
+						</Button>
+					)}
 				</div>
 
 				<div className="flex items-center gap-2 md:hidden">

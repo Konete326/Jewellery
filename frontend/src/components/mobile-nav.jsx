@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Portal, PortalBackdrop } from "@/components/portal";
 import { companyLinks, companyLinks2, productLinks } from "@/components/nav-links";
 import { LinkItem } from "@/components/sheard";
+import { isAdmin } from "@/lib/auth";
 import { XIcon, MenuIcon, Sparkles } from "lucide-react";
 
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
+	const adminLoggedIn = isAdmin();
 
 	return (
 		<div className="md:hidden">
@@ -80,14 +82,16 @@ export function MobileNav() {
 						</div>
 						<div className="mt-5 flex flex-col gap-2">
 							<Button asChild className="w-full" variant="outline" onClick={() => setOpen(false)}>
-								<Link to="/auth">Sign In</Link>
+								<Link to="/auth">{adminLoggedIn ? "Account" : "Sign In"}</Link>
 							</Button>
-							<Button asChild className="w-full bg-foreground text-background" onClick={() => setOpen(false)}>
-								<Link to="/admin" className="flex items-center justify-center gap-1.5">
-									<Sparkles className="size-3.5 text-amber-500" />
-									<span>Admin Portal</span>
-								</Link>
-							</Button>
+							{adminLoggedIn && (
+								<Button asChild className="w-full bg-foreground text-background" onClick={() => setOpen(false)}>
+									<Link to="/admin" className="flex items-center justify-center gap-1.5">
+										<Sparkles className="size-3.5 text-amber-500" />
+										<span>Admin Portal</span>
+									</Link>
+								</Button>
+							)}
 						</div>
 					</div>
 				</Portal>

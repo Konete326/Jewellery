@@ -7,6 +7,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { Sparkles, Calendar, ArrowUp } from "lucide-react";
+import { isAdmin } from "@/lib/auth";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -325,9 +326,11 @@ export function CinematicFooter() {
                 <MagneticButton as={Link} to="/auth" className="footer-glass-pill px-5 py-2.5 rounded-full text-muted-foreground font-medium text-xs hover:text-foreground">
                   Collector Portal
                 </MagneticButton>
-                <MagneticButton as={Link} to="/admin" className="footer-glass-pill px-5 py-2.5 rounded-full text-amber-600 font-semibold text-xs hover:text-amber-500">
-                  Atelier Admin →
-                </MagneticButton>
+                {isAdmin() && (
+                  <MagneticButton as={Link} to="/admin" className="footer-glass-pill px-5 py-2.5 rounded-full text-amber-600 font-semibold text-xs hover:text-amber-500">
+                    Atelier Admin →
+                  </MagneticButton>
+                )}
               </div>
             </div>
           </div>

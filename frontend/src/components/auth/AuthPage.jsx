@@ -56,13 +56,13 @@ export function AuthPage() {
           <div className="flex flex-col space-y-1">
             <div className="inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400 font-medium mb-1">
               <Sparkles className="size-3.5" />
-              <span>Atelier Security Gateway</span>
+              <span>Atelier Client Access</span>
             </div>
             <h1 className="font-semibold font-serif text-3xl tracking-tight text-foreground">
               Sign In or Join
             </h1>
             <p className="text-xs text-muted-foreground">
-              Access your bespoke orders or sign in with admin credentials.
+              Access your bespoke commissions and client profile.
             </p>
           </div>
 
@@ -105,7 +105,7 @@ export function AuthPage() {
           <AuthForm />
 
           <p className="text-center text-[11px] text-muted-foreground pt-4">
-            Authorized Personnel: Enter registered credentials to unlock the Atelier Admin Portal.
+            Khalil & Sons Client Services • Encrypted & Secure Authentication
           </p>
         </div>
       </div>
