@@ -4,12 +4,15 @@ export function NeuralNoise({
   color = [0.85, 0.68, 0.22],
   opacity = 0.55,
   speed = 0.001,
-  zIndex = 20,
+  zIndex = 0,
+  position = 'absolute',
+  className = '',
 }) {
   const canvasRef = useRef(null);
   const pointer = { x: 0, y: 0, tX: 0, tY: 0 };
   let gl;
   let uniforms;
+  let animId;
 
   useEffect(() => {
     gl = initShader();
@@ -22,10 +25,11 @@ export function NeuralNoise({
     gl.uniform1f(uniforms.u_speed, speed);
     render();
     return () => {
+      if (animId) cancelAnimationFrame(animId);
       window.removeEventListener('resize', resizeListener);
       cleanupEvents();
     };
-  }, [color, speed]);
+  }, [color, speed, position]);
 
   function initShader() {
     const vsSource = `
@@ -83,9 +87,7 @@ export function NeuralNoise({
     const canvasEl = canvasRef.current;
     if (!canvasEl) return null;
     gl = canvasEl.getContext('webgl') || canvasEl.getContext('experimental-webgl');
-    if (!gl) {
-      return null;
-    }
+    if (!gl) return null;
     const vertexShader = createShader(gl, vsSource, gl.VERTEX_SHADER);
     const fragmentShader = createShader(gl, fsSource, gl.FRAGMENT_SHADER);
     const shaderProgram = createProgram(gl, vertexShader, fragmentShader);
@@ -118,42 +120,47 @@ export function NeuralNoise({
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
     gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      return null;
-    }
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return null;
     return program;
   }
 
   function getUniforms(gl, program) {
-    const uniforms = {};
+    const unifs = {};
     const uniformCount = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
     for (let i = 0; i < uniformCount; i++) {
       const uniformName = gl.getActiveUniform(program, i).name;
-      uniforms[uniformName] = gl.getUniformLocation(program, uniformName);
+      unifs[uniformName] = gl.getUniformLocation(program, uniformName);
     }
-    return uniforms;
+    return unifs;
   }
 
   function render() {
     const currentTime = performance.now();
     pointer.x += (pointer.tX - pointer.x) * 0.2;
     pointer.y += (pointer.tY - pointer.y) * 0.2;
-    if (gl && uniforms) {
+    const canvasEl = canvasRef.current;
+    if (gl && uniforms && canvasEl) {
+      const parent = canvasEl.parentElement;
+      const w = position === 'fixed' || !parent ? window.innerWidth : parent.clientWidth;
+      const h = position === 'fixed' || !parent ? window.innerHeight : parent.clientHeight;
       gl.uniform1f(uniforms.u_time, currentTime);
-      gl.uniform2f(uniforms.u_pointer_position, pointer.x / window.innerWidth, 1 - pointer.y / window.innerHeight);
+      gl.uniform2f(uniforms.u_pointer_position, pointer.x / (w || 1), 1 - pointer.y / (h || 1));
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
-    requestAnimationFrame(render);
+    animId = requestAnimationFrame(render);
   }
 
   function resizeCanvas() {
     const canvasEl = canvasRef.current;
     if (!canvasEl) return;
+    const parent = canvasEl.parentElement;
+    const width = position === 'fixed' || !parent ? window.innerWidth : parent.clientWidth;
+    const height = position === 'fixed' || !parent ? window.innerHeight : parent.clientHeight;
     const devicePixelRatio = Math.min(window.devicePixelRatio, 2);
-    canvasEl.width = window.innerWidth * devicePixelRatio;
-    canvasEl.height = window.innerHeight * devicePixelRatio;
+    canvasEl.width = width * devicePixelRatio;
+    canvasEl.height = height * devicePixelRatio;
     if (gl && uniforms && uniforms.u_ratio) {
-      gl.uniform1f(uniforms.u_ratio, canvasEl.width / canvasEl.height);
+      gl.uniform1f(uniforms.u_ratio, canvasEl.width / (canvasEl.height || 1));
     }
     if (gl) {
       gl.viewport(0, 0, canvasEl.width, canvasEl.height);
@@ -161,9 +168,12 @@ export function NeuralNoise({
   }
 
   function setupEvents() {
+    const canvasEl = canvasRef.current;
     const updateMousePosition = (x, y) => {
-      pointer.tX = x;
-      pointer.tY = y;
+      if (!canvasEl) return;
+      const rect = canvasEl.getBoundingClientRect();
+      pointer.tX = x - rect.left;
+      pointer.tY = y - rect.top;
     };
     const pointermove = (e) => updateMousePosition(e.clientX, e.clientY);
     const touchmove = (e) => {
@@ -183,8 +193,9 @@ export function NeuralNoise({
   return (
     <canvas
       ref={canvasRef}
+      className={className}
       style={{
-        position: 'fixed',
+        position,
         top: 0,
         left: 0,
         width: '100%',

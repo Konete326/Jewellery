@@ -7,7 +7,6 @@ import { HistoricAtelier } from './components/HistoricAtelier'
 import { Footer } from './components/Footer'
 import { SearchModal } from './components/SearchModal'
 import { CartDrawer } from './components/CartDrawer'
-import { GlobalGoldEffect } from './components/GlobalGoldEffect'
 
 export function UserPanel() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -63,7 +62,6 @@ export function UserPanel() {
 
   return (
     <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
-      <GlobalGoldEffect />
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}

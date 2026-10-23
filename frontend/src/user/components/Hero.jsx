@@ -1,3 +1,5 @@
+import { NeuralNoise } from '@/components/ui/neural-noise'
+
 export function Hero({ onExploreClick }) {
   return (
     <section className="relative h-[850px] md:h-[920px] flex items-center px-6 md:px-20 overflow-hidden">
@@ -7,8 +9,15 @@ export function Hero({ onExploreClick }) {
           className="w-full h-full object-cover"
           src="/images/banner.jpg"
         />
-        <div className="absolute inset-0 bg-stone-900/30 backdrop-brightness-95"></div>
+        <div className="absolute inset-0 bg-stone-900/40 backdrop-brightness-95"></div>
       </div>
+      <NeuralNoise
+        position="absolute"
+        zIndex={1}
+        color={[0.92, 0.74, 0.28]}
+        opacity={0.38}
+        speed={0.0009}
+      />
       <div className="relative z-10 max-w-3xl pt-20">
         <span className="tracking-[0.2em] uppercase text-xs text-white/90 mb-4 block font-medium">
           Est. 1924 • Florence
