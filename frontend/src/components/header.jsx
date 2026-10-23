@@ -24,13 +24,13 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 				<div className="flex items-center gap-6">
 					<Link
 						to="/"
-						className="flex items-center gap-2 group transition-opacity hover:opacity-90"
+						className="flex items-center gap-2.5 group transition-opacity hover:opacity-90"
 					>
 						<div className="flex size-7 items-center justify-center rounded-md bg-amber-500/15 text-amber-600 border border-amber-500/30">
 							<Sparkles className="size-3.5" />
 						</div>
-						<span className="font-serif text-xl tracking-[0.2em] font-light text-foreground">
-							LUMIÈRE
+						<span className="font-serif text-lg sm:text-xl tracking-[0.2em] font-light text-foreground">
+							KHALIL & SONS
 						</span>
 					</Link>
 					<DesktopNav />

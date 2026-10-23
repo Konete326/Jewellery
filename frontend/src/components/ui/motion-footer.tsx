@@ -270,7 +270,7 @@ export function CinematicFooter() {
             ref={giantTextRef}
             className="footer-giant-bg-text absolute -bottom-[4vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none font-serif tracking-widest"
           >
-            LUMIÈRE
+            KHALIL & SONS
           </div>
 
           <div className="absolute top-8 md:top-12 left-0 w-full overflow-hidden border-y border-border/50 bg-background/60 backdrop-blur-md py-3.5 z-10 -rotate-1 scale-105 shadow-xl">
@@ -282,7 +282,7 @@ export function CinematicFooter() {
 
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-16 w-full max-w-5xl mx-auto text-center">
             <span className="text-xs font-mono uppercase tracking-[0.3em] text-amber-600 dark:text-amber-400 mb-3 block">
-              Aurelian Atelier • Florence
+              Khalil & Sons • Haute Horlogerie & Jewelry
             </span>
             <h2
               ref={headingRef}

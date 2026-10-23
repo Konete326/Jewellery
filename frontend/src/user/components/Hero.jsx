@@ -27,7 +27,7 @@ export function Hero({ onExploreClick }) {
           <span className="serif-italic">Hand-Wrought</span> Gold
         </h1>
         <p className="text-white/85 text-lg md:text-xl max-w-lg mb-10 leading-relaxed font-light">
-          Preserving the silent language of the goldsmith. Every piece at Aurelian Atelier is a testament to the patient art of craftsmanship.
+          Preserving the silent language of the goldsmith. Every piece at Khalil & Sons is a testament to the patient art of craftsmanship.
         </p>
         <div>
           <button

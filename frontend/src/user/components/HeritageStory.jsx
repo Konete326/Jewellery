@@ -27,7 +27,7 @@ export function HeritageStory() {
           </h2>
           <div className="space-y-5 text-[#5a6061] leading-relaxed text-base md:text-lg font-light">
             <p>
-              At Aurelian Atelier, we believe jewelry should carry the weight of time. Not in heaviness, but in history. Our artisans employ techniques unchanged since the Renaissance—hand-engraving, wax casting, and secret alloy blends that give our gold its distinct moonlit glow.
+              At Khalil & Sons, we believe jewelry should carry the weight of time. Not in heaviness, but in history. Our artisans employ techniques unchanged since the Renaissance—hand-engraving, wax casting, and secret alloy blends that give our gold its distinct moonlit glow.
             </p>
             <p>
               We do not mass-produce. We curate. Each month, only a handful of "Masterpieces" leave our benches, destined for those who understand that true luxury is found in the artist's touch.
