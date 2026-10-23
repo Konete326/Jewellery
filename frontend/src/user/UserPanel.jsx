@@ -69,7 +69,7 @@ export function UserPanel() {
         onOpenCart={() => setIsCartOpen(true)}
         cartCount={totalCartCount}
       />
-      <main className="relative z-10">
+      <main className="relative z-10 bg-[#f9f9f9]">
         <Hero onExploreClick={() => {
           document.getElementById('collections')?.scrollIntoView({ behavior: 'smooth' })
         }} />
@@ -79,9 +79,7 @@ export function UserPanel() {
           window.location.href = 'mailto:concierge@khalilandsons.com?subject=Private%20Atelier%20Appointment'
         }} />
       </main>
-      <div className="relative z-10">
-        <Footer />
-      </div>
+      <Footer />
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
