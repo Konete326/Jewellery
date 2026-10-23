@@ -8,6 +8,10 @@ export const createOrder = async (orderData) => {
   });
 };
 
+export const fetchOrders = async () => {
+  return apiClient(ENDPOINTS.ORDERS);
+};
+
 export const fetchOrderByNumber = async (orderNumber) => {
   return apiClient(ENDPOINTS.ORDER_BY_NUMBER(orderNumber));
 };

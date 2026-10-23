@@ -1,5 +1,6 @@
 "use client";
 
+import { useNavigate } from "react-router-dom";
 import {
 	Avatar,
 	AvatarFallback,
@@ -16,17 +17,37 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UserIcon, BellIcon, CommandIcon, LifeBuoyIcon, BookOpenIcon, CreditCardIcon, LogOutIcon } from "lucide-react";
 
-const user = {
-	name: "Khalil & Sons Admin",
-	email: "admin@khalilandsons.com",
-	avatar: "",
-};
-
 export function NavUser() {
+	const navigate = useNavigate();
+
+	const getUser = () => {
+		try {
+			const saved = localStorage.getItem("auth_user");
+			if (saved) {
+				const parsed = JSON.parse(saved);
+				return {
+					name: parsed.name || "Atelier Director",
+					email: parsed.email || "admin@gmail.com",
+					avatar: ""
+				};
+			}
+		} catch {
+			return { name: "Atelier Director", email: "admin@gmail.com", avatar: "" };
+		}
+		return { name: "Atelier Director", email: "admin@gmail.com", avatar: "" };
+	};
+
+	const user = getUser();
+
+	const handleLogout = () => {
+		localStorage.removeItem("auth_user");
+		navigate("/login");
+	};
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Avatar className="size-8">
+				<Avatar className="size-8 cursor-pointer">
 					<AvatarImage src={user.avatar} />
 					<AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
 				</Avatar>
@@ -39,7 +60,7 @@ export function NavUser() {
 							<AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
 						</Avatar>
 						<div>
-							<span className="font-medium text-foreground">{user.name}</span>{" "}
+							<span className="font-medium text-foreground">{user.name}</span>
 							<br />
 							<div className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-muted-foreground text-xs">
 								{user.email}
@@ -50,50 +71,37 @@ export function NavUser() {
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
 					<DropdownMenuItem>
-						<UserIcon
-						/>
+						<UserIcon />
 						Profile
 					</DropdownMenuItem>
-				</DropdownMenuGroup>
-				<DropdownMenuSeparator />
-				<DropdownMenuGroup>
 					<DropdownMenuItem>
-						<BellIcon
-						/>
+						<BellIcon />
 						Notifications
 					</DropdownMenuItem>
 					<DropdownMenuItem>
-						<CommandIcon
-						/>
+						<CommandIcon />
 						Keyboard shortcuts
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
 					<DropdownMenuItem>
-						<LifeBuoyIcon
-						/>
-						Seller help
+						<LifeBuoyIcon />
+						Atelier Support
 					</DropdownMenuItem>
 					<DropdownMenuItem>
-						<BookOpenIcon
-						/>
-						Seller guides
+						<BookOpenIcon />
+						Documentation
+					</DropdownMenuItem>
+					<DropdownMenuItem>
+						<CreditCardIcon />
+						Plan & Billing
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem>
-						<CreditCardIcon
-						/>
-						Plan & billing
-					</DropdownMenuItem>
-				</DropdownMenuGroup>
-				<DropdownMenuSeparator />
-				<DropdownMenuGroup>
-					<DropdownMenuItem variant="destructive">
-						<LogOutIcon
-						/>
+					<DropdownMenuItem variant="destructive" onClick={handleLogout} className="cursor-pointer">
+						<LogOutIcon />
 						Log out
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
