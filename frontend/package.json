@@ -7,7 +7,8 @@
     "dev": "node ./node_modules/vite/bin/vite.js",
     "build": "node ./node_modules/vite/bin/vite.js build",
     "lint": "oxlint",
-    "preview": "node ./node_modules/vite/bin/vite.js preview"
+    "preview": "node ./node_modules/vite/bin/vite.js preview",
+    "agentation": "npx agentation-mcp server"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
