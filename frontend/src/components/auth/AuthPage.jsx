@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AppleIcon } from "@/components/apple-icon";
 import { GithubIcon } from "@/components/github-icon";
 import { GoogleIcon } from "@/components/google-icon";
@@ -8,10 +8,12 @@ import { AuthDivider } from "@/components/auth-divider";
 import { FloatingPaths } from "@/components/floating-paths";
 import { ComingSoonModal } from "./ComingSoonModal";
 import { AuthForm } from "./AuthForm";
-import { ChevronLeftIcon, Sparkles } from "lucide-react";
+import { ChevronLeftIcon, Sparkles, ShieldAlert } from "lucide-react";
 
 export function AuthPage() {
+  const location = useLocation();
   const [socialModal, setSocialModal] = useState({ open: false, provider: "" });
+  const isRedirectedFromAdmin = location.state?.from?.pathname === "/admin";
 
   return (
     <main className="relative min-h-screen md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2 bg-background">
@@ -63,6 +65,13 @@ export function AuthPage() {
               Access your bespoke orders or sign in with admin credentials.
             </p>
           </div>
+
+          {isRedirectedFromAdmin && (
+            <div className="flex items-center gap-2 p-3 text-xs rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300">
+              <ShieldAlert className="size-4 shrink-0" />
+              <span>Administrator credentials required to access the Atelier Admin panel.</span>
+            </div>
+          )}
 
           <div className="grid grid-cols-3 gap-2">
             <Button

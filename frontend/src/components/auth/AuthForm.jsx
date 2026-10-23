@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AtSignIcon, KeyRoundIcon, UserIcon, ShieldAlert } from "lucide-react";
 
 export function AuthForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,8 +27,9 @@ export function AuthForm() {
 
     if (email.trim().toLowerCase() === adminEmail.toLowerCase()) {
       if (password === adminPass) {
-        localStorage.setItem("auth_user", JSON.stringify({ email, role: "admin" }));
-        navigate("/admin");
+        localStorage.setItem("auth_user", JSON.stringify({ email, role: "admin", name: "Atelier Director" }));
+        const destination = location.state?.from?.pathname || "/admin";
+        navigate(destination, { replace: true });
         return;
       } else {
         setError("Invalid administrative credentials. Access denied.");
