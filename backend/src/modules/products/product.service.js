@@ -33,6 +33,14 @@ export class ProductService {
   async createProduct(data) {
     return this.repo.create(data);
   }
+
+  async updateProduct(id, data) {
+    return this.repo.updateById(id, data);
+  }
+
+  async deleteProduct(id) {
+    return this.repo.deleteById(id);
+  }
 }
 
 export const productService = new ProductService();

@@ -19,3 +19,35 @@ export const createInquiry = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateInquiryStatus = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const updated = await inquiryService.updateInquiryStatus(id, status);
+    if (!updated) {
+      const err = new Error('Inquiry not found');
+      err.statusCode = 404;
+      throw err;
+    }
+    return sendSuccess(res, 200, 'Inquiry status updated successfully', updated);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteInquiry = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deleted = await inquiryService.deleteInquiry(id);
+    if (!deleted) {
+      const err = new Error('Inquiry not found');
+      err.statusCode = 404;
+      throw err;
+    }
+    return sendSuccess(res, 200, 'Inquiry deleted successfully', deleted);
+  } catch (error) {
+    next(error);
+  }
+};
+

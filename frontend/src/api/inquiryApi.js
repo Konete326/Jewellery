@@ -11,3 +11,17 @@ export const submitInquiry = async (inquiryData) => {
 export const fetchInquiries = async () => {
   return apiClient(ENDPOINTS.INQUIRIES);
 };
+
+export const updateInquiryStatus = async (id, status) => {
+  return apiClient(`${ENDPOINTS.INQUIRIES}/${id}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status })
+  });
+};
+
+export const deleteInquiry = async (id) => {
+  return apiClient(`${ENDPOINTS.INQUIRIES}/${id}`, {
+    method: 'DELETE'
+  });
+};
+

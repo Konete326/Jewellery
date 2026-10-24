@@ -79,13 +79,20 @@ export function MobileNav() {
 									/>
 								))}
 							</div>
-							<div className="pt-2 border-t border-border">
+							<div className="pt-2 border-t border-border flex flex-col gap-1">
 								<Link
 									to="/gallery"
 									onClick={() => setOpen(false)}
 									className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium uppercase tracking-widest text-foreground hover:bg-muted"
 								>
 									<span>Atelier Gallery</span>
+								</Link>
+								<Link
+									to="/about"
+									onClick={() => setOpen(false)}
+									className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium uppercase tracking-widest text-foreground hover:bg-muted"
+								>
+									<span>About Us</span>
 								</Link>
 							</div>
 						</div>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, UploadCloud, Trash2, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Sparkles, UploadCloud, Trash2, Pencil, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { galleryApi } from '@/api/galleryApi';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
+import { EditGalleryModal } from './EditGalleryModal';
 
 export function GalleryManagement() {
   const [items, setItems] = useState([]);
@@ -9,6 +10,8 @@ export function GalleryManagement() {
   const [submitting, setSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [itemToEdit, setItemToEdit] = useState(null);
+  const [savingEdit, setSavingEdit] = useState(false);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -90,6 +93,21 @@ export function GalleryManagement() {
       setErrorMsg(err.message || 'Failed to upload project. Check Cloudinary settings.');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleEditSave = async (id, updatedData) => {
+    setSavingEdit(true);
+    try {
+      await galleryApi.update(id, updatedData);
+      setSuccessMsg('Masterpiece details updated successfully!');
+      setItemToEdit(null);
+      loadGallery();
+      setTimeout(() => setSuccessMsg(''), 4000);
+    } catch (err) {
+      setErrorMsg(err.message || 'Failed to update project.');
+    } finally {
+      setSavingEdit(false);
     }
   };
 
@@ -260,7 +278,7 @@ export function GalleryManagement() {
                   />
                 </div>
                 <div className="p-3.5 flex items-start justify-between gap-2">
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <h4 className="font-serif text-sm font-semibold text-foreground truncate">{item.title}</h4>
                     {item.description && (
                       <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2 leading-relaxed">
@@ -271,19 +289,36 @@ export function GalleryManagement() {
                       {new Date(item.createdAt).toLocaleDateString()}
                     </span>
                   </div>
-                  <button
-                    onClick={() => setItemToDelete(item)}
-                    className="p-1.5 rounded-md text-muted-foreground hover:bg-rose-500/10 hover:text-rose-500 transition-colors cursor-pointer shrink-0"
-                    title="Remove project"
-                  >
-                    <Trash2 className="size-3.5" />
-                  </button>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => setItemToEdit(item)}
+                      className="p-1.5 rounded-md text-muted-foreground hover:bg-amber-500/10 hover:text-amber-600 transition-colors cursor-pointer"
+                      title="Edit project"
+                    >
+                      <Pencil className="size-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setItemToDelete(item)}
+                      className="p-1.5 rounded-md text-muted-foreground hover:bg-rose-500/10 hover:text-rose-500 transition-colors cursor-pointer"
+                      title="Remove project"
+                    >
+                      <Trash2 className="size-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      <EditGalleryModal
+        isOpen={Boolean(itemToEdit)}
+        onClose={() => setItemToEdit(null)}
+        onSave={handleEditSave}
+        item={itemToEdit}
+        loading={savingEdit}
+      />
 
       <ConfirmDeleteModal
         isOpen={Boolean(itemToDelete)}

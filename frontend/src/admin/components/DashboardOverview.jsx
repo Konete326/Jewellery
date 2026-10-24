@@ -3,7 +3,6 @@ import { AdminMetrics } from './AdminMetrics'
 import { RecentOrdersTable } from './RecentOrdersTable'
 import { InventoryOverview } from './InventoryOverview'
 import { AtelierInquiries } from './AtelierInquiries'
-import { GalleryManagement } from './GalleryManagement'
 import { Sparkles, ArrowRight, RefreshCw } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { fetchOrders } from '@/api/orderApi'
@@ -86,14 +85,12 @@ export function DashboardOverview() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <RecentOrdersTable orders={orders} loading={loading} />
-          <AtelierInquiries inquiries={inquiries} loading={loading} />
+          <AtelierInquiries inquiries={inquiries} loading={loading} onRefresh={loadDashboardData} />
         </div>
         <div className="space-y-6">
-          <InventoryOverview products={products} loading={loading} />
+          <InventoryOverview products={products} loading={loading} onRefresh={loadDashboardData} />
         </div>
       </div>
-
-      <GalleryManagement />
     </div>
   )
 }

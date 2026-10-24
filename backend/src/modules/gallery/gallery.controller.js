@@ -36,6 +36,27 @@ export class GalleryController {
     }
   }
 
+  async updateItem(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { title, description, isActive } = req.body;
+
+      const item = await galleryService.updateItem(id, {
+        title,
+        description,
+        isActive
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Gallery item updated successfully',
+        data: item
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async deleteItem(req, res, next) {
     try {
       const { id } = req.params;

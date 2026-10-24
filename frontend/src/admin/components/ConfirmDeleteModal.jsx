@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, AlertTriangle } from 'lucide-react';
 
-export function ConfirmDeleteModal({ isOpen, onClose, onConfirm, title, loading }) {
+export function ConfirmDeleteModal({ isOpen, onClose, onConfirm, title, itemType = 'piece', loading }) {
   if (!isOpen) return null;
 
   return (
@@ -21,13 +21,13 @@ export function ConfirmDeleteModal({ isOpen, onClose, onConfirm, title, loading 
             <AlertTriangle className="size-5" />
           </div>
           <div>
-            <h3 className="font-serif text-lg font-semibold text-foreground">Remove Project</h3>
-            <p className="text-xs text-muted-foreground">Permanent deletion from Cloudinary & Database</p>
+            <h3 className="font-serif text-lg font-semibold text-foreground">Remove {itemType}</h3>
+            <p className="text-xs text-muted-foreground">Permanent deletion from database</p>
           </div>
         </div>
 
         <p className="text-xs text-muted-foreground mb-6 leading-relaxed">
-          Are you sure you want to remove <strong className="text-foreground font-medium">"{title}"</strong> from the atelier gallery? This action cannot be undone.
+          Are you sure you want to remove <strong className="text-foreground font-medium">"{title}"</strong>? This action cannot be undone.
         </p>
 
         <div className="flex items-center justify-end gap-3">

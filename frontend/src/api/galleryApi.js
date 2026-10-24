@@ -13,6 +13,16 @@ export const galleryApi = {
     });
   },
 
+  update: async (id, data) => {
+    return await apiClient(ENDPOINTS.GALLERY_BY_ID(id), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+  },
+
   delete: async (id) => {
     return await apiClient(ENDPOINTS.GALLERY_BY_ID(id), {
       method: 'DELETE'

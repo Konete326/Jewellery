@@ -23,6 +23,10 @@ export class InquiryRepository {
   async updateStatus(id, status) {
     return Inquiry.findByIdAndUpdate(id, { status }, { new: true }).lean();
   }
+
+  async deleteById(id) {
+    return Inquiry.findByIdAndDelete(id).lean();
+  }
 }
 
 export const inquiryRepository = new InquiryRepository();

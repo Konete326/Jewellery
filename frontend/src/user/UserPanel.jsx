@@ -7,10 +7,12 @@ import { HistoricAtelier } from './components/HistoricAtelier'
 import { Footer } from './components/Footer'
 import { SearchModal } from './components/SearchModal'
 import { CartDrawer } from './components/CartDrawer'
+import { BespokeAppointmentModal } from './components/BespokeAppointmentModal'
 
 export function UserPanel() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [isAppointmentOpen, setIsAppointmentOpen] = useState(false)
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -73,14 +75,16 @@ export function UserPanel() {
         }} />
         <HeritageStory />
         <FeaturedMasterpieces onAddToCart={handleAddToCart} />
-        <HistoricAtelier onBookClick={() => {
-          window.location.href = 'mailto:concierge@khalilandsons.com?subject=Private%20Atelier%20Appointment'
-        }} />
+        <HistoricAtelier onBookClick={() => setIsAppointmentOpen(true)} />
       </main>
       <Footer />
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
+      />
+      <BespokeAppointmentModal
+        isOpen={isAppointmentOpen}
+        onClose={() => setIsAppointmentOpen(false)}
       />
       <CartDrawer
         isOpen={isCartOpen}

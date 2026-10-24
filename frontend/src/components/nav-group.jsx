@@ -1,78 +1,40 @@
+import { Link, useLocation } from "react-router-dom";
 import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
-	SidebarGroup,
-	SidebarGroupLabel,
-	SidebarMenu,
-	SidebarMenuButton,
-	SidebarMenuItem,
-	SidebarMenuSub,
-	SidebarMenuSubButton,
-	SidebarMenuSubItem,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ChevronRightIcon } from "lucide-react";
 
-export function NavGroup({
-    label,
-    items
-}) {
-	return (
-		<SidebarGroup>
-			{label && <SidebarGroupLabel>{label}</SidebarGroupLabel>}
-			<SidebarMenu>
-				{items.map((item) => (
-					<Collapsible
-						asChild
-						className="group/collapsible"
-						defaultOpen={
-							!!item.isActive ||
-							item.subItems?.some((i) => !!i.isActive)
-						}
-						key={item.title}
-					>
-						<SidebarMenuItem>
-							{item.subItems?.length ? (
-								<>
-									<CollapsibleTrigger asChild>
-										<SidebarMenuButton isActive={item.isActive}>
-											{item.icon}
-											<span>{item.title}</span>
-											<ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-										</SidebarMenuButton>
-									</CollapsibleTrigger>
-									<CollapsibleContent>
-										<SidebarMenuSub>
-											{item.subItems?.map((subItem) => (
-												<SidebarMenuSubItem key={subItem.title}>
-													<SidebarMenuSubButton
-														asChild
-														isActive={subItem.isActive}
-													>
-														<a href={subItem.path}>
-															{subItem.icon}
-															<span>{subItem.title}</span>
-														</a>
-													</SidebarMenuSubButton>
-												</SidebarMenuSubItem>
-											))}
-										</SidebarMenuSub>
-									</CollapsibleContent>
-								</>
-							) : (
-								<SidebarMenuButton asChild isActive={item.isActive}>
-									<a href={item.path}>
-										{item.icon}
-										<span>{item.title}</span>
-									</a>
-								</SidebarMenuButton>
-							)}
-						</SidebarMenuItem>
-					</Collapsible>
-				))}
-			</SidebarMenu>
-		</SidebarGroup>
-	);
+export function NavGroup({ label, items }) {
+  const location = useLocation();
+
+  const isItemActive = (path) => {
+    if (path === "/admin") {
+      return location.pathname === "/admin" || location.pathname === "/admin/dashboard";
+    }
+    return location.pathname === path;
+  };
+
+  return (
+    <SidebarGroup>
+      {label && <SidebarGroupLabel>{label}</SidebarGroupLabel>}
+      <SidebarMenu>
+        {items.map((item) => {
+          const active = isItemActive(item.path);
+          return (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild isActive={active} tooltip={item.title}>
+                <Link to={item.path} className="flex items-center gap-2">
+                  {item.icon}
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          );
+        })}
+      </SidebarMenu>
+    </SidebarGroup>
+  );
 }

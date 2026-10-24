@@ -32,6 +32,26 @@ export class GalleryService {
     return await galleryRepository.findAll();
   }
 
+  async updateItem(id, { title, description, isActive }) {
+    const item = await galleryRepository.findById(id);
+    if (!item) {
+      throw new Error('Gallery item not found');
+    }
+
+    const updateData = {};
+    if (title !== undefined && title.trim()) {
+      updateData.title = title.trim();
+    }
+    if (description !== undefined) {
+      updateData.description = description.trim();
+    }
+    if (isActive !== undefined) {
+      updateData.isActive = isActive;
+    }
+
+    return await galleryRepository.update(id, updateData);
+  }
+
   async deleteItem(id) {
     const item = await galleryRepository.findById(id);
     if (!item) {

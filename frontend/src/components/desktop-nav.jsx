@@ -77,6 +77,11 @@ export function DesktopNav() {
 						Gallery
 					</Link>
 				</NavigationMenuLink>
+				<NavigationMenuLink asChild className="px-3">
+					<Link className="rounded-md p-2 text-xs tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors" to="/about">
+						About Us
+					</Link>
+				</NavigationMenuLink>
 			</NavigationMenuList>
 		</NavigationMenu>
 	);

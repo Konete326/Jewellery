@@ -6,6 +6,7 @@ const router = Router();
 
 router.get('/', galleryController.getAll);
 router.post('/', upload.single('image'), galleryController.create);
+router.put('/:id', galleryController.updateItem);
 router.delete('/:id', galleryController.deleteItem);
 
 export default router;

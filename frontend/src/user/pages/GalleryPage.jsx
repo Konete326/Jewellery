@@ -3,59 +3,33 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
 import { CartDrawer } from '../components/CartDrawer';
-import { Skiper54 } from '../components/Skiper54';
+import { Skiper54, DEFAULT_SKIPER_IMAGES } from '../components/Skiper54';
 import { LuxuryButton } from '../components/LuxuryButton';
 import { NeuralNoise } from '@/components/ui/neural-noise';
 import { SparklesIcon } from '@/components/ui/sparkles';
 import { galleryApi } from '@/api/galleryApi';
 
-const DEFAULT_GALLERY_FALLBACK = [
-  {
-    _id: 'default-1',
-    title: 'The Aurelian Signet',
-    description: '18K Hand-hammered Florentine gold with raw uncut diamond centerpiece',
-    imageUrl: '/images/image-01.jpg'
-  },
-  {
-    _id: 'default-2',
-    title: 'Venetian Mist Choker',
-    description: 'South Sea cultured pearls interwoven with hand-pulled Venetian gold filigree',
-    imageUrl: '/images/image-02.jpg'
-  },
-  {
-    _id: 'default-3',
-    title: 'Etruscan Serpent Armlet',
-    description: 'Intricately chased 22K solid yellow gold with Burmese emerald eyes',
-    imageUrl: '/images/image-03.jpg'
-  },
-  {
-    _id: 'default-4',
-    title: 'Renaissance Solstice Tiara',
-    description: 'Platinum & 18K gold archival commission forged with Renaissance chasing techniques',
-    imageUrl: '/images/banner.jpg'
-  }
-];
-
 export function GalleryPage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [galleryItems, setGalleryItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [galleryItems, setGalleryItems] = useState(DEFAULT_SKIPER_IMAGES);
 
   useEffect(() => {
     const fetchGallery = async () => {
       try {
         const res = await galleryApi.getAll();
         if (res?.data && res.data.length > 0) {
-          setGalleryItems(res.data);
+          const dbItems = res.data;
+          const merged = dbItems.length >= 6
+            ? dbItems
+            : [...dbItems, ...DEFAULT_SKIPER_IMAGES.slice(0, Math.max(0, 8 - dbItems.length))];
+          setGalleryItems(merged);
         } else {
-          setGalleryItems(DEFAULT_GALLERY_FALLBACK);
+          setGalleryItems(DEFAULT_SKIPER_IMAGES);
         }
       } catch {
-        setGalleryItems(DEFAULT_GALLERY_FALLBACK);
-      } finally {
-        setLoading(false);
+        setGalleryItems(DEFAULT_SKIPER_IMAGES);
       }
     };
     fetchGallery();
@@ -72,7 +46,7 @@ export function GalleryPage() {
       />
 
       <main className="relative z-10 bg-[#f9f9f9]">
-        <section className="relative pt-24 pb-12 md:pt-32 md:pb-16 px-6 md:px-20 text-center overflow-hidden">
+        <section className="relative pt-24 pb-10 md:pt-32 md:pb-14 px-6 md:px-20 text-center overflow-hidden">
           <NeuralNoise
             position="absolute"
             zIndex={0}
@@ -94,7 +68,7 @@ export function GalleryPage() {
           </div>
         </section>
 
-        <section className="relative px-4 md:px-12 pb-24">
+        <section className="relative px-4 md:px-12 pb-20">
           <div className="max-w-7xl mx-auto">
             <Skiper54
               images={galleryItems}
@@ -118,7 +92,7 @@ export function GalleryPage() {
                 </h2>
               </div>
               <span className="text-xs tracking-widest text-[#5a6061] uppercase">
-                {galleryItems.length} Masterpiece{galleryItems.length !== 1 ? 's' : ''} Documented
+                {galleryItems.length} Masterpieces Documented
               </span>
             </div>
 

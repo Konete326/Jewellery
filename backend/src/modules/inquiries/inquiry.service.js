@@ -25,6 +25,14 @@ export class InquiryService {
   async submitInquiry(data) {
     return this.repo.create(data);
   }
+
+  async updateInquiryStatus(id, status) {
+    return this.repo.updateStatus(id, status);
+  }
+
+  async deleteInquiry(id) {
+    return this.repo.deleteById(id);
+  }
 }
 
 export const inquiryService = new InquiryService();

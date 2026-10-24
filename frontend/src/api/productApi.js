@@ -23,3 +23,17 @@ export const createProduct = async (productData) => {
     body: JSON.stringify(productData)
   });
 };
+
+export const updateProduct = async (id, productData) => {
+  return apiClient(`${ENDPOINTS.PRODUCTS}/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(productData)
+  });
+};
+
+export const deleteProduct = async (id) => {
+  return apiClient(`${ENDPOINTS.PRODUCTS}/${id}`, {
+    method: 'DELETE'
+  });
+};
+
