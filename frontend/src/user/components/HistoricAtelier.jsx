@@ -1,4 +1,5 @@
 import { NeuralNoise } from '@/components/ui/neural-noise'
+import { LuxuryButton } from './LuxuryButton'
 
 export function HistoricAtelier({ onBookClick }) {
   return (
@@ -39,12 +40,9 @@ export function HistoricAtelier({ onBookClick }) {
               </p>
             </div>
           </div>
-          <button
-            onClick={onBookClick}
-            className="bg-[#2d3435] text-white px-9 py-4 text-xs tracking-widest uppercase hover:bg-neutral-800 transition-colors cursor-pointer"
-          >
+          <LuxuryButton onClick={onBookClick} variant="dark">
             Book Private Appointment
-          </button>
+          </LuxuryButton>
         </div>
         <div className="w-full lg:w-1/2 relative">
           <div className="bg-[#ebeeef] overflow-hidden shadow-sm">

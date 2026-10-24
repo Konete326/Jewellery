@@ -3,7 +3,8 @@
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { XIcon, Activity } from "lucide-react";
+import { XIcon } from "lucide-react";
+import { ActivityIcon } from "@/components/ui/activity";
 
 const systemStatus = {
   badge: "SYSTEM STATUS",
@@ -28,7 +29,7 @@ export function LatestChange() {
       )}
     >
       <div className="flex items-center gap-1.5 font-light font-mono text-[10px] text-muted-foreground">
-        <Activity className="size-3 text-emerald-500" />
+        <ActivityIcon size={12} className="text-emerald-500 inline-block" />
         <span>{systemStatus.badge}</span>
       </div>
       <p className="font-heading font-medium text-xs">{systemStatus.title}</p>

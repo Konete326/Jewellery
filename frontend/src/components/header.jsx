@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { DesktopNav } from "@/components/desktop-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { isAdmin } from "@/lib/auth";
-import { Search, ShoppingBag, Sparkles } from "lucide-react";
+import { SparklesIcon } from "@/components/ui/sparkles";
+import { SearchIcon } from "@/components/ui/search";
+import { CartIcon } from "@/components/ui/cart";
 
 export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 	const scrolled = useScroll(10);
@@ -29,7 +31,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 						className="flex items-center gap-2.5 group transition-opacity hover:opacity-90"
 					>
 						<div className="flex size-7 items-center justify-center rounded-md bg-amber-500/15 text-amber-600 border border-amber-500/30">
-							<Sparkles className="size-3.5" />
+							<SparklesIcon size={14} />
 						</div>
 						<span className="font-serif text-lg sm:text-xl tracking-[0.2em] font-light text-foreground">
 							KHALIL & SONS
@@ -47,7 +49,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 							className="size-9 text-muted-foreground hover:text-foreground"
 							aria-label="Search collections"
 						>
-							<Search className="size-4" />
+							<SearchIcon size={16} />
 						</Button>
 					)}
 
@@ -59,7 +61,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 							className="relative size-9 text-muted-foreground hover:text-foreground"
 							aria-label="Shopping bag"
 						>
-							<ShoppingBag className="size-4" />
+							<CartIcon size={16} />
 							{cartCount > 0 && (
 								<span className="absolute -top-0.5 -right-0.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-mono">
 									{cartCount}
@@ -90,7 +92,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 							onClick={onOpenCart}
 							className="relative size-9 text-muted-foreground hover:text-foreground"
 						>
-							<ShoppingBag className="size-4" />
+							<CartIcon size={16} />
 							{cartCount > 0 && (
 								<span className="absolute -top-0.5 -right-0.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-mono">
 									{cartCount}

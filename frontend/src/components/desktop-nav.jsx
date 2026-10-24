@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
 	NavigationMenu,
 	NavigationMenuContent,
@@ -67,9 +68,14 @@ export function DesktopNav() {
 					</NavigationMenuContent>
 				</NavigationMenuItem>
 				<NavigationMenuLink asChild className="px-3">
-					<a className="rounded-md p-2 text-xs tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors" href="#collections">
+					<a className="rounded-md p-2 text-xs tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors" href="/#collections">
 						Masterpieces
 					</a>
+				</NavigationMenuLink>
+				<NavigationMenuLink asChild className="px-3">
+					<Link className="rounded-md p-2 text-xs tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors" to="/gallery">
+						Gallery
+					</Link>
 				</NavigationMenuLink>
 			</NavigationMenuList>
 		</NavigationMenu>

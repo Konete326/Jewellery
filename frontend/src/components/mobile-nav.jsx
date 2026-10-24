@@ -79,6 +79,15 @@ export function MobileNav() {
 									/>
 								))}
 							</div>
+							<div className="pt-2 border-t border-border">
+								<Link
+									to="/gallery"
+									onClick={() => setOpen(false)}
+									className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium uppercase tracking-widest text-foreground hover:bg-muted"
+								>
+									<span>Atelier Gallery</span>
+								</Link>
+							</div>
 						</div>
 						<div className="mt-5 flex flex-col gap-2">
 							<Button asChild className="w-full" variant="outline" onClick={() => setOpen(false)}>

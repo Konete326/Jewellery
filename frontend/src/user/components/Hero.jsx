@@ -1,4 +1,5 @@
 import { NeuralNoise } from '@/components/ui/neural-noise'
+import { LuxuryButton } from './LuxuryButton'
 
 export function Hero({ onExploreClick }) {
   return (
@@ -30,12 +31,9 @@ export function Hero({ onExploreClick }) {
           Preserving the silent language of the goldsmith. Every piece at Khalil & Sons is a testament to the patient art of craftsmanship.
         </p>
         <div>
-          <button
-            onClick={onExploreClick}
-            className="hero-gradient px-8 py-4 text-white text-xs tracking-widest uppercase hover:opacity-95 transition-all shadow-lg cursor-pointer"
-          >
+          <LuxuryButton onClick={onExploreClick} variant="gold">
             Explore Atelier
-          </button>
+          </LuxuryButton>
         </div>
       </div>
     </section>

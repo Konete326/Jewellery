@@ -2,12 +2,15 @@ import { API_BASE_URL } from './endpoints.js';
 
 export async function apiClient(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
+  const headers = { ...options.headers };
+
+  if (!(options.body instanceof FormData)) {
+    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+  }
+
   const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers
-    },
-    ...options
+    ...options,
+    headers
   };
 
   try {

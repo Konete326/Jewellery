@@ -1,3 +1,5 @@
+import { LuxuryButton } from './LuxuryButton'
+
 export function FeaturedMasterpieces({ onAddToCart }) {
   const pieces = [
     {
@@ -65,12 +67,14 @@ export function FeaturedMasterpieces({ onAddToCart }) {
                     {piece.badge}
                   </span>
                 )}
-                <button
+                <LuxuryButton
                   onClick={() => onAddToCart(piece)}
-                  className="absolute bottom-4 right-4 bg-neutral-900 text-white text-[10px] tracking-widest uppercase px-3 py-1.5 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer hover:bg-neutral-800"
+                  size="sm"
+                  variant="dark"
+                  className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   Add To Bag
-                </button>
+                </LuxuryButton>
               </div>
               <h3 className="font-headline text-2xl text-[#2d3435] mb-1 font-normal">
                 {piece.name}

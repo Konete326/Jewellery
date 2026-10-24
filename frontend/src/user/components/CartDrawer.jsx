@@ -1,3 +1,5 @@
+import { LuxuryButton } from './LuxuryButton'
+
 export function CartDrawer({
   isOpen,
   onClose,
@@ -95,12 +97,13 @@ export function CartDrawer({
             <span className="text-xs uppercase tracking-widest text-neutral-600 font-medium">Subtotal</span>
             <span className="font-headline italic text-xl text-neutral-900">{formattedSubtotal}</span>
           </div>
-          <button
+          <LuxuryButton
             onClick={onClose}
-            className="w-full py-3.5 bg-neutral-900 text-white text-xs tracking-[0.2em] uppercase hover:bg-neutral-800 transition-colors cursor-pointer"
+            variant="dark"
+            className="w-full"
           >
             Checkout
-          </button>
+          </LuxuryButton>
         </div>
       </div>
     </div>
