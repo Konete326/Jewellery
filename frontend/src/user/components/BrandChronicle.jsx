@@ -1,7 +1,16 @@
 import React from 'react'
-import { ShieldCheck, Award, Gem, MapPin, Phone, MessageCircle, Calendar, Navigation } from 'lucide-react'
+import { ShieldCheck, Award, Gem, MapPin, Phone, MessageCircle, Calendar, Navigation, Clock } from 'lucide-react'
 import { STORE_INFO } from '@/constants/storeInfo'
+import { getStoreStatus } from '@/utils/storeStatus'
+import { cn } from '@/lib/utils'
 import { LuxuryButton } from './LuxuryButton'
+
+const WEEKLY_SCHEDULE = [
+  { days: 'Monday – Thursday', hours: '1:00 PM – 8:30 PM', note: 'Regular Boutique Hours', status: 'Open' },
+  { days: 'Friday', hours: '3:30 PM – 9:30 PM', note: 'Opens After Jummah Prayers', status: 'Open' },
+  { days: 'Saturday', hours: '1:30 PM – 8:30 PM', note: 'Weekend Consultations', status: 'Open' },
+  { days: 'Sunday', hours: 'Closed', note: 'Weekly Rest Day', status: 'Closed' }
+]
 
 const ERAS = [
   {
@@ -51,6 +60,7 @@ const PILLARS = [
 ]
 
 export function BrandChronicle({ onOpenAppointment }) {
+  const storeStatus = getStoreStatus()
   const whatsappUrl = STORE_INFO.whatsapp.inquiryUrl(
     'Hello Khalil & Sons, I would like to learn more about your brand history and bespoke bridal jewelry.'
   )
@@ -132,24 +142,112 @@ export function BrandChronicle({ onOpenAppointment }) {
         </div>
       </div>
 
-      <div className="rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-background to-card p-6 sm:p-10 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
-        <div className="space-y-3 text-center md:text-left max-w-xl">
-          <a
-            href={STORE_INFO.social.googleMapsDirections}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-800 dark:text-amber-400 hover:text-amber-600 transition-colors cursor-pointer"
-          >
-            <MapPin className="size-3.5" />
-            <span className="underline decoration-dotted">{STORE_INFO.address.short}</span>
-          </a>
-          <h3 className="text-2xl sm:text-3xl font-serif font-light text-foreground">
-            Visit Our Saddar Karachi Atelier
-          </h3>
-          <p className="text-xs sm:text-sm text-muted-foreground font-light leading-relaxed">
-            Experience our handcrafted jewelry collections in person or sit down with our goldsmiths to design your custom wedding set.
-          </p>
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-2 text-xs text-muted-foreground font-mono">
+      <div id="visiting-hours" className="scroll-mt-28 rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-background to-card p-6 sm:p-10 md:p-12 shadow-sm space-y-8">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-border/60 pb-8">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <span className={cn(
+                "size-2.5 rounded-full shrink-0",
+                storeStatus.isOpen ? "bg-emerald-500 animate-pulse" : "bg-amber-600"
+              )} />
+              <span className="text-xs font-mono font-bold tracking-widest uppercase text-foreground">
+                {storeStatus.isOpen ? "Atelier Open Now" : "Atelier Currently Closed"}
+              </span>
+              <span className="text-[11px] font-mono text-muted-foreground">
+                • {storeStatus.scheduleText}
+              </span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-serif font-light text-foreground">
+              Boutique Visiting Hours & Atelier Schedule
+            </h3>
+            <p className="text-xs sm:text-sm text-muted-foreground font-light max-w-xl leading-relaxed">
+              Located at {STORE_INFO.address.full}. We welcome walk-in visitors and private bespoke bridal consultations during our boutique hours.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <a
+              href={STORE_INFO.social.googleMapsDirections}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto"
+            >
+              <LuxuryButton
+                variant="gold"
+                className="w-full sm:w-auto"
+                icon={<Navigation className="size-4 text-amber-200" />}
+              >
+                Get Directions
+              </LuxuryButton>
+            </a>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto"
+            >
+              <LuxuryButton
+                variant="gold"
+                className="w-full sm:w-auto"
+                icon={<MessageCircle className="size-4 text-amber-200" />}
+              >
+                WhatsApp Atelier
+              </LuxuryButton>
+            </a>
+            {onOpenAppointment && (
+              <LuxuryButton
+                onClick={onOpenAppointment}
+                variant="gold"
+                className="w-full sm:w-auto"
+                icon={<Calendar className="size-4 text-amber-200" />}
+              >
+                Book Private Visit
+              </LuxuryButton>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {WEEKLY_SCHEDULE.map((item) => {
+            const isClosed = item.status === 'Closed'
+            return (
+              <div
+                key={item.days}
+                className={cn(
+                  "p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3",
+                  isClosed
+                    ? "border-neutral-200/60 dark:border-neutral-800 bg-neutral-100/50 dark:bg-neutral-900/50 opacity-80"
+                    : "border-amber-500/25 bg-card/80 shadow-2xs hover:border-amber-500/40"
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium text-foreground font-mono">
+                    {item.days}
+                  </span>
+                  <span className={cn(
+                    "text-[10px] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold",
+                    isClosed
+                      ? "bg-neutral-200 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400"
+                      : "bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-500/20"
+                  )}>
+                    {item.status}
+                  </span>
+                </div>
+                <div>
+                  <div className="text-sm sm:text-base font-semibold text-foreground font-mono tracking-tight">
+                    {item.hours}
+                  </div>
+                  <div className="text-[11px] text-muted-foreground font-light mt-0.5">
+                    {item.note}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground border-t border-border/40">
+          <div className="flex flex-wrap items-center gap-4 font-mono">
             <span className="flex items-center gap-1.5">
               <Phone className="size-3.5 text-amber-700" />
               <span>{STORE_INFO.phone.landlineFormatted}</span>
@@ -158,48 +256,14 @@ export function BrandChronicle({ onOpenAppointment }) {
               <MessageCircle className="size-3.5 text-emerald-600" />
               <span>{STORE_INFO.phone.mobile}</span>
             </span>
+            <span className="flex items-center gap-1.5">
+              <Clock className="size-3.5 text-amber-700" />
+              <span>Timezone: Asia/Karachi (PKT, UTC+5)</span>
+            </span>
           </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
-          <a
-            href={STORE_INFO.social.googleMapsDirections}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto"
-          >
-            <LuxuryButton
-              variant="gold"
-              className="w-full"
-              icon={<Navigation className="size-4 text-amber-200" />}
-            >
-              Get Directions
-            </LuxuryButton>
-          </a>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto"
-          >
-            <LuxuryButton
-              variant="gold"
-              className="w-full"
-              icon={<MessageCircle className="size-4 text-amber-200" />}
-            >
-              WhatsApp Atelier
-            </LuxuryButton>
-          </a>
-          {onOpenAppointment && (
-            <LuxuryButton
-              onClick={onOpenAppointment}
-              variant="gold"
-              className="w-full sm:w-auto"
-              icon={<Calendar className="size-4 text-amber-200" />}
-            >
-              Book Private Visit
-            </LuxuryButton>
-          )}
+          <span className="text-[11px] font-light text-muted-foreground/80">
+            Direct Assistance for Bridal & Jewellery Inquiries
+          </span>
         </div>
       </div>
     </section>

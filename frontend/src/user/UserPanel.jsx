@@ -8,6 +8,7 @@ import { Footer } from './components/Footer'
 import { SearchModal } from './components/SearchModal'
 import { CartDrawer } from './components/CartDrawer'
 import { BespokeAppointmentModal } from './components/BespokeAppointmentModal'
+import { updatePageSEO, getLocalBusinessSchema } from '@/utils/seo'
 
 export function UserPanel() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -21,6 +22,12 @@ export function UserPanel() {
       return []
     }
   })
+
+  useEffect(() => {
+    updatePageSEO({
+      schema: getLocalBusinessSchema()
+    })
+  }, [])
 
   useEffect(() => {
     try {

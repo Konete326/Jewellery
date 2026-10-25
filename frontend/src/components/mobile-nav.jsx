@@ -7,7 +7,6 @@ import { companyLinks, companyLinks2, productLinks } from "@/components/nav-link
 import { LinkItem } from "@/components/sheard";
 import { isAdmin } from "@/lib/auth";
 import { XIcon, MenuIcon, ShieldCheck } from "lucide-react";
-import { StoreStatusBadge } from "@/components/StoreStatusBadge";
 
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
@@ -52,9 +51,6 @@ export function MobileNav() {
 						data-slot={open ? "open" : "closed"}
 					>
 						<div className="flex w-full flex-col gap-y-2">
-							<div className="px-2 pb-2">
-								<StoreStatusBadge variant="pill" className="w-full justify-center py-1.5" />
-							</div>
 							<span className="text-xs uppercase tracking-widest text-muted-foreground font-medium px-2">Collections</span>
 							{productLinks.map((link) => (
 								<LinkItem

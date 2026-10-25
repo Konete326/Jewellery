@@ -8,6 +8,7 @@ import { Skiper54, DEFAULT_SKIPER_IMAGES } from '../components/Skiper54';
 import { ImageGallery } from '@/components/ui/image-gallery';
 import { GalleryPagination } from '../components/GalleryPagination';
 import { galleryApi } from '@/api/galleryApi';
+import { updatePageSEO } from '@/utils/seo';
 
 const PAGE_SIZE = 9;
 
@@ -30,6 +31,14 @@ export function GalleryPage() {
   const [hasMore, setHasMore] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  useEffect(() => {
+    updatePageSEO({
+      title: 'Haute Joaillerie Gallery & Bridal Heirlooms',
+      description: 'Explore the complete Khalil & Sons fine jewellery collection. Certified 22K/24K gold bridal sets, Polki diamond heirlooms, kadas, and gulubands in Saddar, Karachi.',
+      keywords: 'jewellery gallery Karachi, 22K gold bridal sets, Pakistani gold jewellery, polki collection, handcrafted kadas Karachi'
+    });
+  }, []);
 
   useEffect(() => {
     try {

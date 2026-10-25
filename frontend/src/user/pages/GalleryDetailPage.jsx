@@ -14,6 +14,7 @@ import { BespokeAppointmentModal } from '../components/BespokeAppointmentModal';
 import { galleryApi } from '@/api/galleryApi';
 import { DEFAULT_SKIPER_IMAGES } from '../components/Skiper54';
 import { PolaroidLineCarousel } from '@/components/ui/polaroid-line-carousel';
+import { updatePageSEO, getProductSchema } from '@/utils/seo';
 
 export function GalleryDetailPage() {
   const { id } = useParams();
@@ -69,6 +70,15 @@ export function GalleryDetailPage() {
 
       setPiece(found);
       setReviewsList(found.reviews || []);
+
+      updatePageSEO({
+        title: found.title,
+        description: found.description || `Discover ${found.title} - handcrafted certified 22K gold jewellery by Khalil & Sons Jewellers, Murshid Sunaar Tower, Saddar, Karachi.`,
+        keywords: `${found.title}, ${found.category || 'Bridal Sets'}, gold jewellery Karachi, certified 22K gold, Pakistani jewellery, Khalil & Sons`,
+        image: found.imageUrl || found.src,
+        type: 'product',
+        schema: getProductSchema(found)
+      });
 
       const currentCat = (found.category || 'Bridal Sets').trim().toLowerCase();
       const currentId = String(found._id || found.id);

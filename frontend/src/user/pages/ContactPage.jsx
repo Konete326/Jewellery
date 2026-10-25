@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/user/components/Navbar';
 import { Footer } from '@/user/components/Footer';
 import { SearchModal } from '@/user/components/SearchModal';
@@ -7,12 +7,21 @@ import { BespokeAppointmentModal } from '@/user/components/BespokeAppointmentMod
 import { ContactConfirmationModal } from '@/user/components/ContactConfirmationModal';
 import { AtelierContactDirectory } from '@/user/components/AtelierContactDirectory';
 import { AtelierContactForm } from '@/user/components/AtelierContactForm';
+import { updatePageSEO } from '@/utils/seo';
 
 export function ContactPage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
   const [confirmationData, setConfirmationData] = useState(null);
+
+  useEffect(() => {
+    updatePageSEO({
+      title: 'Contact Atelier & Showroom | Saddar Karachi',
+      description: 'Contact Khalil & Sons Jewellers at Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road, Saddar, Karachi. Call +92 21 35670868 or WhatsApp +92 333 3213613 for private consultation.',
+      keywords: 'contact Khalil & Sons, jewellery shop Saddar Karachi, Murshid Sunaar Tower location, goldsmith Karachi phone'
+    });
+  }, []);
 
   const handleInquirySuccess = (submittedData) => {
     setConfirmationData(submittedData);

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Clock, MapPin } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getStoreStatus } from '@/utils/storeStatus'
 import { STORE_INFO } from '@/constants/storeInfo'
 
 export function StoreStatusBadge({ variant = 'compact', className }) {
+  const navigate = useNavigate()
+  const location = useLocation()
   const [status, setStatus] = useState(() => getStoreStatus())
 
   useEffect(() => {
@@ -15,14 +18,29 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
 
   const isOpen = status.isOpen
 
+  const handleNavigateToHours = (e) => {
+    e.preventDefault()
+    if (location.pathname === '/about') {
+      const el = document.getElementById('visiting-hours')
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+        return
+      }
+    }
+    navigate('/about#visiting-hours')
+  }
+
   if (variant === 'pill') {
     return (
-      <div
+      <button
+        type="button"
+        onClick={handleNavigateToHours}
+        title="Boutique Hours: Click for full schedule"
         className={cn(
-          'inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-mono tracking-wider border shadow-2xs select-none',
+          'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider border shadow-2xs select-none transition-all duration-200 cursor-pointer',
           isOpen
-            ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300'
-            : 'border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-300',
+            ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-500/50'
+            : 'border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-300 hover:bg-amber-500/20 hover:border-amber-500/50',
           className
         )}
       >
@@ -32,18 +50,24 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
             isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-amber-600'
           )}
         />
-        <span className="font-semibold">{status.badgeText}</span>
-        <span className="opacity-40">•</span>
-        <span className="opacity-90">{status.detailText}</span>
-      </div>
+        <span className="font-semibold">{isOpen ? 'Open Now' : 'Closed'}</span>
+      </button>
     )
   }
 
   if (variant === 'detailed') {
     return (
       <div
+        onClick={handleNavigateToHours}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            handleNavigateToHours(e)
+          }
+        }}
         className={cn(
-          'p-3.5 rounded-2xl border transition-all duration-200 select-none shadow-xs',
+          'p-3.5 rounded-2xl border transition-all duration-200 select-none shadow-xs cursor-pointer hover:border-amber-500/50',
           isOpen
             ? 'border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent'
             : 'border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent',
@@ -59,7 +83,7 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
               )}
             />
             <span className="text-xs font-mono font-bold tracking-wider uppercase text-foreground">
-              {status.badgeText}
+              {isOpen ? 'Open Now' : 'Closed'}
             </span>
           </div>
           <span className="text-[10px] font-mono tracking-widest text-muted-foreground uppercase">
@@ -79,12 +103,15 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
   }
 
   return (
-    <div
+    <button
+      type="button"
+      onClick={handleNavigateToHours}
+      title="Boutique Hours: Click for full schedule"
       className={cn(
-        'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono tracking-wider border select-none',
+        'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider border select-none transition-all duration-200 cursor-pointer',
         isOpen
-          ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300'
-          : 'border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-300',
+          ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-500/20'
+          : 'border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-300 hover:bg-amber-500/20',
         className
       )}
     >
@@ -94,8 +121,7 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
           isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-amber-600'
         )}
       />
-      <span className="font-semibold">{status.badgeText}</span>
-      <span className="opacity-70">({status.detailText})</span>
-    </div>
+      <span className="font-semibold">{isOpen ? 'Open Now' : 'Closed'}</span>
+    </button>
   )
 }

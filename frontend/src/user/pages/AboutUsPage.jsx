@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Navbar } from '@/user/components/Navbar'
 import { Footer } from '@/user/components/Footer'
 import { SearchModal } from '@/user/components/SearchModal'
@@ -8,6 +9,7 @@ import AboutUs from '@/components/shadcn-studio/blocks/about-us-page-30/about-us
 import { BrandChronicle } from '@/user/components/BrandChronicle'
 
 export function AboutUsPage() {
+  const location = useLocation()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false)
@@ -25,6 +27,18 @@ export function AboutUsPage() {
       localStorage.setItem('khalil_cart', JSON.stringify(cartItems))
     } catch {}
   }, [cartItems])
+
+  useEffect(() => {
+    if (location.hash) {
+      const targetId = location.hash.replace('#', '')
+      const element = document.getElementById(targetId)
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }, 150)
+      }
+    }
+  }, [location.hash])
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0)
 

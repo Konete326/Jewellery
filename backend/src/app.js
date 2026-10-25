@@ -6,6 +6,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { corsOptions } from './config/cors.js';
 import apiRouter from './routes/index.js';
+import seoRouter from './modules/seo/seo.routes.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 app.use('/api', apiRouter);
+app.use('/', seoRouter);
 
 if (fs.existsSync(publicDir)) {
   app.use(express.static(publicDir));
