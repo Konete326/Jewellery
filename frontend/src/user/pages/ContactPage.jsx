@@ -7,6 +7,7 @@ import { BespokeAppointmentModal } from '@/user/components/BespokeAppointmentMod
 import { ContactConfirmationModal } from '@/user/components/ContactConfirmationModal';
 import { AtelierContactDirectory } from '@/user/components/AtelierContactDirectory';
 import { AtelierContactForm } from '@/user/components/AtelierContactForm';
+import { NeuralNoise } from '@/components/ui/neural-noise';
 
 export function ContactPage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -19,7 +20,16 @@ export function ContactPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
+    <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435] overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <NeuralNoise
+          opacity={0.2}
+          speed={0.0006}
+          position="absolute"
+          className="absolute inset-0 size-full pointer-events-none"
+          zIndex={0}
+        />
+      </div>
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}

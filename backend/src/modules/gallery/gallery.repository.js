@@ -10,6 +10,15 @@ export class GalleryRepository {
     return await Gallery.find(query).sort({ createdAt: -1 });
   }
 
+  async findPaginated({ page = 1, limit = 9, query = { isActive: true } }) {
+    const skip = (Math.max(1, Number(page)) - 1) * Number(limit);
+    const [items, total] = await Promise.all([
+      Gallery.find(query).sort({ createdAt: -1 }).skip(skip).limit(Number(limit)),
+      Gallery.countDocuments(query)
+    ]);
+    return { items, total };
+  }
+
   async findById(id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return await Gallery.findOne({ $or: [{ _id: id }, { title: new RegExp(id, 'i') }] });

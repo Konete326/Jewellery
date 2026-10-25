@@ -1,4 +1,5 @@
 import { LuxuryButton } from './LuxuryButton'
+import { NeuralNoise } from '@/components/ui/neural-noise'
 
 export function Hero({ onExploreClick }) {
   return (
@@ -10,6 +11,13 @@ export function Hero({ onExploreClick }) {
           src="/images/banner.jpg"
         />
         <div className="absolute inset-0 bg-stone-900/40 backdrop-brightness-95"></div>
+        <NeuralNoise
+          opacity={0.35}
+          speed={0.0008}
+          position="absolute"
+          className="absolute inset-0 size-full pointer-events-none"
+          zIndex={1}
+        />
         <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-amber-500/15 blur-[120px] rounded-full pointer-events-none" />
       </div>
       <div className="relative z-10 max-w-3xl pt-20">

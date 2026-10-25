@@ -3,8 +3,10 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { AnimatedGalleryCard } from "@/components/ui/animated-gallery-card";
+import { GalleryCardSkeleton } from "@/components/ui/gallery-card-skeleton";
 
 const DEFAULT_JEWELRY_ITEMS = [
+
 	{
 		title: "The Florentine Ruby Choker",
 		src: "/assets/products/choker-ruby-01.jpg",
@@ -43,7 +45,7 @@ const DEFAULT_JEWELRY_ITEMS = [
 	},
 ];
 
-export function ImageGallery({ items, onItemClick, className, columnsCount = 3 }) {
+export function ImageGallery({ items, onItemClick, className, columnsCount = 3, isLoadingMore = false }) {
 	const displayItems = items && items.length > 0 ? items : DEFAULT_JEWELRY_ITEMS;
 	const cols = Array.from({ length: columnsCount }, (_, colIndex) =>
 		displayItems.filter((_, idx) => idx % columnsCount === colIndex)
@@ -73,6 +75,9 @@ export function ImageGallery({ items, onItemClick, className, columnsCount = 3 }
 							/>
 						);
 					})}
+					{isLoadingMore && (
+						<GalleryCardSkeleton ratio={col % 2 === 0 ? 4 / 5 : 16 / 10} />
+					)}
 				</div>
 			))}
 		</div>

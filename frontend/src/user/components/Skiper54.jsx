@@ -161,6 +161,10 @@ export function Skiper54({
                       src={src}
                       alt={alt}
                       className="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-105"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/assets/products/choker-ruby-01.jpg";
+                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
                     <CardGoldEffect active={current === index} />

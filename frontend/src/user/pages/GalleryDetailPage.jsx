@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Gem, ShieldCheck, Truck } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
@@ -103,14 +103,28 @@ export function GalleryDetailPage() {
       />
 
       <main className="relative z-10 pt-24 md:pt-28 pb-16 w-full max-w-[1880px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
-        <div className="mb-4">
+        <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
+          <nav className="flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground">
+            <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+            <span>/</span>
+            <Link to="/gallery" className="hover:text-foreground transition-colors">Gallery</Link>
+            <span>/</span>
+            <span className="text-foreground truncate max-w-[220px] sm:max-w-xs">{piece.title}</span>
+          </nav>
+
           <button
             type="button"
-            onClick={() => navigate('/gallery')}
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#5a6061] hover:text-[#2d3435] transition-colors cursor-pointer group py-2"
+            onClick={() => {
+              if (window.history.length > 1) {
+                navigate(-1);
+              } else {
+                navigate('/gallery');
+              }
+            }}
+            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-amber-700 hover:text-amber-800 transition-colors cursor-pointer group py-1"
           >
-            <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
-            <span>Back to Gallery</span>
+            <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-1" />
+            <span>Back to Collection</span>
           </button>
         </div>
 

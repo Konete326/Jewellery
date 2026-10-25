@@ -153,6 +153,10 @@ export function GalleryMasterpieceHero({
               src={imageUrl}
               alt={title}
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/assets/products/choker-ruby-01.jpg";
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-40 group-hover:opacity-70 transition-opacity" />
 

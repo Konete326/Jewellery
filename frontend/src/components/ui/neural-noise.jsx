@@ -1,10 +1,13 @@
 import React, { useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 
 export function NeuralNoise({
   color = [0.85, 0.68, 0.22],
-  opacity = 0.5,
+  opacity = 0.35,
   speed = 0.0008,
-  zIndex = 20,
+  zIndex = 0,
+  position = 'absolute',
+  className,
 }) {
   const canvasRef = useRef(null);
 
@@ -13,11 +16,12 @@ export function NeuralNoise({
     if (!canvasEl) return;
 
     let animId = null;
+    let isVisible = true;
     const pointer = {
-      x: window.innerWidth * 0.5,
-      y: window.innerHeight * 0.5,
-      tX: window.innerWidth * 0.5,
-      tY: window.innerHeight * 0.5,
+      x: 100,
+      y: 100,
+      tX: 100,
+      tY: 100,
     };
     let uniforms = {};
 
@@ -121,9 +125,12 @@ export function NeuralNoise({
     gl.uniform1f(uniforms.u_speed, speed);
 
     const resizeCanvas = () => {
+      const parent = canvasEl.parentElement;
+      const w = parent?.clientWidth || window.innerWidth;
+      const h = parent?.clientHeight || window.innerHeight;
       const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
-      canvasEl.width = Math.round(window.innerWidth * dpr);
-      canvasEl.height = Math.round(window.innerHeight * dpr);
+      canvasEl.width = Math.round(w * dpr);
+      canvasEl.height = Math.round(h * dpr);
       if (uniforms.u_ratio) {
         gl.uniform1f(uniforms.u_ratio, canvasEl.width / (canvasEl.height || 1));
       }
@@ -133,9 +140,20 @@ export function NeuralNoise({
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const updatePointer = (x, y) => {
-      pointer.tX = x;
-      pointer.tY = y;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvasEl);
+
+    const updatePointer = (clientX, clientY) => {
+      const rect = canvasEl.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) {
+        pointer.tX = clientX - rect.left;
+        pointer.tY = clientY - rect.top;
+      }
     };
 
     const onPointerMove = (e) => updatePointer(e.clientX, e.clientY);
@@ -149,16 +167,20 @@ export function NeuralNoise({
 
     const render = (now) => {
       animId = requestAnimationFrame(render);
-      if (document.hidden) return;
+      if (document.hidden || !isVisible) return;
 
       pointer.x += (pointer.tX - pointer.x) * 0.15;
       pointer.y += (pointer.tY - pointer.y) * 0.15;
 
+      const rect = canvasEl.getBoundingClientRect();
+      const cw = rect.width || window.innerWidth || 1;
+      const ch = rect.height || window.innerHeight || 1;
+
       gl.uniform1f(uniforms.u_time, now || performance.now());
       gl.uniform2f(
         uniforms.u_pointer_position,
-        pointer.x / (window.innerWidth || 1),
-        1 - pointer.y / (window.innerHeight || 1)
+        pointer.x / cw,
+        1 - pointer.y / ch
       );
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
@@ -167,6 +189,7 @@ export function NeuralNoise({
 
     return () => {
       if (animId) cancelAnimationFrame(animId);
+      observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('mousemove', onPointerMove);
@@ -181,13 +204,13 @@ export function NeuralNoise({
   return (
     <canvas
       ref={canvasRef}
+      className={cn('pointer-events-none', className)}
       style={{
-        position: 'fixed',
+        position,
         top: 0,
         left: 0,
         width: '100%',
         height: '100%',
-        pointerEvents: 'none',
         opacity,
         zIndex,
       }}

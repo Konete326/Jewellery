@@ -2,8 +2,12 @@ import { apiClient } from './client.js';
 import { ENDPOINTS } from './endpoints.js';
 
 export const galleryApi = {
-  getAll: async () => {
-    return await apiClient(ENDPOINTS.GALLERY);
+  getAll: async (params = {}) => {
+    const query = new URLSearchParams();
+    if (params.page !== undefined) query.set('page', params.page);
+    if (params.limit !== undefined) query.set('limit', params.limit);
+    const qs = query.toString();
+    return await apiClient(qs ? `${ENDPOINTS.GALLERY}?${qs}` : ENDPOINTS.GALLERY);
   },
 
   getById: async (id) => {

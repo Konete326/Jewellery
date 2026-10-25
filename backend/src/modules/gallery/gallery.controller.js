@@ -3,11 +3,11 @@ import { galleryService } from './gallery.service.js';
 export class GalleryController {
   async getAll(req, res, next) {
     try {
-      const items = await galleryService.getAllItems();
+      const { page, limit } = req.query;
+      const result = await galleryService.getAllItems({ page, limit });
       res.status(200).json({
         success: true,
-        count: items.length,
-        data: items
+        ...result
       });
     } catch (error) {
       next(error);

@@ -105,6 +105,10 @@ export function FeaturedMasterpieces() {
                     alt={piece.name}
                     className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-700"
                     src={piece.image}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null
+                      e.currentTarget.src = DEFAULT_SKIPER_IMAGES[0].imageUrl
+                    }}
                   />
                   {piece.badge && (
                     <span className="absolute top-6 right-6 bg-[#e4e9ea] px-3 py-1 text-[10px] tracking-widest uppercase font-medium rounded-sm">

@@ -28,8 +28,29 @@ export class GalleryService {
     });
   }
 
-  async getAllItems() {
-    return await galleryRepository.findAll();
+  async getAllItems(pagination = {}) {
+    const { page, limit } = pagination;
+    if (page !== undefined && limit !== undefined) {
+      const pageNum = Math.max(1, Number(page));
+      const limitNum = Math.max(1, Number(limit));
+      const { items, total } = await galleryRepository.findPaginated({
+        page: pageNum,
+        limit: limitNum
+      });
+      return {
+        count: items.length,
+        total,
+        page: pageNum,
+        totalPages: Math.ceil(total / limitNum) || 1,
+        hasMore: pageNum * limitNum < total,
+        data: items
+      };
+    }
+    const items = await galleryRepository.findAll();
+    return {
+      count: items.length,
+      data: items
+    };
   }
 
   async getItemById(id) {
