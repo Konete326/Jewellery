@@ -1,6 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { MotionPreset } from '@/components/ui/motion-preset'
-import { NeuralNoise } from '@/components/ui/neural-noise'
 import ProfileCarousel from '@/components/shadcn-studio/blocks/about-us-page-30/profile-carousel'
 import MusicPlayerCard from '@/components/shadcn-studio/blocks/about-us-page-30/music-player-card'
 import TripFolderCard from '@/components/shadcn-studio/blocks/about-us-page-30/trip-folder-card'
@@ -8,16 +7,7 @@ import SurpriseNote from '@/components/shadcn-studio/blocks/about-us-page-30/sur
 
 const AboutUsPage = () => {
   return (
-    <section className='relative bg-background py-8 sm:py-12 lg:py-16 w-full overflow-hidden'>
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <NeuralNoise
-          opacity={0.22}
-          speed={0.0006}
-          position="absolute"
-          className="absolute inset-0 size-full pointer-events-none"
-          zIndex={0}
-        />
-      </div>
+    <section className='relative bg-transparent pt-6 sm:pt-10 pb-16 lg:pb-24 w-full overflow-hidden'>
       <div className='relative z-10 w-full max-w-7xl xl:max-w-[1480px] mx-auto space-y-8 px-4 sm:px-6 lg:px-8 lg:space-y-10'>
         <div className='space-y-2'>
           <MotionPreset fade blur slide={{ direction: 'down', offset: 50 }} transition={{ duration: 0.5 }}>

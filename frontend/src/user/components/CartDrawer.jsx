@@ -100,11 +100,11 @@ export function CartDrawer({
           </div>
           <LuxuryButton
             onClick={onClose}
-            variant="dark"
+            variant="gold"
             className="w-full"
+            icon={<ArrowRight className="size-3.5 text-amber-200" />}
           >
-            <span>Proceed to Checkout</span>
-            <ArrowRight className="size-3.5 text-amber-400" />
+            Proceed to Checkout
           </LuxuryButton>
         </div>
       </div>

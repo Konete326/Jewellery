@@ -12,7 +12,10 @@ export const uploadToCloudinary = (fileBuffer, folder = 'khalil_gallery') => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         folder,
-        resource_type: 'image'
+        resource_type: 'image',
+        transformation: [
+          { width: 1200, height: 1200, crop: 'fill', gravity: 'auto', quality: 'auto', fetch_format: 'auto' }
+        ]
       },
       (error, result) => {
         if (error) return reject(error);

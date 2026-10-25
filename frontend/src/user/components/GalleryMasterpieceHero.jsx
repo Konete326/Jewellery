@@ -121,11 +121,11 @@ export function GalleryMasterpieceHero({
               <LuxuryButton
                 as="button"
                 onClick={onOpenInquiry}
-                variant="dark"
+                variant="gold"
                 size="lg"
                 className="flex-1"
               >
-                <Mail className="size-4 text-amber-400" />
+                <Mail className="size-4 text-amber-200" />
                 <span>Send Email Inquiry</span>
               </LuxuryButton>
             </div>

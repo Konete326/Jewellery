@@ -5,6 +5,7 @@ import { SearchModal } from '@/user/components/SearchModal'
 import { CartDrawer } from '@/user/components/CartDrawer'
 import { BespokeAppointmentModal } from '@/user/components/BespokeAppointmentModal'
 import AboutUs from '@/components/shadcn-studio/blocks/about-us-page-30/about-us-page-30'
+import { BrandChronicle } from '@/user/components/BrandChronicle'
 
 export function AboutUsPage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -34,8 +35,9 @@ export function AboutUsPage() {
         onOpenCart={() => setIsCartOpen(true)}
         cartCount={totalCartCount}
       />
-      <main className="relative z-10 pt-8">
+      <main className="relative z-10 w-full">
         <AboutUs />
+        <BrandChronicle onOpenAppointment={() => setIsAppointmentOpen(true)} />
       </main>
       <Footer />
       <SearchModal

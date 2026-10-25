@@ -80,8 +80,8 @@ export function HistoricAtelier({ onBookClick }) {
               <p className="text-xs text-[#5a6061] mt-0.5 font-light">Sunday: Closed</p>
             </div>
           </div>
-          <LuxuryButton onClick={onBookClick} variant="dark">
-            <Calendar className="size-3.5 text-amber-400" />
+          <LuxuryButton onClick={onBookClick} variant="gold">
+            <Calendar className="size-3.5 text-amber-200" />
             <span>Book an Appointment</span>
           </LuxuryButton>
         </div>

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Field, FieldLabel, FieldDescription, FieldError } from '@/components/ui/field'
 import { submitInquiry } from '@/api/inquiryApi'
+import { LuxuryButton } from './LuxuryButton'
 
 const inquiryFormSchema = z.object({
   customerName: z.string().min(2, 'Name must be at least 2 characters').max(100),
@@ -265,14 +266,15 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
             >
               Cancel
             </button>
-            <Button
+            <LuxuryButton
               type="submit"
               disabled={form.formState.isSubmitting}
-              className="cursor-pointer inline-flex items-center gap-1.5"
+              variant="gold"
+              size="sm"
+              icon={<Calendar className="size-3.5 text-amber-200" />}
             >
-              <Calendar className="size-3.5 text-amber-400" />
-              <span>{form.formState.isSubmitting ? 'Booking...' : 'Book Appointment'}</span>
-            </Button>
+              {form.formState.isSubmitting ? 'Booking...' : 'Book Appointment'}
+            </LuxuryButton>
           </div>
         </form>
       </div>

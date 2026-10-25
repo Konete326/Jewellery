@@ -2,6 +2,7 @@ import React from 'react';
 import { Mail, MapPin, Clock, Calendar, MessageCircle } from 'lucide-react';
 import { GlobeWireframe } from '@/components/ui/contact-with-globe';
 import { STORE_INFO } from '@/constants/storeInfo';
+import { LuxuryButton } from './LuxuryButton';
 
 export function AtelierContactDirectory({ onOpenAppointment }) {
   const whatsappUrl = STORE_INFO.whatsapp.inquiryUrl(
@@ -104,14 +105,14 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           </p>
         </div>
 
-        <button
-          type="button"
+        <LuxuryButton
           onClick={onOpenAppointment}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#2d3435] text-white hover:bg-neutral-800 text-[11px] uppercase tracking-wider font-medium transition-colors cursor-pointer shrink-0"
+          variant="gold"
+          size="sm"
+          icon={<Calendar className="size-3 text-amber-200" />}
         >
-          <Calendar className="size-3 text-amber-400" />
-          <span>Book Visit</span>
-        </button>
+          Book Visit
+        </LuxuryButton>
       </div>
     </div>
   );

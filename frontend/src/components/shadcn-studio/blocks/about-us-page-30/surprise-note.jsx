@@ -61,7 +61,7 @@ const SurpriseNote = () => {
               className={cn(
                 'px-2.5 py-1 rounded-full text-[11px] font-mono tracking-wider transition-all duration-150 cursor-pointer shrink-0',
                 idx === step
-                  ? 'bg-amber-600 text-white font-medium shadow-xs'
+                  ? 'bg-gradient-to-r from-amber-800 via-amber-700 to-amber-800 text-amber-100 font-medium shadow-xs border border-amber-500/40'
                   : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
               )}
             >

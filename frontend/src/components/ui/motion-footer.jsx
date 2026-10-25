@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { ArrowUp, Gem, Calendar } from "lucide-react";
+import { ArrowUp, Gem, Calendar, Phone, MapPin } from "lucide-react";
 import { isAdmin } from "@/lib/auth";
 import { LuxuryButton } from "@/user/components/LuxuryButton";
 import { STORE_INFO } from "@/constants/storeInfo";
+import { InstagramIcon, FacebookIcon, WhatsAppIcon } from "@/components/ui/social-icons";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -263,16 +264,16 @@ export function CinematicFooter() {
                   href="#collections"
                   variant="gold"
                 >
-                  <Gem size={14} className="text-white inline-block" />
+                  <Gem size={14} className="text-amber-200 inline-block" />
                   Explore Collection
                 </LuxuryButton>
                 
                 <LuxuryButton
                   as="a"
                   href="#atelier"
-                  variant="dark"
+                  variant="gold"
                 >
-                  <Calendar size={14} className="text-amber-400 inline-block" />
+                  <Calendar size={14} className="text-amber-200 inline-block" />
                   Book an Appointment
                 </LuxuryButton>
               </div>
@@ -310,44 +311,49 @@ export function CinematicFooter() {
                 )}
               </div>
 
-              <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
+              <div className="flex flex-wrap justify-center items-center gap-2.5 pt-2">
                 <a
                   href={STORE_INFO.whatsapp.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-amber-600 transition-colors px-3 py-1 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/50"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
                 >
-                  WhatsApp: {STORE_INFO.phone.mobile}
+                  <WhatsAppIcon className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span>{STORE_INFO.phone.mobile}</span>
                 </a>
                 <a
                   href={`tel:${STORE_INFO.phone.landline}`}
-                  className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-amber-600 transition-colors px-3 py-1 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/50"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
                 >
-                  Tel: {STORE_INFO.phone.landlineFormatted}
+                  <Phone className="size-3.5 text-amber-700 dark:text-amber-400" />
+                  <span>{STORE_INFO.phone.landlineFormatted}</span>
                 </a>
                 <a
                   href={STORE_INFO.social.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-amber-600 transition-colors px-3 py-1 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/50"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
                 >
-                  Instagram
+                  <InstagramIcon className="size-3.5 text-pink-600 dark:text-pink-400" />
+                  <span>Instagram</span>
                 </a>
                 <a
                   href={STORE_INFO.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-amber-600 transition-colors px-3 py-1 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/50"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
                 >
-                  Facebook
+                  <FacebookIcon className="size-3.5 text-blue-600 dark:text-blue-400" />
+                  <span>Facebook</span>
                 </a>
                 <a
                   href={STORE_INFO.social.googleMaps}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-amber-600 transition-colors px-3 py-1 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/50"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
                 >
-                  Murshid Sunaar Tower, Karachi (5.0 ★)
+                  <MapPin className="size-3.5 text-amber-600" />
+                  <span>Saddar, Karachi (5.0 ★)</span>
                 </a>
               </div>
             </div>

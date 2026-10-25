@@ -122,9 +122,9 @@ export function FeaturedMasterpieces() {
                         navigate(`/gallery/${piece.id}`)
                       }}
                       size="sm"
-                      variant="dark"
+                      variant="gold"
                     >
-                      <Eye className="size-3.5 text-amber-400" />
+                      <Eye className="size-3.5 text-amber-200" />
                       <span>View Piece</span>
                     </LuxuryButton>
                   </div>

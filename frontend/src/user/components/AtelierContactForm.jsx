@@ -162,17 +162,17 @@ export function AtelierContactForm({ onSuccess }) {
             type="submit"
             disabled={isSubmitting}
             variant="gold"
-            size="md"
-            className="w-full sm:w-auto min-w-[180px]"
+            size="default"
+            className="w-full sm:w-auto min-w-[200px]"
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="size-3.5 animate-spin text-amber-900" />
-                <span>Sending...</span>
+                <Loader2 className="size-4 animate-spin text-white" />
+                <span>Sending Message...</span>
               </>
             ) : (
               <>
-                <Send className="size-3.5 text-amber-950" />
+                <Send className="size-4 text-amber-200" />
                 <span>Send Message</span>
               </>
             )}
