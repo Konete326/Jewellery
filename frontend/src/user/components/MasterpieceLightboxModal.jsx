@@ -38,7 +38,7 @@ export function MasterpieceLightboxModal({ isOpen, onClose, imageUrl, title, des
             )}
           </div>
           <span className="text-[10px] uppercase font-mono tracking-widest text-amber-700 dark:text-amber-400 shrink-0">
-            Florentine Archival Masterpiece
+            Certified 22K Gold Masterpiece
           </span>
         </div>
       </div>

@@ -10,74 +10,8 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 
-export const DEFAULT_SKIPER_IMAGES = [
-  {
-    _id: "default-1",
-    src: "/assets/products/choker-ruby-01.jpg",
-    imageUrl: "/assets/products/choker-ruby-01.jpg",
-    alt: "The Florentine Ruby Choker",
-    title: "The Florentine Ruby Choker",
-    category: "Necklaces & Chokers",
-    description: "22K handmade gold necklace with natural red rubies"
-  },
-  {
-    _id: "default-2",
-    src: "/assets/products/kada-polki-01.jpg",
-    imageUrl: "/assets/products/kada-polki-01.jpg",
-    alt: "Royal Polki Kada Armlet",
-    title: "Royal Polki Kada Armlet",
-    category: "Kadas & Bangles",
-    description: "Uncut diamonds set in 22K solid gold with detailed enamel work"
-  },
-  {
-    _id: "default-3",
-    src: "/assets/products/guluband-01.jpg",
-    imageUrl: "/assets/products/guluband-01.jpg",
-    alt: "Archival Aurelian Guluband",
-    title: "Archival Aurelian Guluband",
-    category: "Necklaces & Chokers",
-    description: "Handmade 22K solid gold collar necklace with delicate gold wirework"
-  },
-  {
-    _id: "default-4",
-    src: "/assets/products/jhumka-01.jpg",
-    imageUrl: "/assets/products/jhumka-01.jpg",
-    alt: "Imperial Florentine Jhumkas",
-    title: "Imperial Florentine Jhumkas",
-    category: "Earrings & Jhumkas",
-    description: "22K gold drop earrings with delicate pearls and carved designs"
-  },
-  {
-    _id: "default-5",
-    src: "/assets/products/ring-polki-01.jpg",
-    imageUrl: "/assets/products/ring-polki-01.jpg",
-    alt: "Medici Uncut Polki Solitaire",
-    title: "Medici Uncut Polki Solitaire",
-    category: "Rings & Solitaires",
-    description: "Natural uncut diamond ring set in textured 22K yellow gold"
-  },
-  {
-    _id: "default-6",
-    src: "/assets/products/kada-plain-01.jpg",
-    imageUrl: "/assets/products/kada-plain-01.jpg",
-    alt: "Solid Bullion Handcrafted Bangle",
-    title: "Solid Bullion Handcrafted Bangle",
-    category: "Kadas & Bangles",
-    description: "Handmade solid gold bangle with a smooth satin finish"
-  },
-  {
-    _id: "default-7",
-    src: "/assets/products/choker-ruby-02.jpg",
-    imageUrl: "/assets/products/choker-ruby-02.jpg",
-    alt: "Renaissance Ruby Suite Choker",
-    title: "Renaissance Ruby Suite Choker",
-    category: "Necklaces & Chokers",
-    description: "Gold choker with hand-linked chains and red rubies"
-  }
-];
-
 export function Skiper54({
-  images,
+  images = [],
   className,
   autoplay = true,
   loop = true,
@@ -88,7 +22,7 @@ export function Skiper54({
   const [api, setApi] = useState(null);
   const [current, setCurrent] = useState(0);
 
-  const displayImages = images && images.length > 0 ? images : DEFAULT_SKIPER_IMAGES;
+  const displayImages = Array.isArray(images) ? images : [];
 
   useEffect(() => {
     if (!api) return;
@@ -117,13 +51,17 @@ export function Skiper54({
     });
   }, [current, displayImages]);
 
+  if (displayImages.length === 0) {
+    return null;
+  }
+
   return (
     <div className={cn("relative w-full max-w-full overflow-hidden pb-12 select-none", className)}>
       <Carousel
         setApi={setApi}
         className="w-full"
         opts={{
-          loop,
+          loop: loop && displayImages.length > 1,
           slidesToScroll: 1,
           align: "center"
         }}
@@ -145,7 +83,7 @@ export function Skiper54({
             const title = item.title || "Masterpiece";
             const alt = item.alt || item.title || "Jewellery Exhibit";
             const description = item.description || "";
-            const targetId = item._id || item.id || `default-${index + 1}`;
+            const targetId = item._id || item.id || index;
 
             return (
               <CarouselItem
@@ -182,7 +120,7 @@ export function Skiper54({
                       className="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-105"
                       onError={(e) => {
                         e.currentTarget.onerror = null;
-                        e.currentTarget.src = "/assets/products/choker-ruby-01.jpg";
+                        e.currentTarget.src = "/images/image-01.jpg";
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
@@ -217,7 +155,7 @@ export function Skiper54({
           })}
         </CarouselContent>
 
-        {showNavigation && (
+        {showNavigation && displayImages.length > 1 && (
           <div className="flex w-full items-center justify-center gap-4 mt-6 pt-2">
             <button
               type="button"
@@ -238,7 +176,7 @@ export function Skiper54({
           </div>
         )}
 
-        {showPagination && (
+        {showPagination && displayImages.length > 1 && (
           <div className="flex w-full items-center justify-center mt-4">
             <div className="flex items-center justify-center gap-1.5">
               {displayImages.map((_, index) => (

@@ -4,39 +4,40 @@ import { Calendar, Star, ArrowRight, Navigation } from 'lucide-react'
 import { LuxuryButton } from './LuxuryButton'
 import { NeuralNoise } from '@/components/ui/neural-noise'
 import { galleryApi } from '@/api/galleryApi'
-import { DEFAULT_SKIPER_IMAGES } from './Skiper54'
 import { STORE_INFO } from '@/constants/storeInfo'
 import { StoreStatusBadge } from '@/components/StoreStatusBadge'
 
 export function HistoricAtelier({ onBookClick }) {
   const navigate = useNavigate()
-  const [piece, setPiece] = useState(() => {
-    const topItems = DEFAULT_SKIPER_IMAGES.filter(it => (it.rating || 5) >= 4.8)
-    const list = topItems.length > 0 ? topItems : DEFAULT_SKIPER_IMAGES
-    return list[Math.floor(Math.random() * list.length)]
-  })
+  const [piece, setPiece] = useState(null)
 
   useEffect(() => {
+    let isMounted = true
+
     const fetchBestPiece = async () => {
       try {
         const res = await galleryApi.getAll()
-        const data = Array.isArray(res?.data) && res.data.length > 0 ? res.data : DEFAULT_SKIPER_IMAGES
-        const sorted = [...data].sort((a, b) => {
-          const rA = Number(a.averageRating ?? a.rating ?? 0)
-          const rB = Number(b.averageRating ?? b.rating ?? 0)
-          return rB - rA
-        })
-        const topPool = sorted.slice(0, Math.min(5, sorted.length))
-        if (topPool.length > 0) {
-          const picked = topPool[Math.floor(Math.random() * topPool.length)]
-          setPiece(picked)
+        if (!isMounted) return
+        if (Array.isArray(res?.data) && res.data.length > 0) {
+          const sorted = [...res.data].sort((a, b) => {
+            const rA = Number(a.averageRating ?? a.rating ?? 0)
+            const rB = Number(b.averageRating ?? b.rating ?? 0)
+            return rB - rA
+          })
+          setPiece(sorted[0])
         }
-      } catch {}
+      } catch {
+        if (isMounted) setPiece(null)
+      }
     }
+
     fetchBestPiece()
+    return () => {
+      isMounted = false
+    }
   }, [])
 
-  const targetId = piece?._id || piece?.id || 'default-1'
+  const targetId = piece?._id || piece?.id
   const hasRating = Boolean(piece?.averageRating || piece?.rating)
   const displayRating = hasRating ? Number(piece.averageRating || piece.rating).toFixed(1) : '5.0'
 
@@ -102,16 +103,22 @@ export function HistoricAtelier({ onBookClick }) {
         </div>
         <div className="w-full lg:w-1/2 relative">
           <div
-            onClick={() => navigate(`/gallery/${targetId}`)}
+            onClick={() => {
+              if (targetId) {
+                navigate(`/gallery/${targetId}`)
+              } else {
+                navigate('/gallery')
+              }
+            }}
             className="group cursor-pointer bg-[#ebeeef] overflow-hidden shadow-2xl rounded-2xl relative aspect-[4/5] sm:aspect-square border border-neutral-300/70"
           >
             <img
-              alt={piece?.title || 'Khalil & Sons Jewellery Masterpiece'}
+              alt={piece?.title || 'Khalil & Sons Jewellery Atelier'}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               src={piece?.imageUrl || piece?.src || '/images/image-03.jpg'}
               onError={(e) => {
                 e.currentTarget.onerror = null
-                e.currentTarget.src = DEFAULT_SKIPER_IMAGES[0].imageUrl
+                e.currentTarget.src = '/images/image-03.jpg'
               }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -121,7 +128,7 @@ export function HistoricAtelier({ onBookClick }) {
                   Featured Gallery Masterpiece
                 </span>
                 <span className="text-sm font-serif font-light text-white truncate block">
-                  {piece?.title || 'View in Gallery'}
+                  {piece?.title || 'Explore Atelier Gallery'}
                 </span>
               </div>
               <div className="size-8 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white">
@@ -147,7 +154,7 @@ export function HistoricAtelier({ onBookClick }) {
             ) : (
               <div className="flex flex-col gap-1">
                 <span className="text-xs font-serif font-medium text-[#2d3435] line-clamp-2 leading-snug">
-                  {piece?.title || 'Khalil & Sons Masterpiece'}
+                  {piece?.title || 'Certified 22K Gold Boutique'}
                 </span>
                 <div className="flex gap-1 text-amber-500 mt-1">
                   {[...Array(5)].map((_, i) => (

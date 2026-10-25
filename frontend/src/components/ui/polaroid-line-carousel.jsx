@@ -132,13 +132,6 @@ function paintLandscape(seed, palette, w = 1600, h = 1000) {
   return c.toDataURL('image/jpeg', 0.88)
 }
 
-const DEFAULT_SLIDES = [
-  { title: 'The Florentine Ruby Choker', caption: 'Handcrafted 22K Solid Gold', palette: 'dawn', seed: 3 },
-  { title: 'Royal Polki Kada Armlet', caption: 'Heritage Filigree Wirework', palette: 'alpine', seed: 8 },
-  { title: 'Archival Aurelian Guluband', caption: 'Certified 22K Pure Gold', palette: 'dusk', seed: 14 },
-  { title: 'Imperial Florentine Jhumkas', caption: 'Hand-set Natural Pearls', palette: 'mist', seed: 21 }
-]
-
 function useSlideImages(slides) {
   const key = slides.map((s) => s.image || (s.palette || 'dawn') + ':' + (s.seed || 1)).join('|')
   const [painted, setPainted] = useState(() => slides.map(() => ''))
@@ -180,7 +173,7 @@ const PL_CSS = `
 `
 
 export function PolaroidLineCarousel({
-  slides = DEFAULT_SLIDES,
+  slides = [],
   height = '420px',
   cardWidth = 240,
   sag = 38,

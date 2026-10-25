@@ -255,7 +255,7 @@ export function ProductFormModal({ isOpen, onClose, onSuccess, productToEdit = n
                   id="product-image"
                   {...field}
                   aria-invalid={fieldState.invalid}
-                  placeholder="https://images.unsplash.com/... or Cloudinary URL"
+                  placeholder="https://res.cloudinary.com/... or image URL"
                   className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
                 />
                 <FieldDescription>Direct link to photography of the jewellery item</FieldDescription>

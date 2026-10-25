@@ -3,38 +3,47 @@ import { useNavigate } from 'react-router-dom'
 import { Card } from '@/components/ui/card'
 import { ArrowUpRight } from 'lucide-react'
 import { galleryApi } from '@/api/galleryApi'
-import { DEFAULT_SKIPER_IMAGES } from '@/user/components/Skiper54'
 
 const MusicPlayerCard = () => {
   const navigate = useNavigate()
-  const [piece, setPiece] = useState(() => {
-    const randomIndex = Math.floor(Math.random() * DEFAULT_SKIPER_IMAGES.length)
-    return DEFAULT_SKIPER_IMAGES[randomIndex]
-  })
+  const [piece, setPiece] = useState(null)
 
   useEffect(() => {
-    const fetchRandomPiece = async () => {
+    let isMounted = true
+
+    const fetchPiece = async () => {
       try {
         const res = await galleryApi.getAll()
+        if (!isMounted) return
         if (res?.data && res.data.length > 0) {
-          const randomIndex = Math.floor(Math.random() * res.data.length)
-          setPiece(res.data[randomIndex])
+          const valid = res.data.filter((item) => item.imageUrl || item.src)
+          if (valid.length > 0) {
+            setPiece(valid[0])
+          }
         }
       } catch {}
     }
-    fetchRandomPiece()
+
+    fetchPiece()
+    return () => {
+      isMounted = false
+    }
   }, [])
 
-  if (!piece) return null
-
-  const targetId = piece._id || piece.id || 'default-1'
-  const title = piece.title || 'Featured Jewellery Piece'
-  const description = piece.description || 'Handcrafted certified 22K gold and precious gemstone jewellery crafted in Karachi.'
-  const imageUrl = piece.imageUrl || piece.src
+  const targetId = piece?._id || piece?.id
+  const title = piece?.title || 'Bespoke Atelier Collection'
+  const description = piece?.description || 'Handcrafted certified 22K gold and bridal jewellery crafted in Karachi.'
+  const imageUrl = piece?.imageUrl || piece?.src || '/assets/about/brand-poster.jpg'
 
   return (
     <Card
-      onClick={() => navigate(`/gallery/${targetId}`)}
+      onClick={() => {
+        if (targetId) {
+          navigate(`/gallery/${targetId}`)
+        } else {
+          navigate('/gallery')
+        }
+      }}
       className='ring-foreground/10 bg-card relative overflow-hidden rounded-3xl p-0 shadow-xs ring-1 transition-all group flex flex-col justify-between border-border cursor-pointer hover:ring-amber-500/40 h-[310px]'
     >
       <div className='relative w-full h-44 overflow-hidden bg-neutral-900'>
@@ -43,6 +52,10 @@ const MusicPlayerCard = () => {
           alt={title}
           loading='lazy'
           className='size-full object-cover transition-transform duration-700 group-hover:scale-105'
+          onError={(e) => {
+            e.currentTarget.onerror = null
+            e.currentTarget.src = '/assets/about/brand-poster.jpg'
+          }}
         />
         <div className='absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent' />
         <div className='absolute bottom-3 left-4 right-4 flex items-center justify-between'>

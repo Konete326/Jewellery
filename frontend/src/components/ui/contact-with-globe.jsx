@@ -16,27 +16,27 @@ const smoothEase = [0.25, 0.1, 0.25, 1];
 const CONTACT_LINKS = [
   {
     icon: Mail,
-    label: "concierge@khalilsons.com",
-    href: "mailto:concierge@khalilsons.com",
+    label: "info@khalilandsonsjewellers.com",
+    href: "mailto:info@khalilandsonsjewellers.com",
     subtext: "Archival commissions & appraisals"
   },
   {
     icon: Phone,
-    label: "+39 055 218 901",
-    href: "tel:+39055218901",
-    subtext: "Florence Atelier Direct Desk"
+    label: "+92 314 2004245",
+    href: "tel:+923142004245",
+    subtext: "Karachi Atelier Direct Desk"
   },
   {
     icon: MapPin,
-    label: "Via de' Tornabuoni, Florence",
-    href: "https://maps.google.com/?q=Via+de+Tornabuoni+Florence",
+    label: "Murshid Sunaar Tower, Saddar, Karachi",
+    href: "https://maps.google.com/?q=Murshid+Sunaar+Tower+Karachi",
     subtext: "Historic Private Showroom"
   },
   {
     icon: Clock,
-    label: "Mon - Sat: 10:00 - 19:00 CET",
+    label: "Mon - Sat: 1:00 PM - 9:30 PM PKT",
     href: "#",
-    subtext: "Private viewings by appointment"
+    subtext: "Private viewings & consultations"
   }
 ];
 
@@ -541,7 +541,7 @@ FormDots.displayName = "FormDots";
 export default function ContactWithGlobe({
   title = "Inquire With Our Atelier",
   subtitle = "Concierge & Heritage Direct",
-  description = "Connect with our Florentine master jewelers for bespoke commissions, heirloom restoration, or private viewing appointments.",
+  description = "Connect with our master goldsmiths in Karachi for bespoke commissions, heirloom restoration, or private viewing appointments.",
   className
 }) {
   const [formData, setFormData] = useState({
@@ -623,7 +623,7 @@ export default function ContactWithGlobe({
       });
 
       setSubmitted(true);
-      toast.success("Your inquiry has been relayed directly to our Florence Atelier concierge.");
+      toast.success("Your inquiry has been relayed directly to our Karachi Atelier concierge.");
       setFormData({
         customerName: "",
         email: "",
@@ -778,7 +778,7 @@ export default function ContactWithGlobe({
                   Inquiry Received With Honor
                 </h4>
                 <p className="text-xs sm:text-sm text-muted-foreground font-light max-w-md">
-                  Thank you. Your consultation dispatch has reached our Florence desk. A dedicated concierge will respond via email within 24 hours.
+                  Thank you. Your consultation dispatch has reached our Karachi desk. A dedicated concierge will respond via email within 24 hours.
                 </p>
                 <Button
                   onClick={() => setSubmitted(false)}

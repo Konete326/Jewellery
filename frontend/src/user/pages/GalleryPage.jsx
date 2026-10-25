@@ -4,11 +4,12 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
 import { CartDrawer } from '../components/CartDrawer';
-import { Skiper54, DEFAULT_SKIPER_IMAGES } from '../components/Skiper54';
+import { Skiper54 } from '../components/Skiper54';
 import { ImageGallery } from '@/components/ui/image-gallery';
 import { GalleryPagination } from '../components/GalleryPagination';
 import { galleryApi } from '@/api/galleryApi';
 import { updatePageSEO } from '@/utils/seo';
+import { Sparkles } from 'lucide-react';
 
 const PAGE_SIZE = 9;
 
@@ -47,28 +48,39 @@ export function GalleryPage() {
   }, [cartItems]);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchInitial = async () => {
       setIsInitialLoading(true);
       try {
         const res = await galleryApi.getAll({ page: 1, limit: PAGE_SIZE });
+        if (!isMounted) return;
         if (res?.data && res.data.length > 0) {
           setGalleryItems(res.data);
           setTotalCount(res.total ?? res.data.length);
           setHasMore(Boolean(res.hasMore));
         } else {
-          setGalleryItems(DEFAULT_SKIPER_IMAGES.slice(0, PAGE_SIZE));
-          setTotalCount(DEFAULT_SKIPER_IMAGES.length);
-          setHasMore(DEFAULT_SKIPER_IMAGES.length > PAGE_SIZE);
+          setGalleryItems([]);
+          setTotalCount(0);
+          setHasMore(false);
         }
       } catch {
-        setGalleryItems(DEFAULT_SKIPER_IMAGES.slice(0, PAGE_SIZE));
-        setTotalCount(DEFAULT_SKIPER_IMAGES.length);
-        setHasMore(DEFAULT_SKIPER_IMAGES.length > PAGE_SIZE);
+        if (isMounted) {
+          setGalleryItems([]);
+          setTotalCount(0);
+          setHasMore(false);
+        }
       } finally {
-        setIsInitialLoading(false);
+        if (isMounted) {
+          setIsInitialLoading(false);
+        }
       }
     };
+
     fetchInitial();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleLoadMore = async () => {
@@ -88,14 +100,7 @@ export function GalleryPage() {
         setHasMore(Boolean(res.hasMore));
         if (res.total) setTotalCount(res.total);
       } else {
-        const currentCount = galleryItems.length;
-        if (currentCount < DEFAULT_SKIPER_IMAGES.length) {
-          const fallbackSlice = DEFAULT_SKIPER_IMAGES.slice(currentCount, currentCount + PAGE_SIZE);
-          setGalleryItems((prev) => [...prev, ...fallbackSlice]);
-          setHasMore(currentCount + fallbackSlice.length < DEFAULT_SKIPER_IMAGES.length);
-        } else {
-          setHasMore(false);
-        }
+        setHasMore(false);
       }
     } catch {
       setHasMore(false);
@@ -129,17 +134,19 @@ export function GalleryPage() {
           </div>
         </section>
 
-        <section className="relative w-full px-0 pb-20 overflow-hidden">
-          <div className="w-full">
-            <Skiper54
-              images={galleryItems.length > 0 ? galleryItems : DEFAULT_SKIPER_IMAGES}
-              autoplay={true}
-              loop={true}
-              showNavigation={true}
-              showPagination={true}
-            />
-          </div>
-        </section>
+        {galleryItems.length > 0 && (
+          <section className="relative w-full px-0 pb-20 overflow-hidden">
+            <div className="w-full">
+              <Skiper54
+                images={galleryItems}
+                autoplay={true}
+                loop={true}
+                showNavigation={true}
+                showPagination={true}
+              />
+            </div>
+          </section>
+        )}
 
         <section className="py-20 px-6 md:px-20 bg-[#f2f4f4] border-t border-neutral-200/60">
           <div className="max-w-7xl mx-auto">
@@ -157,26 +164,44 @@ export function GalleryPage() {
               </span>
             </div>
 
-            <ImageGallery
-              items={galleryItems}
-              isLoadingMore={isLoadingMore}
-              onItemClick={(piece) => {
-                const targetId = piece._id || piece.id;
-                if (targetId) {
-                  navigate(`/gallery/${targetId}`);
-                }
-              }}
-            />
+            {isInitialLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3, 4, 5, 6].map((n) => (
+                  <div key={n} className="aspect-square bg-neutral-200/70 animate-pulse rounded-2xl" />
+                ))}
+              </div>
+            ) : galleryItems.length === 0 ? (
+              <div className="rounded-2xl border border-neutral-300/80 bg-white p-12 text-center max-w-md mx-auto shadow-sm">
+                <Sparkles className="size-8 text-amber-600 mx-auto mb-4" />
+                <h3 className="font-headline text-2xl text-[#2d3435] mb-2 font-normal">
+                  Catalog Updating
+                </h3>
+                <p className="text-sm text-[#5a6061] leading-relaxed font-light">
+                  Our master goldsmiths are adding pieces to the online showcase. Pieces published from the Admin Panel will appear here.
+                </p>
+              </div>
+            ) : (
+              <>
+                <ImageGallery
+                  items={galleryItems}
+                  isLoadingMore={isLoadingMore}
+                  onItemClick={(piece) => {
+                    const targetId = piece._id || piece.id;
+                    if (targetId) {
+                      navigate(`/gallery/${targetId}`);
+                    }
+                  }}
+                />
 
-            {!isInitialLoading && (
-              <GalleryPagination
-                hasMore={hasMore}
-                isLoading={isLoadingMore}
-                onLoadMore={handleLoadMore}
-                total={totalCount || galleryItems.length}
-                loadedCount={galleryItems.length}
-                autoLoadOnScroll={true}
-              />
+                <GalleryPagination
+                  hasMore={hasMore}
+                  isLoading={isLoadingMore}
+                  onLoadMore={handleLoadMore}
+                  total={totalCount || galleryItems.length}
+                  loadedCount={galleryItems.length}
+                  autoLoadOnScroll={true}
+                />
+              </>
             )}
           </div>
         </section>

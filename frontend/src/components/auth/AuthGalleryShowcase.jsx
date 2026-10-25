@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { galleryApi } from "@/api/galleryApi";
-import { DEFAULT_SKIPER_IMAGES } from "@/user/components/Skiper54";
 
 function pickWeightedPiece(pool, currentId) {
   if (!pool || pool.length === 0) return null;
@@ -40,23 +39,10 @@ function preloadImage(url) {
 }
 
 export function AuthGalleryShowcase() {
-  const [pieces, setPieces] = useState(() => {
-    return DEFAULT_SKIPER_IMAGES.map((item, idx) => ({
-      id: item._id || item.id || `default-${idx}`,
-      imageUrl: item.imageUrl || item.src,
-      title: item.title,
-      averageRating: 4.9
-    }));
-  });
-
-  const [currentPiece, setCurrentPiece] = useState(() => {
-    const initialPool = DEFAULT_SKIPER_IMAGES.map((item, idx) => ({
-      id: item._id || item.id || `default-${idx}`,
-      imageUrl: item.imageUrl || item.src,
-      title: item.title,
-      averageRating: 4.9
-    }));
-    return pickWeightedPiece(initialPool, null);
+  const [pieces, setPieces] = useState([]);
+  const [currentPiece, setCurrentPiece] = useState({
+    imageUrl: "/images/banner.jpg",
+    title: "Khalil & Sons Master Goldsmithing"
   });
 
   const [prevImage, setPrevImage] = useState(null);
@@ -84,33 +70,18 @@ export function AuthGalleryShowcase() {
       try {
         const res = await galleryApi.getAll();
         const apiData = Array.isArray(res?.data) ? res.data : [];
-        const merged = [
-          ...apiData.filter((item) => item.imageUrl || item.src),
-          ...DEFAULT_SKIPER_IMAGES.map((item, idx) => ({
-            id: item._id || item.id || `fallback-${idx}`,
+        const validList = apiData
+          .filter((item) => item.imageUrl || item.src)
+          .map((item) => ({
+            id: item._id || item.id,
             imageUrl: item.imageUrl || item.src,
             title: item.title,
-            averageRating: 4.9
-          }))
-        ];
+            averageRating: Number(item.averageRating ?? item.rating ?? 4.8)
+          }));
 
-        const uniqueMap = new Map();
-        for (const item of merged) {
-          const key = item.imageUrl || item.src || item.title;
-          if (!uniqueMap.has(key)) {
-            uniqueMap.set(key, {
-              id: item._id || item.id || key,
-              imageUrl: item.imageUrl || item.src,
-              title: item.title,
-              averageRating: Number(item.averageRating ?? item.rating ?? 4.8)
-            });
-          }
-        }
-
-        const uniqueList = Array.from(uniqueMap.values());
-        if (isMounted && uniqueList.length > 0) {
-          setPieces(uniqueList);
-          const firstPick = pickWeightedPiece(uniqueList, null);
+        if (isMounted && validList.length > 0) {
+          setPieces(validList);
+          const firstPick = pickWeightedPiece(validList, null);
           if (firstPick) {
             setCurrentPiece(firstPick);
           }

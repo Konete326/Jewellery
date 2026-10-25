@@ -9,22 +9,21 @@ export const ecommerce5Demo = {
   name: "The Aurelian Signet",
   tagline: "Handcrafted Atelier Masterpiece",
   description:
-    "18K Hand-hammered Florentine gold with raw uncut diamond centerpiece. Forged with patient Renaissance goldcraft in our historic Florence atelier.",
+    "18K Hand-hammered solid gold with raw uncut diamond centerpiece. Forged with artisanal goldsmithing in our Karachi atelier.",
   price: 4200,
   originalPrice: 4800,
   currency: "$",
-  image:
-    "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=80",
-  rating: 4.9,
-  reviewCount: 47,
+  image: "/images/banner.jpg",
+  rating: 5.0,
+  reviewCount: 1,
   features: [
-    "Sustainably sourced 18K Florentine gold",
-    "Hand-hammered Renaissance finish",
+    "Sustainably sourced 22K pure gold",
+    "Hand-hammered traditional finish",
     "Conflict-free certified raw centerpiece diamond",
-    "Lifetime craftsmanship certificate & bespoke wooden vault box",
+    "Lifetime craftsmanship certificate & bespoke presentation vault",
   ],
-  ctaLabel: "Add to Bag",
-  ctaHref: "",
+  ctaLabel: "Inquire Now",
+  ctaHref: "/contact",
   imagePosition: "right",
 };
 
