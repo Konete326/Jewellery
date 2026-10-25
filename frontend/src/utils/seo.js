@@ -114,9 +114,10 @@ export function getLocalBusinessSchema() {
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: 24.8538,
-      longitude: 67.0315
+      latitude: 24.8595126,
+      longitude: 67.0252029
     },
+    hasMap: 'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7',
     openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',
@@ -138,6 +139,7 @@ export function getLocalBusinessSchema() {
       }
     ],
     sameAs: [
+      'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7',
       'https://www.instagram.com/khalilandsons/',
       'https://www.facebook.com/thekhalilandsons/'
     ]

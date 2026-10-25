@@ -7,6 +7,7 @@ import { BespokeAppointmentModal } from '@/user/components/BespokeAppointmentMod
 import { ContactConfirmationModal } from '@/user/components/ContactConfirmationModal';
 import { AtelierContactDirectory } from '@/user/components/AtelierContactDirectory';
 import { AtelierContactForm } from '@/user/components/AtelierContactForm';
+import { AtelierMapEmbed } from '@/user/components/AtelierMapEmbed';
 import { updatePageSEO } from '@/utils/seo';
 
 export function ContactPage() {
@@ -49,6 +50,8 @@ export function ContactPage() {
             />
           </div>
         </div>
+
+        <AtelierMapEmbed />
       </main>
 
       <Footer />
