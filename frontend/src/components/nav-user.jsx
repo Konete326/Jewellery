@@ -1,6 +1,7 @@
 "use client";
 
 import { useNavigate } from "react-router-dom";
+import { logoutUser, getAuthUser } from "@/lib/auth";
 import {
 	Avatar,
 	AvatarFallback,
@@ -21,26 +22,21 @@ export function NavUser() {
 	const navigate = useNavigate();
 
 	const getUser = () => {
-		try {
-			const saved = localStorage.getItem("auth_user");
-			if (saved) {
-				const parsed = JSON.parse(saved);
-				return {
-					name: parsed.name || "Atelier Director",
-					email: parsed.email || "admin@gmail.com",
-					avatar: ""
-				};
-			}
-		} catch {
-			return { name: "Atelier Director", email: "admin@gmail.com", avatar: "" };
+		const saved = getAuthUser();
+		if (saved) {
+			return {
+				name: saved.name || "Atelier Director",
+				email: saved.email || "admin@gmail.com",
+				avatar: saved.avatar || ""
+			};
 		}
 		return { name: "Atelier Director", email: "admin@gmail.com", avatar: "" };
 	};
 
 	const user = getUser();
 
-	const handleLogout = () => {
-		localStorage.removeItem("auth_user");
+	const handleLogout = async () => {
+		await logoutUser();
 		navigate("/login");
 	};
 

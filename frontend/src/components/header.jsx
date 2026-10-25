@@ -1,18 +1,37 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useScroll } from "@/hooks/use-scroll";
 import { Button } from "@/components/ui/button";
 import { DesktopNav } from "@/components/desktop-nav";
 import { MobileNav } from "@/components/mobile-nav";
-import { isAdmin } from "@/lib/auth";
-import { Search, ShoppingBag } from "lucide-react";
+import { getAuthUser, logoutUser } from "@/lib/auth";
+import { Search, ShoppingBag, ShieldCheck, User, LogOut } from "lucide-react";
 import { StoreStatusBadge } from "@/components/StoreStatusBadge";
 
 export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 	const scrolled = useScroll(10);
-	const adminLoggedIn = isAdmin();
+	const [user, setUser] = useState(getAuthUser());
+	const adminLoggedIn = Boolean(user && user.role === "admin");
+
+	useEffect(() => {
+		const handleAuthChange = (e) => {
+			setUser(e.detail || getAuthUser());
+		};
+		const handleStorage = (e) => {
+			if (e.key === "auth_user") {
+				setUser(getAuthUser());
+			}
+		};
+		window.addEventListener("khalil_auth_change", handleAuthChange);
+		window.addEventListener("storage", handleStorage);
+		return () => {
+			window.removeEventListener("khalil_auth_change", handleAuthChange);
+			window.removeEventListener("storage", handleStorage);
+		};
+	}, []);
 
 	return (
 		<header
@@ -72,16 +91,46 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 						</Button>
 					)}
 
-					<Button asChild variant="outline" size="sm" className="h-8 text-xs px-3">
-						<Link to="/auth">{adminLoggedIn ? "Account" : "Sign In"}</Link>
-					</Button>
-
-					{adminLoggedIn && (
-						<Button asChild size="sm" className="h-8 text-xs px-3 bg-foreground text-background">
-							<Link to="/admin" className="flex items-center gap-1.5">
-								<span className="text-amber-500 font-semibold">Admin Portal</span>
-								<span>→</span>
-							</Link>
+					{user ? (
+						<div className="flex items-center gap-2">
+							{adminLoggedIn && (
+								<Button asChild size="sm" className="h-8 text-xs px-3 bg-foreground text-background hover:bg-neutral-800">
+									<Link to="/admin" className="flex items-center gap-1.5">
+										<ShieldCheck className="size-3.5 text-amber-500" />
+										<span className="text-amber-400 font-medium">Admin Portal</span>
+										<span>→</span>
+									</Link>
+								</Button>
+							)}
+							<div className="flex items-center gap-1.5 bg-neutral-100 dark:bg-neutral-800 px-2.5 py-1 rounded-md border border-border text-xs">
+								{user?.avatar ? (
+									<img
+										src={user.avatar}
+										alt={user.name}
+										referrerPolicy="no-referrer"
+										className="size-4 rounded-full object-cover"
+									/>
+								) : (
+									<User className="size-3.5 text-amber-700 dark:text-amber-400" />
+								)}
+								<span className="font-medium text-foreground max-w-[110px] truncate">
+									{user.name ? user.name.split(" ")[0] : "Account"}
+								</span>
+							</div>
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => logoutUser()}
+								className="h-8 text-xs px-2 text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 cursor-pointer"
+								title="Sign Out"
+							>
+								<LogOut className="size-3.5" />
+								<span className="hidden xl:inline">Sign Out</span>
+							</Button>
+						</div>
+					) : (
+						<Button asChild variant="outline" size="sm" className="h-8 text-xs px-3">
+							<Link to="/auth">Sign In</Link>
 						</Button>
 					)}
 				</div>

@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AtSignIcon, KeyRoundIcon, UserIcon, ShieldAlert } from "lucide-react";
+import { AtSignIcon, KeyRoundIcon, UserIcon, ShieldAlert, Loader2 } from "lucide-react";
+import { loginWithEmail, registerWithEmail } from "@/lib/auth";
+import { toast } from "sonner";
 
 export function AuthForm() {
   const navigate = useNavigate();
@@ -11,12 +13,10 @@ export function AuthForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || "admin@gmail.com";
-  const adminPass = import.meta.env.VITE_ADMIN_PASSWORD || "admin123";
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -25,20 +25,36 @@ export function AuthForm() {
       return;
     }
 
-    if (email.trim().toLowerCase() === adminEmail.toLowerCase()) {
-      if (password === adminPass) {
-        localStorage.setItem("auth_user", JSON.stringify({ email, role: "admin", name: "Admin" }));
-        const destination = location.state?.from?.pathname || "/admin";
-        navigate(destination, { replace: true });
-        return;
-      } else {
-        setError("Invalid admin email or password. Please try again.");
-        return;
-      }
+    if (isSignUp && !name.trim()) {
+      setError("Please provide your full name.");
+      return;
     }
 
-    localStorage.setItem("auth_user", JSON.stringify({ email, name: name || "Customer", role: "user" }));
-    navigate("/");
+    try {
+      setLoading(true);
+      let user;
+      if (isSignUp) {
+        user = await registerWithEmail(name.trim(), email.trim(), password);
+        toast.success("Account Created", {
+          description: `Welcome to Khalil & Sons, ${user.name}`
+        });
+      } else {
+        user = await loginWithEmail(email.trim(), password);
+        toast.success("Welcome Back", {
+          description: `Signed in as ${user.name}`
+        });
+      }
+
+      const destination =
+        user.role === "admin"
+          ? location.state?.from?.pathname || "/admin"
+          : "/";
+      navigate(destination, { replace: true });
+    } catch (err) {
+      setError(err.message || "Authentication failed. Please verify credentials.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,6 +75,7 @@ export function AuthForm() {
             type="text"
             className="pl-9 h-11"
             required={isSignUp}
+            disabled={loading}
           />
           <UserIcon className="absolute left-3 top-3.5 size-4 text-muted-foreground pointer-events-none" />
         </div>
@@ -72,6 +89,7 @@ export function AuthForm() {
           type="email"
           className="pl-9 h-11"
           required
+          disabled={loading}
         />
         <AtSignIcon className="absolute left-3 top-3.5 size-4 text-muted-foreground pointer-events-none" />
       </div>
@@ -84,22 +102,29 @@ export function AuthForm() {
           type="password"
           className="pl-9 h-11"
           required
+          disabled={loading}
         />
         <KeyRoundIcon className="absolute left-3 top-3.5 size-4 text-muted-foreground pointer-events-none" />
       </div>
 
-      <Button className="w-full h-11 mt-2 text-xs uppercase tracking-widest" type="submit">
-        {isSignUp ? "Create Account" : "Sign In"}
+      <Button
+        className="w-full h-11 mt-2 text-xs uppercase tracking-widest flex items-center justify-center gap-2"
+        type="submit"
+        disabled={loading}
+      >
+        {loading && <Loader2 className="size-4 animate-spin" />}
+        <span>{isSignUp ? "Create Account" : "Sign In"}</span>
       </Button>
 
       <div className="pt-2 text-center">
         <button
           type="button"
+          disabled={loading}
           onClick={() => {
             setIsSignUp(!isSignUp);
             setError("");
           }}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
         >
           {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
         </button>

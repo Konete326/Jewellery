@@ -49,7 +49,7 @@ export const navGroups = [
         icon: <ShoppingBagIcon className="size-4" />
       },
       {
-        title: "Customers",
+        title: "Users & Clientele",
         path: "/admin/customers",
         key: "customers",
         icon: <UsersIcon className="size-4" />

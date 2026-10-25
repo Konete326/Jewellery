@@ -4,6 +4,7 @@ import { AppShell } from '@/components/app-shell'
 import { DashboardOverview } from './components/DashboardOverview'
 import { GalleryAdminView } from './components/GalleryAdminView'
 import { InquiriesAdminView } from './components/InquiriesAdminView'
+import { UsersAdminView } from './components/UsersAdminView'
 import { AdminPlaceholder } from './components/AdminPlaceholder'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Package, ShoppingBag, Users, UserCheck, Settings } from 'lucide-react'
@@ -73,14 +74,8 @@ export function AdminPanel() {
           />
         )
       case 'customers':
-        return (
-          <AdminPlaceholder
-            title="VIP Clientele"
-            category="Commerce"
-            description="Manage private appointments, atelier collectors, and bespoke clients."
-            icon={Users}
-          />
-        )
+      case 'users':
+        return <UsersAdminView />
       case 'profile':
         return (
           <AdminPlaceholder

@@ -4,6 +4,7 @@ import productRoutes from '../modules/products/product.routes.js';
 import inquiryRoutes from '../modules/inquiries/inquiry.routes.js';
 import orderRoutes from '../modules/orders/order.routes.js';
 import galleryRoutes from '../modules/gallery/gallery.routes.js';
+import userRoutes from '../modules/users/user.routes.js';
 
 const apiRouter = Router();
 
@@ -12,6 +13,6 @@ apiRouter.use('/products', productRoutes);
 apiRouter.use('/inquiries', inquiryRoutes);
 apiRouter.use('/orders', orderRoutes);
 apiRouter.use('/gallery', galleryRoutes);
+apiRouter.use('/users', userRoutes);
 
 export default apiRouter;
-

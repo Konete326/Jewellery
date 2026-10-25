@@ -5,12 +5,29 @@ import { Button } from "@/components/ui/button";
 import { Portal, PortalBackdrop } from "@/components/portal";
 import { companyLinks, companyLinks2, productLinks } from "@/components/nav-links";
 import { LinkItem } from "@/components/sheard";
-import { isAdmin } from "@/lib/auth";
-import { XIcon, MenuIcon, ShieldCheck } from "lucide-react";
+import { getAuthUser, logoutUser } from "@/lib/auth";
+import { XIcon, MenuIcon, ShieldCheck, LogOut, User } from "lucide-react";
 
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
-	const adminLoggedIn = isAdmin();
+	const [user, setUser] = React.useState(() => getAuthUser());
+
+	React.useEffect(() => {
+		const syncAuth = () => setUser(getAuthUser());
+		window.addEventListener("khalil_auth_change", syncAuth);
+		window.addEventListener("storage", syncAuth);
+		return () => {
+			window.removeEventListener("khalil_auth_change", syncAuth);
+			window.removeEventListener("storage", syncAuth);
+		};
+	}, []);
+
+	const handleLogout = () => {
+		logoutUser();
+		setOpen(false);
+	};
+
+	const isAdmin = user && (user.role === "admin" || user.isAdmin === true);
 
 	return (
 		<div className="md:hidden">
@@ -96,15 +113,41 @@ export function MobileNav() {
 								</Link>
 							</div>
 						</div>
-						<div className="mt-5 flex flex-col gap-2">
-							<Button asChild className="w-full" variant="outline" onClick={() => setOpen(false)}>
-								<Link to="/auth">{adminLoggedIn ? "Account" : "Sign In"}</Link>
-							</Button>
-							{adminLoggedIn && (
-								<Button asChild className="w-full bg-foreground text-background" onClick={() => setOpen(false)}>
-									<Link to="/admin" className="flex items-center justify-center gap-1.5">
-										<ShieldCheck className="size-3.5 text-amber-500" />
-										<span>Admin Portal</span>
+						<div className="mt-5 flex flex-col gap-2 pt-3 border-t border-border">
+							{user ? (
+								<>
+									<div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-muted/50">
+										<div className="size-7 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 font-semibold flex items-center justify-center text-xs">
+											{(user.name || user.email || "U").charAt(0).toUpperCase()}
+										</div>
+										<div className="flex flex-col min-w-0">
+											<span className="text-xs font-medium text-foreground truncate">{user.name || "Customer"}</span>
+											<span className="text-[10px] text-muted-foreground truncate">{user.email}</span>
+										</div>
+									</div>
+									{isAdmin && (
+										<Button asChild className="w-full bg-foreground text-background" onClick={() => setOpen(false)}>
+											<Link to="/admin" className="flex items-center justify-center gap-1.5">
+												<ShieldCheck className="size-3.5 text-amber-500" />
+												<span>Admin Portal</span>
+											</Link>
+										</Button>
+									)}
+									<Button
+										type="button"
+										variant="outline"
+										className="w-full text-destructive hover:bg-destructive/10"
+										onClick={handleLogout}
+									>
+										<LogOut className="size-3.5 mr-1.5" />
+										<span>Sign Out</span>
+									</Button>
+								</>
+							) : (
+								<Button asChild className="w-full" variant="outline" onClick={() => setOpen(false)}>
+									<Link to="/auth" className="flex items-center justify-center gap-1.5">
+										<User className="size-3.5" />
+										<span>Sign In</span>
 									</Link>
 								</Button>
 							)}
