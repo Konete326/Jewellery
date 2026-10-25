@@ -29,7 +29,7 @@ const MusicPlayerCard = () => {
 
   const targetId = piece._id || piece.id || 'default-1'
   const title = piece.title || 'Featured Jewellery Piece'
-  const description = piece.description || 'Handcrafted gold and gemstone jewellery made in Florence.'
+  const description = piece.description || 'Handcrafted certified 22K gold and precious gemstone jewellery crafted in Karachi.'
   const imageUrl = piece.imageUrl || piece.src
 
   return (

@@ -12,26 +12,26 @@ const NOTES = [
   {
     category: 'Pure Gold',
     title: 'Gold Standards',
-    text: 'Handcrafted 18K & 22K Solid Gold',
-    tag: 'Tested & Officially Hallmarked'
+    text: 'Certified 22K (.916) & 24K Pure Gold',
+    tag: 'Tested & Guaranteed Purity'
   },
   {
-    category: 'Florence',
-    title: 'Historic Atelier',
-    text: 'Historic Workshop Via de\' Tornabuoni',
-    tag: 'Active In Florence Since 1924'
+    category: 'Karachi Atelier',
+    title: 'Historic Boutique',
+    text: 'Shop #2, Murshid Sunaar Tower, Saddar',
+    tag: 'Serving Generations Since 1992'
   },
   {
     category: 'Craft',
     title: 'Master Artistry',
-    text: 'Traditional Lost-Wax Casting & Engraving',
+    text: 'Traditional Polki, Bridal & Solitaire Heirlooms',
     tag: 'Master Goldsmith Certified'
   },
   {
     category: 'Bespoke',
     title: 'Custom Creations',
-    text: 'One-of-a-Kind Made to Order Masterpieces',
-    tag: 'Certificate of Authenticity'
+    text: 'Bespoke Bridal Sets & Family Commissions',
+    tag: 'Personalized Artistry by Mr. Khalil'
   }
 ]
 

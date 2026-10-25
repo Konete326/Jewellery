@@ -1,15 +1,19 @@
+import { STORE_INFO } from './storeInfo';
+
 export const NAV_LINKS = [
   { id: 'home', label: 'Home', path: '/' },
-  { id: 'products', label: 'Collections', path: '/collections' },
-  { id: 'bespoke', label: 'Custom Jewellery', path: '/bespoke' },
-  { id: 'orders', label: 'Track Order', path: '/orders' }
+  { id: 'products', label: 'Collections', path: '/gallery' },
+  { id: 'about', label: 'About Us', path: '/about' },
+  { id: 'contact', label: 'Contact', path: '/contact' }
 ];
 
 export const BRAND_INFO = {
-  name: 'Khalil & Sons',
-  tagline: 'Handcrafted Fine Gold & Diamond Jewellery',
-  established: '1984',
-  phone: '+92 (0) 300 1234567',
-  email: 'atelier@khalilandsons.com',
-  address: 'Atelier Suites, Luxury Avenue, Lahore, Pakistan'
+  name: STORE_INFO.name,
+  tagline: STORE_INFO.tagline,
+  established: STORE_INFO.established,
+  phone: STORE_INFO.phone.landline,
+  whatsapp: STORE_INFO.whatsapp.number,
+  email: STORE_INFO.email,
+  address: STORE_INFO.address.full,
+  social: STORE_INFO.social
 };

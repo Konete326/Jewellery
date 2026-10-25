@@ -22,7 +22,7 @@ const AboutUsPage = () => {
         <div className='space-y-2'>
           <MotionPreset fade blur slide={{ direction: 'down', offset: 50 }} transition={{ duration: 0.5 }}>
             <span className='text-xs uppercase tracking-[0.25em] text-[#5f5e5e] font-medium block mb-2 font-mono'>
-              Our Story &bull; Est. 1924
+              Our Story &bull; Est. 1992 &bull; Saddar, Karachi
             </span>
           </MotionPreset>
           <MotionPreset
@@ -34,7 +34,7 @@ const AboutUsPage = () => {
             slide={{ direction: 'down', offset: 50 }}
             transition={{ duration: 0.5 }}
           >
-            The Skilled Jewelers Behind Our Florence Workshop
+            The Master Goldsmiths Behind Khalil & Sons Jewellers
           </MotionPreset>
         </div>
 

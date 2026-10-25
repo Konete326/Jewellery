@@ -7,23 +7,23 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 const FOUNDER_SLIDES = [
   {
     src: '/assets/about/founder.png',
-    title: 'M. Khalil',
-    subtitle: 'Founder & Master Jeweler • Florence'
+    title: 'Mr. Khalil Ahmed',
+    subtitle: 'Founder & Master Jeweler • Est. 1992'
   },
   {
     src: '/assets/about/founder-poster.jpg',
     title: 'Master Goldsmithing',
-    subtitle: 'Over a Century of Traditional Goldsmithing'
+    subtitle: 'Over 3 Decades of Artisanal Artistry'
   },
   {
     src: '/assets/about/brand-poster.jpg',
-    title: 'Fine Jewellery Workshop',
-    subtitle: 'Via de\' Tornabuoni, Florence'
+    title: 'Fine Jewellery Boutique',
+    subtitle: 'Murshid Sunaar Tower, Saddar, Karachi'
   },
   {
     src: '/assets/about/shop-front.jpg',
-    title: 'The Historic Workshop',
-    subtitle: 'Handcrafted Jewellery Bench'
+    title: 'Artisanal Workshop',
+    subtitle: 'Shop #2, Dr. Daud Pota Road, Karachi'
   }
 ]
 
@@ -52,7 +52,7 @@ const ProfileCarousel = () => {
           <div className='absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent' />
           <div className='absolute bottom-6 left-6 right-6 z-10'>
             <span className='text-[10px] uppercase tracking-widest text-amber-400 font-mono font-medium block mb-1'>
-              Handmade in Florence
+              Handcrafted in Karachi • Est. 1992
             </span>
             <h3 className='font-headline text-2xl text-white font-normal'>
               {slide.title}

@@ -85,14 +85,14 @@ export function DesktopNav() {
 										to="/about"
 										className="mt-2 text-[11px] font-medium text-amber-700 dark:text-amber-400 hover:underline inline-flex items-center gap-1 px-1"
 									>
-										<span>Explore Florence Heritage →</span>
+										<span>Explore Our 1992 Heritage →</span>
 									</Link>
 								</NavigationMenuLink>
 							</div>
 						</div>
 						<div className="mt-3 p-3 bg-muted/40 rounded-xl border border-border/50 flex items-center justify-between">
 							<span className="text-muted-foreground text-xs font-light">
-								Learn about our century-old legacy
+								Learn about our 3-decade legacy
 							</span>
 							<NavigationMenuLink asChild>
 								<Link

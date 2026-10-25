@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { ArrowUp, Gem, Calendar } from "lucide-react";
 import { isAdmin } from "@/lib/auth";
 import { LuxuryButton } from "@/user/components/LuxuryButton";
+import { STORE_INFO } from "@/constants/storeInfo";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -153,11 +154,11 @@ MagneticButton.displayName = "MagneticButton";
 
 const MarqueeItem = () => (
   <div className="flex items-center space-x-10 px-6">
-    <span>Fine Jewellery & Goldsmithing</span> <span className="text-amber-500">✦</span>
-    <span>Handmade 18K & 22K Gold</span> <span className="text-amber-500">✦</span>
-    <span>Authentic Florence Heritage</span> <span className="text-amber-500">✦</span>
-    <span>Custom Jewellery Design</span> <span className="text-amber-500">✦</span>
-    <span>Est. 1924 Florence</span> <span className="text-amber-500">✦</span>
+    <span>Fine Gold Jewellery & Goldsmithing</span> <span className="text-amber-500">✦</span>
+    <span>Certified 22K (.916) Pure Gold</span> <span className="text-amber-500">✦</span>
+    <span>Bespoke Bridal Heirlooms</span> <span className="text-amber-500">✦</span>
+    <span>Murshid Sunaar Tower, Saddar, Karachi</span> <span className="text-amber-500">✦</span>
+    <span>Master Goldsmithing Since 1992</span> <span className="text-amber-500">✦</span>
   </div>
 );
 
@@ -252,7 +253,7 @@ export function CinematicFooter() {
               The Art of <span className="serif-italic">Handcrafted</span> Gold
             </h2>
             <p className="text-xs md:text-base text-muted-foreground max-w-lg mb-8 leading-relaxed font-light">
-              Creating timeless gold jewellery with care and dedication. Every piece is handcrafted by master artisans in Florence.
+              Master goldsmithing since 1992 in Saddar, Karachi. Crafting certified 22K and 24K gold bridal jewelry, solitaires, and polki heirlooms.
             </p>
 
             <div ref={linksRef} className="flex flex-col items-center gap-5 w-full">
@@ -289,7 +290,7 @@ export function CinematicFooter() {
                   href="#atelier"
                   className="border border-[#2d3435]/25 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xs text-[#2d3435] dark:text-neutral-200 px-5 py-2.5 text-xs tracking-widest uppercase hover:bg-[#2d3435] hover:text-white dark:hover:bg-white dark:hover:text-black transition-all font-medium cursor-pointer"
                 >
-                  Our Workshop
+                  Karachi Boutique
                 </MagneticButton>
                 <MagneticButton
                   as={Link}
@@ -308,12 +309,53 @@ export function CinematicFooter() {
                   </MagneticButton>
                 )}
               </div>
+
+              <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
+                <a
+                  href={STORE_INFO.whatsapp.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-amber-600 transition-colors px-3 py-1 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/50"
+                >
+                  WhatsApp: {STORE_INFO.phone.mobile}
+                </a>
+                <a
+                  href={`tel:${STORE_INFO.phone.landline}`}
+                  className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-amber-600 transition-colors px-3 py-1 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/50"
+                >
+                  Tel: {STORE_INFO.phone.landlineFormatted}
+                </a>
+                <a
+                  href={STORE_INFO.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-amber-600 transition-colors px-3 py-1 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/50"
+                >
+                  Instagram
+                </a>
+                <a
+                  href={STORE_INFO.social.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-amber-600 transition-colors px-3 py-1 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/50"
+                >
+                  Facebook
+                </a>
+                <a
+                  href={STORE_INFO.social.googleMaps}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground hover:text-amber-600 transition-colors px-3 py-1 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/50"
+                >
+                  Murshid Sunaar Tower, Karachi (5.0 ★)
+                </a>
+              </div>
             </div>
           </div>
 
           <div className="relative z-20 w-full pb-6 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border/30 bg-background/30 backdrop-blur-xs">
-            <div className="text-muted-foreground text-[10px] md:text-xs font-medium tracking-widest uppercase order-2 md:order-1">
-              © 2026 Khalil & Sons. All rights reserved.
+            <div className="text-muted-foreground text-[10px] md:text-xs font-medium tracking-widest uppercase order-2 md:order-1 font-mono">
+              © 2026 Khalil & Sons Jewellers • Saddar, Karachi. All rights reserved.
             </div>
 
             <div className="border border-[#2d3435]/20 bg-white/60 dark:bg-neutral-900/60 backdrop-blur-xs px-4 py-2 flex items-center gap-2 order-1 md:order-2 cursor-default">

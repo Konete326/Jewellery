@@ -31,7 +31,7 @@ export const companyLinks = [
   {
     label: "About Us",
     href: "/about",
-    description: "Our story, heritage & master jewelers since 1924",
+    description: "Our story, heritage & master jewelers since 1992",
     icon: <BookOpen className="size-4" />
   },
   {
@@ -41,9 +41,9 @@ export const companyLinks = [
     icon: <ShieldCheck className="size-4" />
   },
   {
-    label: "Historic Atelier",
+    label: "Karachi Boutique",
     href: "/#atelier",
-    description: "Our showroom and workshop in Florence",
+    description: "Our showroom and boutique in Saddar, Karachi",
     icon: <Landmark className="size-4" />
   }
 ];

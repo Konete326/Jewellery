@@ -13,7 +13,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
   useEffect(() => {
     if (inquiry) {
       setSubject(`Response to your inquiry: ${inquiry.subject || inquiry.jewelryType || 'Atelier Consultation'}`);
-      setBody(`Dear ${inquiry.customerName || 'Valued Client'},\n\nThank you for reaching out to the Khalil & Sons Atelier in Florence.\n\nRegarding your request:\n\n\nWarm regards,\nKhalil & Sons Concierge\nVia de' Tornabuoni, Florence`);
+      setBody(`Dear ${inquiry.customerName || 'Valued Client'},\n\nThank you for reaching out to Khalil & Sons Jewellers.\n\nRegarding your request:\n\n\nWarm regards,\nKhalil & Sons Jewellers\nShop #2, Murshid Sunaar Tower, Saddar, Karachi`);
       setTouched({});
     }
   }, [inquiry]);

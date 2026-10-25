@@ -147,7 +147,7 @@ export function FeaturedMasterpieces() {
                 </p>
                 <div className="flex items-center justify-between pt-2 border-t border-neutral-200/50">
                   <span className="text-[10px] uppercase font-mono tracking-widest text-[#5a6061]">
-                    Florence Atelier Piece
+                    Khalil & Sons Masterpiece
                   </span>
                   <span className="text-xs font-mono uppercase tracking-wider text-amber-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                     <span>View Piece</span>

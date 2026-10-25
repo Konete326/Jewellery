@@ -162,7 +162,7 @@ export function AuthGalleryShowcase() {
             &ldquo;True luxury is found in the artist's touch, preserving the timeless beauty of pure gold.&rdquo;
           </p>
           <footer className="text-xs uppercase tracking-widest text-amber-300/80 drop-shadow-xs">
-            Florence Atelier • Est. 1924
+            Murshid Bazaar, Saddar, Karachi • Est. 1992
           </footer>
         </blockquote>
       </div>

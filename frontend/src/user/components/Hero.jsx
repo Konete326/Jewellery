@@ -1,5 +1,6 @@
 import { LuxuryButton } from './LuxuryButton'
 import { NeuralNoise } from '@/components/ui/neural-noise'
+import { STORE_INFO } from '@/constants/storeInfo'
 
 export function Hero({ onExploreClick }) {
   return (
@@ -21,15 +22,15 @@ export function Hero({ onExploreClick }) {
         <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-amber-500/15 blur-[120px] rounded-full pointer-events-none" />
       </div>
       <div className="relative z-10 max-w-3xl pt-20">
-        <span className="tracking-[0.2em] uppercase text-xs text-white/90 mb-4 block font-medium">
-          Est. 1924 • Florence
+        <span className="tracking-[0.2em] uppercase text-xs text-white/90 mb-4 block font-medium font-mono">
+          Est. {STORE_INFO.established} • Saddar, Karachi
         </span>
         <h1 className="font-headline text-5xl md:text-8xl text-white leading-[1.08] mb-8 tracking-tight font-light">
           The Art of <br />
           <span className="serif-italic">Handcrafted</span> Gold
         </h1>
         <p className="text-white/85 text-lg md:text-xl max-w-lg mb-10 leading-relaxed font-light">
-          Creating timeless gold jewellery with care and dedication. Every piece at Khalil & Sons is handcrafted by master artisans in Florence.
+          Master goldsmithing since 1992 in Saddar, Karachi. Crafting certified 22K and 24K gold bridal jewelry, solitaires, and polki heirlooms.
         </p>
         <div>
           <LuxuryButton onClick={onExploreClick} variant="gold">

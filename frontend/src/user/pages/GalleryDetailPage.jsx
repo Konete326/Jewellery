@@ -145,7 +145,7 @@ export function GalleryDetailPage() {
               <div>
                 <h4 className="text-sm font-medium text-[#2d3435]">Handmade Quality</h4>
                 <p className="text-xs text-[#5a6061] font-light mt-1 leading-relaxed">
-                  Each piece is handcrafted by master jewelers in Florence and comes with a certificate of authenticity.
+                  Each piece is handcrafted by master jewelers at Khalil & Sons, Karachi and comes with a certificate of authenticity.
                 </p>
               </div>
             </div>

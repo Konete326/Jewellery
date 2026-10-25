@@ -1,6 +1,7 @@
 import React from 'react';
 import { Star, MessageCircle, Mail, Calendar, ZoomIn, Gem } from 'lucide-react';
 import { LuxuryButton } from './LuxuryButton';
+import { STORE_INFO } from '@/constants/storeInfo';
 
 export function GalleryMasterpieceHero({
   piece,
@@ -12,17 +13,15 @@ export function GalleryMasterpieceHero({
   if (!piece) return null;
 
   const title = piece.title || 'Fine Jewellery Piece';
-  const description = piece.description || 'Handcrafted gold jewellery made with care in our Florence workshop.';
+  const description = piece.description || 'Handcrafted fine gold jewellery made with care at Khalil & Sons, Karachi.';
   const imageUrl = piece.imageUrl || piece.src;
   const rating = Number(piece.averageRating || piece.rating || 0);
   const reviewCount = piece.reviewCount || (piece.reviews?.length) || 0;
   const hasQualifyingRating = rating >= 4.0;
   const refCode = `KS-${String(piece._id || piece.id || '001').slice(-6).toUpperCase()}`;
 
-  const whatsappMessage = encodeURIComponent(
-    `Hello Khalil & Sons,\n\nI am interested in this piece:\n*${title}*\nReference: ${refCode}\nImage: ${imageUrl}\n\nPlease share price, availability, and ordering details.`
-  );
-  const whatsappUrl = `https://wa.me/39055218901?text=${whatsappMessage}`;
+  const whatsappMessage = `Hello Khalil & Sons,\n\nI am interested in this piece:\n*${title}*\nReference: ${refCode}\nImage: ${imageUrl}\n\nPlease share price, availability, and ordering details.`;
+  const whatsappUrl = STORE_INFO.whatsapp.inquiryUrl(whatsappMessage);
 
   return (
     <section className="w-full pt-2 pb-12">
@@ -31,7 +30,7 @@ export function GalleryMasterpieceHero({
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-400 text-xs font-mono tracking-widest uppercase">
               <Gem className="size-3.5 text-amber-600" />
-              <span>Handmade Jewellery • Florence</span>
+              <span>Handmade Jewellery • Karachi</span>
             </div>
 
             <h1 className="font-headline text-3xl sm:text-5xl xl:text-6xl text-[#2d3435] font-light tracking-tight leading-[1.15]">
@@ -93,7 +92,7 @@ export function GalleryMasterpieceHero({
             </div>
             <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
               <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Made In</span>
-              <p className="text-xs font-medium text-[#2d3435] mt-0.5">Florence, Italy</p>
+              <p className="text-xs font-medium text-[#2d3435] mt-0.5">Saddar, Karachi</p>
             </div>
             <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
               <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Availability</span>
@@ -138,7 +137,7 @@ export function GalleryMasterpieceHero({
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-neutral-300 bg-white/70 hover:bg-white text-xs uppercase tracking-wider font-medium text-[#2d3435] hover:border-amber-500/50 transition-all cursor-pointer shadow-xs"
               >
                 <Calendar className="size-3.5 text-amber-600" />
-                <span>Book an In-Person Viewing in Florence</span>
+                <span>Book an In-Person Viewing in Karachi</span>
               </button>
             </div>
           </div>
@@ -162,7 +161,7 @@ export function GalleryMasterpieceHero({
 
             <div className="absolute top-4 left-4 z-10 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white/90 text-[11px] font-mono tracking-wider uppercase flex items-center gap-1.5">
               <Gem className="size-3 text-amber-400" />
-              <span>Handmade in Florence</span>
+              <span>Handmade in Karachi</span>
             </div>
 
             <div className="absolute bottom-4 right-4 z-10 px-4 py-2 rounded-xl bg-white/95 text-[#2d3435] backdrop-blur-md shadow-lg text-xs font-medium uppercase tracking-wider flex items-center gap-2 transition-transform duration-300 group-hover:scale-105">

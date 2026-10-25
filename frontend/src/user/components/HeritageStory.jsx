@@ -1,45 +1,59 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { STORE_INFO } from '@/constants/storeInfo'
+
 export function HeritageStory() {
   return (
     <section id="heritage" className="py-28 md:py-36 px-6 md:px-20 bg-[#f9f9f9]">
       <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16 items-center">
         <div className="md:col-span-5 relative">
-          <div className="bg-[#f2f4f4] p-4 aspect-[3/4] shadow-sm">
+          <div className="bg-[#f2f4f4] p-4 aspect-[3/4] shadow-sm rounded-xl overflow-hidden border border-neutral-200/70">
             <img
-              alt="Vintage photograph of a traditional jewelry workshop"
-              className="w-full h-full object-cover grayscale brightness-90"
-              src="/images/image-01.jpg"
+              alt="Artisanal gold workshop of Khalil & Sons"
+              className="w-full h-full object-cover"
+              src="/assets/about/founder-poster.jpg"
+              onError={(e) => {
+                e.currentTarget.onerror = null
+                e.currentTarget.src = '/images/image-01.jpg'
+              }}
             />
           </div>
-          <div className="absolute -bottom-8 -right-6 md:-right-8 w-44 h-44 md:w-52 md:h-52 bg-white p-2.5 hidden sm:block shadow-md">
+          <div className="absolute -bottom-8 -right-6 md:-right-8 w-44 h-44 md:w-52 md:h-52 bg-white p-2.5 hidden sm:block shadow-xl rounded-xl border border-neutral-200/80 overflow-hidden">
             <img
-              alt="Macrophotography of a gold ring detail"
+              alt="Detailed craftsmanship of bridal gold jewelry"
               className="w-full h-full object-cover"
-              src="/images/image-02.jpg"
+              src="/assets/about/brand-poster.jpg"
+              onError={(e) => {
+                e.currentTarget.onerror = null
+                e.currentTarget.src = '/images/image-02.jpg'
+              }}
             />
           </div>
         </div>
         <div className="md:col-span-6 md:col-start-7 space-y-6">
-          <span className="text-[#5f5e5e] tracking-[0.2em] uppercase text-xs block font-medium">
-            Our Story
+          <span className="text-[#5f5e5e] tracking-[0.2em] uppercase text-xs block font-medium font-mono">
+            Our Heritage • Est. {STORE_INFO.established}
           </span>
           <h2 className="font-headline text-4xl md:text-6xl text-[#2d3435] leading-tight font-normal">
-            Over 100 Years of <span className="serif-italic">Fine</span> Craftsmanship
+            Master Goldsmithing <br />
+            <span className="serif-italic">Since 1992</span>
           </h2>
           <div className="space-y-5 text-[#5a6061] leading-relaxed text-base md:text-lg font-light">
             <p>
-              At Khalil & Sons, we believe jewellery should hold lasting beauty and personal meaning. Our skilled jewelers use time-tested methods — hand-engraving, lost-wax casting, and pure gold alloys that give each design a warm, natural shine.
+              Founded in 1992 by Mr. Khalil Ahmed in Murshid Bazaar, Saddar, Karachi, Khalil & Sons Jewellers preserves authentic artisanal goldsmithing and bridal jewelry across generations.
             </p>
             <p>
-              We never mass-produce. Every month, only a few handmade pieces leave our workshop, crafted with care for customers who appreciate real quality.
+              We specialize in certified 22K (.916) and 24K pure gold, hand-set natural diamonds, Polki heirlooms, and custom bridal jewelry crafted with care for families who value lasting quality and certified purity.
             </p>
           </div>
           <div className="pt-4">
-            <a
-              href="#atelier"
-              className="text-[#2d3435] tracking-widest uppercase text-xs border-b border-neutral-400 pb-1 hover:border-black transition-colors"
+            <Link
+              to="/about"
+              className="inline-flex items-center gap-2 text-[#2d3435] tracking-widest uppercase text-xs border-b border-neutral-400 pb-1 hover:border-black hover:text-amber-800 transition-colors"
             >
-              Learn More About Us
-            </a>
+              <span>Discover Our Story & Workshop</span>
+              <span>&rarr;</span>
+            </Link>
           </div>
         </div>
       </div>

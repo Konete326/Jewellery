@@ -1,100 +1,116 @@
 import React from 'react';
-import { Mail, MapPin, Clock, Calendar, MessageCircle, Crown } from 'lucide-react';
+import { Mail, MapPin, Clock, Calendar, MessageCircle } from 'lucide-react';
+import { GlobeWireframe } from '@/components/ui/contact-with-globe';
+import { STORE_INFO } from '@/constants/storeInfo';
 
 export function AtelierContactDirectory({ onOpenAppointment }) {
-  const whatsappUrl = `https://wa.me/39055218901?text=${encodeURIComponent(
-    'Hello Khalil & Sons, I would like to inquire about custom jewellery.'
-  )}`;
+  const whatsappUrl = STORE_INFO.whatsapp.inquiryUrl(
+    'Hello Khalil & Sons, I would like to inquire about your services.'
+  );
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="space-y-2">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-800 dark:text-amber-400 text-xs font-mono tracking-widest uppercase">
-          <Crown className="size-3 text-amber-600" />
-          <span>Contact Information</span>
-        </div>
-        <h2 className="text-3xl sm:text-4xl font-serif font-light text-foreground tracking-tight">
+    <div className="flex flex-col gap-4">
+      <div className="space-y-1">
+        <h2 className="text-2xl sm:text-3xl font-serif font-light text-foreground tracking-tight">
           Get In Touch
         </h2>
         <p className="text-xs sm:text-sm text-muted-foreground font-light leading-relaxed">
-          Reach out to us directly by phone, WhatsApp, or email. We are happy to assist you.
+          Reach out directly by phone, WhatsApp, or email. We are here to assist with any questions or requests.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3.5">
+      <div className="relative overflow-hidden h-44 sm:h-48 rounded-2xl border border-neutral-200/80 bg-white dark:bg-card shadow-xs p-3">
+        <div className="absolute top-2.5 left-3 z-10 flex items-center gap-2">
+          <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[10px] uppercase font-mono tracking-widest text-[#5a6061]">
+            Global Concierge Network
+          </span>
+        </div>
+        <GlobeWireframe
+          className="w-full aspect-square max-w-full absolute -top-8 left-0 text-amber-600 dark:text-amber-400"
+          variant="wireframesolid"
+          autoRotate
+          autoRotateSpeed={0.4}
+          strokeWidth={0.8}
+          graticuleOpacity={0.12}
+          strokeColor="currentColor"
+          sphereOutlineColor="currentColor"
+        />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-card dark:via-card/80" />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
         <a
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-start gap-3.5 p-4 rounded-2xl border border-border/80 bg-white/90 dark:bg-card hover:border-amber-500/40 hover:bg-amber-500/5 transition-all shadow-xs"
+          className="group flex items-center gap-3 p-3 rounded-xl border border-border/80 bg-white/90 dark:bg-card hover:border-amber-500/40 hover:bg-amber-500/5 transition-all shadow-xs"
         >
-          <div className="size-11 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 shrink-0 group-hover:scale-105 transition-transform">
-            <MessageCircle className="size-5" />
+          <div className="size-9 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 shrink-0 group-hover:scale-105 transition-transform">
+            <MessageCircle className="size-4" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 block">WhatsApp Us</span>
-            <span className="text-sm font-medium text-foreground group-hover:text-amber-800 transition-colors">+39 055 218 901</span>
-            <p className="text-[11px] text-muted-foreground font-light mt-0.5">Chat directly with our team</p>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 block">WhatsApp</span>
+            <span className="text-xs font-medium text-foreground group-hover:text-amber-800 transition-colors block truncate">{STORE_INFO.phone.mobileFormatted}</span>
           </div>
         </a>
 
         <a
-          href="mailto:concierge@khaliljewellery.com"
-          className="group flex items-start gap-3.5 p-4 rounded-2xl border border-border/80 bg-white/90 dark:bg-card hover:border-amber-500/40 hover:bg-amber-500/5 transition-all shadow-xs"
+          href={`mailto:${STORE_INFO.email}`}
+          className="group flex items-center gap-3 p-3 rounded-xl border border-border/80 bg-white/90 dark:bg-card hover:border-amber-500/40 hover:bg-amber-500/5 transition-all shadow-xs"
         >
-          <div className="size-11 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 shrink-0 group-hover:scale-105 transition-transform">
-            <Mail className="size-5" />
+          <div className="size-9 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 shrink-0 group-hover:scale-105 transition-transform">
+            <Mail className="size-4" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 block">Email Us</span>
-            <span className="text-sm font-medium text-foreground group-hover:text-amber-800 transition-colors truncate block">concierge@khaliljewellery.com</span>
-            <p className="text-[11px] text-muted-foreground font-light mt-0.5">We reply within 24 hours</p>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 block">Email</span>
+            <span className="text-xs font-medium text-foreground group-hover:text-amber-800 transition-colors block truncate">{STORE_INFO.email}</span>
           </div>
         </a>
 
-        <div className="flex items-start gap-3.5 p-4 rounded-2xl border border-border/80 bg-white/90 dark:bg-card shadow-xs">
-          <div className="size-11 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 shrink-0">
-            <MapPin className="size-5" />
+        <a
+          href={STORE_INFO.social.googleMaps}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-center gap-3 p-3 rounded-xl border border-border/80 bg-white/90 dark:bg-card hover:border-amber-500/40 hover:bg-amber-500/5 transition-all shadow-xs"
+        >
+          <div className="size-9 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 shrink-0 group-hover:scale-105 transition-transform">
+            <MapPin className="size-4" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 block">Our Workshop</span>
-            <span className="text-sm font-medium text-foreground block">Via de' Tornabuoni 14/R</span>
-            <p className="text-[11px] text-muted-foreground font-light mt-0.5">50123 Florence, Italy</p>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 block">Showroom</span>
+            <span className="text-xs font-medium text-foreground block truncate">{STORE_INFO.address.short}</span>
           </div>
-        </div>
+        </a>
 
-        <div className="flex items-start gap-3.5 p-4 rounded-2xl border border-border/80 bg-white/90 dark:bg-card shadow-xs">
-          <div className="size-11 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 shrink-0">
-            <Clock className="size-5" />
+        <div className="flex items-center gap-3 p-3 rounded-xl border border-border/80 bg-white/90 dark:bg-card shadow-xs">
+          <div className="size-9 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 shrink-0">
+            <Clock className="size-4" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 block">Opening Hours</span>
-            <span className="text-sm font-medium text-foreground block">Monday – Saturday</span>
-            <p className="text-[11px] text-muted-foreground font-light mt-0.5">10:00 AM – 7:00 PM</p>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 block">Hours</span>
+            <span className="text-xs font-medium text-foreground block truncate">{STORE_INFO.hours.monThu}</span>
           </div>
         </div>
       </div>
 
-      <div className="p-6 rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent flex flex-col gap-4 shadow-sm">
+      <div className="p-3.5 rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent flex items-center justify-between gap-3 shadow-xs">
         <div>
-          <span className="text-[10px] uppercase font-mono tracking-widest text-amber-800 dark:text-amber-400 font-semibold block mb-1">
-            In-Person Visit
-          </span>
-          <h4 className="font-serif text-lg font-medium text-foreground">
-            Visit Our Workshop in Florence
+          <h4 className="font-serif text-sm font-medium text-foreground">
+            Private Consultation
           </h4>
-          <p className="text-xs text-muted-foreground font-light leading-relaxed mt-1">
-            Visit our showroom in Florence to see our handcrafted jewellery and gemstones in person.
+          <p className="text-[11px] text-muted-foreground font-light">
+            Book an appointment for in-person viewing or bespoke jewelry advice
           </p>
         </div>
 
         <button
           type="button"
           onClick={onOpenAppointment}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#2d3435] text-white hover:bg-neutral-800 text-xs uppercase tracking-widest font-medium transition-colors cursor-pointer shadow-md"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#2d3435] text-white hover:bg-neutral-800 text-[11px] uppercase tracking-wider font-medium transition-colors cursor-pointer shrink-0"
         >
-          <Calendar className="size-3.5 text-amber-400" />
-          <span>Book an Appointment</span>
+          <Calendar className="size-3 text-amber-400" />
+          <span>Book Visit</span>
         </button>
       </div>
     </div>
