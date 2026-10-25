@@ -4,6 +4,16 @@ const DEFAULT_KEYWORDS = 'Khalil and Sons, Khalil and Sons Jewellers, jewellery 
 const DEFAULT_IMAGE = 'https://khalilandsonsjewellers.com/assets/logo.png';
 const BASE_URL = 'https://khalilandsonsjewellers.com';
 
+const optimizeCloudinaryUrl = (url = '') => {
+  if (!url || typeof url !== 'string') return url;
+  if (url.includes('cloudinary.com') && url.includes('/upload/')) {
+    if (!url.includes('f_auto') && !url.includes('q_auto')) {
+      return url.replace('/upload/', '/upload/f_auto,q_auto/');
+    }
+  }
+  return url;
+};
+
 function setMetaTag(selector, attribute, value) {
   if (typeof document === 'undefined') return;
   let element = document.querySelector(selector);
@@ -138,9 +148,10 @@ export function getProductSchema(piece) {
   if (!piece) return null;
   const rating = Number(piece.averageRating || piece.rating || 5);
   const reviewCount = Math.max(1, piece.reviewCount || (piece.reviews?.length) || 1);
-  const imgUrl = piece.imageUrl?.startsWith('http')
+  const rawImg = piece.imageUrl?.startsWith('http')
     ? piece.imageUrl
     : `${BASE_URL}${piece.imageUrl || piece.src || '/assets/logo.png'}`;
+  const imgUrl = optimizeCloudinaryUrl(rawImg);
 
   return {
     '@context': 'https://schema.org',
@@ -162,9 +173,25 @@ export function getProductSchema(piece) {
       priceValidUntil: '2030-12-31',
       availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
+      availableAtOrFrom: {
+        '@type': 'JewelryStore',
+        '@id': `${BASE_URL}/#store`,
+        name: 'Khalil & Sons Jewellers',
+        telephone: '+922135670868',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road',
+          addressLocality: 'Saddar, Karachi',
+          addressRegion: 'Sindh',
+          postalCode: '74400',
+          addressCountry: 'PK'
+        }
+      },
       seller: {
         '@type': 'JewelryStore',
-        name: 'Khalil & Sons Jewellers'
+        '@id': `${BASE_URL}/#store`,
+        name: 'Khalil & Sons Jewellers',
+        telephone: '+922135670868'
       }
     },
     aggregateRating: {

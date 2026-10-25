@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AppleIcon } from "@/components/apple-icon";
-import { GithubIcon } from "@/components/github-icon";
 import { GoogleIcon } from "@/components/google-icon";
 import { Button } from "@/components/ui/button";
 import { AuthDivider } from "@/components/auth-divider";
@@ -55,30 +54,24 @@ export function AuthPage() {
             </div>
           )}
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             <Button
               type="button"
               variant="outline"
               onClick={() => setSocialModal({ open: true, provider: "Google" })}
-              className="w-full h-10 px-2"
+              className="w-full h-10 px-3 flex items-center justify-center gap-2 cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             >
-              <GoogleIcon className="size-4" />
+              <GoogleIcon className="size-4 shrink-0" />
+              <span className="text-xs font-medium">Google</span>
             </Button>
             <Button
               type="button"
               variant="outline"
               onClick={() => setSocialModal({ open: true, provider: "Apple" })}
-              className="w-full h-10 px-2"
+              className="w-full h-10 px-3 flex items-center justify-center gap-2 cursor-pointer hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             >
-              <AppleIcon className="size-4" />
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setSocialModal({ open: true, provider: "GitHub" })}
-              className="w-full h-10 px-2"
-            >
-              <GithubIcon className="size-4" />
+              <AppleIcon className="size-4 shrink-0" />
+              <span className="text-xs font-medium">Apple</span>
             </Button>
           </div>
 
