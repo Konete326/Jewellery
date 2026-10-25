@@ -3,6 +3,7 @@ import { UploadCloud, Trash2, Pencil, Image as ImageIcon, Loader2 } from 'lucide
 import { galleryApi } from '@/api/galleryApi';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { EditGalleryModal } from './EditGalleryModal';
+import { JEWELLERY_CATEGORIES } from '@/constants/categories';
 
 export function GalleryManagement() {
   const [items, setItems] = useState([]);
@@ -14,6 +15,7 @@ export function GalleryManagement() {
   const [savingEdit, setSavingEdit] = useState(false);
 
   const [title, setTitle] = useState('');
+  const [category, setCategory] = useState(JEWELLERY_CATEGORIES[0]);
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
@@ -75,6 +77,7 @@ export function GalleryManagement() {
     try {
       const formData = new FormData();
       formData.append('title', title.trim());
+      formData.append('category', category || JEWELLERY_CATEGORIES[0]);
       if (description.trim()) {
         formData.append('description', description.trim());
       }
@@ -84,6 +87,7 @@ export function GalleryManagement() {
       if (res?.success) {
         setSuccessMsg('Project published to Cloudinary & live gallery!');
         setTitle('');
+        setCategory(JEWELLERY_CATEGORIES[0]);
         setDescription('');
         handleRemoveSelectedFile();
         loadGallery();
@@ -167,6 +171,23 @@ export function GalleryManagement() {
             </div>
 
             <div>
+              <label className="block text-xs font-medium text-foreground mb-1">
+                Jewellery Category <span className="text-rose-500">*</span>
+              </label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer"
+              >
+                {JEWELLERY_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="md:col-span-2">
               <label className="block text-xs font-medium text-foreground mb-1">
                 Description <span className="text-muted-foreground font-normal">(Optional)</span>
               </label>
@@ -275,6 +296,11 @@ export function GalleryManagement() {
                 </div>
                 <div className="p-3.5 flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                      <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20">
+                        {item.category || 'Bridal Sets'}
+                      </span>
+                    </div>
                     <h4 className="font-serif text-sm font-semibold text-foreground truncate">{item.title}</h4>
                     {item.description && (
                       <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2 leading-relaxed">

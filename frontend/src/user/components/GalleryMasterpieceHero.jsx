@@ -20,7 +20,11 @@ export function GalleryMasterpieceHero({
   const hasQualifyingRating = rating >= 4.0;
   const refCode = `KS-${String(piece._id || piece.id || '001').slice(-6).toUpperCase()}`;
 
-  const whatsappMessage = `Hello Khalil & Sons,\n\nI am interested in this piece:\n*${title}*\nReference: ${refCode}\nImage: ${imageUrl}\n\nPlease share price, availability, and ordering details.`;
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://khalilandsonsjewellers.com';
+  const fullImageUrl = imageUrl?.startsWith('http') ? imageUrl : `${origin}${imageUrl}`;
+  const productPageUrl = typeof window !== 'undefined' ? window.location.href : `${origin}/gallery/${piece._id || piece.id}`;
+
+  const whatsappMessage = `Hello Khalil & Sons,\n\nI would like to inquire about this jewellery piece:\n\n✨ *${title}*\n💎 Category: ${piece.category || 'Fine Jewellery'}\n🏷️ Ref Code: ${refCode}\n🔗 Product: ${productPageUrl}\n📸 Photo: ${fullImageUrl}\n\nPlease share price estimate, gold purity details, and appointment availability.`;
   const whatsappUrl = STORE_INFO.whatsapp.inquiryUrl(whatsappMessage);
 
   return (

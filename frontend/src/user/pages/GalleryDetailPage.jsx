@@ -13,6 +13,7 @@ import { MasterpieceInquiryModal } from '../components/MasterpieceInquiryModal';
 import { BespokeAppointmentModal } from '../components/BespokeAppointmentModal';
 import { galleryApi } from '@/api/galleryApi';
 import { DEFAULT_SKIPER_IMAGES } from '../components/Skiper54';
+import { PolaroidLineCarousel } from '@/components/ui/polaroid-line-carousel';
 
 export function GalleryDetailPage() {
   const { id } = useParams();
@@ -26,6 +27,7 @@ export function GalleryDetailPage() {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
   const [piece, setPiece] = useState(null);
   const [reviewsList, setReviewsList] = useState([]);
+  const [similarSlides, setSimilarSlides] = useState([]);
 
   useEffect(() => {
     const loadPiece = async () => {
@@ -35,6 +37,8 @@ export function GalleryDetailPage() {
           String(idx + 1) === String(id) ||
           `default-${idx + 1}` === String(id)
       );
+
+      let allItems = [...DEFAULT_SKIPER_IMAGES];
 
       try {
         const res = await galleryApi.getAll();
@@ -47,6 +51,7 @@ export function GalleryDetailPage() {
               _id: dbItem._id,
               id: dbItem._id,
               title: dbItem.title,
+              category: dbItem.category || 'Bridal Sets',
               description: dbItem.description,
               imageUrl: dbItem.imageUrl,
               averageRating: dbItem.averageRating || 0,
@@ -54,6 +59,7 @@ export function GalleryDetailPage() {
               reviews: dbItem.reviews || []
             };
           }
+          allItems = [...res.data, ...DEFAULT_SKIPER_IMAGES];
         }
       } catch {}
 
@@ -63,6 +69,40 @@ export function GalleryDetailPage() {
 
       setPiece(found);
       setReviewsList(found.reviews || []);
+
+      const currentCat = (found.category || 'Bridal Sets').trim().toLowerCase();
+      const currentId = String(found._id || found.id);
+
+      const uniquePool = [];
+      const seenIds = new Set([currentId]);
+
+      for (const item of allItems) {
+        const itemId = String(item._id || item.id);
+        if (!seenIds.has(itemId)) {
+          seenIds.add(itemId);
+          uniquePool.push(item);
+        }
+      }
+
+      const sameCategory = uniquePool.filter(
+        (it) => it.category && it.category.trim().toLowerCase() === currentCat
+      );
+      const otherCategory = uniquePool.filter(
+        (it) => !it.category || it.category.trim().toLowerCase() !== currentCat
+      );
+
+      const combinedSimilar = [...sameCategory, ...otherCategory].slice(0, 8);
+
+      const formattedSlides = combinedSimilar.map((item) => ({
+        id: item._id || item.id,
+        image: item.imageUrl || item.src,
+        title: item.title,
+        caption: item.category || '22K Gold Masterpiece',
+        category: item.category || 'Fine Jewellery',
+        alt: item.title
+      }));
+
+      setSimilarSlides(formattedSlides);
     };
 
     loadPiece();
@@ -137,6 +177,37 @@ export function GalleryDetailPage() {
         />
 
         <div className="w-full pt-10 pb-6 border-t border-neutral-200/80">
+          {similarSlides.length > 0 && (
+            <div className="w-full mb-10">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4">
+                <div>
+                  <span className="text-xs uppercase tracking-[0.25em] text-[#5f5e5e] font-mono font-medium block mb-1">
+                    Curated Collection • {piece.category || 'Fine Jewellery'}
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-serif font-light text-[#2d3435]">
+                    Similar Masterpieces
+                  </h3>
+                </div>
+                <span className="text-xs text-muted-foreground font-mono">
+                  Drag line or click to inspect
+                </span>
+              </div>
+
+              <div className="w-full overflow-hidden rounded-3xl border border-neutral-200/70 bg-gradient-to-b from-[#f5f2ea]/50 via-white to-transparent shadow-xs">
+                <PolaroidLineCarousel
+                  slides={similarSlides}
+                  height="440px"
+                  cardWidth={260}
+                  onSlideClick={(slide) => {
+                    if (slide.id) {
+                      navigate(`/gallery/${slide.id}`);
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
               <div className="p-3 rounded-xl bg-amber-500/10 text-amber-700">

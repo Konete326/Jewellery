@@ -3,8 +3,8 @@ import { galleryService } from './gallery.service.js';
 export class GalleryController {
   async getAll(req, res, next) {
     try {
-      const { page, limit } = req.query;
-      const result = await galleryService.getAllItems({ page, limit });
+      const { page, limit, category } = req.query;
+      const result = await galleryService.getAllItems({ page, limit }, { category });
       res.status(200).json({
         success: true,
         ...result
@@ -29,10 +29,11 @@ export class GalleryController {
 
   async create(req, res, next) {
     try {
-      const { title, description, imageUrl } = req.body;
+      const { title, description, category, imageUrl } = req.body;
       const item = await galleryService.createItem({
         title,
         description,
+        category,
         file: req.file,
         imageUrl
       });
@@ -49,8 +50,8 @@ export class GalleryController {
   async updateItem(req, res, next) {
     try {
       const { id } = req.params;
-      const { title, description, isActive } = req.body;
-      const item = await galleryService.updateItem(id, { title, description, isActive });
+      const { title, description, category, isActive } = req.body;
+      const item = await galleryService.updateItem(id, { title, description, category, isActive });
       res.status(200).json({
         success: true,
         message: 'Gallery item updated successfully',

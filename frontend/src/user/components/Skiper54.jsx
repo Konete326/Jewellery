@@ -17,6 +17,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/choker-ruby-01.jpg",
     alt: "The Florentine Ruby Choker",
     title: "The Florentine Ruby Choker",
+    category: "Necklaces & Chokers",
     description: "22K handmade gold necklace with natural red rubies"
   },
   {
@@ -25,6 +26,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/kada-polki-01.jpg",
     alt: "Royal Polki Kada Armlet",
     title: "Royal Polki Kada Armlet",
+    category: "Kadas & Bangles",
     description: "Uncut diamonds set in 22K solid gold with detailed enamel work"
   },
   {
@@ -33,6 +35,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/guluband-01.jpg",
     alt: "Archival Aurelian Guluband",
     title: "Archival Aurelian Guluband",
+    category: "Necklaces & Chokers",
     description: "Handmade 22K solid gold collar necklace with delicate gold wirework"
   },
   {
@@ -41,6 +44,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/jhumka-01.jpg",
     alt: "Imperial Florentine Jhumkas",
     title: "Imperial Florentine Jhumkas",
+    category: "Earrings & Jhumkas",
     description: "22K gold drop earrings with delicate pearls and carved designs"
   },
   {
@@ -49,6 +53,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/ring-polki-01.jpg",
     alt: "Medici Uncut Polki Solitaire",
     title: "Medici Uncut Polki Solitaire",
+    category: "Rings & Solitaires",
     description: "Natural uncut diamond ring set in textured 22K yellow gold"
   },
   {
@@ -57,6 +62,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/kada-plain-01.jpg",
     alt: "Solid Bullion Handcrafted Bangle",
     title: "Solid Bullion Handcrafted Bangle",
+    category: "Kadas & Bangles",
     description: "Handmade solid gold bangle with a smooth satin finish"
   },
   {
@@ -65,6 +71,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/choker-ruby-02.jpg",
     alt: "Renaissance Ruby Suite Choker",
     title: "Renaissance Ruby Suite Choker",
+    category: "Necklaces & Chokers",
     description: "Gold choker with hand-linked chains and red rubies"
   }
 ];

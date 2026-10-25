@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { X, Gem, Loader2, Save } from 'lucide-react';
+import { JEWELLERY_CATEGORIES } from '@/constants/categories';
 
 export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
   const [title, setTitle] = useState('');
+  const [category, setCategory] = useState(JEWELLERY_CATEGORIES[0]);
   const [description, setDescription] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     if (item) {
       setTitle(item.title || '');
+      setCategory(item.category || JEWELLERY_CATEGORIES[0]);
       setDescription(item.description || '');
       setErrorMsg('');
     }
@@ -24,6 +27,7 @@ export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
     }
     onSave(item._id, {
       title: title.trim(),
+      category: category || JEWELLERY_CATEGORIES[0],
       description: description.trim()
     });
   };
@@ -89,6 +93,23 @@ export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
               placeholder="Masterpiece title"
               className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-amber-500"
             />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-foreground mb-1">
+              Jewellery Category <span className="text-rose-500">*</span>
+            </label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer"
+            >
+              {JEWELLERY_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>

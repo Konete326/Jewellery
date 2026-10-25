@@ -2,7 +2,7 @@ import { galleryRepository } from './gallery.repository.js';
 import { uploadToCloudinary, deleteFromCloudinary } from '../../config/cloudinary.js';
 
 export class GalleryService {
-  async createItem({ title, description, file, imageUrl }) {
+  async createItem({ title, description, category, file, imageUrl }) {
     if (!title || !title.trim()) {
       throw new Error('Title is required');
     }
@@ -23,19 +23,25 @@ export class GalleryService {
     return await galleryRepository.create({
       title: title.trim(),
       description: description ? description.trim() : '',
+      category: category ? category.trim() : 'Bridal Sets',
       imageUrl: finalImageUrl,
       publicId
     });
   }
 
-  async getAllItems(pagination = {}) {
+  async getAllItems(pagination = {}, filter = {}) {
+    const query = { isActive: true };
+    if (filter.category) {
+      query.category = filter.category;
+    }
     const { page, limit } = pagination;
     if (page !== undefined && limit !== undefined) {
       const pageNum = Math.max(1, Number(page));
       const limitNum = Math.max(1, Number(limit));
       const { items, total } = await galleryRepository.findPaginated({
         page: pageNum,
-        limit: limitNum
+        limit: limitNum,
+        query
       });
       return {
         count: items.length,
@@ -46,7 +52,7 @@ export class GalleryService {
         data: items
       };
     }
-    const items = await galleryRepository.findAll();
+    const items = await galleryRepository.findAll(query);
     return {
       count: items.length,
       data: items
@@ -57,7 +63,7 @@ export class GalleryService {
     return await galleryRepository.findById(id);
   }
 
-  async updateItem(id, { title, description, isActive }) {
+  async updateItem(id, { title, description, category, isActive }) {
     const item = await galleryRepository.findById(id);
     if (!item) {
       throw new Error('Gallery item not found');
@@ -66,6 +72,7 @@ export class GalleryService {
     const updateData = {};
     if (title !== undefined && title.trim()) updateData.title = title.trim();
     if (description !== undefined) updateData.description = description.trim();
+    if (category !== undefined && category.trim()) updateData.category = category.trim();
     if (isActive !== undefined) updateData.isActive = isActive;
 
     return await galleryRepository.update(id, updateData);

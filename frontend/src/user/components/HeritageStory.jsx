@@ -18,7 +18,7 @@ export function HeritageStory() {
               }}
             />
           </div>
-          <div className="absolute -bottom-8 -right-6 md:-right-8 w-44 h-44 md:w-52 md:h-52 bg-white p-2.5 hidden sm:block shadow-xl rounded-xl border border-neutral-200/80 overflow-hidden">
+          <div className="absolute -bottom-8 md:-bottom-10 left-0 right-0 w-full h-44 md:h-52 bg-white p-2.5 hidden sm:block shadow-xl rounded-xl border border-neutral-200/80 overflow-hidden">
             <img
               alt="Detailed craftsmanship of bridal gold jewelry"
               className="w-full h-full object-cover"

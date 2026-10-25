@@ -22,6 +22,11 @@ const gallerySchema = new mongoose.Schema(
       default: '',
       trim: true
     },
+    category: {
+      type: String,
+      default: 'Bridal Sets',
+      trim: true
+    },
     imageUrl: {
       type: String,
       required: true
