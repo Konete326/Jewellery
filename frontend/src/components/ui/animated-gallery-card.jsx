@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useInView } from "framer-motion";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Star, ArrowUpRight } from "lucide-react";
+import { SaveToVaultButton } from "@/components/ui/SaveToVaultButton";
 
 export function AnimatedGalleryCard({ alt, src, ratio, placeholder, item, rating, onClick }) {
 	const ref = React.useRef(null);
@@ -38,6 +39,9 @@ export function AnimatedGalleryCard({ alt, src, ratio, placeholder, item, rating
 					loading="lazy"
 					onError={handleError}
 				/>
+				<div className="absolute top-3.5 right-3.5 z-20">
+					<SaveToVaultButton piece={item} />
+				</div>
 				<div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 				<div className="absolute inset-x-0 bottom-0 p-5 text-white opacity-0 transition-all duration-300 translate-y-2 group-hover:translate-y-0 group-hover:opacity-100">
 					<div className="flex items-center justify-between mb-1.5">

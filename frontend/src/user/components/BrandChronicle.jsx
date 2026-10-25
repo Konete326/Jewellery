@@ -1,6 +1,7 @@
 import React from 'react'
 import { ShieldCheck, Award, Gem, MapPin, Phone, MessageCircle, Calendar, Navigation, Clock } from 'lucide-react'
 import { STORE_INFO } from '@/constants/storeInfo'
+import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp'
 import { getStoreStatus } from '@/utils/storeStatus'
 import { cn } from '@/lib/utils'
 import { LuxuryButton } from './LuxuryButton'
@@ -61,9 +62,9 @@ const PILLARS = [
 
 export function BrandChronicle({ onOpenAppointment }) {
   const storeStatus = getStoreStatus()
-  const whatsappUrl = STORE_INFO.whatsapp.inquiryUrl(
-    'Hello Khalil & Sons, I would like to learn more about your brand history and bespoke bridal jewelry.'
-  )
+  const whatsappUrl = getPersonalizedWhatsAppInquiry({
+    customMessage: 'I would like to learn more about your brand history and bespoke bridal jewelry.'
+  })
 
   return (
     <section className="relative w-full max-w-7xl xl:max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">

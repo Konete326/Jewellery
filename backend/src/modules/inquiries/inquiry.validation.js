@@ -16,6 +16,7 @@ export const createInquirySchema = z.object({
 export const replyInquirySchema = z.object({
   body: z.object({
     subject: z.string().min(2).max(200),
-    message: z.string().min(5).max(5000)
+    message: z.string().min(5).max(5000),
+    sentBy: z.string().max(100).optional().default('Atelier Director')
   })
 });

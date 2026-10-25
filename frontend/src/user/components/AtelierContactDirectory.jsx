@@ -2,13 +2,12 @@ import React from 'react';
 import { Mail, MapPin, Phone, Calendar, MessageCircle, Navigation } from 'lucide-react';
 import { GlobeWireframe } from '@/components/ui/contact-with-globe';
 import { STORE_INFO } from '@/constants/storeInfo';
+import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
 import { LuxuryButton } from './LuxuryButton';
 import { StoreStatusBadge } from '@/components/StoreStatusBadge';
 
 export function AtelierContactDirectory({ onOpenAppointment }) {
-  const whatsappUrl = STORE_INFO.whatsapp.inquiryUrl(
-    'Hello Khalil & Sons, I would like to inquire about fine jewellery.'
-  );
+  const whatsappUrl = getPersonalizedWhatsAppInquiry();
 
   return (
     <div className="rounded-2xl border border-border/80 bg-white dark:bg-card p-5 sm:p-7 shadow-xs flex flex-col justify-between h-full gap-4">
