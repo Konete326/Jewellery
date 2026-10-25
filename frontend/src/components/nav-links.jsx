@@ -1,67 +1,67 @@
-import { Sparkles, Gem, Crown, Compass, BookOpen, ShieldCheck, HeartHandshake, Mail } from "lucide-react";
+import { Diamond, Gem, Crown, Compass, BookOpen, ShieldCheck, Landmark, Calendar, Clock } from "lucide-react";
 
 export const productLinks = [
   {
-    label: "Aurelian Sigils",
-    href: "#collections",
-    description: "18K hammered gold with raw diamonds",
-    icon: <Sparkles className="size-5 text-amber-600" />
+    label: "Gold Rings",
+    href: "/#collections",
+    description: "18K handmade gold with real diamonds",
+    icon: <Sparkles className="size-4" />
   },
   {
-    label: "Tuscan Mist Pearls",
-    href: "#collections",
-    description: "South Sea pearls on Venetian gold wire",
-    icon: <Gem className="size-5 text-amber-600" />
+    label: "Pearl Jewellery",
+    href: "/#collections",
+    description: "Natural pearls crafted on gold wire",
+    icon: <Gem className="size-4" />
   },
   {
-    label: "Etruscan Bangles",
-    href: "#collections",
-    description: "Engraved 22K solid gold masterworks",
-    icon: <Crown className="size-5 text-amber-600" />
+    label: "Gold Bangles",
+    href: "/#collections",
+    description: "Solid 22K pure gold handcrafted bangles",
+    icon: <Crown className="size-4" />
   },
   {
-    label: "Bespoke Commissions",
-    href: "#atelier",
-    description: "Private consultations for custom designs",
-    icon: <Compass className="size-5 text-amber-600" />
+    label: "Custom Design",
+    href: "/#atelier",
+    description: "Personal designs made just for you",
+    icon: <Compass className="size-4" />
   }
 ];
 
 export const companyLinks = [
   {
-    label: "The Heritage Story",
-    href: "#heritage",
-    description: "A century of unseen Florentine details",
-    icon: <BookOpen className="size-5 text-amber-600" />
+    label: "About Us",
+    href: "/about",
+    description: "Our story, heritage & master jewelers since 1924",
+    icon: <BookOpen className="size-4" />
   },
   {
-    label: "Ethical Gold Standards",
-    href: "#heritage",
-    description: "Conflict-free alloys and certified provenance",
-    icon: <ShieldCheck className="size-5 text-amber-600" />
+    label: "Pure Gold Quality",
+    href: "/#heritage",
+    description: "Certified pure gold and conflict-free stones",
+    icon: <ShieldCheck className="size-4" />
   },
   {
-    label: "Historic Atelier Visit",
-    href: "#atelier",
-    description: "Via de' Tornabuoni showroom in Florence",
-    icon: <HeartHandshake className="size-5 text-amber-600" />
+    label: "Historic Atelier",
+    href: "/#atelier",
+    description: "Our showroom and workshop in Florence",
+    icon: <Landmark className="size-4" />
   }
 ];
 
 export const companyLinks2 = [
   {
+    label: "Our Story & Vision",
+    href: "/about",
+    icon: <BookOpen className="size-3.5" />
+  },
+  {
     label: "Book Appointment",
-    href: "#atelier",
-    icon: <Mail className="size-4" />
+    href: "/#atelier",
+    icon: <Calendar className="size-3.5" />
   },
   {
-    label: "Heritage Archives",
-    href: "#heritage",
-    icon: <BookOpen className="size-4" />
-  },
-  {
-    label: "Atelier Journal",
-    href: "#heritage",
-    icon: <Compass className="size-4" />
+    label: "Atelier Archives",
+    href: "/#heritage",
+    icon: <Clock className="size-3.5" />
   }
 ];

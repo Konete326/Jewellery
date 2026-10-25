@@ -10,21 +10,22 @@ export function Hero({ onExploreClick }) {
           src="/images/banner.jpg"
         />
         <div className="absolute inset-0 bg-stone-900/40 backdrop-brightness-95"></div>
+        <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-amber-500/15 blur-[120px] rounded-full pointer-events-none" />
       </div>
       <div className="relative z-10 max-w-3xl pt-20">
         <span className="tracking-[0.2em] uppercase text-xs text-white/90 mb-4 block font-medium">
           Est. 1924 • Florence
         </span>
         <h1 className="font-headline text-5xl md:text-8xl text-white leading-[1.08] mb-8 tracking-tight font-light">
-          The Soul of <br />
-          <span className="serif-italic">Hand-Wrought</span> Gold
+          The Art of <br />
+          <span className="serif-italic">Handcrafted</span> Gold
         </h1>
         <p className="text-white/85 text-lg md:text-xl max-w-lg mb-10 leading-relaxed font-light">
-          Preserving the silent language of the goldsmith. Every piece at Khalil & Sons is a testament to the patient art of craftsmanship.
+          Creating timeless gold jewellery with care and dedication. Every piece at Khalil & Sons is handcrafted by master artisans in Florence.
         </p>
         <div>
           <LuxuryButton onClick={onExploreClick} variant="gold">
-            Explore Atelier
+            Explore Collection
           </LuxuryButton>
         </div>
       </div>

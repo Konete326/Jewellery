@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 
 export function NeuralNoise({
   color = [0.85, 0.68, 0.22],
-  opacity = 0.42,
+  opacity = 0.5,
   speed = 0.0008,
-  zIndex = 0,
+  zIndex = 20,
 }) {
   const canvasRef = useRef(null);
 
@@ -13,7 +13,12 @@ export function NeuralNoise({
     if (!canvasEl) return;
 
     let animId = null;
-    const pointer = { x: 0, y: 0, tX: 0, tY: 0 };
+    const pointer = {
+      x: window.innerWidth * 0.5,
+      y: window.innerHeight * 0.5,
+      tX: window.innerWidth * 0.5,
+      tY: window.innerHeight * 0.5,
+    };
     let uniforms = {};
 
     const vsSource = `
@@ -41,7 +46,7 @@ export function NeuralNoise({
         vec2 sine_acc = vec2(0.0);
         vec2 res = vec2(0.0);
         float scale = 8.0;
-        for (int j = 0; j < 15; j++) {
+        for (int j = 0; j < 12; j++) {
           uv = rotate(uv, 1.0);
           sine_acc = rotate(sine_acc, 1.0);
           vec2 layer = uv * scale + float(j) + sine_acc - t;
@@ -70,7 +75,9 @@ export function NeuralNoise({
       }
     `;
 
-    const gl = canvasEl.getContext('webgl') || canvasEl.getContext('experimental-webgl');
+    const gl =
+      canvasEl.getContext('webgl', { powerPreference: 'low-power', preserveDrawingBuffer: false }) ||
+      canvasEl.getContext('experimental-webgl');
     if (!gl) return;
 
     function createShader(glCtx, source, type) {
@@ -114,9 +121,9 @@ export function NeuralNoise({
     gl.uniform1f(uniforms.u_speed, speed);
 
     const resizeCanvas = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvasEl.width = window.innerWidth * dpr;
-      canvasEl.height = window.innerHeight * dpr;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+      canvasEl.width = Math.round(window.innerWidth * dpr);
+      canvasEl.height = Math.round(window.innerHeight * dpr);
       if (uniforms.u_ratio) {
         gl.uniform1f(uniforms.u_ratio, canvasEl.width / (canvasEl.height || 1));
       }
@@ -136,30 +143,33 @@ export function NeuralNoise({
       if (e.targetTouches[0]) updatePointer(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
     };
 
-    window.addEventListener('pointermove', onPointerMove);
-    window.addEventListener('touchmove', onTouchMove);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('mousemove', onPointerMove, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
 
-    const render = () => {
-      pointer.x += (pointer.tX - pointer.x) * 0.2;
-      pointer.y += (pointer.tY - pointer.y) * 0.2;
+    const render = (now) => {
+      animId = requestAnimationFrame(render);
+      if (document.hidden) return;
 
-      gl.uniform1f(uniforms.u_time, performance.now());
+      pointer.x += (pointer.tX - pointer.x) * 0.15;
+      pointer.y += (pointer.tY - pointer.y) * 0.15;
+
+      gl.uniform1f(uniforms.u_time, now || performance.now());
       gl.uniform2f(
         uniforms.u_pointer_position,
         pointer.x / (window.innerWidth || 1),
         1 - pointer.y / (window.innerHeight || 1)
       );
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-      animId = requestAnimationFrame(render);
     };
 
-    render();
+    animId = requestAnimationFrame(render);
 
     return () => {
       if (animId) cancelAnimationFrame(animId);
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('mousemove', onPointerMove);
       window.removeEventListener('touchmove', onTouchMove);
       if (vertexBuffer) gl.deleteBuffer(vertexBuffer);
       if (vertexShader) gl.deleteShader(vertexShader);

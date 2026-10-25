@@ -1,4 +1,4 @@
-import { X, Sparkles } from "lucide-react";
+import { X, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function ComingSoonModal({ isOpen, onClose, provider = "Social Provider" }) {
@@ -20,7 +20,7 @@ export function ComingSoonModal({ isOpen, onClose, provider = "Social Provider" 
 
         <div className="flex flex-col items-center text-center">
           <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-amber-500/10 text-amber-600 border border-amber-500/20">
-            <Sparkles className="size-6" />
+            <Crown className="size-6" />
           </div>
 
           <h3 className="font-semibold text-lg tracking-tight">
@@ -28,8 +28,8 @@ export function ComingSoonModal({ isOpen, onClose, provider = "Social Provider" 
           </h3>
 
           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-            Direct single sign-on with {provider} is currently being configured for our next release.
-            Please use your email and password to sign in or access the Atelier Admin panel.
+            Social sign-in with {provider} will be available soon.
+            Please use your email and password to sign in.
           </p>
 
           <div className="mt-6 w-full flex flex-col gap-2">

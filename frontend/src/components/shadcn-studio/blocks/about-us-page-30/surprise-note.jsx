@@ -1,37 +1,37 @@
 import React, { useState } from 'react'
-import { Sparkles, ShieldCheck } from 'lucide-react'
+import { Sparkles, ShieldCheck, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NOTES = [
   {
+    category: 'Diamonds',
     title: 'Ethical Sourcing',
-    text: '100% Conflict-Free Certified Diamonds',
-    tag: 'Kimberley Process Compliant',
-    position: 'top-[8%] left-[10%] -rotate-3 sm:-rotate-6'
+    text: '100% Conflict-Free Natural Diamonds',
+    tag: 'Certified Clean Natural Stones'
   },
   {
-    title: 'Solid Goldcraft',
-    text: 'Hand-Hammered 18K & 22K Solid Gold',
-    tag: 'Fire Assayed & Hallmarked',
-    position: 'top-[4%] left-[45%] rotate-2 sm:rotate-4'
+    category: 'Pure Gold',
+    title: 'Gold Standards',
+    text: 'Handcrafted 18K & 22K Solid Gold',
+    tag: 'Tested & Officially Hallmarked'
   },
   {
-    title: 'Century Atelier',
-    text: 'Florence Heritage Workshop Est. 1924',
-    tag: 'Via de\' Tornabuoni Archive',
-    position: 'top-[6%] left-[20%] -rotate-2'
+    category: 'Florence',
+    title: 'Historic Atelier',
+    text: 'Historic Workshop Via de\' Tornabuoni',
+    tag: 'Active In Florence Since 1924'
   },
   {
-    title: 'Artisanal Chasing',
-    text: 'Renaissance Repoussé & Lost Wax Casting',
-    tag: 'Master Goldsmithing Bench',
-    position: 'top-[10%] left-[50%] rotate-3'
+    category: 'Craft',
+    title: 'Master Artistry',
+    text: 'Traditional Lost-Wax Casting & Engraving',
+    tag: 'Master Goldsmith Certified'
   },
   {
-    title: 'Bespoke Registry',
-    text: 'Individually Numbered Vault Pieces',
-    tag: 'Lifetime Provenance Dossier',
-    position: 'top-[5%] left-[30%] rotate-1'
+    category: 'Bespoke',
+    title: 'Custom Creations',
+    text: 'One-of-a-Kind Made to Order Masterpieces',
+    tag: 'Certificate of Authenticity'
   }
 ]
 
@@ -39,46 +39,88 @@ const SurpriseNote = () => {
   const [step, setStep] = useState(0)
   const note = NOTES[step]
 
-  return (
-    <div className='relative h-full w-full py-4 flex flex-col justify-between overflow-hidden select-none'>
-      <div className='bg-amber-500/25 absolute top-10 right-[10%] left-[10%] h-1 rounded-full' />
+  const nextStep = (e) => {
+    e.stopPropagation()
+    setStep((prev) => (prev + 1) % NOTES.length)
+  }
 
-      <div
-        onMouseEnter={() => setStep(prev => (prev + 1) % NOTES.length)}
-        onClick={() => setStep(prev => (prev + 1) % NOTES.length)}
-        className={cn(
-          'absolute z-10 w-72 sm:w-80 cursor-pointer transition-all duration-500',
-          note.position
-        )}
-      >
-        <div className='rounded-2xl bg-white/95 dark:bg-card border border-amber-500/35 p-4 shadow-xl backdrop-blur-md hover:border-amber-500 transition-colors'>
-          <div className='flex items-center justify-between mb-1.5'>
-            <span className='inline-flex items-center gap-1 text-[10px] uppercase font-mono tracking-widest text-amber-700 font-semibold'>
-              <Sparkles className='size-3 text-amber-600' />
-              {note.title}
-            </span>
-            <span className='inline-flex items-center gap-1 text-[10px] text-emerald-700 font-mono'>
-              <ShieldCheck className='size-3' />
-              Guaranteed
-            </span>
-          </div>
-          <p className='text-sm sm:text-base font-serif font-medium text-foreground leading-snug'>
-            {note.text}
-          </p>
-          <div className='mt-2 pt-2 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-[11px] text-muted-foreground font-light'>
-            <span>{note.tag}</span>
-            <span className='text-amber-700 font-mono text-[10px]'>Click to cycle &rarr;</span>
-          </div>
+  const prevStep = (e) => {
+    e.stopPropagation()
+    setStep((prev) => (prev - 1 + NOTES.length) % NOTES.length)
+  }
+
+  return (
+    <div className='relative h-full w-full flex flex-col justify-between select-none'>
+      <div className='flex items-center justify-between gap-2 border-b border-border/60 pb-3'>
+        <div className='flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5'>
+          {NOTES.map((item, idx) => (
+            <button
+              key={item.category}
+              type='button'
+              onClick={() => setStep(idx)}
+              className={cn(
+                'px-2.5 py-1 rounded-full text-[11px] font-mono tracking-wider transition-all duration-150 cursor-pointer shrink-0',
+                idx === step
+                  ? 'bg-amber-600 text-white font-medium shadow-xs'
+                  : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
+              )}
+            >
+              {item.category}
+            </button>
+          ))}
+        </div>
+
+        <div className='flex items-center gap-1 shrink-0'>
+          <button
+            type='button'
+            onClick={prevStep}
+            aria-label='Previous note'
+            className='size-7 rounded-md border border-border/80 bg-background hover:bg-muted flex items-center justify-center text-foreground transition-colors cursor-pointer'
+          >
+            <ChevronLeft className='size-3.5' />
+          </button>
+          <span className='text-[10px] font-mono text-muted-foreground px-1'>
+            {step + 1}/{NOTES.length}
+          </span>
+          <button
+            type='button'
+            onClick={nextStep}
+            aria-label='Next note'
+            className='size-7 rounded-md border border-border/80 bg-background hover:bg-muted flex items-center justify-center text-foreground transition-colors cursor-pointer'
+          >
+            <ChevronRight className='size-3.5' />
+          </button>
         </div>
       </div>
 
-      <div className='mt-auto pt-24 text-center z-10'>
-        <p className='text-foreground text-lg sm:text-xl font-normal font-serif'>
-          The Hallmark of Florentine Haute Joaillerie
-        </p>
-        <p className='text-xs text-muted-foreground font-light mt-0.5 tracking-wider uppercase font-mono'>
-          Living Heritage &bull; Continuous Handcraft Since 1924
-        </p>
+      <div
+        onClick={() => setStep((prev) => (prev + 1) % NOTES.length)}
+        className='my-auto py-2 cursor-pointer transition-opacity duration-150'
+      >
+        <div className='flex items-center justify-between mb-2'>
+          <span className='inline-flex items-center gap-1.5 text-[10px] uppercase font-mono tracking-widest text-amber-700 dark:text-amber-400 font-semibold'>
+            <Sparkles className='size-3.5 text-amber-600 dark:text-amber-400' />
+            <span>{note.title}</span>
+          </span>
+          <span className='inline-flex items-center gap-1 text-[11px] text-emerald-700 dark:text-emerald-400 font-mono font-medium'>
+            <ShieldCheck className='size-3.5' />
+            <span>Verified</span>
+          </span>
+        </div>
+
+        <h3 className='font-headline text-xl sm:text-2xl text-foreground font-normal leading-snug tracking-tight mb-2'>
+          {note.text}
+        </h3>
+
+        <div className='flex items-center justify-between pt-2 border-t border-border/50 text-[11px] text-muted-foreground font-light'>
+          <div className='flex items-center gap-1.5'>
+            <BookOpen className='size-3 text-amber-600' />
+            <span>{note.tag}</span>
+          </div>
+          <span className='text-amber-700 dark:text-amber-400 font-mono text-[10px] tracking-wider uppercase font-medium'>
+            Tap to advance &rarr;
+          </span>
+        </div>
       </div>
     </div>
   )

@@ -28,8 +28,8 @@ const MusicPlayerCard = () => {
   if (!piece) return null
 
   const targetId = piece._id || piece.id || 'default-1'
-  const title = piece.title || 'Haute Joaillerie Masterpiece'
-  const description = piece.description || 'Archival Florentine solid gold and gemstone exhibition piece.'
+  const title = piece.title || 'Featured Jewellery Piece'
+  const description = piece.description || 'Handcrafted gold and gemstone jewellery made in Florence.'
   const imageUrl = piece.imageUrl || piece.src
 
   return (
@@ -47,7 +47,7 @@ const MusicPlayerCard = () => {
         <div className='absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent' />
         <div className='absolute bottom-3 left-4 right-4 flex items-center justify-between'>
           <span className='text-[10px] uppercase font-mono tracking-widest text-amber-300 font-medium'>
-            Exhibition Masterpiece
+            Featured Piece
           </span>
           <div className='size-7 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity'>
             <ArrowUpRight className='size-3.5' />
@@ -65,7 +65,7 @@ const MusicPlayerCard = () => {
           </p>
         </div>
         <div className='flex items-center justify-between pt-2 border-t border-border/50 text-[11px] text-amber-700 font-mono uppercase tracking-wider'>
-          <span>Explore Piece</span>
+          <span>View Details</span>
           <span>&rarr;</span>
         </div>
       </div>

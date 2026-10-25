@@ -5,11 +5,9 @@ import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Sparkles, Calendar } from "lucide-react";
 import { isAdmin } from "@/lib/auth";
 import { LuxuryButton } from "@/user/components/LuxuryButton";
-import { SparklesIcon } from "@/components/ui/sparkles";
-import { CalendarDaysIcon } from "@/components/ui/calendar-days";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -155,10 +153,10 @@ MagneticButton.displayName = "MagneticButton";
 
 const MarqueeItem = () => (
   <div className="flex items-center space-x-10 px-6">
-    <span>Haute Joaillerie & Goldsmithing</span> <span className="text-amber-500">✦</span>
-    <span>Hand-Wrought 18K & 22K Gold</span> <span className="text-amber-500">✦</span>
-    <span>Certified Florence Provenance</span> <span className="text-amber-500">✦</span>
-    <span>Bespoke Masterpiece Commissions</span> <span className="text-amber-500">✦</span>
+    <span>Fine Jewellery & Goldsmithing</span> <span className="text-amber-500">✦</span>
+    <span>Handmade 18K & 22K Gold</span> <span className="text-amber-500">✦</span>
+    <span>Authentic Florence Heritage</span> <span className="text-amber-500">✦</span>
+    <span>Custom Jewellery Design</span> <span className="text-amber-500">✦</span>
     <span>Est. 1924 Florence</span> <span className="text-amber-500">✦</span>
   </div>
 );
@@ -245,16 +243,16 @@ export function CinematicFooter() {
 
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-16 w-full max-w-5xl mx-auto text-center">
             <span className="text-xs font-mono uppercase tracking-[0.3em] text-amber-600 dark:text-amber-400 mb-3 block font-medium">
-              Khalil & Sons • Haute Horlogerie & Jewelry
+              Khalil & Sons • Handcrafted Fine Jewellery
             </span>
             <h2
               ref={headingRef}
               className="text-4xl md:text-7xl font-light font-headline footer-text-glow tracking-tight mb-4"
             >
-              The Soul of <span className="serif-italic">Hand-Wrought</span> Gold
+              The Art of <span className="serif-italic">Handcrafted</span> Gold
             </h2>
             <p className="text-xs md:text-base text-muted-foreground max-w-lg mb-8 leading-relaxed font-light">
-              Preserving the silent language of the goldsmith. Every piece is a testament to the patient art of Italian craftsmanship.
+              Creating timeless gold jewellery with care and dedication. Every piece is handcrafted by master artisans in Florence.
             </p>
 
             <div ref={linksRef} className="flex flex-col items-center gap-5 w-full">
@@ -264,8 +262,8 @@ export function CinematicFooter() {
                   href="#collections"
                   variant="gold"
                 >
-                  <SparklesIcon size={14} className="text-white inline-block" />
-                  Explore Masterpieces
+                  <Sparkles size={14} className="text-white inline-block" />
+                  Explore Collection
                 </LuxuryButton>
                 
                 <LuxuryButton
@@ -273,8 +271,8 @@ export function CinematicFooter() {
                   href="#atelier"
                   variant="dark"
                 >
-                  <CalendarDaysIcon size={14} className="text-white/80 inline-block" />
-                  Book Private Appointment
+                  <Calendar size={14} className="text-amber-400 inline-block" />
+                  Book an Appointment
                 </LuxuryButton>
               </div>
 
@@ -284,21 +282,21 @@ export function CinematicFooter() {
                   href="#heritage"
                   className="border border-[#2d3435]/25 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xs text-[#2d3435] dark:text-neutral-200 px-5 py-2.5 text-xs tracking-widest uppercase hover:bg-[#2d3435] hover:text-white dark:hover:bg-white dark:hover:text-black transition-all font-medium cursor-pointer"
                 >
-                  The Heritage Story
+                  Our Story
                 </MagneticButton>
                 <MagneticButton
                   as="a"
                   href="#atelier"
                   className="border border-[#2d3435]/25 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xs text-[#2d3435] dark:text-neutral-200 px-5 py-2.5 text-xs tracking-widest uppercase hover:bg-[#2d3435] hover:text-white dark:hover:bg-white dark:hover:text-black transition-all font-medium cursor-pointer"
                 >
-                  Florence Atelier
+                  Our Workshop
                 </MagneticButton>
                 <MagneticButton
                   as={Link}
                   to="/auth"
                   className="border border-[#2d3435]/25 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xs text-[#2d3435] dark:text-neutral-200 px-5 py-2.5 text-xs tracking-widest uppercase hover:bg-[#2d3435] hover:text-white dark:hover:bg-white dark:hover:text-black transition-all font-medium cursor-pointer"
                 >
-                  Collector Portal
+                  Sign In
                 </MagneticButton>
                 {isAdmin() && (
                   <MagneticButton
@@ -306,7 +304,7 @@ export function CinematicFooter() {
                     to="/admin"
                     className="border border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400 px-5 py-2.5 text-xs tracking-widest uppercase hover:bg-amber-600 hover:text-white transition-all font-semibold cursor-pointer"
                   >
-                    Atelier Admin →
+                    Admin Portal →
                   </MagneticButton>
                 )}
               </div>
@@ -315,14 +313,14 @@ export function CinematicFooter() {
 
           <div className="relative z-20 w-full pb-6 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border/30 bg-background/30 backdrop-blur-xs">
             <div className="text-muted-foreground text-[10px] md:text-xs font-medium tracking-widest uppercase order-2 md:order-1">
-              © 2026 Khalil & Sons Atelier. All rights reserved.
+              © 2026 Khalil & Sons. All rights reserved.
             </div>
 
             <div className="border border-[#2d3435]/20 bg-white/60 dark:bg-neutral-900/60 backdrop-blur-xs px-4 py-2 flex items-center gap-2 order-1 md:order-2 cursor-default">
               <span className="text-muted-foreground text-[10px] md:text-xs font-medium uppercase tracking-widest">Crafted with</span>
               <span className="animate-footer-heartbeat text-sm text-rose-500">❤</span>
               <span className="text-muted-foreground text-[10px] md:text-xs font-medium uppercase tracking-widest">by</span>
-              <span className="text-[#2d3435] dark:text-white font-semibold text-xs tracking-wider">EliteDev</span>
+              <span className="text-[#2d3435] dark:text-white font-semibold text-xs tracking-wider">elitedevagency</span>
             </div>
 
             <MagneticButton

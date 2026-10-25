@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
 import { CartDrawer } from '../components/CartDrawer';
 import { Skiper54, DEFAULT_SKIPER_IMAGES } from '../components/Skiper54';
-import { LuxuryButton } from '../components/LuxuryButton';
-import { GlobalGoldEffect } from '../components/GlobalGoldEffect';
+import { ImageGallery } from '@/components/ui/image-gallery';
 import { galleryApi } from '@/api/galleryApi';
 
 export function GalleryPage() {
@@ -54,7 +52,6 @@ export function GalleryPage() {
 
   return (
     <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
-      <GlobalGoldEffect />
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
@@ -93,83 +90,26 @@ export function GalleryPage() {
             <div className="flex flex-col sm:flex-row items-baseline justify-between mb-12 gap-4">
               <div>
                 <span className="text-xs uppercase tracking-[0.25em] text-[#5f5e5e] font-medium block mb-2">
-                  Permanent Collection
+                  Jewellery Collection
                 </span>
                 <h2 className="font-headline text-3xl md:text-5xl text-[#2d3435] font-normal">
-                  All Exhibition <span className="serif-italic">Pieces</span>
+                  All Jewellery <span className="serif-italic">Pieces</span>
                 </h2>
               </div>
               <span className="text-xs tracking-widest text-[#5a6061] uppercase">
-                {galleryItems.length} Masterpieces Documented
+                {galleryItems.length} Pieces Available
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {galleryItems.map((piece, index) => (
-                <div
-                  key={piece._id || index}
-                  className="group bg-white rounded-2xl overflow-hidden border border-neutral-200/80 shadow-xs hover:shadow-xl transition-all duration-500 flex flex-col"
-                >
-                  <div
-                    onClick={() => {
-                      const targetId = piece._id || piece.id || `default-${index + 1}`;
-                      navigate(`/gallery/${targetId}`);
-                    }}
-                    className="aspect-[4/3] w-full overflow-hidden bg-neutral-900 relative cursor-pointer"
-                  >
-                    <img
-                      src={piece.imageUrl || piece.src}
-                      alt={piece.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-[10px] uppercase tracking-widest text-amber-600 font-mono font-medium block">
-                          Plate #{String(index + 1).padStart(2, '0')}
-                        </span>
-                        {(piece.averageRating >= 4 || piece.rating >= 4) && (
-                          <div className="flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 text-amber-800 text-[11px] font-mono">
-                            <Star className="size-3 fill-amber-500 text-amber-500" />
-                            <span>{(piece.averageRating || piece.rating).toFixed(1)}</span>
-                          </div>
-                        )}
-                      </div>
-                      <h3
-                        onClick={() => {
-                          const targetId = piece._id || piece.id || `default-${index + 1}`;
-                          navigate(`/gallery/${targetId}`);
-                        }}
-                        className="font-headline text-xl text-[#2d3435] font-medium mb-2 hover:text-amber-700 transition-colors cursor-pointer"
-                      >
-                        {piece.title}
-                      </h3>
-                      {piece.description && (
-                        <p className="text-xs text-[#5a6061] font-light leading-relaxed mb-6">
-                          {piece.description}
-                        </p>
-                      )}
-                    </div>
-                    <div className="pt-2 border-t border-neutral-100">
-                      <LuxuryButton
-                        as="button"
-                        onClick={() => {
-                          const targetId = piece._id || piece.id || `default-${index + 1}`;
-                          navigate(`/gallery/${targetId}`);
-                        }}
-                        size="sm"
-                        variant="dark"
-                        className="w-full"
-                      >
-                        Acquire Masterpiece
-                      </LuxuryButton>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ImageGallery
+              items={galleryItems}
+              onItemClick={(piece) => {
+                const targetId = piece._id || piece.id;
+                if (targetId) {
+                  navigate(`/gallery/${targetId}`);
+                }
+              }}
+            />
           </div>
         </section>
       </main>

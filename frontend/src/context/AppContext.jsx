@@ -33,7 +33,7 @@ export const AppProvider = ({ children }) => {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
-    showAlert('Added to Bag', `${product.title} has been added to your bespoke collection bag.`, 'success');
+    showAlert('Added to Bag', `${product.title} has been added to your shopping bag.`, 'success');
   };
 
   const removeFromCart = (productId) => {

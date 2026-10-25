@@ -13,17 +13,17 @@ const FOUNDER_SLIDES = [
   {
     src: '/assets/about/founder-poster.jpg',
     title: 'Master Goldsmithing',
-    subtitle: 'Over a Century of Artisan Chasing'
+    subtitle: 'Over a Century of Traditional Goldsmithing'
   },
   {
     src: '/assets/about/brand-poster.jpg',
-    title: 'Haute Joaillerie Atelier',
+    title: 'Fine Jewellery Workshop',
     subtitle: 'Via de\' Tornabuoni, Florence'
   },
   {
     src: '/assets/about/shop-front.jpg',
     title: 'The Historic Workshop',
-    subtitle: 'Living Archive & Handcraft Bench'
+    subtitle: 'Handcrafted Jewellery Bench'
   }
 ]
 
@@ -52,7 +52,7 @@ const ProfileCarousel = () => {
           <div className='absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent' />
           <div className='absolute bottom-6 left-6 right-6 z-10'>
             <span className='text-[10px] uppercase tracking-widest text-amber-400 font-mono font-medium block mb-1'>
-              Florentine Masterpiece Provenance
+              Handmade in Florence
             </span>
             <h3 className='font-headline text-2xl text-white font-normal'>
               {slide.title}

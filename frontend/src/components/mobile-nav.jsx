@@ -6,7 +6,7 @@ import { Portal, PortalBackdrop } from "@/components/portal";
 import { companyLinks, companyLinks2, productLinks } from "@/components/nav-links";
 import { LinkItem } from "@/components/sheard";
 import { isAdmin } from "@/lib/auth";
-import { XIcon, MenuIcon, Sparkles } from "lucide-react";
+import { XIcon, MenuIcon, ShieldCheck } from "lucide-react";
 
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
@@ -60,7 +60,7 @@ export function MobileNav() {
 									{...link}
 								/>
 							))}
-							<span className="text-xs uppercase tracking-widest text-muted-foreground font-medium px-2 mt-2">Atelier & Heritage</span>
+							<span className="text-xs uppercase tracking-widest text-muted-foreground font-medium px-2 mt-2">About & Heritage</span>
 							{companyLinks.map((link) => (
 								<LinkItem
 									className="rounded-lg p-2 active:bg-muted dark:active:bg-muted/50"
@@ -85,14 +85,7 @@ export function MobileNav() {
 									onClick={() => setOpen(false)}
 									className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium uppercase tracking-widest text-foreground hover:bg-muted"
 								>
-									<span>Masterpieces</span>
-								</Link>
-								<Link
-									to="/about"
-									onClick={() => setOpen(false)}
-									className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium uppercase tracking-widest text-foreground hover:bg-muted"
-								>
-									<span>About Us</span>
+									<span>Gallery</span>
 								</Link>
 								<Link
 									to="/contact"
@@ -110,7 +103,7 @@ export function MobileNav() {
 							{adminLoggedIn && (
 								<Button asChild className="w-full bg-foreground text-background" onClick={() => setOpen(false)}>
 									<Link to="/admin" className="flex items-center justify-center gap-1.5">
-										<Sparkles className="size-3.5 text-amber-500" />
+										<ShieldCheck className="size-3.5 text-amber-500" />
 										<span>Admin Portal</span>
 									</Link>
 								</Button>

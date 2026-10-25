@@ -57,7 +57,7 @@ const TripFolderCard = () => {
           >
             <img
               src={photo.src}
-              alt='Haute Joaillerie showcase'
+              alt='Handcrafted jewellery showcase'
               loading='lazy'
               className='size-full object-cover'
             />
@@ -74,10 +74,10 @@ const TripFolderCard = () => {
         >
           <div className='w-48 sm:w-56 h-14 sm:h-16 bg-amber-500/20 border border-amber-500/40 rounded-2xl backdrop-blur-md flex flex-col items-center justify-center shadow-md px-4'>
             <span className='text-xs uppercase font-mono tracking-widest text-amber-900 font-bold'>
-              Atelier Vault
+              Jewellery Vault
             </span>
             <span className='text-[10px] text-amber-800/80 font-mono tracking-wider'>
-              Curated Dossier
+              Selected Pieces
             </span>
           </div>
         </div>
@@ -86,13 +86,13 @@ const TripFolderCard = () => {
       <div className='flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border/60'>
         <div className='flex items-center gap-2'>
           <p className='text-foreground text-base sm:text-lg font-medium font-serif'>
-            Masterpieces
+            Jewellery Collection
           </p>
           <Badge
             variant='secondary'
             className='text-foreground h-6 rounded-md bg-muted font-light text-[11px] px-2'
           >
-            Curated
+            Featured
           </Badge>
         </div>
         <button
@@ -103,7 +103,7 @@ const TripFolderCard = () => {
           }}
           className='inline-flex items-center gap-1 text-xs font-medium text-amber-700 hover:text-amber-800 transition-colors cursor-pointer'
         >
-          <span>Exhibition</span>
+          <span>View Gallery</span>
           <ArrowUpRight className='size-3.5' />
         </button>
       </div>

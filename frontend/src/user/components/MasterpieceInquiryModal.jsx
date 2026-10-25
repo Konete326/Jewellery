@@ -9,7 +9,7 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState(
-    piece ? `I am inquiring about acquiring or commissioning: ${piece.title}. Please provide availability and private viewing schedule.` : ''
+    piece ? `Hello, I am interested in this piece: ${piece.title}. Please provide details on price, availability, and ordering.` : ''
   );
   const [submitting, setSubmitting] = useState(false);
 
@@ -28,14 +28,14 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
         customerName: customerName.trim(),
         email: email.trim(),
         phone: phone.trim(),
-        subject: `Commission Inquiry: ${piece.title}`,
-        message: `${message.trim()}\n\n[Masterpiece Reference ID: ${piece._id || piece.id}]`,
+        subject: `Inquiry: ${piece.title}`,
+        message: `${message.trim()}\n\n[Reference ID: ${piece._id || piece.id}]`,
         jewelryType: 'Custom Ring',
         preferredMetal: '22K Gold',
         estimatedBudget: 'Consultation'
       });
 
-      toast.success('Your acquisition inquiry has reached our master jeweler.');
+      toast.success('Your inquiry has been sent! We will contact you soon.');
       onClose();
     } catch (err) {
       toast.error(err.message || 'Failed to submit inquiry.');
@@ -60,10 +60,10 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
             </div>
             <div>
               <span className="text-[10px] uppercase font-mono tracking-widest text-amber-700 dark:text-amber-400 font-medium">
-                Atelier Commission
+                Product Inquiry
               </span>
               <h3 className="font-serif text-lg font-semibold text-foreground">
-                Inquire on Masterpiece
+                Ask About This Piece
               </h3>
             </div>
           </div>

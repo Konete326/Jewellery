@@ -11,16 +11,16 @@ export function GalleryMasterpieceHero({
 }) {
   if (!piece) return null;
 
-  const title = piece.title || 'Haute Joaillerie Masterpiece';
-  const description = piece.description || 'Archival exhibition piece forged with patient Renaissance goldcraft in our Florence atelier.';
+  const title = piece.title || 'Fine Jewellery Piece';
+  const description = piece.description || 'Handcrafted gold jewellery made with care in our Florence workshop.';
   const imageUrl = piece.imageUrl || piece.src;
   const rating = Number(piece.averageRating || piece.rating || 0);
   const reviewCount = piece.reviewCount || (piece.reviews?.length) || 0;
   const hasQualifyingRating = rating >= 4.0;
-  const refCode = `FL-ATELIER-${String(piece._id || piece.id || '001').slice(-6).toUpperCase()}`;
+  const refCode = `KS-${String(piece._id || piece.id || '001').slice(-6).toUpperCase()}`;
 
   const whatsappMessage = encodeURIComponent(
-    `Hello Khalil & Sons Atelier,\n\nI am inquiring regarding the bespoke masterpiece:\n*${title}*\nReference: ${refCode}\nImage: ${imageUrl}\nPage: ${typeof window !== 'undefined' ? window.location.href : ''}\n\nPlease share availability, bespoke specifications, and private viewing details.`
+    `Hello Khalil & Sons,\n\nI am interested in this piece:\n*${title}*\nReference: ${refCode}\nImage: ${imageUrl}\n\nPlease share price, availability, and ordering details.`
   );
   const whatsappUrl = `https://wa.me/39055218901?text=${whatsappMessage}`;
 
@@ -31,7 +31,7 @@ export function GalleryMasterpieceHero({
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-400 text-xs font-mono tracking-widest uppercase">
               <Sparkles className="size-3.5 text-amber-600" />
-              <span>Living Archive • Archival Masterpiece</span>
+              <span>Handmade Jewellery • Florence</span>
             </div>
 
             <h1 className="font-headline text-3xl sm:text-5xl xl:text-6xl text-[#2d3435] font-light tracking-tight leading-[1.15]">
@@ -60,7 +60,7 @@ export function GalleryMasterpieceHero({
                     {rating.toFixed(1)}
                   </span>
                   <span className="text-[11px] text-amber-700/80 dark:text-amber-400 underline underline-offset-2">
-                    ({reviewCount} {reviewCount === 1 ? 'Appraisal' : 'Appraisals'})
+                    ({reviewCount} {reviewCount === 1 ? 'Review' : 'Reviews'})
                   </span>
                 </div>
               ) : null}
@@ -71,7 +71,7 @@ export function GalleryMasterpieceHero({
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-neutral-200 text-xs text-[#2d3435] hover:border-amber-500/50 hover:text-amber-800 transition-colors cursor-pointer shadow-xs"
               >
                 <Star className="size-3.5 text-amber-600" />
-                <span>{hasQualifyingRating ? 'Add Your Appraisal' : 'Record Patron Appraisal'}</span>
+                <span>Write a Review</span>
               </button>
             </div>
           </div>
@@ -84,26 +84,26 @@ export function GalleryMasterpieceHero({
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-4 border-y border-neutral-200/80">
             <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Archive Ref</span>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Item Code</span>
               <p className="text-xs font-mono font-medium text-[#2d3435] mt-0.5 truncate">{refCode}</p>
             </div>
             <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Precious Metal</span>
-              <p className="text-xs font-medium text-[#2d3435] mt-0.5">Solid Florentine Gold</p>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Metal</span>
+              <p className="text-xs font-medium text-[#2d3435] mt-0.5">Solid 22K Gold</p>
             </div>
             <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Atelier</span>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Made In</span>
               <p className="text-xs font-medium text-[#2d3435] mt-0.5">Florence, Italy</p>
             </div>
             <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Edition</span>
-              <p className="text-xs font-medium text-amber-700 mt-0.5">Bespoke Unique Piece</p>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Availability</span>
+              <p className="text-xs font-medium text-amber-700 mt-0.5">Handmade to Order</p>
             </div>
           </div>
 
           <div className="space-y-3 pt-2">
             <span className="text-xs font-mono uppercase tracking-widest text-[#5f5e5e] block">
-              Bespoke Acquisition & Atelier Inquiry
+              Inquire About This Piece
             </span>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <LuxuryButton
@@ -116,7 +116,7 @@ export function GalleryMasterpieceHero({
                 className="flex-1"
               >
                 <MessageCircle className="size-4" />
-                <span>WhatsApp Atelier Directly</span>
+                <span>WhatsApp Directly</span>
               </LuxuryButton>
 
               <LuxuryButton
@@ -127,7 +127,7 @@ export function GalleryMasterpieceHero({
                 className="flex-1"
               >
                 <Mail className="size-4 text-amber-400" />
-                <span>Email Commission Inquiry</span>
+                <span>Send Email Inquiry</span>
               </LuxuryButton>
             </div>
 
@@ -138,7 +138,7 @@ export function GalleryMasterpieceHero({
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-neutral-300 bg-white/70 hover:bg-white text-xs uppercase tracking-wider font-medium text-[#2d3435] hover:border-amber-500/50 transition-all cursor-pointer shadow-xs"
               >
                 <Calendar className="size-3.5 text-amber-600" />
-                <span>Book In-Person Atelier Viewing in Florence</span>
+                <span>Book an In-Person Viewing in Florence</span>
               </button>
             </div>
           </div>
@@ -158,12 +158,12 @@ export function GalleryMasterpieceHero({
 
             <div className="absolute top-4 left-4 z-10 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white/90 text-[11px] font-mono tracking-wider uppercase flex items-center gap-1.5">
               <Gem className="size-3 text-amber-400" />
-              <span>Florentine Masterwork</span>
+              <span>Handmade in Florence</span>
             </div>
 
             <div className="absolute bottom-4 right-4 z-10 px-4 py-2 rounded-xl bg-white/95 text-[#2d3435] backdrop-blur-md shadow-lg text-xs font-medium uppercase tracking-wider flex items-center gap-2 transition-transform duration-300 group-hover:scale-105">
               <ZoomIn className="size-4 text-amber-600" />
-              <span>Inspect High-Res Details</span>
+              <span>Click to Zoom</span>
             </div>
           </div>
         </div>

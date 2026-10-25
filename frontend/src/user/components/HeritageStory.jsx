@@ -20,17 +20,17 @@ export function HeritageStory() {
         </div>
         <div className="md:col-span-6 md:col-start-7 space-y-6">
           <span className="text-[#5f5e5e] tracking-[0.2em] uppercase text-xs block font-medium">
-            The Heritage Story
+            Our Story
           </span>
           <h2 className="font-headline text-4xl md:text-6xl text-[#2d3435] leading-tight font-normal">
-            A Century of <span className="serif-italic">Unseen</span> Details
+            Over 100 Years of <span className="serif-italic">Fine</span> Craftsmanship
           </h2>
           <div className="space-y-5 text-[#5a6061] leading-relaxed text-base md:text-lg font-light">
             <p>
-              At Khalil & Sons, we believe jewelry should carry the weight of time. Not in heaviness, but in history. Our artisans employ techniques unchanged since the Renaissance—hand-engraving, wax casting, and secret alloy blends that give our gold its distinct moonlit glow.
+              At Khalil & Sons, we believe jewellery should hold lasting beauty and personal meaning. Our skilled jewelers use time-tested methods — hand-engraving, lost-wax casting, and pure gold alloys that give each design a warm, natural shine.
             </p>
             <p>
-              We do not mass-produce. We curate. Each month, only a handful of "Masterpieces" leave our benches, destined for those who understand that true luxury is found in the artist's touch.
+              We never mass-produce. Every month, only a few handmade pieces leave our workshop, crafted with care for customers who appreciate real quality.
             </p>
           </div>
           <div className="pt-4">
@@ -38,7 +38,7 @@ export function HeritageStory() {
               href="#atelier"
               className="text-[#2d3435] tracking-widest uppercase text-xs border-b border-neutral-400 pb-1 hover:border-black transition-colors"
             >
-              Our Philosophy
+              Learn More About Us
             </a>
           </div>
         </div>

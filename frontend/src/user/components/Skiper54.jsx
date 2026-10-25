@@ -9,6 +9,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { CardGoldEffect } from "./CardGoldEffect";
 
 export const DEFAULT_SKIPER_IMAGES = [
   {
@@ -17,7 +18,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/choker-ruby-01.jpg",
     alt: "The Florentine Ruby Choker",
     title: "The Florentine Ruby Choker",
-    description: "22K Hand-hammered Florentine gold set with rare untreated Burmese rubies"
+    description: "22K handmade gold necklace with natural red rubies"
   },
   {
     _id: "default-2",
@@ -25,7 +26,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/kada-polki-01.jpg",
     alt: "Royal Polki Kada Armlet",
     title: "Royal Polki Kada Armlet",
-    description: "Heritage uncut polki diamonds set in solid 22K yellow gold with meenakari detailing"
+    description: "Uncut diamonds set in 22K solid gold with detailed enamel work"
   },
   {
     _id: "default-3",
@@ -33,7 +34,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/guluband-01.jpg",
     alt: "Archival Aurelian Guluband",
     title: "Archival Aurelian Guluband",
-    description: "Intricately hand-chased 22K solid gold collar forged with Renaissance filigree techniques"
+    description: "Handmade 22K solid gold collar necklace with delicate gold wirework"
   },
   {
     _id: "default-4",
@@ -41,7 +42,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/jhumka-01.jpg",
     alt: "Imperial Florentine Jhumkas",
     title: "Imperial Florentine Jhumkas",
-    description: "Cascading 22K gold drop earrings detailed with seed pearls and micro-carved motifs"
+    description: "22K gold drop earrings with delicate pearls and carved designs"
   },
   {
     _id: "default-5",
@@ -49,7 +50,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/ring-polki-01.jpg",
     alt: "Medici Uncut Polki Solitaire",
     title: "Medici Uncut Polki Solitaire",
-    description: "Monumental natural polki diamond cradled in Florentine textured yellow gold prongs"
+    description: "Natural uncut diamond ring set in textured 22K yellow gold"
   },
   {
     _id: "default-6",
@@ -57,7 +58,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/kada-plain-01.jpg",
     alt: "Solid Bullion Handcrafted Bangle",
     title: "Solid Bullion Handcrafted Bangle",
-    description: "Forged with patient anvil hammer work, achieving the soft, moonlit satin gold finish"
+    description: "Handmade solid gold bangle with a smooth satin finish"
   },
   {
     _id: "default-7",
@@ -65,7 +66,7 @@ export const DEFAULT_SKIPER_IMAGES = [
     imageUrl: "/assets/products/choker-ruby-02.jpg",
     alt: "Renaissance Ruby Suite Choker",
     title: "Renaissance Ruby Suite Choker",
-    description: "Archival heirloom choker crafted with hand-linked gold chains and pigeon-blood rubies"
+    description: "Gold choker with hand-linked chains and red rubies"
   }
 ];
 
@@ -152,13 +153,17 @@ export function Skiper54({
                     }
                   }}
                 >
-                  <div className="relative h-full w-full bg-neutral-900 border border-neutral-800 overflow-hidden rounded-3xl group/card">
+                  <div className={cn(
+                    "relative h-full w-full bg-neutral-900 border overflow-hidden rounded-3xl group/card transition-all duration-500",
+                    current === index ? "border-amber-500/50 shadow-[0_0_30px_rgba(217,119,6,0.25)]" : "border-neutral-800"
+                  )}>
                     <img
                       src={src}
                       alt={alt}
                       className="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
+                    <CardGoldEffect active={current === index} />
 
                     <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 z-10 flex flex-col justify-end text-left pointer-events-auto">
                       {(item.averageRating >= 4 || item.rating >= 4) && (
@@ -179,7 +184,7 @@ export function Skiper54({
                       )}
 
                       <div className="mt-3.5 flex items-center justify-between pt-2.5 border-t border-white/20 text-[11px] uppercase tracking-wider font-mono text-amber-300 group-hover/card:text-amber-200">
-                        <span>View Piece</span>
+                        <span>View Details</span>
                         <span>&rarr;</span>
                       </div>
                     </div>

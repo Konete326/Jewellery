@@ -27,17 +27,17 @@ export function AuthForm() {
 
     if (email.trim().toLowerCase() === adminEmail.toLowerCase()) {
       if (password === adminPass) {
-        localStorage.setItem("auth_user", JSON.stringify({ email, role: "admin", name: "Atelier Director" }));
+        localStorage.setItem("auth_user", JSON.stringify({ email, role: "admin", name: "Admin" }));
         const destination = location.state?.from?.pathname || "/admin";
         navigate(destination, { replace: true });
         return;
       } else {
-        setError("Invalid administrative credentials. Access denied.");
+        setError("Invalid admin email or password. Please try again.");
         return;
       }
     }
 
-    localStorage.setItem("auth_user", JSON.stringify({ email, name: name || "Collector", role: "user" }));
+    localStorage.setItem("auth_user", JSON.stringify({ email, name: name || "Customer", role: "user" }));
     navigate("/");
   };
 
@@ -89,7 +89,7 @@ export function AuthForm() {
       </div>
 
       <Button className="w-full h-11 mt-2 text-xs uppercase tracking-widest" type="submit">
-        {isSignUp ? "Create Atelier Account" : "Sign In to Account"}
+        {isSignUp ? "Create Account" : "Sign In"}
       </Button>
 
       <div className="pt-2 text-center">
@@ -101,7 +101,7 @@ export function AuthForm() {
           }}
           className="text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
-          {isSignUp ? "Already have an account? Sign In" : "New to the Atelier? Create an account"}
+          {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
         </button>
       </div>
     </form>

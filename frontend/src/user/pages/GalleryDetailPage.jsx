@@ -5,7 +5,6 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
 import { CartDrawer } from '../components/CartDrawer';
-import { GlobalGoldEffect } from '../components/GlobalGoldEffect';
 import { GalleryMasterpieceHero } from '../components/GalleryMasterpieceHero';
 import { GalleryReviewsSection } from '../components/GalleryReviewsSection';
 import { MasterpieceLightboxModal } from '../components/MasterpieceLightboxModal';
@@ -97,7 +96,6 @@ export function GalleryDetailPage() {
 
   return (
     <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
-      <GlobalGoldEffect />
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
@@ -131,9 +129,9 @@ export function GalleryDetailPage() {
                 <Sparkles className="size-5" />
               </div>
               <div>
-                <h4 className="text-sm font-medium text-[#2d3435]">Artisanal Provenance</h4>
+                <h4 className="text-sm font-medium text-[#2d3435]">Handmade Quality</h4>
                 <p className="text-xs text-[#5a6061] font-light mt-1 leading-relaxed">
-                  Each piece is individually documented in our Florence archive and accompanied by our master smith dossier.
+                  Each piece is handcrafted by master jewelers in Florence and comes with a certificate of authenticity.
                 </p>
               </div>
             </div>
@@ -143,9 +141,9 @@ export function GalleryDetailPage() {
                 <ShieldCheck className="size-5" />
               </div>
               <div>
-                <h4 className="text-sm font-medium text-[#2d3435]">Atelier Guarantee</h4>
+                <h4 className="text-sm font-medium text-[#2d3435]">Lifetime Guarantee</h4>
                 <p className="text-xs text-[#5a6061] font-light mt-1 leading-relaxed">
-                  Lifetime solid gold restoration, ultrasonic gemstone maintenance, and complimentary vault servicing.
+                  Free lifetime cleaning, gold polishing, and inspection for your jewellery.
                 </p>
               </div>
             </div>
@@ -155,9 +153,9 @@ export function GalleryDetailPage() {
                 <Truck className="size-5" />
               </div>
               <div>
-                <h4 className="text-sm font-medium text-[#2d3435]">Armored Delivery</h4>
+                <h4 className="text-sm font-medium text-[#2d3435]">Secure Insured Shipping</h4>
                 <p className="text-xs text-[#5a6061] font-light mt-1 leading-relaxed">
-                  Fully insured private courier delivery worldwide in our signature Florentine hand-waxed wooden vault box.
+                  Safe and fully insured worldwide delivery in our signature luxury gift box.
                 </p>
               </div>
             </div>

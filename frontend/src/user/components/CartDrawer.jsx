@@ -1,3 +1,4 @@
+import { ArrowRight } from 'lucide-react'
 import { LuxuryButton } from './LuxuryButton'
 
 export function CartDrawer({
@@ -58,7 +59,7 @@ export function CartDrawer({
                     {item.name}
                   </h3>
                   <p className="text-[11px] text-neutral-500">
-                    {item.material || 'Artisanal Piece'}
+                    {item.material || 'Handcrafted Jewellery'}
                   </p>
                   <div className="flex justify-between items-center pt-2">
                     <span className="text-xs font-serif font-medium text-neutral-900">
@@ -102,7 +103,8 @@ export function CartDrawer({
             variant="dark"
             className="w-full"
           >
-            Checkout
+            <span>Proceed to Checkout</span>
+            <ArrowRight className="size-3.5 text-amber-400" />
           </LuxuryButton>
         </div>
       </div>

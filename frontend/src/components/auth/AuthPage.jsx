@@ -30,10 +30,10 @@ export function AuthPage() {
         <div className="z-10 mt-auto">
           <blockquote className="space-y-3">
             <p className="font-serif italic text-2xl text-foreground/90 leading-snug">
-              &ldquo;True luxury is found in the artist's touch, preserving the silent language of the goldsmith.&rdquo;
+              &ldquo;True luxury is found in the artist's touch, preserving the timeless beauty of pure gold.&rdquo;
             </p>
             <footer className="text-xs uppercase tracking-widest text-muted-foreground">
-              Florence Atelier • Est. 1924
+              Florence Workshop • Est. 1924
             </footer>
           </blockquote>
         </div>
@@ -56,20 +56,20 @@ export function AuthPage() {
           <div className="flex flex-col space-y-1">
             <div className="inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400 font-medium mb-1">
               <Sparkles className="size-3.5" />
-              <span>Atelier Client Access</span>
+              <span>Customer Account</span>
             </div>
             <h1 className="font-semibold font-serif text-3xl tracking-tight text-foreground">
               Sign In or Join
             </h1>
             <p className="text-xs text-muted-foreground">
-              Access your bespoke commissions and client profile.
+              Sign in to manage your orders, saved items, and profile.
             </p>
           </div>
 
           {isRedirectedFromAdmin && (
             <div className="flex items-center gap-2 p-3 text-xs rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300">
               <ShieldAlert className="size-4 shrink-0" />
-              <span>Administrator credentials required to access the Atelier Admin panel.</span>
+              <span>Admin login required to open the admin panel.</span>
             </div>
           )}
 
@@ -105,7 +105,7 @@ export function AuthPage() {
           <AuthForm />
 
           <p className="text-center text-[11px] text-muted-foreground pt-4">
-            Khalil & Sons Client Services • Encrypted & Secure Authentication
+            Khalil & Sons • Safe & Secure Sign In
           </p>
         </div>
       </div>

@@ -20,7 +20,6 @@ export const LuxuryButton = forwardRef(function LuxuryButton(
     lg: 'min-h-[54px] px-10 py-4 text-sm'
   }[size] || 'min-h-[48px] px-8 py-3.5 text-xs'
 
-  const auraColor = isGold ? 'bg-amber-400/35' : 'bg-amber-500/25'
   const borderGradient = isGold
     ? 'bg-gradient-to-b from-amber-100/90 via-amber-300/50 to-amber-950/90'
     : 'bg-gradient-to-b from-white/70 via-amber-400/40 to-black/90'
@@ -35,12 +34,11 @@ export const LuxuryButton = forwardRef(function LuxuryButton(
     <Component
       ref={ref}
       className={cn(
-        'group relative inline-flex items-center justify-center rounded-full cursor-pointer select-none whitespace-nowrap overflow-visible transition-all duration-150 ease-out hover:scale-[1.02] active:scale-95',
+        'group relative inline-flex items-center justify-center rounded-full cursor-pointer select-none whitespace-nowrap overflow-visible transition-all duration-150 ease-out hover:scale-[1.02] active:scale-95 active:opacity-90 shadow-none hover:shadow-none',
         className
       )}
       {...props}
     >
-      <div className={cn('absolute -inset-1 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out pointer-events-none', auraColor)} />
       <div className={cn('absolute inset-0 rounded-full p-[1.5px] pointer-events-none', borderGradient)}>
         <div className={cn('relative w-full h-full rounded-full overflow-hidden flex items-center justify-center transition-all duration-150 group-hover:brightness-110', coreBg)}>
           <div className={cn('absolute inset-0 pointer-events-none', radialGlow)} />

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { X } from 'lucide-react'
 
 export function SearchModal({ isOpen, onClose }) {
   const [searchTerm, setSearchTerm] = useState('')
@@ -25,9 +26,10 @@ export function SearchModal({ isOpen, onClose }) {
     <div className="fixed inset-0 z-50 bg-white/95 backdrop-blur-xl flex items-center justify-center animate-in fade-in duration-200">
       <button
         onClick={onClose}
-        className="absolute top-8 right-8 md:right-12 text-neutral-800 hover:text-neutral-500 cursor-pointer"
+        className="absolute top-8 right-8 md:right-12 text-neutral-800 hover:text-neutral-500 cursor-pointer p-2"
+        aria-label="Close search"
       >
-        <span className="material-symbols-outlined text-3xl">close</span>
+        <X className="size-6" />
       </button>
       <form onSubmit={handleSearch} className="w-full max-w-3xl px-8 md:px-12">
         <input
@@ -39,7 +41,7 @@ export function SearchModal({ isOpen, onClose }) {
           type="text"
         />
         <p className="mt-6 text-[10px] tracking-[0.3em] uppercase text-neutral-400 font-medium">
-          Press enter to search the atelier archive
+          Press Enter to search all jewellery
         </p>
       </form>
     </div>

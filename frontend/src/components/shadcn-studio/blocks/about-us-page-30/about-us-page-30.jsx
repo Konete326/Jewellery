@@ -12,7 +12,7 @@ const AboutUsPage = () => {
         <div className='space-y-2'>
           <MotionPreset fade blur slide={{ direction: 'down', offset: 50 }} transition={{ duration: 0.5 }}>
             <span className='text-xs uppercase tracking-[0.25em] text-[#5f5e5e] font-medium block mb-2 font-mono'>
-              Atelier Heritage &bull; Est. 1924
+              Our Story &bull; Est. 1924
             </span>
           </MotionPreset>
           <MotionPreset
@@ -24,7 +24,7 @@ const AboutUsPage = () => {
             slide={{ direction: 'down', offset: 50 }}
             transition={{ duration: 0.5 }}
           >
-            The Master Craftsmen Behind Our Florentine Atelier
+            The Skilled Jewelers Behind Our Florence Workshop
           </MotionPreset>
         </div>
 

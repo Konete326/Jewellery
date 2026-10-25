@@ -7,9 +7,7 @@ import { Button } from "@/components/ui/button";
 import { DesktopNav } from "@/components/desktop-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { isAdmin } from "@/lib/auth";
-import { SparklesIcon } from "@/components/ui/sparkles";
-import { SearchIcon } from "@/components/ui/search";
-import { CartIcon } from "@/components/ui/cart";
+import { Search, ShoppingBag } from "lucide-react";
 
 export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 	const scrolled = useScroll(10);
@@ -51,7 +49,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 							className="size-9 text-muted-foreground hover:text-foreground"
 							aria-label="Search collections"
 						>
-							<SearchIcon size={16} />
+							<Search className="size-4" />
 						</Button>
 					)}
 
@@ -63,7 +61,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 							className="relative size-9 text-muted-foreground hover:text-foreground"
 							aria-label="Shopping bag"
 						>
-							<CartIcon size={16} />
+							<ShoppingBag className="size-4" />
 							{cartCount > 0 && (
 								<span className="absolute -top-0.5 -right-0.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-mono">
 									{cartCount}
@@ -94,7 +92,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 							onClick={onOpenCart}
 							className="relative size-9 text-muted-foreground hover:text-foreground"
 						>
-							<CartIcon size={16} />
+							<ShoppingBag className="size-4" />
 							{cartCount > 0 && (
 								<span className="absolute -top-0.5 -right-0.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-mono">
 									{cartCount}

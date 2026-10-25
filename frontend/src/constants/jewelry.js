@@ -4,7 +4,7 @@ export const CATEGORIES = [
   'Necklaces',
   'Bracelets',
   'Earrings',
-  'Bespoke'
+  'Custom Design'
 ];
 
 export const METALS = [
@@ -25,7 +25,7 @@ export const FEATURED_SHOWCASE = [
     metal: '18K White Gold',
     price: 385000,
     isFeatured: true,
-    description: 'Precision-cut 2.5 carat brilliant solitaire encased in hand-forged 18K white gold with pave shoulder diamonds.'
+    description: 'Brilliant 2.5 carat diamond set in handcrafted 18K white gold with small side diamonds.'
   },
   {
     id: 'f2',
@@ -35,7 +35,7 @@ export const FEATURED_SHOWCASE = [
     metal: '22K Gold',
     price: 940000,
     isFeatured: true,
-    description: 'Deep verdant Zambian emeralds framed in filigree 22K yellow gold adorned with freshwater south sea pearls.'
+    description: 'Natural green emeralds set in handmade 22K yellow gold with real freshwater pearls.'
   },
   {
     id: 'f3',
@@ -45,6 +45,6 @@ export const FEATURED_SHOWCASE = [
     metal: 'Platinum',
     price: 520000,
     isFeatured: true,
-    description: 'Art-Deco inspired dual-row baguette diamonds set securely in high-polish platinum with an invisible clasp.'
+    description: 'Dual-row sparkling diamond bangle crafted in polished platinum.'
   }
 ];

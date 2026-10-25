@@ -13,7 +13,7 @@ import {
 import { NavGroup } from "@/components/nav-group";
 import { navGroups } from "@/components/app-shared";
 import { LatestChange } from "@/components/latest-change";
-import { Store, Sparkles } from "lucide-react";
+import { Store } from "lucide-react";
 
 export function AppSidebar() {
   return (

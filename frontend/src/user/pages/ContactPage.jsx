@@ -1,70 +1,69 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Navbar } from '@/user/components/Navbar';
 import { Footer } from '@/user/components/Footer';
 import { SearchModal } from '@/user/components/SearchModal';
 import { CartDrawer } from '@/user/components/CartDrawer';
 import { BespokeAppointmentModal } from '@/user/components/BespokeAppointmentModal';
-import { GlobalGoldEffect } from '@/user/components/GlobalGoldEffect';
-import ContactWithGlobe from '@/components/ui/contact-with-globe';
+import { ContactConfirmationModal } from '@/user/components/ContactConfirmationModal';
+import { AtelierContactDirectory } from '@/user/components/AtelierContactDirectory';
+import { AtelierContactForm } from '@/user/components/AtelierContactForm';
 
 export function ContactPage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
-  const [cartItems, setCartItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem('khalil_cart');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [confirmationData, setConfirmationData] = useState(null);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('khalil_cart', JSON.stringify(cartItems));
-    } catch {}
-  }, [cartItems]);
-
-  const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const handleInquirySuccess = (submittedData) => {
+    setConfirmationData(submittedData);
+  };
 
   return (
     <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
-      <GlobalGoldEffect />
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
-        cartCount={totalCartCount}
+        cartCount={0}
       />
-      <main className="relative z-10 pt-4">
-        <ContactWithGlobe />
+
+      <main className="relative z-10 pt-24 md:pt-28 pb-16 w-full max-w-[1880px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-14 items-start">
+          <div className="lg:col-span-5 xl:col-span-5">
+            <AtelierContactDirectory
+              onOpenAppointment={() => setIsAppointmentOpen(true)}
+            />
+          </div>
+
+          <div className="lg:col-span-7 xl:col-span-7">
+            <AtelierContactForm
+              onSuccess={handleInquirySuccess}
+            />
+          </div>
+        </div>
       </main>
+
       <Footer />
-      <SearchModal
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
+
+      <ContactConfirmationModal
+        isOpen={Boolean(confirmationData)}
+        onClose={() => setConfirmationData(null)}
+        inquiryData={confirmationData}
       />
+
       <BespokeAppointmentModal
         isOpen={isAppointmentOpen}
         onClose={() => setIsAppointmentOpen(false)}
       />
+
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
+
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
-        items={cartItems}
-        onIncrement={(id) =>
-          setCartItems((prev) =>
-            prev.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item))
-          )
-        }
-        onDecrement={(id) =>
-          setCartItems((prev) =>
-            prev
-              .map((item) => (item.id === id ? { ...item, quantity: item.quantity - 1 } : item))
-              .filter((item) => item.quantity > 0)
-          )
-        }
-        onRemove={(id) => setCartItems((prev) => prev.filter((item) => item.id !== id))}
+        items={[]}
       />
     </div>
   );

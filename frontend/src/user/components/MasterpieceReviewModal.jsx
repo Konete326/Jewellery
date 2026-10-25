@@ -19,21 +19,21 @@ export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitt
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
-      toast.error('Authentication is required to register an archival appraisal rating.');
+      toast.error('Please sign in to submit a review.');
       navigate('/auth');
       return;
     }
 
     if (!rating || rating < 1 || rating > 5) {
-      toast.error('Please assign a rating from 1 to 5 stars.');
+      toast.error('Please select a rating between 1 and 5 stars.');
       return;
     }
 
     setSubmitting(true);
     try {
       const reviewPayload = {
-        userName: user.name || user.email?.split('@')[0] || 'Atelier Patron',
-        userEmail: user.email || 'client@patron.com',
+        userName: user.name || user.email?.split('@')[0] || 'Customer',
+        userEmail: user.email || 'customer@example.com',
         rating,
         comment: comment.trim(),
         title: piece.title,
@@ -56,7 +56,7 @@ export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitt
         window.dispatchEvent(new CustomEvent('khalil_review_added', { detail: alertData }));
       } catch {}
 
-      toast.success('Your rating and evaluation have been recorded in the atelier archive.');
+      toast.success('Thank you! Your review has been recorded.');
       onReviewSubmitted(reviewPayload);
       onClose();
     } catch (err) {
@@ -78,10 +78,10 @@ export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitt
         <div className="flex items-start justify-between border-b border-border pb-3.5">
           <div>
             <span className="text-[10px] uppercase font-mono tracking-widest text-amber-700 dark:text-amber-400 font-medium">
-              Connoisseur Appraisal
+              Customer Feedback
             </span>
             <h3 className="font-serif text-lg font-semibold text-foreground">
-              Rate Masterpiece
+              Rate This Piece
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
               {piece.title}
@@ -103,7 +103,7 @@ export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitt
             <div>
               <h4 className="text-sm font-medium text-foreground">Sign In to Rate</h4>
               <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                To maintain authentic provenance, only authenticated atelier collectors can submit masterwork reviews.
+                Please sign in with your account to leave a review for this piece.
               </p>
             </div>
             <Button
@@ -140,22 +140,22 @@ export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitt
                 ))}
               </div>
               <span className="text-xs font-semibold text-foreground">
-                {rating === 5 ? 'Exceptional Masterwork (5/5)' :
-                 rating === 4 ? 'Remarkable Craftsmanship (4/5)' :
-                 rating === 3 ? 'Distinguished Design (3/5)' :
-                 rating === 2 ? 'Appreciated Piece (2/5)' : 'Initial Impression (1/5)'}
+                {rating === 5 ? 'Excellent (5/5)' :
+                 rating === 4 ? 'Very Good (4/5)' :
+                 rating === 3 ? 'Good (3/5)' :
+                 rating === 2 ? 'Fair (2/5)' : 'Needs Improvement (1/5)'}
               </span>
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-medium uppercase tracking-wider text-muted-foreground font-mono">
-                Artisan Notes / Review (Optional)
+                Your Review (Optional)
               </label>
               <textarea
                 rows={3}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="Share observations on the gold finish, stone setting, or handcraft..."
+                placeholder="Share your thoughts about this jewellery design..."
                 className="w-full bg-muted/30 border border-input rounded-xl px-3.5 py-2.5 text-xs text-foreground outline-none focus:border-amber-500/60 transition-all resize-none"
               />
             </div>
@@ -163,9 +163,9 @@ export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitt
             <div className="flex items-center justify-between text-[11px] text-muted-foreground font-light pt-1">
               <span className="flex items-center gap-1">
                 <ShieldCheck className="size-3.5 text-emerald-600" />
-                Verified Client Review
+                Verified Buyer
               </span>
-              <span>Logged as {user.name || user.email}</span>
+              <span>Logged in as {user.name || user.email}</span>
             </div>
 
             <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-border">
@@ -191,7 +191,7 @@ export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitt
                     <span>Submitting...</span>
                   </>
                 ) : (
-                  <span>Record Appraisal</span>
+                  <span>Submit Review</span>
                 )}
               </Button>
             </div>

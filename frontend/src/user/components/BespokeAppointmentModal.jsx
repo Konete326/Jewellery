@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'sonner'
-import { X, CheckCheckIcon, Sparkles } from 'lucide-react'
+import { X, CheckCheckIcon, Sparkles, Calendar } from 'lucide-react'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -19,7 +19,7 @@ const inquiryFormSchema = z.object({
   estimatedBudget: z.string().min(2, 'Budget estimate is required').max(50),
   message: z.string().min(10, 'Please share at least 10 characters detailing your vision').max(1000),
   acceptTerms: z.boolean().refine(val => val === true, {
-    message: 'You must accept the terms of bespoke consultation.'
+    message: 'Please accept the terms to continue.'
   })
 })
 
@@ -56,7 +56,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
       toast.custom(() => (
         <Alert className="border-green-600 text-green-600 dark:border-green-400 dark:text-green-400 *:[svg]:row-span-1">
           <CheckCheckIcon />
-          <AlertTitle>Private consultation booked with Master Jeweler!</AlertTitle>
+          <AlertTitle>Appointment request booked successfully!</AlertTitle>
         </Alert>
       ))
       form.reset()
@@ -83,10 +83,10 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
           </div>
           <div>
             <h3 className="font-serif text-lg font-semibold text-foreground">
-              Book Private Atelier Appointment
+              Book an Appointment
             </h3>
             <p className="text-xs text-muted-foreground">
-              Consult with our Master Jeweler in Florence for bespoke creations
+              Meet with our jewelers in person or online for custom jewellery
             </p>
           </div>
         </div>
@@ -102,7 +102,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                   id="appointment-name"
                   {...field}
                   aria-invalid={fieldState.invalid}
-                  placeholder="e.g. Lady Vivienne Montgomery"
+                  placeholder="e.g. Sarah Jenkins"
                   className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
                 />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -122,7 +122,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                     type="email"
                     {...field}
                     aria-invalid={fieldState.invalid}
-                    placeholder="vivienne@atelier.com"
+                    placeholder="sarah@example.com"
                     className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -156,7 +156,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid} className="flex-col items-start">
-                  <FieldLabel htmlFor="appointment-type">Commission Type</FieldLabel>
+                  <FieldLabel htmlFor="appointment-type">Jewellery Type</FieldLabel>
                   <select
                     id="appointment-type"
                     {...field}
@@ -165,7 +165,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                     <option value="Custom Ring">Custom Ring</option>
                     <option value="Bridal Set">Bridal Set</option>
                     <option value="Diamond Necklace">Diamond Necklace</option>
-                    <option value="Bespoke Bracelet">Bespoke Bracelet</option>
+                    <option value="Bespoke Bracelet">Gold Bracelet</option>
                     <option value="Other">Other</option>
                   </select>
                 </Field>
@@ -204,7 +204,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                   id="appointment-budget"
                   {...field}
                   aria-invalid={fieldState.invalid}
-                  placeholder="e.g. $10,000 - $25,000"
+                  placeholder="e.g. $5,000 - $15,000"
                   className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
                 />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -217,13 +217,13 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid} className="flex-col items-start">
-                <FieldLabel htmlFor="appointment-message">Artisan Details & Vision</FieldLabel>
+                <FieldLabel htmlFor="appointment-message">Your Ideas & Requirements</FieldLabel>
                 <textarea
                   id="appointment-message"
                   rows={3}
                   {...field}
                   aria-invalid={fieldState.invalid}
-                  placeholder="Describe your gemstone preferences, cut specifications, or heirloom inspirations..."
+                  placeholder="Tell us what you would like us to make, your preferred gemstones, or design ideas..."
                   className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
                 />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -244,11 +244,11 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                     onCheckedChange={field.onChange}
                     aria-invalid={fieldState.invalid}
                   />
-                  <FieldLabel htmlFor="acceptTerms">Agree to Atelier Consultation Terms</FieldLabel>
+                  <FieldLabel htmlFor="acceptTerms">Agree to Appointment Guidelines</FieldLabel>
                 </div>
                 <div className="flex flex-col gap-2">
                   <FieldDescription>
-                    By clicking &apos;Confirm Appointment&apos;, you accept our Private Client Guidelines and Confidentiality Policy.
+                    We will contact you shortly to confirm your preferred date and time.
                   </FieldDescription>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </div>
@@ -268,9 +268,10 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
             <Button
               type="submit"
               disabled={form.formState.isSubmitting}
-              className="cursor-pointer"
+              className="cursor-pointer inline-flex items-center gap-1.5"
             >
-              {form.formState.isSubmitting ? 'Booking...' : 'Confirm Appointment'}
+              <Calendar className="size-3.5 text-amber-400" />
+              <span>{form.formState.isSubmitting ? 'Booking...' : 'Book Appointment'}</span>
             </Button>
           </div>
         </form>

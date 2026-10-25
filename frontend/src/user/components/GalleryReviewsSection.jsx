@@ -14,10 +14,10 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <span className="text-xs uppercase tracking-[0.2em] text-[#5f5e5e] font-medium block mb-1">
-            Provenance & Appraisals
+            Customer Reviews
           </span>
           <h2 className="font-headline text-2xl sm:text-3xl text-[#2d3435] font-light">
-            Patron <span className="serif-italic">Reviews & Appraisals</span>
+            Customer <span className="serif-italic">Reviews & Ratings</span>
           </h2>
         </div>
 
@@ -27,7 +27,7 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-amber-600/30 bg-amber-500/10 hover:bg-amber-500/20 text-xs uppercase tracking-wider font-medium text-amber-900 dark:text-amber-300 transition-colors cursor-pointer shadow-xs"
         >
           <Plus className="size-3.5" />
-          <span>Record Archival Appraisal</span>
+          <span>Write a Review</span>
         </button>
       </div>
 
@@ -37,9 +37,9 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
             <MessageSquare className="size-5" />
           </div>
           <div>
-            <h4 className="font-serif text-base font-medium text-[#2d3435]">No Recorded Appraisals Yet</h4>
+            <h4 className="font-serif text-base font-medium text-[#2d3435]">No Reviews Yet</h4>
             <p className="text-xs text-[#5a6061] font-light mt-1 max-w-md">
-              Authenticated collectors and patrons who have examined this piece are invited to submit their archival appraisal notes.
+              Be the first to share your thoughts about this jewellery piece.
             </p>
           </div>
           <Button
@@ -48,7 +48,7 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
             variant="outline"
             className="text-xs uppercase tracking-wider font-medium mt-2"
           >
-            Be The First To Appraise
+            Write the First Review
           </Button>
         </div>
       ) : (
@@ -65,7 +65,7 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="font-serif text-sm font-medium text-[#2d3435]">
-                      {rev.userName || 'Atelier Patron'}
+                      {rev.userName || 'Verified Customer'}
                     </span>
                     {showStars ? (
                       <div className="flex items-center gap-0.5">
@@ -93,7 +93,7 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
                 <div className="flex items-center justify-between pt-3 border-t border-neutral-100 text-[11px] text-neutral-400 font-mono">
                   <span className="flex items-center gap-1 text-emerald-700">
                     <ShieldCheck className="size-3" />
-                    <span>Verified Collector</span>
+                    <span>Verified Buyer</span>
                   </span>
                   <span>
                     {rev.createdAt
@@ -102,7 +102,7 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
                           month: 'short',
                           day: 'numeric'
                         })
-                      : 'Archived Appraisal'}
+                      : 'Customer Review'}
                   </span>
                 </div>
               </div>

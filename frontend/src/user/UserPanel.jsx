@@ -8,7 +8,6 @@ import { Footer } from './components/Footer'
 import { SearchModal } from './components/SearchModal'
 import { CartDrawer } from './components/CartDrawer'
 import { BespokeAppointmentModal } from './components/BespokeAppointmentModal'
-import { GlobalGoldEffect } from './components/GlobalGoldEffect'
 
 export function UserPanel() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -28,19 +27,6 @@ export function UserPanel() {
       localStorage.setItem('khalil_cart', JSON.stringify(cartItems))
     } catch {}
   }, [cartItems])
-
-  const handleAddToCart = (piece) => {
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === piece.id)
-      if (existing) {
-        return prev.map((item) =>
-          item.id === piece.id ? { ...item, quantity: item.quantity + 1 } : item
-        )
-      }
-      return [...prev, { ...piece, quantity: 1 }]
-    })
-    setIsCartOpen(true)
-  }
 
   const handleIncrement = (id) => {
     setCartItems((prev) =>
@@ -68,7 +54,6 @@ export function UserPanel() {
 
   return (
     <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
-      <GlobalGoldEffect />
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
@@ -79,7 +64,7 @@ export function UserPanel() {
           document.getElementById('collections')?.scrollIntoView({ behavior: 'smooth' })
         }} />
         <HeritageStory />
-        <FeaturedMasterpieces onAddToCart={handleAddToCart} />
+        <FeaturedMasterpieces />
         <HistoricAtelier onBookClick={() => setIsAppointmentOpen(true)} />
       </main>
       <Footer />

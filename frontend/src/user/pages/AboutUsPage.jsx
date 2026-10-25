@@ -4,7 +4,6 @@ import { Footer } from '@/user/components/Footer'
 import { SearchModal } from '@/user/components/SearchModal'
 import { CartDrawer } from '@/user/components/CartDrawer'
 import { BespokeAppointmentModal } from '@/user/components/BespokeAppointmentModal'
-import { GlobalGoldEffect } from '@/user/components/GlobalGoldEffect'
 import AboutUs from '@/components/shadcn-studio/blocks/about-us-page-30/about-us-page-30'
 
 export function AboutUsPage() {
@@ -30,7 +29,6 @@ export function AboutUsPage() {
 
   return (
     <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
-      <GlobalGoldEffect />
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}

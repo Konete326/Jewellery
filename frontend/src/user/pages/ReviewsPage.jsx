@@ -5,7 +5,6 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
 import { CartDrawer } from '../components/CartDrawer';
-import { GlobalGoldEffect } from '../components/GlobalGoldEffect';
 import { galleryApi } from '@/api/galleryApi';
 
 export function ReviewsPage() {
@@ -34,7 +33,6 @@ export function ReviewsPage() {
 
   return (
     <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
-      <GlobalGoldEffect />
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
@@ -45,13 +43,13 @@ export function ReviewsPage() {
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-400 text-xs font-mono tracking-widest uppercase mb-4">
             <Sparkles className="size-3.5 text-amber-600" />
-            <span>Archival Dossier</span>
+            <span>Customer Reviews</span>
           </div>
           <h1 className="font-headline text-3xl sm:text-5xl lg:text-6xl font-light text-[#2d3435] leading-tight mb-4">
-            Collector <span className="serif-italic">Appraisals & Reviews</span>
+            Customer <span className="serif-italic">Reviews & Ratings</span>
           </h1>
           <p className="text-sm sm:text-base text-[#5a6061] font-light max-w-xl mx-auto leading-relaxed">
-            Authentic appraisal impressions and craftsmanship evaluations documented by verified patrons of our Florentine atelier.
+            Real feedback and ratings from customers who purchased our handcrafted jewellery.
           </p>
         </div>
 
@@ -65,16 +63,16 @@ export function ReviewsPage() {
               <MessageSquare className="size-6" />
             </div>
             <div>
-              <h3 className="font-serif text-lg font-medium text-[#2d3435]">Living Archive Being Documented</h3>
+              <h3 className="font-serif text-lg font-medium text-[#2d3435]">No Reviews Yet</h3>
               <p className="text-xs text-[#5a6061] font-light mt-1">
-                Archival ratings and reviews are currently being synchronized from our master registry.
+                Customer ratings and reviews will appear here once submitted.
               </p>
             </div>
             <button
               onClick={() => navigate('/gallery')}
               className="px-6 py-2.5 rounded-full bg-[#2d3435] text-white text-xs uppercase tracking-widest hover:bg-neutral-800 transition-colors cursor-pointer"
             >
-              Explore Masterpieces
+              Explore Collection
             </button>
           </div>
         ) : (
@@ -99,17 +97,17 @@ export function ReviewsPage() {
                       )}
                       <div className="min-w-0 flex-1">
                         <span className="text-[10px] font-mono uppercase tracking-wider text-amber-700 block">
-                          Appraised Masterpiece
+                          Jewellery Piece
                         </span>
                         <h3 className="font-serif text-sm font-medium text-[#2d3435] truncate">
-                          {rev.masterpieceTitle || 'Haute Joaillerie Piece'}
+                          {rev.masterpieceTitle || 'Handmade Jewellery'}
                         </h3>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <span className="font-medium text-xs text-[#2d3435]">
-                        {rev.userName || 'Anonymous Collector'}
+                        {rev.userName || 'Anonymous Customer'}
                       </span>
                       {showStars ? (
                         <div className="flex items-center gap-0.5">
@@ -137,7 +135,7 @@ export function ReviewsPage() {
                   <div className="p-4 bg-neutral-50/80 border-t border-neutral-100 flex items-center justify-between text-xs">
                     <span className="flex items-center gap-1 text-[11px] text-emerald-700">
                       <ShieldCheck className="size-3.5" />
-                      <span>Verified Appraisal</span>
+                      <span>Verified Customer</span>
                     </span>
                     {rev.masterpieceId && (
                       <button
