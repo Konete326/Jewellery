@@ -8,6 +8,7 @@ import { DesktopNav } from "@/components/desktop-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { isAdmin } from "@/lib/auth";
 import { Search, ShoppingBag } from "lucide-react";
+import { StoreStatusBadge } from "@/components/StoreStatusBadge";
 
 export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 	const scrolled = useScroll(10);
@@ -41,6 +42,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 				</div>
 
 				<div className="hidden items-center gap-3 md:flex">
+					<StoreStatusBadge variant="pill" className="hidden lg:inline-flex" />
 					{onOpenSearch && (
 						<Button
 							variant="ghost"

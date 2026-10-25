@@ -1,5 +1,5 @@
 import React from 'react'
-import { ShieldCheck, Award, Gem, MapPin, Phone, MessageCircle, Calendar } from 'lucide-react'
+import { ShieldCheck, Award, Gem, MapPin, Phone, MessageCircle, Calendar, Navigation } from 'lucide-react'
 import { STORE_INFO } from '@/constants/storeInfo'
 import { LuxuryButton } from './LuxuryButton'
 
@@ -134,10 +134,15 @@ export function BrandChronicle({ onOpenAppointment }) {
 
       <div className="rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-background to-card p-6 sm:p-10 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
         <div className="space-y-3 text-center md:text-left max-w-xl">
-          <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-800 dark:text-amber-400">
+          <a
+            href={STORE_INFO.social.googleMapsDirections}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-amber-800 dark:text-amber-400 hover:text-amber-600 transition-colors cursor-pointer"
+          >
             <MapPin className="size-3.5" />
-            <span>{STORE_INFO.address.short}</span>
-          </div>
+            <span className="underline decoration-dotted">{STORE_INFO.address.short}</span>
+          </a>
           <h3 className="text-2xl sm:text-3xl font-serif font-light text-foreground">
             Visit Our Saddar Karachi Atelier
           </h3>
@@ -157,6 +162,20 @@ export function BrandChronicle({ onOpenAppointment }) {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
+          <a
+            href={STORE_INFO.social.googleMapsDirections}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto"
+          >
+            <LuxuryButton
+              variant="gold"
+              className="w-full"
+              icon={<Navigation className="size-4 text-amber-200" />}
+            >
+              Get Directions
+            </LuxuryButton>
+          </a>
           <a
             href={whatsappUrl}
             target="_blank"

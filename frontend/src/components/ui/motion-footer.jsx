@@ -347,13 +347,13 @@ export function CinematicFooter() {
                   <span>Facebook</span>
                 </a>
                 <a
-                  href={STORE_INFO.social.googleMaps}
+                  href={STORE_INFO.social.googleMapsDirections}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
                 >
                   <MapPin className="size-3.5 text-amber-600" />
-                  <span>Saddar, Karachi (5.0 ★)</span>
+                  <span>Get Directions • Saddar (5.0 ★)</span>
                 </a>
               </div>
             </div>

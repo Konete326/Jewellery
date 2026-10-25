@@ -1,8 +1,9 @@
 import React from 'react';
-import { Mail, MapPin, Clock, Calendar, MessageCircle } from 'lucide-react';
+import { Mail, MapPin, Clock, Calendar, MessageCircle, Navigation } from 'lucide-react';
 import { GlobeWireframe } from '@/components/ui/contact-with-globe';
 import { STORE_INFO } from '@/constants/storeInfo';
 import { LuxuryButton } from './LuxuryButton';
+import { StoreStatusBadge } from '@/components/StoreStatusBadge';
 
 export function AtelierContactDirectory({ onOpenAppointment }) {
   const whatsappUrl = STORE_INFO.whatsapp.inquiryUrl(
@@ -94,6 +95,32 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           </div>
         </div>
       </div>
+
+      <StoreStatusBadge variant="detailed" />
+
+      <a
+        href={STORE_INFO.social.googleMapsDirections}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex items-center justify-between p-3.5 rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent hover:border-amber-500/50 hover:bg-amber-500/20 transition-all shadow-xs cursor-pointer"
+      >
+        <div className="flex items-center gap-3">
+          <div className="size-9 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-800 dark:text-amber-300 shrink-0 group-hover:scale-105 transition-transform">
+            <Navigation className="size-4 text-amber-800 dark:text-amber-300" />
+          </div>
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-wider text-foreground block">
+              Get Driving Directions
+            </span>
+            <span className="text-[11px] text-muted-foreground block font-light">
+              One-tap turn-by-turn navigation in Google Maps
+            </span>
+          </div>
+        </div>
+        <span className="text-xs font-mono text-amber-800 dark:text-amber-300 group-hover:translate-x-1 transition-transform">
+          Navigate &rarr;
+        </span>
+      </a>
 
       <div className="p-3.5 rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent flex items-center justify-between gap-3 shadow-xs">
         <div>

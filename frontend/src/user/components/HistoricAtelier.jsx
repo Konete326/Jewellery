@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Calendar, Star, ArrowRight } from 'lucide-react'
+import { Calendar, Star, ArrowRight, Navigation } from 'lucide-react'
 import { LuxuryButton } from './LuxuryButton'
 import { NeuralNoise } from '@/components/ui/neural-noise'
 import { galleryApi } from '@/api/galleryApi'
 import { DEFAULT_SKIPER_IMAGES } from './Skiper54'
 import { STORE_INFO } from '@/constants/storeInfo'
+import { StoreStatusBadge } from '@/components/StoreStatusBadge'
 
 export function HistoricAtelier({ onBookClick }) {
   const navigate = useNavigate()
@@ -71,19 +72,33 @@ export function HistoricAtelier({ onBookClick }) {
               </p>
             </div>
             <div>
-              <p className="tracking-widest text-[10px] uppercase text-[#5a6061] mb-1 font-medium font-mono">
-                Business Hours
-              </p>
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <p className="tracking-widest text-[10px] uppercase text-[#5a6061] font-medium font-mono">
+                  Business Hours
+                </p>
+                <StoreStatusBadge variant="compact" />
+              </div>
               <p className="font-headline text-base sm:text-lg text-[#2d3435]">
                 {STORE_INFO.hours.summary}
               </p>
               <p className="text-xs text-[#5a6061] mt-0.5 font-light">Sunday: Closed</p>
             </div>
           </div>
-          <LuxuryButton onClick={onBookClick} variant="gold">
-            <Calendar className="size-3.5 text-amber-200" />
-            <span>Book an Appointment</span>
-          </LuxuryButton>
+          <div className="flex flex-wrap items-center gap-3">
+            <LuxuryButton onClick={onBookClick} variant="gold">
+              <Calendar className="size-3.5 text-amber-200" />
+              <span>Book an Appointment</span>
+            </LuxuryButton>
+            <a
+              href={STORE_INFO.social.googleMapsDirections}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 min-h-[48px] px-6 py-3.5 rounded-full border border-neutral-300 hover:border-amber-600 bg-white/90 hover:bg-white text-xs font-mono uppercase tracking-wider text-[#2d3435] transition-all cursor-pointer shadow-2xs"
+            >
+              <Navigation className="size-3.5 text-amber-700" />
+              <span>Get Directions</span>
+            </a>
+          </div>
         </div>
         <div className="w-full lg:w-1/2 relative">
           <div

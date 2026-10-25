@@ -9,7 +9,6 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { CardGoldEffect } from "./CardGoldEffect";
 
 export const DEFAULT_SKIPER_IMAGES = [
   {
@@ -168,7 +167,7 @@ export function Skiper54({
                 >
                   <div className={cn(
                     "relative h-full w-full bg-neutral-900 border overflow-hidden rounded-3xl group/card transition-all duration-500",
-                    current === index ? "border-amber-500/50 shadow-[0_0_30px_rgba(217,119,6,0.25)]" : "border-neutral-800"
+                    current === index ? "border-white/40 shadow-xl" : "border-neutral-800"
                   )}>
                     <img
                       src={src}
@@ -180,7 +179,6 @@ export function Skiper54({
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
-                    <CardGoldEffect active={current === index} />
 
                     <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 z-10 flex flex-col justify-end text-left pointer-events-auto">
                       {(item.averageRating >= 4 || item.rating >= 4) && (
@@ -190,7 +188,7 @@ export function Skiper54({
                         </div>
                       )}
 
-                      <h3 className="font-headline text-lg sm:text-xl text-white font-medium tracking-wide line-clamp-1 group-hover/card:text-amber-300 transition-colors">
+                      <h3 className="font-headline text-lg sm:text-xl text-white font-medium tracking-wide line-clamp-1 group-hover/card:text-neutral-200 transition-colors">
                         {title}
                       </h3>
 
@@ -200,7 +198,7 @@ export function Skiper54({
                         </p>
                       )}
 
-                      <div className="mt-3.5 flex items-center justify-between pt-2.5 border-t border-white/20 text-[11px] uppercase tracking-wider font-mono text-amber-300 group-hover/card:text-amber-200">
+                      <div className="mt-3.5 flex items-center justify-between pt-2.5 border-t border-white/20 text-[11px] uppercase tracking-wider font-mono text-neutral-300 group-hover/card:text-white">
                         <span>View Details</span>
                         <span>&rarr;</span>
                       </div>

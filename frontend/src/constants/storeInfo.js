@@ -35,6 +35,8 @@ export const STORE_INFO = {
     facebook: 'https://www.facebook.com/thekhalilandsons/',
     googleMaps:
       'https://maps.google.com/?q=Khalil+%26+Sons+Jewellers+Murshid+Sunaar+Tower+Daud+Pota+Road+Saddar+Karachi',
+    googleMapsDirections:
+      'https://www.google.com/maps/dir/?api=1&destination=Khalil+%26+Sons+Jewellers+Murshid+Sunaar+Tower+Dr+Daud+Pota+Road+Saddar+Karachi',
     website: 'https://khalilandsonsjewellers.com'
   },
   email: 'info@khalilandsonsjewellers.com',
