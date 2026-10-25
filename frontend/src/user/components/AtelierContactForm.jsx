@@ -61,7 +61,7 @@ export function AtelierContactForm({ onSuccess }) {
   };
 
   return (
-    <div className="rounded-2xl border border-border/80 bg-white dark:bg-card p-5 sm:p-7 shadow-xs flex flex-col gap-4">
+    <div className="rounded-2xl border border-border/80 bg-white dark:bg-card p-5 sm:p-7 shadow-xs flex flex-col justify-between h-full gap-4">
       <div>
         <h3 className="text-xl sm:text-2xl font-serif font-light text-foreground tracking-tight">
           Send Us a Message
@@ -71,7 +71,7 @@ export function AtelierContactForm({ onSuccess }) {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
+      <form onSubmit={handleSubmit} className="flex flex-col justify-between flex-1 gap-3.5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
           <div className="flex flex-col gap-1">
             <label className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">

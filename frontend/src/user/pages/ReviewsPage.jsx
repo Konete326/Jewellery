@@ -6,6 +6,7 @@ import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
 import { CartDrawer } from '../components/CartDrawer';
 import { galleryApi } from '@/api/galleryApi';
+import { updatePageSEO } from '@/utils/seo';
 
 export function ReviewsPage() {
   const navigate = useNavigate();
@@ -13,6 +14,14 @@ export function ReviewsPage() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    updatePageSEO({
+      title: 'Client Reviews & Appraisals',
+      description: 'Read verified client testimonials and 5-star appraisals for Khalil & Sons Jewellers, Saddar, Karachi. Trusted for certified gold purity and master bridal jewelry.',
+      keywords: 'Khalil & Sons reviews, jeweler rating Karachi, trusted gold shop Saddar'
+    });
+  }, []);
 
   useEffect(() => {
     const fetchReviews = async () => {

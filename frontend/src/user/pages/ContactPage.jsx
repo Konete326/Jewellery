@@ -36,14 +36,14 @@ export function ContactPage() {
       />
 
       <main className="relative z-10 pt-16 md:pt-20 pb-12 w-full max-w-[1880px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-10 items-start">
-          <div className="lg:col-span-5 xl:col-span-5">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-10 items-stretch">
+          <div className="lg:col-span-5 xl:col-span-5 h-full">
             <AtelierContactDirectory
               onOpenAppointment={() => setIsAppointmentOpen(true)}
             />
           </div>
 
-          <div className="lg:col-span-7 xl:col-span-7">
+          <div className="lg:col-span-7 xl:col-span-7 h-full">
             <AtelierContactForm
               onSuccess={handleInquirySuccess}
             />
