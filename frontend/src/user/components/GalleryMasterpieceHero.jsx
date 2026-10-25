@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, MessageCircle, Mail, Calendar, ZoomIn, ShieldCheck, Gem, Compass } from 'lucide-react';
+import { Star, MessageCircle, Mail, Calendar, ZoomIn, Gem } from 'lucide-react';
 import { LuxuryButton } from './LuxuryButton';
 
 export function GalleryMasterpieceHero({

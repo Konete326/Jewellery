@@ -1,6 +1,5 @@
 import React from 'react';
-import { Phone, Mail, MapPin, Clock, Calendar, MessageCircle, Crown, ArrowRight } from 'lucide-react';
-import { LuxuryButton } from './LuxuryButton';
+import { Mail, MapPin, Clock, Calendar, MessageCircle, Crown } from 'lucide-react';
 
 export function AtelierContactDirectory({ onOpenAppointment }) {
   const whatsappUrl = `https://wa.me/39055218901?text=${encodeURIComponent(
