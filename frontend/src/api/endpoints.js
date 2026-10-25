@@ -16,5 +16,8 @@ export const ENDPOINTS = {
   USERS_REGISTER: '/users/register',
   USERS_LOGIN: '/users/login',
   USERS_ROLE: (id) => `/users/${id}/role`,
-  USER_BY_ID: (id) => `/users/${id}`
+  USER_BY_ID: (id) => `/users/${id}`,
+  USERS_WISHLIST: (email) => `/users/wishlist/${encodeURIComponent(email)}`,
+  USERS_WISHLIST_TOGGLE: '/users/wishlist/toggle',
+  USERS_WISHLIST_SYNC: '/users/wishlist/sync'
 };

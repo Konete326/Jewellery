@@ -1,26 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Star, Loader2, ShieldCheck, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { GoogleIcon } from '@/components/google-icon';
 import { galleryApi } from '@/api/galleryApi';
-import { getAuthUser } from '@/lib/auth';
+import { getAuthUser, loginWithGoogle } from '@/lib/auth';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitted = () => {} }) {
   const navigate = useNavigate();
-  const user = getAuthUser();
+  const [user, setUser] = useState(getAuthUser());
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  useEffect(() => {
+    const handleAuthChange = (e) => {
+      setUser(e.detail || getAuthUser());
+    };
+    window.addEventListener('khalil_auth_change', handleAuthChange);
+    return () => window.removeEventListener('khalil_auth_change', handleAuthChange);
+  }, []);
+
   if (!isOpen || !piece) return null;
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setGoogleLoading(true);
+      const signedInUser = await loginWithGoogle();
+      setUser(signedInUser);
+      toast.success(`Welcome, ${signedInUser.name}!`, {
+        description: 'You can now submit your rating'
+      });
+    } catch (err) {
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        toast.error('Google Sign-In Failed', {
+          description: err.message || 'Unable to connect Google account.'
+        });
+      }
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
       toast.error('Please sign in to submit a review.');
-      navigate('/auth');
       return;
     }
 
@@ -103,15 +131,31 @@ export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitt
             <div>
               <h4 className="text-sm font-medium text-foreground">Sign In to Rate</h4>
               <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                Please sign in with your account to leave a review for this piece.
+                Connect your account in 1 tap to leave a verified rating for this masterpiece.
               </p>
             </div>
             <Button
-              onClick={() => navigate('/auth')}
-              className="w-full bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-widest font-medium"
+              disabled={googleLoading}
+              onClick={handleGoogleSignIn}
+              className="w-full bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-widest font-medium flex items-center justify-center gap-2.5 h-11 cursor-pointer"
             >
-              Sign In to Continue
+              {googleLoading ? (
+                <Loader2 className="size-4 animate-spin text-amber-500" />
+              ) : (
+                <GoogleIcon className="size-4 shrink-0" />
+              )}
+              <span>{googleLoading ? 'Connecting...' : 'Continue with Google'}</span>
             </Button>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                navigate('/auth');
+              }}
+              className="text-[11px] text-muted-foreground hover:text-foreground hover:underline cursor-pointer"
+            >
+              Or sign in with email & password
+            </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">

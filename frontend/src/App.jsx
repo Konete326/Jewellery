@@ -8,6 +8,7 @@ import { ContactPage } from '@/user/pages/ContactPage'
 import { AdminPanel } from '@/admin/AdminPanel'
 import { AuthPage } from '@/components/auth/AuthPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
+import { GoogleOneTapOverlay } from '@/components/auth/GoogleOneTapOverlay'
 import { Toaster } from '@/components/ui/sonner'
 import { Agentation } from 'agentation'
 
@@ -16,6 +17,7 @@ export default function App() {
     <>
       <Toaster position="top-right" richColors />
       <BrowserRouter>
+        <GoogleOneTapOverlay />
         <Routes>
           <Route path="/" element={<UserPanel />} />
           <Route path="/gallery" element={<GalleryPage />} />

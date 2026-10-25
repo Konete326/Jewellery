@@ -1,7 +1,8 @@
 import React from 'react';
 import { Star, MessageCircle, Mail, Calendar, ZoomIn, Gem } from 'lucide-react';
 import { LuxuryButton } from './LuxuryButton';
-import { STORE_INFO } from '@/constants/storeInfo';
+import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton';
+import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
 
 export function GalleryMasterpieceHero({
   piece,
@@ -20,21 +21,19 @@ export function GalleryMasterpieceHero({
   const hasQualifyingRating = rating >= 4.0;
   const refCode = `KS-${String(piece._id || piece.id || '001').slice(-6).toUpperCase()}`;
 
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://khalilandsonsjewellers.com';
-  const fullImageUrl = imageUrl?.startsWith('http') ? imageUrl : `${origin}${imageUrl}`;
-  const productPageUrl = typeof window !== 'undefined' ? window.location.href : `${origin}/gallery/${piece._id || piece.id}`;
-
-  const whatsappMessage = `Hello Khalil & Sons,\n\nI would like to inquire about this jewellery piece:\n\n✨ *${title}*\n💎 Category: ${piece.category || 'Fine Jewellery'}\n🏷️ Ref Code: ${refCode}\n🔗 Product: ${productPageUrl}\n📸 Photo: ${fullImageUrl}\n\nPlease share price estimate, gold purity details, and appointment availability.`;
-  const whatsappUrl = STORE_INFO.whatsapp.inquiryUrl(whatsappMessage);
+  const whatsappUrl = getPersonalizedWhatsAppInquiry({ piece });
 
   return (
     <section className="w-full pt-2 pb-12">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
         <div className="lg:col-span-6 xl:col-span-7 flex flex-col justify-center space-y-6 order-2 lg:order-1">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-400 text-xs font-mono tracking-widest uppercase">
-              <Gem className="size-3.5 text-amber-600" />
-              <span>Handmade Jewellery • Karachi</span>
+            <div className="flex items-center justify-between gap-3">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-400 text-xs font-mono tracking-widest uppercase">
+                <Gem className="size-3.5 text-amber-600" />
+                <span>Handmade Jewellery • Karachi</span>
+              </div>
+              <SaveToVaultButton piece={piece} variant="pill" showText />
             </div>
 
             <h1 className="font-headline text-3xl sm:text-5xl xl:text-6xl text-[#2d3435] font-light tracking-tight leading-[1.15]">
@@ -48,55 +47,47 @@ export function GalleryMasterpieceHero({
                   className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/25 cursor-pointer hover:bg-amber-500/15 transition-colors group"
                 >
                   <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`size-3.5 ${
-                          star <= Math.round(rating)
-                            ? 'fill-amber-500 text-amber-500'
-                            : 'text-neutral-300'
-                        }`}
-                      />
-                    ))}
+                    <Star className="size-4 fill-amber-500 text-amber-500" />
+                    <span className="font-semibold text-xs text-[#2d3435]">{rating.toFixed(1)}</span>
                   </div>
-                  <span className="text-xs font-semibold text-amber-900 dark:text-amber-300 font-mono">
-                    {rating.toFixed(1)}
-                  </span>
-                  <span className="text-[11px] text-amber-700/80 dark:text-amber-400 underline underline-offset-2">
-                    ({reviewCount} {reviewCount === 1 ? 'Review' : 'Reviews'})
+                  <span className="text-[11px] text-[#5f5e5e] group-hover:text-amber-700">
+                    ({reviewCount} Verified Client Appraisals)
                   </span>
                 </div>
-              ) : null}
+              ) : (
+                <div
+                  onClick={onOpenReview}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-amber-500/10 border border-neutral-200/80 cursor-pointer transition-colors"
+                >
+                  <Star className="size-3.5 text-amber-600" />
+                  <span className="text-xs font-medium text-[#2d3435]">Atelier Masterpiece</span>
+                  <span className="text-[11px] text-amber-700 underline underline-offset-2">Rate Piece</span>
+                </div>
+              )}
 
-              <button
-                type="button"
-                onClick={onOpenReview}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-neutral-200 text-xs text-[#2d3435] hover:border-amber-500/50 hover:text-amber-800 transition-colors cursor-pointer shadow-xs"
-              >
-                <Star className="size-3.5 text-amber-600" />
-                <span>Write a Review</span>
-              </button>
+              <span className="text-xs text-neutral-400 font-mono">|</span>
+              <span className="text-xs font-mono text-neutral-500 uppercase tracking-wider">
+                Ref: {refCode}
+              </span>
             </div>
           </div>
 
-          <div className="prose prose-neutral max-w-none">
-            <p className="text-sm sm:text-base text-[#5a6061] font-light leading-relaxed">
-              {description}
-            </p>
-          </div>
+          <p className="text-base sm:text-lg text-[#5f5e5e] font-light leading-relaxed max-w-2xl">
+            {description}
+          </p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-4 border-y border-neutral-200/80">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
             <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Item Code</span>
-              <p className="text-xs font-mono font-medium text-[#2d3435] mt-0.5 truncate">{refCode}</p>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Purity</span>
+              <p className="text-xs font-medium text-[#2d3435] mt-0.5">22K / 24K Hallmarked</p>
             </div>
             <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Metal</span>
-              <p className="text-xs font-medium text-[#2d3435] mt-0.5">Solid 22K Gold</p>
-            </div>
-            <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Made In</span>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Boutique</span>
               <p className="text-xs font-medium text-[#2d3435] mt-0.5">Saddar, Karachi</p>
+            </div>
+            <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Craftsmanship</span>
+              <p className="text-xs font-medium text-[#2d3435] mt-0.5">Artisanal Goldsmithing</p>
             </div>
             <div className="p-3 rounded-xl bg-white/80 border border-neutral-200/70">
               <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block">Availability</span>
@@ -148,27 +139,36 @@ export function GalleryMasterpieceHero({
         </div>
 
         <div className="lg:col-span-6 xl:col-span-5 order-1 lg:order-2">
-          <div
-            onClick={onOpenLightbox}
-            className="group relative aspect-square sm:aspect-[4/3] lg:aspect-square w-full rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-200/80 shadow-2xl cursor-pointer select-none"
-          >
-            <img
-              src={imageUrl}
-              alt={title}
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = "/assets/products/choker-ruby-01.jpg";
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-40 group-hover:opacity-70 transition-opacity" />
+          <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square w-full rounded-3xl overflow-hidden bg-neutral-900 border border-neutral-200/80 shadow-2xl group">
+            <div
+              onClick={onOpenLightbox}
+              className="w-full h-full cursor-pointer select-none"
+            >
+              <img
+                src={imageUrl}
+                alt={title}
+                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/assets/products/choker-ruby-01.jpg";
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-40 group-hover:opacity-70 transition-opacity" />
+            </div>
 
-            <div className="absolute top-4 left-4 z-10 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white/90 text-[11px] font-mono tracking-wider uppercase flex items-center gap-1.5">
+            <div className="absolute top-4 left-4 z-10 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white/90 text-[11px] font-mono tracking-wider uppercase flex items-center gap-1.5 pointer-events-none">
               <Gem className="size-3 text-amber-400" />
               <span>Handmade in Karachi</span>
             </div>
 
-            <div className="absolute bottom-4 right-4 z-10 px-4 py-2 rounded-xl bg-white/95 text-[#2d3435] backdrop-blur-md shadow-lg text-xs font-medium uppercase tracking-wider flex items-center gap-2 transition-transform duration-300 group-hover:scale-105">
+            <div className="absolute top-4 right-4 z-20">
+              <SaveToVaultButton piece={piece} />
+            </div>
+
+            <div
+              onClick={onOpenLightbox}
+              className="absolute bottom-4 right-4 z-10 px-4 py-2 rounded-xl bg-white/95 text-[#2d3435] backdrop-blur-md shadow-lg text-xs font-medium uppercase tracking-wider flex items-center gap-2 transition-transform duration-300 group-hover:scale-105 cursor-pointer"
+            >
               <ZoomIn className="size-4 text-amber-600" />
               <span>Click to Zoom</span>
             </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Star, ArrowRight, Eye, Sparkles } from 'lucide-react'
 import { LuxuryButton } from './LuxuryButton'
+import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton'
 import { galleryApi } from '@/api/galleryApi'
 
 export function FeaturedMasterpieces() {
@@ -107,6 +108,11 @@ export function FeaturedMasterpieces() {
                   className={`group cursor-pointer ${piece.offset ? 'translate-y-0 md:translate-y-12' : ''}`}
                 >
                   <div className="bg-white aspect-square p-10 flex items-center justify-center relative mb-6 shadow-sm overflow-hidden border border-neutral-200/60 rounded-xl">
+                    <div className="absolute top-4 left-4 z-10">
+                      <SaveToVaultButton
+                        piece={{ _id: piece.id, title: piece.name, imageUrl: piece.image, description: piece.material }}
+                      />
+                    </div>
                     <img
                       alt={piece.name}
                       className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-700"

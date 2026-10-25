@@ -1,5 +1,6 @@
 import { auth, googleProvider, signInWithPopup } from './firebase.js';
 import { usersApi } from '@/api/users.api.js';
+import { syncVaultWithDatabase } from './wishlist.js';
 
 export function getAuthUser() {
   try {
@@ -15,6 +16,7 @@ export function setAuthUser(user) {
   if (user) {
     localStorage.setItem('auth_user', JSON.stringify(user));
     window.dispatchEvent(new CustomEvent('khalil_auth_change', { detail: user }));
+    syncVaultWithDatabase().catch(() => {});
   } else {
     clearAuth();
   }

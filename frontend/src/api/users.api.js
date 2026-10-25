@@ -40,5 +40,25 @@ export const usersApi = {
     return await apiClient(ENDPOINTS.USER_BY_ID(id), {
       method: 'DELETE'
     });
+  },
+
+  async getWishlist(email) {
+    return await apiClient(ENDPOINTS.USERS_WISHLIST(email), {
+      method: 'GET'
+    });
+  },
+
+  async toggleWishlist(email, pieceId) {
+    return await apiClient(ENDPOINTS.USERS_WISHLIST_TOGGLE, {
+      method: 'POST',
+      body: JSON.stringify({ email, pieceId })
+    });
+  },
+
+  async syncWishlist(email, pieceIds) {
+    return await apiClient(ENDPOINTS.USERS_WISHLIST_SYNC, {
+      method: 'POST',
+      body: JSON.stringify({ email, pieceIds })
+    });
   }
 };

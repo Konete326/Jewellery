@@ -1,19 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Send, Loader2, Gem, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { GoogleIcon } from '@/components/google-icon';
 import { submitInquiry } from '@/api/inquiryApi';
+import { getAuthUser, loginWithGoogle } from '@/lib/auth';
 import { toast } from 'sonner';
 
 export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
-  const [customerName, setCustomerName] = useState('');
-  const [email, setEmail] = useState('');
+  const [user, setUser] = useState(getAuthUser());
+  const [customerName, setCustomerName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
   const [phone, setPhone] = useState('');
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [message, setMessage] = useState(
-    piece ? `Hello, I am interested in this piece: ${piece.title}. Please provide details on price, availability, and ordering.` : ''
+    piece
+      ? `Hello, I am interested in this piece: ${piece.title}. Please provide details on price, availability, and ordering.`
+      : ''
   );
   const [submitting, setSubmitting] = useState(false);
 
+  useEffect(() => {
+    const current = getAuthUser();
+    setUser(current);
+    if (current) {
+      if (!customerName) setCustomerName(current.name || '');
+      if (!email) setEmail(current.email || '');
+    }
+  }, [isOpen]);
+
   if (!isOpen || !piece) return null;
+
+  const handleGoogleAutofill = async () => {
+    try {
+      setGoogleLoading(true);
+      const signedIn = await loginWithGoogle();
+      setUser(signedIn);
+      setCustomerName(signedIn.name || '');
+      setEmail(signedIn.email || '');
+      toast.success(`Autofilled as ${signedIn.name}`);
+    } catch (err) {
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        toast.error('Google connection failed', {
+          description: err.message || 'Unable to connect Google account'
+        });
+      }
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +64,7 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
         phone: phone.trim(),
         subject: `Inquiry: ${piece.title}`,
         message: `${message.trim()}\n\n[Reference ID: ${piece._id || piece.id}]`,
-        jewelryType: 'Custom Ring',
+        jewelryType: piece.category || 'Bridal Sets',
         preferredMetal: '22K Gold',
         estimatedBudget: 'Consultation'
       });
@@ -91,6 +125,30 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
           </div>
         </div>
 
+        {!user && (
+          <div className="flex items-center justify-between p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10">
+            <div className="flex items-center gap-2">
+              <GoogleIcon className="size-4 shrink-0" />
+              <span className="text-xs text-foreground font-medium">
+                Sign in with Google to autofill your details
+              </span>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={googleLoading}
+              onClick={handleGoogleAutofill}
+              className="h-7 text-[11px] px-2.5 font-medium cursor-pointer"
+            >
+              {googleLoading ? (
+                <Loader2 className="size-3 animate-spin mr-1" />
+              ) : null}
+              <span>1-Tap Autofill</span>
+            </Button>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="flex flex-col gap-1">
@@ -129,7 +187,7 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="+39 055 218 901"
+              placeholder="+92 314 2004245"
               className="w-full bg-muted/30 border border-input rounded-xl px-3 py-2 text-xs text-foreground outline-none focus:border-amber-500/60"
             />
           </div>
@@ -166,7 +224,7 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
                 type="submit"
                 size="sm"
                 disabled={submitting}
-                className="bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-widest gap-1.5"
+                className="bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-widest gap-1.5 cursor-pointer"
               >
                 {submitting ? (
                   <>
