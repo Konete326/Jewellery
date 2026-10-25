@@ -5,6 +5,10 @@ const router = Router();
 
 router.get('/sitemap.xml', seoController.getSitemap);
 router.get('/robots.txt', seoController.getRobots);
-router.get('/:token(google[a-zA-Z0-9]+.html)', seoController.handleGoogleVerification);
+router.get('/google:token.html', (req, res) => {
+  const token = `google${req.params.token}.html`;
+  res.setHeader('Content-Type', 'text/html');
+  res.status(200).send(`google-site-verification: ${token}`);
+});
 
 export default router;
