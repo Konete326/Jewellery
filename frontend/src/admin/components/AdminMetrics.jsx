@@ -1,4 +1,4 @@
-import { DollarSign, ShoppingBag, Sparkles, Calendar, Activity } from 'lucide-react'
+import { DollarSign, ShoppingBag, Gem, Calendar, Activity } from 'lucide-react'
 
 export function AdminMetrics({ orders = [], products = [], inquiries = [], loading = false }) {
   const totalRevenue = orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0)
@@ -28,7 +28,7 @@ export function AdminMetrics({ orders = [], products = [], inquiries = [], loadi
       title: "Active Masterpieces",
       value: loading ? "..." : `${products.length}`,
       subtext: loading ? "Loading..." : "Catalog items in database",
-      icon: Sparkles,
+      icon: Gem,
       accent: "bg-blue-500/10 text-blue-600 dark:text-blue-400"
     },
     {

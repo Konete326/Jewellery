@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail, MapPin, Clock, Calendar, MessageCircle, Sparkles, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Calendar, MessageCircle, Crown, ArrowRight } from 'lucide-react';
 import { LuxuryButton } from './LuxuryButton';
 
 export function AtelierContactDirectory({ onOpenAppointment }) {
@@ -11,7 +11,7 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
     <div className="flex flex-col gap-6">
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-800 dark:text-amber-400 text-xs font-mono tracking-widest uppercase">
-          <Sparkles className="size-3 text-amber-600" />
+          <Crown className="size-3 text-amber-600" />
           <span>Contact Information</span>
         </div>
         <h2 className="text-3xl sm:text-4xl font-serif font-light text-foreground tracking-tight">

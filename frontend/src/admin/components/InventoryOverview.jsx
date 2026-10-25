@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Sparkles, Package, Plus, Pencil, Trash2 } from 'lucide-react'
+import { Gem, Package, Plus, Pencil, Trash2 } from 'lucide-react'
 import { ProductFormModal } from './ProductFormModal'
 import { ConfirmDeleteModal } from './ConfirmDeleteModal'
 import { deleteProduct } from '@/api/productApi'
@@ -99,7 +99,7 @@ export function InventoryOverview({ products = [], loading = false, onRefresh = 
                   {item.images?.[0] ? (
                     <img src={item.images[0]} alt={item.title} className="size-full object-cover" />
                   ) : (
-                    <Sparkles className="size-4 text-amber-500/60" />
+                    <Gem className="size-4 text-amber-500/60" />
                   )}
                 </div>
                 <div className="min-w-0">

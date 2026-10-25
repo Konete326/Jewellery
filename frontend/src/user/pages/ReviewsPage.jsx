@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, ShieldCheck, ArrowRight, MessageSquare, Sparkles } from 'lucide-react';
+import { Star, ShieldCheck, ArrowRight, MessageSquare, Gem } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
@@ -42,7 +42,7 @@ export function ReviewsPage() {
       <main className="relative z-10 pt-28 pb-20 px-4 sm:px-8 lg:px-12 xl:px-16 w-full max-w-[1880px] mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-400 text-xs font-mono tracking-widest uppercase mb-4">
-            <Sparkles className="size-3.5 text-amber-600" />
+            <Gem className="size-3.5 text-amber-600" />
             <span>Customer Reviews</span>
           </div>
           <h1 className="font-headline text-3xl sm:text-5xl lg:text-6xl font-light text-[#2d3435] leading-tight mb-4">

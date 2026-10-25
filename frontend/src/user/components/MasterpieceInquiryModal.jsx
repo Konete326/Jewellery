@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Send, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
+import { X, Send, Loader2, Gem, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { submitInquiry } from '@/api/inquiryApi';
 import { toast } from 'sonner';
@@ -56,7 +56,7 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
         <div className="flex items-start justify-between border-b border-border pb-3">
           <div className="flex items-center gap-3">
             <div className="size-10 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0">
-              <Sparkles className="size-5" />
+              <Gem className="size-5" />
             </div>
             <div>
               <span className="text-[10px] uppercase font-mono tracking-widest text-amber-700 dark:text-amber-400 font-medium">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, Loader2, Save } from 'lucide-react';
+import { X, Gem, Loader2, Save } from 'lucide-react';
 
 export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
   const [title, setTitle] = useState('');
@@ -45,7 +45,7 @@ export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
 
         <div className="flex items-center gap-2 mb-2">
           <div className="size-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
-            <Sparkles className="size-4" />
+            <Gem className="size-4" />
           </div>
           <div>
             <h3 className="font-serif text-lg font-semibold text-foreground">

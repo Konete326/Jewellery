@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'sonner'
-import { X, CheckCheckIcon, Sparkles, Calendar } from 'lucide-react'
+import { X, CheckCheckIcon, Crown, Calendar } from 'lucide-react'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -79,7 +79,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
 
         <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-border">
           <div className="p-2 rounded-lg bg-amber-500/10 text-amber-600">
-            <Sparkles className="size-4" />
+            <Crown className="size-4" />
           </div>
           <div>
             <h3 className="font-serif text-lg font-semibold text-foreground">

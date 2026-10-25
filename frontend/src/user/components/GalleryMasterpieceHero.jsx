@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Sparkles, MessageCircle, Mail, Calendar, ZoomIn, ShieldCheck, Gem, Compass } from 'lucide-react';
+import { Star, MessageCircle, Mail, Calendar, ZoomIn, ShieldCheck, Gem, Compass } from 'lucide-react';
 import { LuxuryButton } from './LuxuryButton';
 
 export function GalleryMasterpieceHero({
@@ -30,7 +30,7 @@ export function GalleryMasterpieceHero({
         <div className="lg:col-span-6 xl:col-span-7 flex flex-col justify-center space-y-6 order-2 lg:order-1">
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-400 text-xs font-mono tracking-widest uppercase">
-              <Sparkles className="size-3.5 text-amber-600" />
+              <Gem className="size-3.5 text-amber-600" />
               <span>Handmade Jewellery • Florence</span>
             </div>
 

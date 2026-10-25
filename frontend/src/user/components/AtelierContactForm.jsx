@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
+import { Send, Loader2, ShieldCheck } from 'lucide-react';
 import { submitInquiry } from '@/api/inquiryApi';
 import { LuxuryButton } from './LuxuryButton';
 import { toast } from 'sonner';

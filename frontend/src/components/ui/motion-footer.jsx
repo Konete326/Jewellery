@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { ArrowUp, Sparkles, Calendar } from "lucide-react";
+import { ArrowUp, Gem, Calendar } from "lucide-react";
 import { isAdmin } from "@/lib/auth";
 import { LuxuryButton } from "@/user/components/LuxuryButton";
 
@@ -262,7 +262,7 @@ export function CinematicFooter() {
                   href="#collections"
                   variant="gold"
                 >
-                  <Sparkles size={14} className="text-white inline-block" />
+                  <Gem size={14} className="text-white inline-block" />
                   Explore Collection
                 </LuxuryButton>
                 

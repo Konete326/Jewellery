@@ -5,7 +5,7 @@ export const productLinks = [
     label: "Gold Rings",
     href: "/#collections",
     description: "18K handmade gold with real diamonds",
-    icon: <Sparkles className="size-4" />
+    icon: <Diamond className="size-4" />
   },
   {
     label: "Pearl Jewellery",

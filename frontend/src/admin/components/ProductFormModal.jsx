@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'sonner'
-import { X, CheckCheckIcon, Sparkles } from 'lucide-react'
+import { X, CheckCheckIcon, Gem } from 'lucide-react'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -123,7 +123,7 @@ export function ProductFormModal({ isOpen, onClose, onSuccess, productToEdit = n
 
         <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-border">
           <div className="p-2 rounded-lg bg-amber-500/10 text-amber-600">
-            <Sparkles className="size-4" />
+            <Gem className="size-4" />
           </div>
           <div>
             <h3 className="font-serif text-lg font-semibold text-foreground">

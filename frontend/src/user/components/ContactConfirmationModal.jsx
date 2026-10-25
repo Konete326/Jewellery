@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCheck, X, Sparkles, ArrowRight, ShieldCheck, Mail } from 'lucide-react';
+import { CheckCheck, X, ArrowRight, ShieldCheck, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function ContactConfirmationModal({ isOpen, onClose, inquiryData }) {

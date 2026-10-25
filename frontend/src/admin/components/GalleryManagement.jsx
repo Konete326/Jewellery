@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, UploadCloud, Trash2, Pencil, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { UploadCloud, Trash2, Pencil, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { galleryApi } from '@/api/galleryApi';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { EditGalleryModal } from './EditGalleryModal';

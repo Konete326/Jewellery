@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Sparkles, ShieldCheck, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react'
+import { Gem, ShieldCheck, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NOTES = [
@@ -99,7 +99,7 @@ const SurpriseNote = () => {
       >
         <div className='flex items-center justify-between mb-2'>
           <span className='inline-flex items-center gap-1.5 text-[10px] uppercase font-mono tracking-widest text-amber-700 dark:text-amber-400 font-semibold'>
-            <Sparkles className='size-3.5 text-amber-600 dark:text-amber-400' />
+            <Gem className='size-3.5 text-amber-600 dark:text-amber-400' />
             <span>{note.title}</span>
           </span>
           <span className='inline-flex items-center gap-1 text-[11px] text-emerald-700 dark:text-emerald-400 font-mono font-medium'>

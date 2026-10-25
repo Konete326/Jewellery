@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Eye, ArrowRight } from 'lucide-react';
+import { Eye, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { GalleryManagement } from './GalleryManagement';
 import { AdminReviewsList } from './AdminReviewsList';

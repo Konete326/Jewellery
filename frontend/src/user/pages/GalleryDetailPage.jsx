@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Sparkles, ShieldCheck, Truck } from 'lucide-react';
+import { ArrowLeft, Gem, ShieldCheck, Truck } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
@@ -126,7 +126,7 @@ export function GalleryDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
               <div className="p-3 rounded-xl bg-amber-500/10 text-amber-700">
-                <Sparkles className="size-5" />
+                <Gem className="size-5" />
               </div>
               <div>
                 <h4 className="text-sm font-medium text-[#2d3435]">Handmade Quality</h4>
