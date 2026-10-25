@@ -5,10 +5,10 @@ import { GithubIcon } from "@/components/github-icon";
 import { GoogleIcon } from "@/components/google-icon";
 import { Button } from "@/components/ui/button";
 import { AuthDivider } from "@/components/auth-divider";
-import { FloatingPaths } from "@/components/floating-paths";
+import { AuthGalleryShowcase } from "./AuthGalleryShowcase";
 import { ComingSoonModal } from "./ComingSoonModal";
 import { AuthForm } from "./AuthForm";
-import { ChevronLeftIcon, Sparkles, ShieldAlert } from "lucide-react";
+import { ChevronLeftIcon, ShieldAlert } from "lucide-react";
 
 export function AuthPage() {
   const location = useLocation();
@@ -17,32 +17,7 @@ export function AuthPage() {
 
   return (
     <main className="relative min-h-screen md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2 bg-background">
-      <div className="relative hidden h-full flex-col border-r border-border bg-secondary p-10 lg:flex dark:bg-secondary/20">
-        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-background" />
-
-        <div className="z-10 flex items-center gap-2">
-          <div className="flex size-7 items-center justify-center rounded-md bg-amber-500/20 text-amber-600 border border-amber-500/30">
-            <Sparkles className="size-4" />
-          </div>
-          <span className="font-serif tracking-widest text-lg font-light">KHALIL & SONS</span>
-        </div>
-
-        <div className="z-10 mt-auto">
-          <blockquote className="space-y-3">
-            <p className="font-serif italic text-2xl text-foreground/90 leading-snug">
-              &ldquo;True luxury is found in the artist's touch, preserving the timeless beauty of pure gold.&rdquo;
-            </p>
-            <footer className="text-xs uppercase tracking-widest text-muted-foreground">
-              Florence Workshop • Est. 1924
-            </footer>
-          </blockquote>
-        </div>
-
-        <div className="absolute inset-0">
-          <FloatingPaths position={1} />
-          <FloatingPaths position={-1} />
-        </div>
-      </div>
+      <AuthGalleryShowcase />
 
       <div className="relative flex min-h-screen flex-col justify-center px-6 sm:px-12 py-10">
         <Button asChild className="absolute top-7 left-5 text-xs tracking-wider" variant="ghost">
@@ -53,11 +28,18 @@ export function AuthPage() {
         </Button>
 
         <div className="mx-auto w-full max-w-sm space-y-4">
+          <Link to="/" className="lg:hidden flex items-center gap-2.5 mb-2 w-fit">
+            <img
+              src="/assets/logo.png"
+              alt="Khalil & Sons"
+              className="size-7 object-contain"
+            />
+            <span className="font-serif tracking-widest text-base font-light text-foreground">
+              KHALIL & SONS
+            </span>
+          </Link>
+
           <div className="flex flex-col space-y-1">
-            <div className="inline-flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400 font-medium mb-1">
-              <Sparkles className="size-3.5" />
-              <span>Customer Account</span>
-            </div>
             <h1 className="font-semibold font-serif text-3xl tracking-tight text-foreground">
               Sign In or Join
             </h1>

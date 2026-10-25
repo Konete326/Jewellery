@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, Compass, ShieldCheck } from 'lucide-react';
+import { Compass, ShieldCheck } from 'lucide-react';
 
 export function AdminPlaceholder({ title, description, category, icon: Icon = Compass }) {
   return (
