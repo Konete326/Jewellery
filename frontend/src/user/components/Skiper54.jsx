@@ -98,6 +98,19 @@ export function Skiper54({
     };
   }, [api]);
 
+  useEffect(() => {
+    if (!displayImages || displayImages.length === 0) return;
+    const nextIdx = (current + 1) % displayImages.length;
+    const subsequentIdx = (current + 2) % displayImages.length;
+    [displayImages[nextIdx], displayImages[subsequentIdx]].forEach((item) => {
+      const src = item?.imageUrl || item?.src;
+      if (src) {
+        const img = new Image();
+        img.src = src;
+      }
+    });
+  }, [current, displayImages]);
+
   return (
     <div className={cn("relative w-full max-w-full overflow-hidden pb-12 select-none", className)}>
       <Carousel

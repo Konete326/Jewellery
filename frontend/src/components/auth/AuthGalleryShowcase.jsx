@@ -25,6 +25,20 @@ function pickWeightedPiece(pool, currentId) {
   return candidates[0];
 }
 
+function preloadImage(url) {
+  if (!url) return Promise.resolve();
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = url;
+    if (img.complete) {
+      resolve();
+    } else {
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+    }
+  });
+}
+
 export function AuthGalleryShowcase() {
   const [pieces, setPieces] = useState(() => {
     return DEFAULT_SKIPER_IMAGES.map((item, idx) => ({
@@ -47,10 +61,21 @@ export function AuthGalleryShowcase() {
 
   const [prevImage, setPrevImage] = useState(null);
   const piecesRef = useRef(pieces);
+  const upcomingPieceRef = useRef(null);
 
   useEffect(() => {
     piecesRef.current = pieces;
   }, [pieces]);
+
+  useEffect(() => {
+    const pool = piecesRef.current;
+    if (!pool || pool.length < 2) return;
+    const upcoming = pickWeightedPiece(pool, currentPiece?.id);
+    upcomingPieceRef.current = upcoming;
+    if (upcoming?.imageUrl) {
+      preloadImage(upcoming.imageUrl);
+    }
+  }, [currentPiece]);
 
   useEffect(() => {
     let isMounted = true;
@@ -101,12 +126,13 @@ export function AuthGalleryShowcase() {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       const pool = piecesRef.current;
       if (!pool || pool.length < 2) return;
 
-      const next = pickWeightedPiece(pool, currentPiece?.id);
-      if (next && next.imageUrl !== currentPiece?.imageUrl) {
+      const next = upcomingPieceRef.current || pickWeightedPiece(pool, currentPiece?.id);
+      if (next && next.imageUrl && next.imageUrl !== currentPiece?.imageUrl) {
+        await preloadImage(next.imageUrl);
         setPrevImage(currentPiece?.imageUrl);
         setCurrentPiece(next);
 
