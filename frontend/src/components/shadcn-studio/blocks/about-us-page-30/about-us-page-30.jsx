@@ -7,13 +7,13 @@ import SurpriseNote from '@/components/shadcn-studio/blocks/about-us-page-30/sur
 
 const AboutUsPage = () => {
   return (
-    <section className='bg-background py-8 sm:py-16 lg:py-24'>
-      <div className='mx-auto max-w-5xl space-y-8 px-4 sm:px-6 lg:space-y-16 lg:px-8'>
+    <section className='bg-background py-8 sm:py-12 lg:py-16 w-full'>
+      <div className='w-full max-w-7xl xl:max-w-[1480px] mx-auto space-y-8 px-4 sm:px-6 lg:px-8 lg:space-y-10'>
         <div className='space-y-2'>
           <MotionPreset fade blur slide={{ direction: 'down', offset: 50 }} transition={{ duration: 0.5 }}>
-            <p className='text-amber-600 dark:text-amber-400 text-lg font-medium italic sm:text-xl font-serif'>
-              {'// About Khalil & Sons'}
-            </p>
+            <span className='text-xs uppercase tracking-[0.25em] text-[#5f5e5e] font-medium block mb-2 font-mono'>
+              Atelier Heritage &bull; Est. 1924
+            </span>
           </MotionPreset>
           <MotionPreset
             component='h2'
@@ -34,17 +34,17 @@ const AboutUsPage = () => {
           delay={0.4}
           slide={{ direction: 'down', offset: 50 }}
           transition={{ duration: 0.5 }}
-          className='grid grid-cols-1 gap-6 md:grid-cols-[380px_1fr]'
+          className='grid grid-cols-1 gap-6 lg:grid-cols-[400px_1fr] xl:grid-cols-[440px_1fr] items-stretch'
         >
           <ProfileCarousel />
 
-          <div className='grid gap-4 md:h-130 lg:grid-cols-2 lg:grid-rows-2'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 gap-6 h-full'>
             <MusicPlayerCard />
 
             <TripFolderCard />
 
-            <Card className='ring-foreground/10 bg-muted overflow-visible rounded-3xl shadow-none ring-1 max-lg:hidden max-md:h-70 max-md:min-h-50 sm:col-span-2'>
-              <CardContent className='h-full max-md:px-4'>
+            <Card className='ring-foreground/10 bg-muted/40 border border-border/80 overflow-visible rounded-3xl shadow-xs ring-1 sm:col-span-2 h-[260px] p-0 flex flex-col justify-between'>
+              <CardContent className='h-full p-6'>
                 <SurpriseNote />
               </CardContent>
             </Card>

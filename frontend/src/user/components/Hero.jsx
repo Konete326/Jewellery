@@ -1,4 +1,3 @@
-import { NeuralNoise } from '@/components/ui/neural-noise'
 import { LuxuryButton } from './LuxuryButton'
 
 export function Hero({ onExploreClick }) {
@@ -12,13 +11,6 @@ export function Hero({ onExploreClick }) {
         />
         <div className="absolute inset-0 bg-stone-900/40 backdrop-brightness-95"></div>
       </div>
-      <NeuralNoise
-        position="absolute"
-        zIndex={1}
-        color={[0.92, 0.74, 0.28]}
-        opacity={0.38}
-        speed={0.0009}
-      />
       <div className="relative z-10 max-w-3xl pt-20">
         <span className="tracking-[0.2em] uppercase text-xs text-white/90 mb-4 block font-medium">
           Est. 1924 • Florence

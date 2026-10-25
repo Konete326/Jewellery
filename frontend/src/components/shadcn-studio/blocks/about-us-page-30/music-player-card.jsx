@@ -1,114 +1,72 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Card } from '@/components/ui/card'
-import { cn } from '@/lib/utils'
-
-const TOTAL_SECONDS = 181
-const EQ_BAR_DELAYS = ['[animation-delay:0ms]', '[animation-delay:150ms]', '[animation-delay:300ms]']
-
-const formatTime = (totalSeconds) => {
-  const minutes = Math.floor(totalSeconds / 60)
-  const seconds = totalSeconds % 60
-
-  return `${minutes}:${String(seconds).padStart(2, '0')}`
-}
+import { ArrowUpRight } from 'lucide-react'
+import { galleryApi } from '@/api/galleryApi'
+import { DEFAULT_SKIPER_IMAGES } from '@/user/components/Skiper54'
 
 const MusicPlayerCard = () => {
-  const [expanded, setExpanded] = useState(true)
-  const [seconds, setSeconds] = useState(70)
+  const navigate = useNavigate()
+  const [piece, setPiece] = useState(() => {
+    const randomIndex = Math.floor(Math.random() * DEFAULT_SKIPER_IMAGES.length)
+    return DEFAULT_SKIPER_IMAGES[randomIndex]
+  })
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setSeconds(prev => (prev + 1) % (TOTAL_SECONDS + 1))
-    }, 1000)
-
-    return () => clearInterval(id)
+    const fetchRandomPiece = async () => {
+      try {
+        const res = await galleryApi.getAll()
+        if (res?.data && res.data.length > 0) {
+          const randomIndex = Math.floor(Math.random() * res.data.length)
+          setPiece(res.data[randomIndex])
+        }
+      } catch {}
+    }
+    fetchRandomPiece()
   }, [])
+
+  if (!piece) return null
+
+  const targetId = piece._id || piece.id || 'default-1'
+  const title = piece.title || 'Haute Joaillerie Masterpiece'
+  const description = piece.description || 'Archival Florentine solid gold and gemstone exhibition piece.'
+  const imageUrl = piece.imageUrl || piece.src
 
   return (
     <Card
-      onClick={() => setExpanded(prev => !prev)}
-      className='ring-foreground/10 bg-muted relative cursor-pointer gap-0 overflow-hidden rounded-3xl p-0 shadow-none ring-1'
+      onClick={() => navigate(`/gallery/${targetId}`)}
+      className='ring-foreground/10 bg-card relative overflow-hidden rounded-3xl p-0 shadow-xs ring-1 transition-all group flex flex-col justify-between border-border cursor-pointer hover:ring-amber-500/40 h-[310px]'
     >
-      <div
-        className={cn(
-          'relative overflow-hidden transition-all duration-500',
-          expanded ? 'h-32 rounded-[0_0_50%_50%/0_0_70%_70%]' : 'h-55 rounded-b-2xl md:h-full'
-        )}
-      >
+      <div className='relative w-full h-44 overflow-hidden bg-neutral-900'>
         <img
-          src='https://cdn.shadcnstudio.com/ss-assets/template/landing-page/zolt/music.png?width=760&format=auto'
-          alt='Atelier acoustic resonance'
+          src={imageUrl}
+          alt={title}
           loading='lazy'
-          className='absolute inset-0 size-full object-cover'
+          className='size-full object-cover transition-transform duration-700 group-hover:scale-105'
         />
-      </div>
-
-      <div
-        className={cn(
-          'absolute top-0 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-500',
-          expanded ? 'opacity-100' : 'opacity-0'
-        )}
-      >
-        <img
-          src='https://cdn.shadcnstudio.com/ss-assets/template/landing-page/zolt/eye.png'
-          alt=''
-          aria-hidden='true'
-          loading='lazy'
-          className='ring-background/40 size-8 rounded-full object-cover ring-2'
-        />
-      </div>
-
-      <div
-        className={cn(
-          'grid transition-[grid-template-rows] duration-500',
-          expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-        )}
-      >
-        <div className='overflow-hidden'>
-          <div
-            className={cn(
-              'space-y-1.5 px-4 py-4 text-center transition-all duration-3000',
-              expanded ? 'opacity-100 blur-none' : 'opacity-0 blur-lg'
-            )}
-          >
-            <span className='text-muted-foreground mx-auto flex h-3 w-fit items-center gap-0.5'>
-              {EQ_BAR_DELAYS.map((delay, bar) => (
-                <span
-                  key={bar}
-                  className={cn('animate-eq h-full w-0.5 origin-center rounded-full bg-current', delay)}
-                />
-              ))}
-            </span>
-            <p className='text-muted-foreground text-xs'>Khalil & Sons Soundscape</p>
-            <p className='text-sm font-medium font-serif'>Florentine Cadence</p>
-            <div className='bg-muted-foreground/30 mx-auto h-px w-6' />
-            <p className='text-muted-foreground flex items-center justify-center gap-1 text-xs tabular-nums'>
-              <span className='flex'>
-                {formatTime(seconds)
-                  .split('')
-                  .map((char, i) => (
-                    <span key={i} className='relative inline-grid overflow-hidden'>
-                      <AnimatePresence mode='popLayout' initial={false}>
-                        <motion.span
-                          key={char}
-                          initial={{ y: '100%', opacity: 0 }}
-                          animate={{ y: '0%', opacity: 1 }}
-                          exit={{ y: '-100%', opacity: 0 }}
-                          transition={{ duration: 0.3, ease: 'easeInOut' }}
-                          className='col-start-1 row-start-1'
-                        >
-                          {char}
-                        </motion.span>
-                      </AnimatePresence>
-                    </span>
-                  ))}
-              </span>
-              <span>/ {formatTime(TOTAL_SECONDS)}</span>
-            </p>
+        <div className='absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent' />
+        <div className='absolute bottom-3 left-4 right-4 flex items-center justify-between'>
+          <span className='text-[10px] uppercase font-mono tracking-widest text-amber-300 font-medium'>
+            Exhibition Masterpiece
+          </span>
+          <div className='size-7 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity'>
+            <ArrowUpRight className='size-3.5' />
           </div>
+        </div>
+      </div>
+
+      <div className='p-5 space-y-1.5 flex-1 flex flex-col justify-between'>
+        <div>
+          <h4 className='font-headline text-lg text-foreground font-medium group-hover:text-amber-700 transition-colors line-clamp-1'>
+            {title}
+          </h4>
+          <p className='text-xs text-muted-foreground font-light leading-relaxed line-clamp-2 mt-1'>
+            {description}
+          </p>
+        </div>
+        <div className='flex items-center justify-between pt-2 border-t border-border/50 text-[11px] text-amber-700 font-mono uppercase tracking-wider'>
+          <span>Explore Piece</span>
+          <span>&rarr;</span>
         </div>
       </div>
     </Card>

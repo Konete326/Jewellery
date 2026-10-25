@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import { MessageSquare, Calendar, Mail, Trash2, CheckCheckIcon } from 'lucide-react'
+import { MessageSquare, Calendar, Mail, Trash2, CheckCheckIcon, Reply } from 'lucide-react'
 import { updateInquiryStatus, deleteInquiry } from '@/api/inquiryApi'
 import { ConfirmDeleteModal } from './ConfirmDeleteModal'
+import { ReplyInquiryModal } from './ReplyInquiryModal'
+import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 
 export function AtelierInquiries({ inquiries = [], loading = false, onRefresh = () => {} }) {
+  const [replyingInquiry, setReplyingInquiry] = useState(null)
   const [deletingInquiry, setDeletingInquiry] = useState(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
 
@@ -100,12 +103,22 @@ export function AtelierInquiries({ inquiries = [], loading = false, onRefresh = 
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setReplyingInquiry(inq)}
+                  className="h-7 px-2.5 text-xs gap-1 cursor-pointer"
+                >
+                  <Reply className="size-3 text-amber-600" />
+                  <span>Reply</span>
+                </Button>
                 <select
                   value={inq.status || 'Pending'}
                   onChange={(e) => handleStatusChange(inq._id, e.target.value)}
                   className="text-xs px-2.5 py-1 rounded-md border border-input bg-background text-foreground shadow-xs cursor-pointer focus:outline-none"
                 >
                   <option value="Pending">Pending</option>
+                  <option value="Replied">Replied</option>
                   <option value="Contacted">Contacted</option>
                   <option value="In Design">In Design</option>
                   <option value="Closed">Closed</option>
@@ -122,6 +135,13 @@ export function AtelierInquiries({ inquiries = [], loading = false, onRefresh = 
           ))}
         </div>
       )}
+
+      <ReplyInquiryModal
+        isOpen={Boolean(replyingInquiry)}
+        onClose={() => setReplyingInquiry(null)}
+        inquiry={replyingInquiry}
+        onReplied={onRefresh}
+      />
 
       <ConfirmDeleteModal
         isOpen={Boolean(deletingInquiry)}

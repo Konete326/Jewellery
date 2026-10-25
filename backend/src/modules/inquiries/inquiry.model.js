@@ -15,22 +15,25 @@ const inquirySchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
+      default: '',
+      trim: true
+    },
+    subject: {
+      type: String,
+      default: 'Atelier Inquiry',
       trim: true
     },
     jewelryType: {
       type: String,
-      required: true,
-      enum: ['Bridal Set', 'Custom Ring', 'Diamond Necklace', 'Bespoke Bracelet', 'Other']
+      default: 'Other'
     },
     preferredMetal: {
       type: String,
-      required: true,
-      enum: ['24K Yellow Gold', '22K Gold', '18K White Gold', '18K Rose Gold', 'Platinum']
+      default: '22K Gold'
     },
     estimatedBudget: {
       type: String,
-      required: true
+      default: 'Consultation'
     },
     message: {
       type: String,
@@ -38,9 +41,17 @@ const inquirySchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Pending', 'Contacted', 'In Design', 'Closed'],
+      enum: ['Pending', 'Contacted', 'Replied', 'In Design', 'Closed'],
       default: 'Pending'
-    }
+    },
+    replies: [
+      {
+        subject: { type: String, required: true },
+        message: { type: String, required: true },
+        sentAt: { type: Date, default: Date.now },
+        sentBy: { type: String, default: 'Atelier Concierge' }
+      }
+    ]
   },
   {
     timestamps: true

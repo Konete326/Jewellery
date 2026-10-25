@@ -8,6 +8,8 @@ export const ENDPOINTS = {
   ORDERS: '/orders',
   ORDER_BY_NUMBER: (orderNumber) => `/orders/${orderNumber}`,
   GALLERY: '/gallery',
-  GALLERY_BY_ID: (id) => `/gallery/${id}`
+  GALLERY_BY_ID: (id) => `/gallery/${id}`,
+  GALLERY_REVIEWS: (id) => `/gallery/${id}/reviews`,
+  GALLERY_RECENT_REVIEWS: '/gallery/reviews/recent'
 };
 

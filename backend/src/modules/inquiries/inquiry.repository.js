@@ -24,6 +24,17 @@ export class InquiryRepository {
     return Inquiry.findByIdAndUpdate(id, { status }, { new: true }).lean();
   }
 
+  async addReply(id, reply) {
+    return Inquiry.findByIdAndUpdate(
+      id,
+      {
+        $push: { replies: reply },
+        $set: { status: 'Replied' }
+      },
+      { new: true }
+    ).lean();
+  }
+
   async deleteById(id) {
     return Inquiry.findByIdAndDelete(id).lean();
   }

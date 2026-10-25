@@ -1,16 +1,8 @@
-import { NeuralNoise } from '@/components/ui/neural-noise'
 import { LuxuryButton } from './LuxuryButton'
 
 export function HistoricAtelier({ onBookClick }) {
   return (
     <section id="atelier" className="relative py-28 md:py-36 px-6 md:px-20 bg-linear-to-b from-[#f9f9f9] via-[#f5f2ea] to-[#f9f9f9] overflow-hidden">
-      <NeuralNoise
-        position="absolute"
-        zIndex={0}
-        color={[0.88, 0.70, 0.25]}
-        opacity={0.25}
-        speed={0.0006}
-      />
       <div className="relative z-10 max-w-screen-2xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
         <div className="w-full lg:w-1/2">
           <span className="text-[#5f5e5e] tracking-[0.2em] uppercase text-xs mb-4 block font-medium">

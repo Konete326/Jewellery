@@ -19,6 +19,13 @@ export const updateInquiryStatus = async (id, status) => {
   });
 };
 
+export const replyToInquiry = async (id, replyData) => {
+  return apiClient(`${ENDPOINTS.INQUIRIES}/${id}/reply`, {
+    method: 'POST',
+    body: JSON.stringify(replyData)
+  });
+};
+
 export const deleteInquiry = async (id) => {
   return apiClient(`${ENDPOINTS.INQUIRIES}/${id}`, {
     method: 'DELETE'

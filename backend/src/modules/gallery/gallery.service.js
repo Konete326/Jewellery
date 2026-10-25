@@ -32,6 +32,10 @@ export class GalleryService {
     return await galleryRepository.findAll();
   }
 
+  async getItemById(id) {
+    return await galleryRepository.findById(id);
+  }
+
   async updateItem(id, { title, description, isActive }) {
     const item = await galleryRepository.findById(id);
     if (!item) {
@@ -39,15 +43,9 @@ export class GalleryService {
     }
 
     const updateData = {};
-    if (title !== undefined && title.trim()) {
-      updateData.title = title.trim();
-    }
-    if (description !== undefined) {
-      updateData.description = description.trim();
-    }
-    if (isActive !== undefined) {
-      updateData.isActive = isActive;
-    }
+    if (title !== undefined && title.trim()) updateData.title = title.trim();
+    if (description !== undefined) updateData.description = description.trim();
+    if (isActive !== undefined) updateData.isActive = isActive;
 
     return await galleryRepository.update(id, updateData);
   }
@@ -63,6 +61,14 @@ export class GalleryService {
     }
 
     return await galleryRepository.delete(id);
+  }
+
+  async addReview(id, reviewData) {
+    return await galleryRepository.addReview(id, reviewData);
+  }
+
+  async getRecentReviews(limit) {
+    return await galleryRepository.getRecentReviews(limit);
   }
 }
 

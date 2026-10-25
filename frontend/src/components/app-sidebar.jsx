@@ -21,9 +21,11 @@ export function AppSidebar() {
       <SidebarHeader className="h-16 justify-center border-b border-sidebar-border px-3">
         <SidebarMenuButton asChild className="h-auto py-2">
           <Link to="/admin" className="flex items-center gap-2.5">
-            <div className="flex size-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 border border-amber-500/30">
-              <Sparkles className="size-4" />
-            </div>
+            <img
+              src="/assets/logo.png"
+              alt="Khalil & Sons"
+              className="size-8 object-contain shrink-0"
+            />
             <div className="flex flex-col text-left group-data-[collapsible=icon]:hidden">
               <span className="font-semibold text-sm tracking-tight text-sidebar-foreground">Khalil & Sons</span>
               <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-mono">Atelier Admin</span>

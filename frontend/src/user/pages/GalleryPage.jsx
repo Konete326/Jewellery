@@ -1,19 +1,34 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Star } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
 import { CartDrawer } from '../components/CartDrawer';
 import { Skiper54, DEFAULT_SKIPER_IMAGES } from '../components/Skiper54';
 import { LuxuryButton } from '../components/LuxuryButton';
-import { NeuralNoise } from '@/components/ui/neural-noise';
-import { SparklesIcon } from '@/components/ui/sparkles';
+import { GlobalGoldEffect } from '../components/GlobalGoldEffect';
 import { galleryApi } from '@/api/galleryApi';
 
 export function GalleryPage() {
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('khalil_cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const [galleryItems, setGalleryItems] = useState(DEFAULT_SKIPER_IMAGES);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('khalil_cart', JSON.stringify(cartItems));
+    } catch {}
+  }, [cartItems]);
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -39,37 +54,30 @@ export function GalleryPage() {
 
   return (
     <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
+      <GlobalGoldEffect />
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
         cartCount={totalCartCount}
       />
 
-      <main className="relative z-10 bg-[#f9f9f9]">
-        <section className="relative pt-24 pb-10 md:pt-32 md:pb-14 px-6 md:px-20 text-center overflow-hidden">
-          <NeuralNoise
-            position="absolute"
-            zIndex={0}
-            color={[0.9, 0.72, 0.28]}
-            opacity={0.18}
-            speed={0.0006}
-          />
-          <div className="relative z-10 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-[11px] font-medium tracking-widest uppercase mb-4">
-              <SparklesIcon size={12} />
-              <span>Living Archive • Florence Atelier</span>
-            </div>
-            <h1 className="font-headline text-4xl sm:text-6xl md:text-7xl text-[#2d3435] leading-tight font-light mb-6">
-              The Haute Joaillerie <span className="serif-italic">Gallery</span>
+      <main className="relative z-10">
+        <section className="relative pt-18 pb-4 md:pt-22 md:pb-6 px-4 sm:px-6 md:px-12 text-center overflow-hidden">
+          <div className="relative z-10 max-w-2xl mx-auto">
+            <span className="text-xs uppercase tracking-widest text-amber-700 font-mono font-medium block mb-1.5">
+              Handcrafted Gold & Diamond Jewellery
+            </span>
+            <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl text-[#2d3435] leading-tight font-light mb-2.5">
+              Jewellery <span className="serif-italic">Gallery</span>
             </h1>
-            <p className="text-[#5a6061] text-sm md:text-base leading-relaxed font-light max-w-xl mx-auto">
-              A curated exhibition of our limited-edition commissions and handcrafted masterworks, forged with patient Renaissance goldcraft.
+            <p className="text-[#5a6061] text-xs sm:text-sm leading-relaxed font-light max-w-md mx-auto">
+              Explore our handcrafted gold and diamond jewellery collection, created with fine craftsmanship and authentic quality.
             </p>
           </div>
         </section>
 
-        <section className="relative px-4 md:px-12 pb-20">
-          <div className="max-w-7xl mx-auto">
+        <section className="relative w-full px-0 pb-20 overflow-hidden">
+          <div className="w-full">
             <Skiper54
               images={galleryItems}
               autoplay={true}
@@ -102,7 +110,13 @@ export function GalleryPage() {
                   key={piece._id || index}
                   className="group bg-white rounded-2xl overflow-hidden border border-neutral-200/80 shadow-xs hover:shadow-xl transition-all duration-500 flex flex-col"
                 >
-                  <div className="aspect-[4/3] w-full overflow-hidden bg-neutral-900 relative">
+                  <div
+                    onClick={() => {
+                      const targetId = piece._id || piece.id || `default-${index + 1}`;
+                      navigate(`/gallery/${targetId}`);
+                    }}
+                    className="aspect-[4/3] w-full overflow-hidden bg-neutral-900 relative cursor-pointer"
+                  >
                     <img
                       src={piece.imageUrl || piece.src}
                       alt={piece.title}
@@ -112,10 +126,24 @@ export function GalleryPage() {
                   </div>
                   <div className="p-6 flex-1 flex flex-col justify-between">
                     <div>
-                      <span className="text-[10px] uppercase tracking-widest text-amber-600 font-mono font-medium block mb-1">
-                        Plate #{String(index + 1).padStart(2, '0')}
-                      </span>
-                      <h3 className="font-headline text-xl text-[#2d3435] font-medium mb-2">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[10px] uppercase tracking-widest text-amber-600 font-mono font-medium block">
+                          Plate #{String(index + 1).padStart(2, '0')}
+                        </span>
+                        {(piece.averageRating >= 4 || piece.rating >= 4) && (
+                          <div className="flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20 text-amber-800 text-[11px] font-mono">
+                            <Star className="size-3 fill-amber-500 text-amber-500" />
+                            <span>{(piece.averageRating || piece.rating).toFixed(1)}</span>
+                          </div>
+                        )}
+                      </div>
+                      <h3
+                        onClick={() => {
+                          const targetId = piece._id || piece.id || `default-${index + 1}`;
+                          navigate(`/gallery/${targetId}`);
+                        }}
+                        className="font-headline text-xl text-[#2d3435] font-medium mb-2 hover:text-amber-700 transition-colors cursor-pointer"
+                      >
                         {piece.title}
                       </h3>
                       {piece.description && (
@@ -126,13 +154,16 @@ export function GalleryPage() {
                     </div>
                     <div className="pt-2 border-t border-neutral-100">
                       <LuxuryButton
-                        as="a"
-                        href="mailto:concierge@khalilandsons.com?subject=Inquiry%20Regarding%20Gallery%20Commission"
+                        as="button"
+                        onClick={() => {
+                          const targetId = piece._id || piece.id || `default-${index + 1}`;
+                          navigate(`/gallery/${targetId}`);
+                        }}
                         size="sm"
                         variant="dark"
                         className="w-full"
                       >
-                        Inquire About Commission
+                        Acquire Masterpiece
                       </LuxuryButton>
                     </div>
                   </div>

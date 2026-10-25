@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Autoplay from "embla-carousel-autoplay";
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Carousel,
@@ -12,67 +13,59 @@ import {
 export const DEFAULT_SKIPER_IMAGES = [
   {
     _id: "default-1",
-    src: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80",
-    imageUrl: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80",
-    alt: "The Aurelian Signet",
-    title: "The Aurelian Signet",
-    description: "18K Hand-hammered Florentine gold with raw uncut diamond centerpiece"
+    src: "/assets/products/choker-ruby-01.jpg",
+    imageUrl: "/assets/products/choker-ruby-01.jpg",
+    alt: "The Florentine Ruby Choker",
+    title: "The Florentine Ruby Choker",
+    description: "22K Hand-hammered Florentine gold set with rare untreated Burmese rubies"
   },
   {
     _id: "default-2",
-    src: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80",
-    imageUrl: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80",
-    alt: "Venetian Mist Choker",
-    title: "Venetian Mist Choker",
-    description: "South Sea cultured pearls interwoven with hand-pulled Venetian gold filigree"
+    src: "/assets/products/kada-polki-01.jpg",
+    imageUrl: "/assets/products/kada-polki-01.jpg",
+    alt: "Royal Polki Kada Armlet",
+    title: "Royal Polki Kada Armlet",
+    description: "Heritage uncut polki diamonds set in solid 22K yellow gold with meenakari detailing"
   },
   {
     _id: "default-3",
-    src: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80",
-    imageUrl: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80",
-    alt: "Etruscan Serpent Armlet",
-    title: "Etruscan Serpent Armlet",
-    description: "Intricately chased 22K solid yellow gold with Burmese emerald eyes"
+    src: "/assets/products/guluband-01.jpg",
+    imageUrl: "/assets/products/guluband-01.jpg",
+    alt: "Archival Aurelian Guluband",
+    title: "Archival Aurelian Guluband",
+    description: "Intricately hand-chased 22K solid gold collar forged with Renaissance filigree techniques"
   },
   {
     _id: "default-4",
-    src: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80",
-    imageUrl: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80",
-    alt: "Renaissance Solstice Tiara",
-    title: "Renaissance Solstice Tiara",
-    description: "Platinum & 18K gold archival commission forged with Renaissance chasing techniques"
+    src: "/assets/products/jhumka-01.jpg",
+    imageUrl: "/assets/products/jhumka-01.jpg",
+    alt: "Imperial Florentine Jhumkas",
+    title: "Imperial Florentine Jhumkas",
+    description: "Cascading 22K gold drop earrings detailed with seed pearls and micro-carved motifs"
   },
   {
     _id: "default-5",
-    src: "https://images.unsplash.com/photo-1611591475870-07bfcfc9f280?auto=format&fit=crop&w=800&q=80",
-    imageUrl: "https://images.unsplash.com/photo-1611591475870-07bfcfc9f280?auto=format&fit=crop&w=800&q=80",
-    alt: "Medici Emerald Solitaire",
-    title: "Medici Emerald Solitaire",
-    description: "Unheated Colombian emerald surrounded by baguette-cut diamonds"
+    src: "/assets/products/ring-polki-01.jpg",
+    imageUrl: "/assets/products/ring-polki-01.jpg",
+    alt: "Medici Uncut Polki Solitaire",
+    title: "Medici Uncut Polki Solitaire",
+    description: "Monumental natural polki diamond cradled in Florentine textured yellow gold prongs"
   },
   {
     _id: "default-6",
-    src: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=800&q=80",
-    imageUrl: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?auto=format&fit=crop&w=800&q=80",
-    alt: "Celestial Tourbillon Horizon",
-    title: "Celestial Tourbillon Horizon",
-    description: "Hand-engraved sapphire dial with flying tourbillon in rose gold"
+    src: "/assets/products/kada-plain-01.jpg",
+    imageUrl: "/assets/products/kada-plain-01.jpg",
+    alt: "Solid Bullion Handcrafted Bangle",
+    title: "Solid Bullion Handcrafted Bangle",
+    description: "Forged with patient anvil hammer work, achieving the soft, moonlit satin gold finish"
   },
   {
     _id: "default-7",
-    src: "https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&w=800&q=80",
-    imageUrl: "https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&w=800&q=80",
-    alt: "Imperial Royal Brooch",
-    title: "Imperial Royal Brooch",
-    description: "Rare pigeon-blood Burmese ruby cluster mounted in platinum prongs"
-  },
-  {
-    _id: "default-8",
-    src: "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?auto=format&fit=crop&w=800&q=80",
-    imageUrl: "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?auto=format&fit=crop&w=800&q=80",
-    alt: "Florentine Aureate Cuff",
-    title: "Florentine Aureate Cuff",
-    description: "Chiseled 24K solid bullion cuff featuring Renaissance scrollwork"
+    src: "/assets/products/choker-ruby-02.jpg",
+    imageUrl: "/assets/products/choker-ruby-02.jpg",
+    alt: "Renaissance Ruby Suite Choker",
+    title: "Renaissance Ruby Suite Choker",
+    description: "Archival heirloom choker crafted with hand-linked gold chains and pigeon-blood rubies"
   }
 ];
 
@@ -84,6 +77,7 @@ export function Skiper54({
   showNavigation = true,
   showPagination = true
 }) {
+  const navigate = useNavigate();
   const [api, setApi] = useState(null);
   const [current, setCurrent] = useState(0);
 
@@ -125,69 +119,79 @@ export function Skiper54({
             : []
         }
       >
-        <CarouselContent className="flex h-[460px] md:h-[520px] w-full py-4 items-center">
+        <CarouselContent className="flex h-[520px] md:h-[580px] lg:h-[620px] w-full py-4 items-center">
           {displayImages.map((item, index) => {
             const src = item.imageUrl || item.src;
             const title = item.title || "Masterpiece";
             const alt = item.alt || item.title || "Jewellery Exhibit";
             const description = item.description || "";
+            const targetId = item._id || item.id || `default-${index + 1}`;
 
             return (
               <CarouselItem
                 key={item._id || item.id || index}
-                className="relative flex h-[380px] md:h-[420px] w-full basis-[75%] sm:basis-[48%] md:basis-[32%] lg:basis-[26%] xl:basis-[22%] items-center justify-center px-2.5 shrink-0"
+                className="relative flex h-[460px] md:h-[520px] lg:h-[560px] w-full basis-[85%] sm:basis-[52%] md:basis-[36%] lg:basis-[28%] xl:basis-[24%] items-center justify-center px-3 shrink-0"
               >
                 <motion.div
                   initial={false}
                   animate={{
                     clipPath:
                       current !== index
-                        ? "inset(14% 0 14% 0 round 1.5rem)"
+                        ? "inset(10% 0 10% 0 round 1.5rem)"
                         : "inset(0 0 0 0 round 1.5rem)",
-                    scale: current === index ? 1.04 : 0.94,
-                    opacity: current === index ? 1 : 0.7
+                    scale: current === index ? 1.03 : 0.94,
+                    opacity: current === index ? 1 : 0.72
                   }}
                   transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
                   className="h-full w-full overflow-hidden rounded-3xl shadow-xl cursor-pointer"
-                  onClick={() => api?.scrollTo(index)}
+                  onClick={() => {
+                    if (current === index) {
+                      navigate(`/gallery/${targetId}`);
+                    } else {
+                      api?.scrollTo(index);
+                    }
+                  }}
                 >
-                  <div className="relative h-full w-full bg-neutral-900 border border-amber-500/20 overflow-hidden rounded-3xl">
+                  <div className="relative h-full w-full bg-neutral-900 border border-neutral-800 overflow-hidden rounded-3xl group/card">
                     <img
                       src={src}
                       alt={alt}
-                      className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover/card:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
+
+                    <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 z-10 flex flex-col justify-end text-left pointer-events-auto">
+                      {(item.averageRating >= 4 || item.rating >= 4) && (
+                        <div className="inline-flex items-center gap-1 mb-2 px-2.5 py-0.5 w-fit rounded-full bg-black/60 border border-amber-500/40 text-amber-300 text-[11px] font-mono backdrop-blur-xs">
+                          <Star className="size-3 fill-amber-400 text-amber-400" />
+                          <span>{(item.averageRating || item.rating).toFixed(1)}</span>
+                        </div>
+                      )}
+
+                      <h3 className="font-headline text-lg sm:text-xl text-white font-medium tracking-wide line-clamp-1 group-hover/card:text-amber-300 transition-colors">
+                        {title}
+                      </h3>
+
+                      {description && (
+                        <p className="text-xs text-white/80 font-light mt-1.5 line-clamp-2 leading-relaxed">
+                          {description}
+                        </p>
+                      )}
+
+                      <div className="mt-3.5 flex items-center justify-between pt-2.5 border-t border-white/20 text-[11px] uppercase tracking-wider font-mono text-amber-300 group-hover/card:text-amber-200">
+                        <span>View Piece</span>
+                        <span>&rarr;</span>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
-
-                <AnimatePresence mode="wait">
-                  {current === index && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, y: -12, filter: "blur(6px)" }}
-                      transition={{ duration: 0.35 }}
-                      className="absolute bottom-1 left-0 right-0 flex flex-col items-center justify-center p-2 text-center translate-y-full pointer-events-none z-20"
-                    >
-                      <span className="font-headline text-lg md:text-xl text-[#2d3435] font-normal tracking-wide">
-                        {title}
-                      </span>
-                      {description && (
-                        <span className="text-[11px] md:text-xs text-[#5a6061] max-w-xs font-light mt-0.5 line-clamp-1">
-                          {description}
-                        </span>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </CarouselItem>
             );
           })}
         </CarouselContent>
 
         {showNavigation && (
-          <div className="flex w-full items-center justify-center gap-4 mt-10 pt-4">
+          <div className="flex w-full items-center justify-center gap-4 mt-6 pt-2">
             <button
               type="button"
               aria-label="Previous slide"

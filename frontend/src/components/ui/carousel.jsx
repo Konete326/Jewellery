@@ -116,7 +116,7 @@ function CarouselContent({
   return (
     <div
       ref={carouselRef}
-      className="overflow-hidden"
+      className="overflow-hidden w-full"
       data-slot="carousel-content"
     >
       <div

@@ -6,10 +6,6 @@ export function AdminPlaceholder({ title, description, category, icon: Icon = Co
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-linear-to-r from-amber-500/10 via-amber-500/5 to-transparent p-5 rounded-xl border border-amber-500/20">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/20 text-amber-700 dark:text-amber-300 mb-2">
-            <Sparkles className="size-3" />
-            <span>Khalil & Sons • {category || 'Atelier'}</span>
-          </div>
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-foreground font-serif">
             {title}
           </h2>
@@ -24,10 +20,6 @@ export function AdminPlaceholder({ title, description, category, icon: Icon = Co
           <Icon className="size-8" />
         </div>
 
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-700 dark:text-amber-300 mb-3 tracking-wider uppercase font-mono">
-          <Clock className="size-3.5" />
-          <span>Coming Soon</span>
-        </div>
 
         <h3 className="text-xl font-serif font-semibold text-foreground mb-2">
           {title} Module in Development

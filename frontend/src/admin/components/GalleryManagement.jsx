@@ -130,10 +130,6 @@ export function GalleryManagement() {
       <div className="rounded-xl border border-border bg-card p-6 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/15 text-amber-600 dark:text-amber-400 mb-2">
-              <Sparkles className="size-3" />
-              <span>Cloudinary & MongoDB Atlas Synced</span>
-            </div>
             <h3 className="font-serif text-lg font-semibold text-foreground">
               Add New Gallery Project
             </h3>

@@ -4,41 +4,73 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
-const IMAGES = [
-  'https://cdn.shadcnstudio.com/ss-assets/template/landing-page/zolt/carousel-01.png',
-  'https://cdn.shadcnstudio.com/ss-assets/template/landing-page/zolt/carousel-02.png',
-  'https://cdn.shadcnstudio.com/ss-assets/template/landing-page/zolt/carousel-03.png',
-  'https://cdn.shadcnstudio.com/ss-assets/template/landing-page/zolt/carousel-04.png'
+const FOUNDER_SLIDES = [
+  {
+    src: '/assets/about/founder.png',
+    title: 'M. Khalil',
+    subtitle: 'Founder & Master Jeweler • Florence'
+  },
+  {
+    src: '/assets/about/founder-poster.jpg',
+    title: 'Master Goldsmithing',
+    subtitle: 'Over a Century of Artisan Chasing'
+  },
+  {
+    src: '/assets/about/brand-poster.jpg',
+    title: 'Haute Joaillerie Atelier',
+    subtitle: 'Via de\' Tornabuoni, Florence'
+  },
+  {
+    src: '/assets/about/shop-front.jpg',
+    title: 'The Historic Workshop',
+    subtitle: 'Living Archive & Handcraft Bench'
+  }
 ]
 
 const ProfileCarousel = () => {
   const [index, setIndex] = useState(0)
 
-  const goPrev = () => setIndex(prev => (prev - 1 + IMAGES.length) % IMAGES.length)
-  const goNext = () => setIndex(prev => (prev + 1) % IMAGES.length)
+  const goPrev = () => setIndex(prev => (prev - 1 + FOUNDER_SLIDES.length) % FOUNDER_SLIDES.length)
+  const goNext = () => setIndex(prev => (prev + 1) % FOUNDER_SLIDES.length)
 
   return (
-    <div className='relative row-span-2 h-130 overflow-hidden rounded-3xl'>
-      {IMAGES.map((src, i) => (
-        <img
-          key={src}
-          src={src}
-          alt='Behind the scenes of the artisan jeweler at work'
-          loading='lazy'
+    <div className='relative h-full min-h-[480px] lg:min-h-full overflow-hidden rounded-3xl bg-neutral-900 border border-border/80 shadow-md'>
+      {FOUNDER_SLIDES.map((slide, i) => (
+        <div
+          key={slide.src}
           className={cn(
-            'absolute inset-0 size-full object-cover transition-opacity duration-500',
-            i === index ? 'opacity-100' : 'opacity-0'
+            'absolute inset-0 size-full transition-opacity duration-700',
+            i === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
           )}
-        />
+        >
+          <img
+            src={slide.src}
+            alt={slide.title}
+            loading='lazy'
+            className='size-full object-cover object-top'
+          />
+          <div className='absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent' />
+          <div className='absolute bottom-6 left-6 right-6 z-10'>
+            <span className='text-[10px] uppercase tracking-widest text-amber-400 font-mono font-medium block mb-1'>
+              Florentine Masterpiece Provenance
+            </span>
+            <h3 className='font-headline text-2xl text-white font-normal'>
+              {slide.title}
+            </h3>
+            <p className='text-xs text-white/80 font-light mt-0.5'>
+              {slide.subtitle}
+            </p>
+          </div>
+        </div>
       ))}
 
-      <div className='absolute top-15 right-12 z-10 flex gap-0.5'>
-        {IMAGES.map((src, i) => (
+      <div className='absolute top-6 right-6 z-10 flex gap-1.5'>
+        {FOUNDER_SLIDES.map((_, i) => (
           <span
-            key={src}
+            key={i}
             className={cn(
-              'block h-0.5 w-2.5 rounded-full bg-white transition-opacity duration-300',
-              i === index ? 'opacity-100' : 'opacity-50'
+              'block h-1 rounded-full transition-all duration-300',
+              i === index ? 'w-6 bg-amber-400' : 'w-2 bg-white/40'
             )}
           />
         ))}
@@ -47,21 +79,21 @@ const ProfileCarousel = () => {
       <button
         type='button'
         onClick={goPrev}
-        className='group/prev absolute inset-y-0 left-0 flex w-1/4 items-center justify-start pl-3 outline-none'
+        className='group/prev absolute inset-y-0 left-0 flex w-1/4 items-center justify-start pl-3 outline-none cursor-pointer z-20'
+        aria-label='Previous slide'
       >
-        <span className='absolute inset-0 bg-linear-to-r from-black/30 to-transparent mask-[linear-gradient(to_right,black,transparent)] opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover/prev:opacity-100' />
-        <ChevronLeftIcon className='relative size-5 -translate-x-2 text-white opacity-50 transition-all duration-300 group-hover/prev:translate-x-0 group-hover/prev:opacity-100' />
-        <span className='sr-only'>Previous image</span>
+        <span className='absolute inset-0 bg-linear-to-r from-black/30 to-transparent opacity-0 backdrop-blur-xs transition-opacity duration-300 group-hover/prev:opacity-100' />
+        <ChevronLeftIcon className='relative size-6 -translate-x-1 text-white opacity-70 transition-all duration-300 group-hover/prev:translate-x-0 group-hover/prev:opacity-100' />
       </button>
 
       <button
         type='button'
         onClick={goNext}
-        className='group/next absolute inset-y-0 right-0 flex w-1/4 items-center justify-end pr-3 outline-none'
+        className='group/next absolute inset-y-0 right-0 flex w-1/4 items-center justify-end pr-3 outline-none cursor-pointer z-20'
+        aria-label='Next slide'
       >
-        <span className='absolute inset-0 bg-linear-to-l from-black/30 to-transparent mask-[linear-gradient(to_left,black,transparent)] opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover/next:opacity-100' />
-        <ChevronRightIcon className='relative size-5 translate-x-2 text-white opacity-50 transition-all duration-300 group-hover/next:translate-x-0 group-hover/next:opacity-100' />
-        <span className='sr-only'>Next image</span>
+        <span className='absolute inset-0 bg-linear-to-l from-black/30 to-transparent opacity-0 backdrop-blur-xs transition-opacity duration-300 group-hover/next:opacity-100' />
+        <ChevronRightIcon className='relative size-6 translate-x-1 text-white opacity-70 transition-all duration-300 group-hover/next:translate-x-0 group-hover/next:opacity-100' />
       </button>
     </div>
   )

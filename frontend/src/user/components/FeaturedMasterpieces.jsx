@@ -1,3 +1,5 @@
+import React from 'react'
+import { Star } from 'lucide-react'
 import { LuxuryButton } from './LuxuryButton'
 
 export function FeaturedMasterpieces({ onAddToCart }) {
@@ -10,6 +12,7 @@ export function FeaturedMasterpieces({ onAddToCart }) {
       numericPrice: 4200,
       image: "/images/product-thumb-01.jpg",
       badge: "One of One",
+      rating: 4.9,
       offset: false
     },
     {
@@ -20,6 +23,7 @@ export function FeaturedMasterpieces({ onAddToCart }) {
       numericPrice: 2850,
       image: "/images/product-thumb-02.jpg",
       badge: null,
+      rating: 4.8,
       offset: true
     },
     {
@@ -30,6 +34,7 @@ export function FeaturedMasterpieces({ onAddToCart }) {
       numericPrice: 6400,
       image: "/images/product-thumb-03.jpg",
       badge: null,
+      rating: 5.0,
       offset: false
     }
   ]
@@ -51,42 +56,56 @@ export function FeaturedMasterpieces({ onAddToCart }) {
           </span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
-          {pieces.map((piece) => (
-            <div
-              key={piece.id}
-              className={`group ${piece.offset ? 'translate-y-0 md:translate-y-12' : ''}`}
-            >
-              <div className="bg-white aspect-square p-10 flex items-center justify-center relative mb-6 shadow-sm overflow-hidden">
-                <img
-                  alt={piece.name}
-                  className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-700"
-                  src={piece.image}
-                />
-                {piece.badge && (
-                  <span className="absolute top-6 right-6 bg-[#e4e9ea] px-3 py-1 text-[10px] tracking-widest uppercase font-medium">
-                    {piece.badge}
-                  </span>
-                )}
-                <LuxuryButton
-                  onClick={() => onAddToCart(piece)}
-                  size="sm"
-                  variant="dark"
-                  className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  Add To Bag
-                </LuxuryButton>
+          {pieces.map((piece) => {
+            const hasQualifyingRating = piece.rating && piece.rating >= 4;
+
+            return (
+              <div
+                key={piece.id}
+                className={`group ${piece.offset ? 'translate-y-0 md:translate-y-12' : ''}`}
+              >
+                <div className="bg-white aspect-square p-10 flex items-center justify-center relative mb-6 shadow-sm overflow-hidden">
+                  <img
+                    alt={piece.name}
+                    className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-700"
+                    src={piece.image}
+                  />
+                  {piece.badge && (
+                    <span className="absolute top-6 right-6 bg-[#e4e9ea] px-3 py-1 text-[10px] tracking-widest uppercase font-medium">
+                      {piece.badge}
+                    </span>
+                  )}
+                  <LuxuryButton
+                    onClick={() => onAddToCart(piece)}
+                    size="sm"
+                    variant="dark"
+                    className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    Add To Bag
+                  </LuxuryButton>
+                </div>
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="font-headline text-2xl text-[#2d3435] font-normal">
+                    {piece.name}
+                  </h3>
+                  {hasQualifyingRating && (
+                    <div className="flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                      <Star className="size-3 fill-amber-500 text-amber-500" />
+                      <span className="text-[11px] font-mono font-medium text-amber-800">
+                        {piece.rating}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <p className="text-[#5a6061] text-xs mb-3 font-light">
+                  {piece.material}
+                </p>
+                <p className="font-headline text-[#5f5e5e] text-xl">
+                  {piece.price}
+                </p>
               </div>
-              <h3 className="font-headline text-2xl text-[#2d3435] mb-1 font-normal">
-                {piece.name}
-              </h3>
-              <p className="text-[#5a6061] text-xs mb-3 font-light">
-                {piece.material}
-              </p>
-              <p className="font-headline text-[#5f5e5e] text-xl">
-                {piece.price}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

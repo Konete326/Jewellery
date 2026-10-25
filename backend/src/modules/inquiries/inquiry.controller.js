@@ -36,6 +36,17 @@ export const updateInquiryStatus = async (req, res, next) => {
   }
 };
 
+export const replyInquiry = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { subject, message, sentBy } = req.body;
+    const result = await inquiryService.replyToInquiry(id, { subject, message, sentBy });
+    return sendSuccess(res, 200, 'Reply dispatched and recorded successfully', result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteInquiry = async (req, res, next) => {
   try {
     const { id } = req.params;

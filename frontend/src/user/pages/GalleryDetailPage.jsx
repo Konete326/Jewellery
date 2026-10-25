@@ -1,0 +1,214 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Sparkles, ShieldCheck, Truck } from 'lucide-react';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+import { SearchModal } from '../components/SearchModal';
+import { CartDrawer } from '../components/CartDrawer';
+import { GlobalGoldEffect } from '../components/GlobalGoldEffect';
+import { GalleryMasterpieceHero } from '../components/GalleryMasterpieceHero';
+import { GalleryReviewsSection } from '../components/GalleryReviewsSection';
+import { MasterpieceLightboxModal } from '../components/MasterpieceLightboxModal';
+import { MasterpieceReviewModal } from '../components/MasterpieceReviewModal';
+import { MasterpieceInquiryModal } from '../components/MasterpieceInquiryModal';
+import { BespokeAppointmentModal } from '../components/BespokeAppointmentModal';
+import { galleryApi } from '@/api/galleryApi';
+import { DEFAULT_SKIPER_IMAGES } from '../components/Skiper54';
+
+export function GalleryDetailPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
+  const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [piece, setPiece] = useState(null);
+  const [reviewsList, setReviewsList] = useState([]);
+
+  useEffect(() => {
+    const loadPiece = async () => {
+      let found = DEFAULT_SKIPER_IMAGES.find(
+        (img, idx) =>
+          String(img._id) === String(id) ||
+          String(idx + 1) === String(id) ||
+          `default-${idx + 1}` === String(id)
+      );
+
+      try {
+        const res = await galleryApi.getAll();
+        if (res?.data && res.data.length > 0) {
+          const dbItem = res.data.find(
+            (item) => String(item._id) === String(id) || String(item.id) === String(id)
+          );
+          if (dbItem) {
+            found = {
+              _id: dbItem._id,
+              id: dbItem._id,
+              title: dbItem.title,
+              description: dbItem.description,
+              imageUrl: dbItem.imageUrl,
+              averageRating: dbItem.averageRating || 0,
+              reviewCount: dbItem.reviewCount || 0,
+              reviews: dbItem.reviews || []
+            };
+          }
+        }
+      } catch {}
+
+      if (!found) {
+        found = DEFAULT_SKIPER_IMAGES[0];
+      }
+
+      setPiece(found);
+      setReviewsList(found.reviews || []);
+    };
+
+    loadPiece();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [id]);
+
+  const handleReviewSubmitted = (newReview) => {
+    setReviewsList((prev) => [newReview, ...prev]);
+    setPiece((prev) => {
+      if (!prev) return prev;
+      const updatedReviews = [newReview, ...(prev.reviews || [])];
+      const newCount = updatedReviews.length;
+      const totalScore = updatedReviews.reduce((sum, r) => sum + Number(r.rating || 5), 0);
+      const newAverage = Number((totalScore / newCount).toFixed(1));
+      return {
+        ...prev,
+        reviews: updatedReviews,
+        reviewCount: newCount,
+        averageRating: newAverage
+      };
+    });
+  };
+
+  if (!piece) {
+    return (
+      <div className="min-h-screen bg-[#f9f9f9] flex items-center justify-center">
+        <div className="size-8 rounded-full border-2 border-neutral-300 border-t-[#2d3435] animate-spin" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
+      <GlobalGoldEffect />
+      <Navbar
+        onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenCart={() => setIsCartOpen(true)}
+        cartCount={0}
+      />
+
+      <main className="relative z-10 pt-24 md:pt-28 pb-16 w-full max-w-[1880px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
+        <div className="mb-4">
+          <button
+            type="button"
+            onClick={() => navigate('/gallery')}
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#5a6061] hover:text-[#2d3435] transition-colors cursor-pointer group py-2"
+          >
+            <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
+            <span>Back to Gallery</span>
+          </button>
+        </div>
+
+        <GalleryMasterpieceHero
+          piece={piece}
+          onOpenLightbox={() => setIsLightboxOpen(true)}
+          onOpenReview={() => setIsReviewModalOpen(true)}
+          onOpenInquiry={() => setIsInquiryModalOpen(true)}
+          onOpenAppointment={() => setIsAppointmentModalOpen(true)}
+        />
+
+        <div className="w-full pt-10 pb-6 border-t border-neutral-200/80">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
+              <div className="p-3 rounded-xl bg-amber-500/10 text-amber-700">
+                <Sparkles className="size-5" />
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-[#2d3435]">Artisanal Provenance</h4>
+                <p className="text-xs text-[#5a6061] font-light mt-1 leading-relaxed">
+                  Each piece is individually documented in our Florence archive and accompanied by our master smith dossier.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
+              <div className="p-3 rounded-xl bg-amber-500/10 text-amber-700">
+                <ShieldCheck className="size-5" />
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-[#2d3435]">Atelier Guarantee</h4>
+                <p className="text-xs text-[#5a6061] font-light mt-1 leading-relaxed">
+                  Lifetime solid gold restoration, ultrasonic gemstone maintenance, and complimentary vault servicing.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
+              <div className="p-3 rounded-xl bg-amber-500/10 text-amber-700">
+                <Truck className="size-5" />
+              </div>
+              <div>
+                <h4 className="text-sm font-medium text-[#2d3435]">Armored Delivery</h4>
+                <p className="text-xs text-[#5a6061] font-light mt-1 leading-relaxed">
+                  Fully insured private courier delivery worldwide in our signature Florentine hand-waxed wooden vault box.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <GalleryReviewsSection
+          piece={piece}
+          reviews={reviewsList}
+          onOpenReviewModal={() => setIsReviewModalOpen(true)}
+        />
+      </main>
+
+      <Footer />
+
+      <MasterpieceLightboxModal
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        imageUrl={piece.imageUrl || piece.src}
+        title={piece.title}
+        description={piece.description}
+      />
+
+      <MasterpieceReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+        piece={piece}
+        onReviewSubmitted={handleReviewSubmitted}
+      />
+
+      <MasterpieceInquiryModal
+        isOpen={isInquiryModalOpen}
+        onClose={() => setIsInquiryModalOpen(false)}
+        piece={piece}
+      />
+
+      <BespokeAppointmentModal
+        isOpen={isAppointmentModalOpen}
+        onClose={() => setIsAppointmentModalOpen(false)}
+      />
+
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
+
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        items={[]}
+      />
+    </div>
+  );
+}

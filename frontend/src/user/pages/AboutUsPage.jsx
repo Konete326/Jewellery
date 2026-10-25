@@ -1,31 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Navbar } from '@/user/components/Navbar'
 import { Footer } from '@/user/components/Footer'
 import { SearchModal } from '@/user/components/SearchModal'
 import { CartDrawer } from '@/user/components/CartDrawer'
 import { BespokeAppointmentModal } from '@/user/components/BespokeAppointmentModal'
+import { GlobalGoldEffect } from '@/user/components/GlobalGoldEffect'
 import AboutUs from '@/components/shadcn-studio/blocks/about-us-page-30/about-us-page-30'
 
 export function AboutUsPage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false)
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "The Aurelian Sigil",
-      material: "18K Hammered Gold with Raw Diamond",
-      price: "$4,200",
-      numericPrice: 4200,
-      image: "/images/product-thumb-01.jpg",
-      quantity: 1
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('khalil_cart')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
     }
-  ])
+  })
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('khalil_cart', JSON.stringify(cartItems))
+    } catch {}
+  }, [cartItems])
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0)
 
   return (
     <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
+      <GlobalGoldEffect />
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}

@@ -85,7 +85,7 @@ export function MobileNav() {
 									onClick={() => setOpen(false)}
 									className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium uppercase tracking-widest text-foreground hover:bg-muted"
 								>
-									<span>Atelier Gallery</span>
+									<span>Masterpieces</span>
 								</Link>
 								<Link
 									to="/about"
@@ -93,6 +93,13 @@ export function MobileNav() {
 									className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium uppercase tracking-widest text-foreground hover:bg-muted"
 								>
 									<span>About Us</span>
+								</Link>
+								<Link
+									to="/contact"
+									onClick={() => setOpen(false)}
+									className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium uppercase tracking-widest text-foreground hover:bg-muted"
+								>
+									<span>Contact</span>
 								</Link>
 							</div>
 						</div>

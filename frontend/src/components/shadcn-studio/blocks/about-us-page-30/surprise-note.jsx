@@ -1,15 +1,38 @@
-'use client'
-
-import { useState } from 'react'
+import React, { useState } from 'react'
+import { Sparkles, ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NOTES = [
-  { text: 'Grab it and get surprise', position: 'top-[10%] left-[12%] -rotate-8' },
-  { text: 'Did you try it again? You silly gullible', position: 'top-[4%] left-[62%] rotate-10' },
-  { text: 'Pure 24K Gold :)', position: 'top-[3%] left-[3%] -rotate-6' },
-  { text: "Bespoke cut, U can't touch", position: 'top-[54%] left-[68%] rotate-12' },
-  { text: 'Haute Horlogerie magic!', position: 'top-[45%] left-[36%] rotate-4' },
-  { text: 'Florence Heritage await you <3', position: '-top-[2%] -left-[3%] -rotate-10' }
+  {
+    title: 'Ethical Sourcing',
+    text: '100% Conflict-Free Certified Diamonds',
+    tag: 'Kimberley Process Compliant',
+    position: 'top-[8%] left-[10%] -rotate-3 sm:-rotate-6'
+  },
+  {
+    title: 'Solid Goldcraft',
+    text: 'Hand-Hammered 18K & 22K Solid Gold',
+    tag: 'Fire Assayed & Hallmarked',
+    position: 'top-[4%] left-[45%] rotate-2 sm:rotate-4'
+  },
+  {
+    title: 'Century Atelier',
+    text: 'Florence Heritage Workshop Est. 1924',
+    tag: 'Via de\' Tornabuoni Archive',
+    position: 'top-[6%] left-[20%] -rotate-2'
+  },
+  {
+    title: 'Artisanal Chasing',
+    text: 'Renaissance Repoussé & Lost Wax Casting',
+    tag: 'Master Goldsmithing Bench',
+    position: 'top-[10%] left-[50%] rotate-3'
+  },
+  {
+    title: 'Bespoke Registry',
+    text: 'Individually Numbered Vault Pieces',
+    tag: 'Lifetime Provenance Dossier',
+    position: 'top-[5%] left-[30%] rotate-1'
+  }
 ]
 
 const SurpriseNote = () => {
@@ -17,28 +40,46 @@ const SurpriseNote = () => {
   const note = NOTES[step]
 
   return (
-    <div className='relative h-full'>
-      <div className='bg-background absolute top-8 right-[16%] left-[16%] h-2 rounded-full' />
+    <div className='relative h-full w-full py-4 flex flex-col justify-between overflow-hidden select-none'>
+      <div className='bg-amber-500/25 absolute top-10 right-[10%] left-[10%] h-1 rounded-full' />
 
       <div
         onMouseEnter={() => setStep(prev => (prev + 1) % NOTES.length)}
-        className={cn('absolute z-10 w-32 cursor-pointer transition-all duration-500', note.position)}
+        onClick={() => setStep(prev => (prev + 1) % NOTES.length)}
+        className={cn(
+          'absolute z-10 w-72 sm:w-80 cursor-pointer transition-all duration-500',
+          note.position
+        )}
       >
-        <img
-          src='https://cdn.shadcnstudio.com/ss-assets/template/landing-page/zolt/note.png'
-          alt=''
-          aria-hidden='true'
-          loading='lazy'
-          className='w-full'
-        />
-        <p className='absolute inset-0 flex items-center justify-center px-4 text-center text-sm font-medium text-neutral-800 italic'>
-          {note.text}
-        </p>
+        <div className='rounded-2xl bg-white/95 dark:bg-card border border-amber-500/35 p-4 shadow-xl backdrop-blur-md hover:border-amber-500 transition-colors'>
+          <div className='flex items-center justify-between mb-1.5'>
+            <span className='inline-flex items-center gap-1 text-[10px] uppercase font-mono tracking-widest text-amber-700 font-semibold'>
+              <Sparkles className='size-3 text-amber-600' />
+              {note.title}
+            </span>
+            <span className='inline-flex items-center gap-1 text-[10px] text-emerald-700 font-mono'>
+              <ShieldCheck className='size-3' />
+              Guaranteed
+            </span>
+          </div>
+          <p className='text-sm sm:text-base font-serif font-medium text-foreground leading-snug'>
+            {note.text}
+          </p>
+          <div className='mt-2 pt-2 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-[11px] text-muted-foreground font-light'>
+            <span>{note.tag}</span>
+            <span className='text-amber-700 font-mono text-[10px]'>Click to cycle &rarr;</span>
+          </div>
+        </div>
       </div>
 
-      <p className='text-card-foreground absolute bottom-0 left-[10%] text-2xl font-medium sm:text-nowrap md:left-1/2 md:-translate-x-1/2 font-serif'>
-        Artisan secrets inside our vault 🙃
-      </p>
+      <div className='mt-auto pt-24 text-center z-10'>
+        <p className='text-foreground text-lg sm:text-xl font-normal font-serif'>
+          The Hallmark of Florentine Haute Joaillerie
+        </p>
+        <p className='text-xs text-muted-foreground font-light mt-0.5 tracking-wider uppercase font-mono'>
+          Living Heritage &bull; Continuous Handcraft Since 1924
+        </p>
+      </div>
     </div>
   )
 }
