@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ratesApi } from '@/api/ratesApi';
-import { RatesAdminOverview } from './RatesAdminOverview';
-import { RatesAdminOverrideForm } from './RatesAdminOverrideForm';
-import { RatesAdminHistoryTable } from './RatesAdminHistoryTable';
+import { RatesAdminHeader } from './RatesAdminHeader';
+import { RatesAdminHeroCard } from './RatesAdminHeroCard';
+import { RatesAdminHistoryList } from './RatesAdminHistoryList';
 import { toast } from 'sonner';
 
 export function RatesAdminView() {
@@ -10,6 +10,7 @@ export function RatesAdminView() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   const loadData = useCallback(async () => {
@@ -24,7 +25,7 @@ export function RatesAdminView() {
       if (histRes?.success && Array.isArray(histRes.data)) {
         setHistory(histRes.data);
       }
-    } catch (err) {
+    } catch {
       toast.error('Failed to load bullion rates data.');
     } finally {
       setLoading(false);
@@ -45,10 +46,27 @@ export function RatesAdminView() {
         const histRes = await ratesApi.getHistory(30);
         if (histRes?.data) setHistory(histRes.data);
       }
-    } catch (err) {
+    } catch {
       toast.error('Could not sync with Sarafa market source.');
     } finally {
       setIsSyncing(false);
+    }
+  };
+
+  const handleRestoreMarket = async () => {
+    setIsRestoring(true);
+    try {
+      const res = await ratesApi.syncRates('Artisan Admin (Revert)');
+      if (res?.success && res.data) {
+        setRates(res.data);
+        toast.success('Benchmark restored to live market rates.');
+        const histRes = await ratesApi.getHistory(30);
+        if (histRes?.data) setHistory(histRes.data);
+      }
+    } catch {
+      toast.error('Could not restore live market rate.');
+    } finally {
+      setIsRestoring(false);
     }
   };
 
@@ -65,7 +83,7 @@ export function RatesAdminView() {
         const histRes = await ratesApi.getHistory(30);
         if (histRes?.data) setHistory(histRes.data);
       }
-    } catch (err) {
+    } catch {
       toast.error('Failed to update benchmark rates.');
     } finally {
       setIsSaving(false);
@@ -75,9 +93,9 @@ export function RatesAdminView() {
   const handleDeleteLog = async (id) => {
     try {
       await ratesApi.deleteHistory(id);
-      setHistory((prev) => prev.filter((item) => item._id !== id));
-      toast.success('Rate log removed.');
-    } catch (err) {
+      setHistory((prev) => prev.filter((item) => (item._id || item.id) !== id));
+      toast.success('Rate log entry removed.');
+    } catch {
       toast.error('Failed to delete log entry.');
     }
   };
@@ -100,21 +118,22 @@ export function RatesAdminView() {
   }
 
   return (
-    <div className="space-y-8">
-      <RatesAdminOverview
+    <div className="space-y-6 max-w-5xl">
+      <RatesAdminHeader
         rates={rates}
         onSync={handleSync}
         isSyncing={isSyncing}
+        onRestoreMarket={handleRestoreMarket}
+        isRestoring={isRestoring}
       />
 
-      <RatesAdminOverrideForm
+      <RatesAdminHeroCard
         rates={rates}
-        onSave={handleSaveOverride}
-        onReset={handleSync}
+        onSaveOverride={handleSaveOverride}
         isSaving={isSaving}
       />
 
-      <RatesAdminHistoryTable
+      <RatesAdminHistoryList
         history={history}
         onDeleteLog={handleDeleteLog}
         onReapplyRate={handleReapply}

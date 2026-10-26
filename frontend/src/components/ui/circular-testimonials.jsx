@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
+import { Link } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -227,23 +228,28 @@ export const CircularTestimonials = ({
               </motion.div>
 
               {activeTestimonial.productTitle && (
-                <div className="inline-flex items-center gap-3 pt-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs">
+                <Link
+                  to={activeTestimonial.productId ? `/gallery/${activeTestimonial.productId}` : '/gallery'}
+                  className="inline-flex items-center gap-3 pt-2 px-3.5 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-500/60 text-xs transition-all group cursor-pointer shadow-2xs hover:scale-[1.02]"
+                  title={`View ${activeTestimonial.productTitle} in Atelier Gallery`}
+                >
                   {activeTestimonial.productImage && (
                     <img
                       src={activeTestimonial.productImage}
                       alt={activeTestimonial.productTitle}
-                      className="size-7 rounded-lg object-cover border border-amber-500/30"
+                      className="size-8 rounded-lg object-cover border border-amber-500/40 shrink-0"
                     />
                   )}
-                  <div>
-                    <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground block">
-                      Appraised Piece
+                  <div className="text-left">
+                    <span className="text-[10px] uppercase font-mono tracking-wider text-amber-800 dark:text-amber-300 font-semibold flex items-center gap-1">
+                      <span>Appraised Piece</span>
+                      <span className="transition-transform group-hover:translate-x-0.5">→</span>
                     </span>
-                    <span className="font-medium text-foreground">
+                    <span className="font-medium text-foreground group-hover:underline">
                       {activeTestimonial.productTitle}
                     </span>
                   </div>
-                </div>
+                </Link>
               )}
             </motion.div>
           </AnimatePresence>

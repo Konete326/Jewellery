@@ -6,6 +6,7 @@ import { ReviewsPage } from '@/user/pages/ReviewsPage'
 import RatesPage from '@/user/pages/RatesPage'
 import { AboutUsPage } from '@/user/pages/AboutUsPage'
 import { ContactPage } from '@/user/pages/ContactPage'
+import { NotFoundPage } from '@/user/pages/NotFoundPage'
 import { AdminPanel } from '@/admin/AdminPanel'
 import { AuthPage } from '@/components/auth/AuthPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
@@ -59,7 +60,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
       {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}
