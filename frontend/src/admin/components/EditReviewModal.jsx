@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Star, Save, Loader2, Sparkles } from 'lucide-react';
+import { X, Star, Save, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function EditReviewModal({ isOpen, onClose, onSave, review, loading = false }) {
@@ -50,8 +50,8 @@ export function EditReviewModal({ isOpen, onClose, onSave, review, loading = fal
         </button>
 
         <div className="flex items-center gap-3 mb-5">
-          <div className="size-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center shrink-0">
-            <Sparkles className="size-5" />
+          <div className="size-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 flex items-center justify-center shrink-0">
+            <Star className="size-5" />
           </div>
           <div>
             <h3 className="font-serif text-lg font-semibold text-foreground">Edit Patron Appraisal</h3>

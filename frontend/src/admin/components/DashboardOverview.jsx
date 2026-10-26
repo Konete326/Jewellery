@@ -49,7 +49,7 @@ export function DashboardOverview() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4 bg-linear-to-r from-amber-500/10 via-amber-500/5 to-transparent py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl border border-amber-500/20">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4 bg-white dark:bg-card py-2.5 px-4 sm:py-3 sm:px-5 rounded-xl border border-border/80 shadow-2xs">
         <div>
           <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground font-serif">
             Atelier Executive Overview
@@ -63,14 +63,14 @@ export function DashboardOverview() {
             type="button"
             onClick={loadDashboardData}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-border bg-background hover:bg-muted text-foreground transition-colors shadow-xs disabled:opacity-50 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border border-border bg-background hover:bg-muted text-foreground transition-colors shadow-xs disabled:opacity-50 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
           >
             <RefreshCw className={`size-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Sync</span>
           </button>
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-border bg-background hover:bg-muted text-foreground transition-colors shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-border bg-background hover:bg-muted text-foreground transition-colors shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
           >
             <span>Live Storefront</span>
             <ArrowRight className="size-3.5" />

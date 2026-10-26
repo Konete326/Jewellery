@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { GoogleIcon } from '@/components/google-icon';
 import { Button } from '@/components/ui/button';
-import { X, Loader2, Sparkles } from 'lucide-react';
+import { X, Loader2, Gem } from 'lucide-react';
 import { getAuthUser, loginWithGoogle } from '@/lib/auth';
 import { toast } from 'sonner';
 
@@ -117,8 +117,8 @@ export function GoogleOneTapOverlay() {
         </div>
 
         <div className="py-3.5 space-y-1">
-          <div className="flex items-center gap-1.5 text-amber-700 dark:text-amber-400">
-            <Sparkles className="size-3.5" />
+          <div className="flex items-center gap-1.5 text-foreground">
+            <Gem className="size-3.5 text-neutral-600 dark:text-neutral-300" />
             <h3 className="font-serif text-sm font-semibold text-foreground">
               Sign In with Google
             </h3>

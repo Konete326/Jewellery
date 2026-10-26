@@ -10,7 +10,7 @@ import {
   Shield,
   Heart,
   MessageSquare,
-  Sparkles,
+  Gem,
   Key,
   CheckCircle2,
   AlertCircle,
@@ -281,7 +281,7 @@ export function UserActivityModal({
               <div className="space-y-3">
                 {inquiries.length === 0 ? (
                   <div className="py-10 text-center border border-dashed border-border rounded-xl bg-muted/10">
-                    <Sparkles className="size-7 mx-auto text-muted-foreground/60 mb-2" />
+                    <Gem className="size-7 mx-auto text-muted-foreground/60 mb-2" />
                     <p className="text-xs font-semibold text-foreground">No Bespoke Inquiries Yet</p>
                     <p className="text-[11px] text-muted-foreground mt-0.5">
                       This client has not submitted custom requests through the inquiry forms.

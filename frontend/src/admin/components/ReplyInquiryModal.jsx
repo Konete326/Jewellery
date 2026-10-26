@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Mail, Send, Loader2, AlertCircle, CheckCircle2, History, Phone, MessageSquare, Sparkles } from 'lucide-react';
+import { X, Mail, Send, Loader2, AlertCircle, CheckCircle2, History, Phone, MessageSquare, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { replyToInquiry, updateInquiryStatus } from '@/api/inquiryApi';
 import { createWhatsAppInquiryUrl, formatPhoneDisplay } from '@/utils/phone';
@@ -179,7 +179,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
             <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-mono flex items-center gap-1">
-              <Sparkles className="size-3 text-amber-500" /> Quick Templates:
+              <FileText className="size-3 text-neutral-500" /> Quick Templates:
             </span>
           </div>
           <div className="flex flex-wrap gap-2">
