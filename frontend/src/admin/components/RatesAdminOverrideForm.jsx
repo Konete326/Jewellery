@@ -46,7 +46,7 @@ export function RatesAdminOverrideForm({ rates, onSave, onReset, isSaving }) {
   }, [g24, s24]);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (!g24 || g24 <= 0) return;
     onSave({
       gold24kTola: g24,
@@ -56,7 +56,7 @@ export function RatesAdminOverrideForm({ rates, onSave, onReset, isSaving }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-6">
+    <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h3 className="text-lg font-serif font-light text-foreground">
@@ -150,7 +150,8 @@ export function RatesAdminOverrideForm({ rates, onSave, onReset, isSaving }) {
         </Button>
 
         <Button
-          type="submit"
+          type="button"
+          onClick={handleSubmit}
           disabled={isSaving}
           className="bg-foreground text-background hover:opacity-90 cursor-pointer text-xs uppercase tracking-wider font-semibold"
         >
@@ -158,6 +159,6 @@ export function RatesAdminOverrideForm({ rates, onSave, onReset, isSaving }) {
           {isSaving ? 'Saving...' : 'Save & Publish Rates'}
         </Button>
       </div>
-    </form>
+    </div>
   );
 }
