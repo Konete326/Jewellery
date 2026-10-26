@@ -28,5 +28,7 @@ export const ENDPOINTS = {
   RATES_SYNC: '/rates/sync',
   RATES_OVERRIDE: '/rates/override',
   RATES_HISTORY: '/rates/history',
-  RATES_HISTORY_ITEM: (id) => `/rates/history/${id}`
+  RATES_HISTORY_ITEM: (id) => `/rates/history/${id}`,
+  RATES_SCHEDULER: '/rates/scheduler',
+  RATES_SCHEDULER_TRIGGER: '/rates/scheduler/trigger'
 };

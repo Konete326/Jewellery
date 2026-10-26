@@ -2,15 +2,18 @@ import app from './app.js';
 import { ENV } from './config/env.js';
 import { connectDatabase, disconnectDatabase } from './config/database.js';
 import { logger } from './utils/logger.js';
+import { startRateScheduler, stopRateScheduler } from './modules/rates/rate.scheduler.js';
 
 const startServer = () => {
-  const server = app.listen(ENV.PORT, () => {
+  const server = app.listen(ENV.PORT, async () => {
     logger.info(`Khalil & Sons Server running in ${ENV.NODE_ENV} mode on port ${ENV.PORT}`);
-    connectDatabase();
+    await connectDatabase();
+    startRateScheduler();
   });
 
   const handleShutdown = (signal) => {
     logger.info(`Received ${signal}. Gracefully shutting down...`);
+    stopRateScheduler();
     server.close(async () => {
       await disconnectDatabase();
       logger.info('Database disconnected and server closed.');
