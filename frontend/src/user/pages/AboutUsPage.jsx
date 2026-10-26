@@ -8,7 +8,31 @@ import { BespokeAppointmentModal } from '@/user/components/BespokeAppointmentMod
 import AboutUs from '@/components/shadcn-studio/blocks/about-us-page-30/about-us-page-30'
 import { BrandChronicle } from '@/user/components/BrandChronicle'
 import { AtelierInteractiveMap } from '@/user/components/AtelierInteractiveMap'
+import FAQSection from '@/components/ui/faq1'
 import { updatePageSEO } from '@/utils/seo'
+
+const aboutFaqs = [
+  {
+    question: "Where is the Khalil & Sons atelier located?",
+    answer: "Our flagship atelier and showroom is situated at Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road, Saddar, Karachi. We have welcomed collector families here since 1992."
+  },
+  {
+    question: "What hallmark certification accompanies your gold jewellery?",
+    answer: "Every gold creation is rigorously tested and certified for 22K (.916) or 24K pure gold purity, stamped with our authentic atelier hallmark and issued with a physical purity certificate."
+  },
+  {
+    question: "How long does a bespoke bridal heirloom commission take?",
+    answer: "A bespoke bridal set typically requires 3 to 5 weeks from initial design sketching and wax moulding to final stone setting and gold polishing."
+  },
+  {
+    question: "Can I visit the workshop to discuss an heirloom remodel?",
+    answer: "Yes, we welcome private consultations for remodelling antique jewellery or creating new heirlooms using your own gold or sourced gemstones."
+  },
+  {
+    question: "Do you deliver securely across Pakistan and internationally?",
+    answer: "Yes, all heirloom deliveries are fully insured and packaged in security-sealed vaults dispatched directly to your designated address."
+  }
+];
 
 export function AboutUsPage() {
   const location = useLocation()
@@ -62,6 +86,14 @@ export function AboutUsPage() {
       <main className="relative z-10 w-full max-w-[1880px] mx-auto">
         <AboutUs />
         <BrandChronicle onOpenAppointment={() => setIsAppointmentOpen(true)} />
+        <div className="px-4 sm:px-8 lg:px-12 xl:px-16 py-6">
+          <FAQSection
+            faqs={aboutFaqs}
+            category="Heritage & Craftsmanship"
+            title="Atelier Heritage & Standards"
+            subtitle="Essential details regarding our three-decade legacy in Saddar Karachi, gold hallmark purity, and bespoke appointments."
+          />
+        </div>
         <div className="px-4 sm:px-8 lg:px-12 xl:px-16 pb-16">
           <AtelierInteractiveMap onOpenAppointment={() => setIsAppointmentOpen(true)} />
         </div>

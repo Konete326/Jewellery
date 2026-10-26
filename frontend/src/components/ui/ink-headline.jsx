@@ -690,8 +690,12 @@ export default function InkHeadline({ children, as = 'h2', trigger = 'inView', p
         Promise.all([document.fonts?.ready, document.fonts?.load(face).catch(() => [])]).then(() => {
             build();
             if (s.pending) {
-                s.pending = false;
-                s.start();
+                const box = root.getBoundingClientRect();
+                const currentlyVisible = box.top < window.innerHeight && box.bottom > 0;
+                if (currentlyVisible) {
+                    s.pending = false;
+                    s.start();
+                }
             }
         });
         document.fonts?.addEventListener?.('loadingdone', rebuild);
@@ -730,7 +734,9 @@ export default function InkHeadline({ children, as = 'h2', trigger = 'inView', p
         const io = new IntersectionObserver(([entry]) => {
             if (!entry)
                 return;
-            if (entry.isIntersecting) {
+            const rect = entry.boundingClientRect;
+            const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+            if (entry.isIntersecting && inViewport) {
                 if (s.ready)
                     s.start();
                 else
@@ -742,7 +748,7 @@ export default function InkHeadline({ children, as = 'h2', trigger = 'inView', p
                 s.pending = false;
                 animateTo(0);
             }
-        }, { threshold: 0.35 });
+        }, { threshold: [0.15, 0.35] });
         io.observe(root);
         return () => {
             io.disconnect();

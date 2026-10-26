@@ -11,13 +11,13 @@ export function GooglePlaceReviewBadge({ variant = 'card', className = '' }) {
         href={reviewUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-amber-500/40 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent text-amber-900 dark:text-amber-300 hover:border-amber-500 hover:bg-amber-500/15 text-xs uppercase tracking-wider font-medium transition-colors shadow-2xs group cursor-pointer ${className}`}
+        className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-stone-900 text-foreground hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs uppercase tracking-wider font-medium transition-colors shadow-2xs group cursor-pointer ${className}`}
       >
         <span className="flex items-center text-amber-500">
           <Star className="size-3.5 fill-amber-400 text-amber-400" />
         </span>
         <span>Review Us on Google</span>
-        <ExternalLink className="size-3 text-amber-600/70 dark:text-amber-400/70" />
+        <ExternalLink className="size-3 text-neutral-500" />
       </a>
     );
   }
@@ -45,9 +45,9 @@ export function GooglePlaceReviewBadge({ variant = 'card', className = '' }) {
   }
 
   return (
-    <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl border border-amber-500/25 bg-amber-500/5 dark:bg-amber-500/5 backdrop-blur-xs ${className}`}>
+    <div className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl border border-border/80 bg-white dark:bg-card backdrop-blur-xs ${className}`}>
       <div className="flex items-center gap-3.5">
-        <div className="size-11 rounded-xl bg-white dark:bg-stone-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center shadow-xs shrink-0">
+        <div className="size-11 rounded-xl bg-neutral-100 dark:bg-stone-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center shadow-xs shrink-0">
           <svg className="size-5" viewBox="0 0 24 24">
             <path
               fill="#4285F4"
@@ -90,9 +90,9 @@ export function GooglePlaceReviewBadge({ variant = 'card', className = '' }) {
         href={reviewUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-stone-900 border border-amber-500/40 text-amber-800 dark:text-amber-300 hover:bg-amber-500/10 text-xs uppercase tracking-wider font-medium transition-colors shadow-xs shrink-0 cursor-pointer w-full sm:w-auto"
+        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-neutral-100 dark:bg-stone-900 border border-neutral-300 dark:border-neutral-700 text-foreground hover:bg-neutral-200 dark:hover:bg-neutral-800 text-xs uppercase tracking-wider font-medium transition-colors shadow-xs shrink-0 cursor-pointer w-full sm:w-auto"
       >
-        <HeartHandshake className="size-3.5 text-amber-600" />
+        <HeartHandshake className="size-3.5 text-neutral-600 dark:text-neutral-400" />
         <span>Review on Google</span>
         <ExternalLink className="size-3 text-neutral-400" />
       </a>

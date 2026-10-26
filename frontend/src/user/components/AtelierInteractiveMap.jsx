@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Navigation, ExternalLink, Phone, Clock, Star, Gem, Sparkles, Copy, Check } from 'lucide-react';
+import { MapPin, Navigation, ExternalLink, Phone, Clock, Star, Gem, Copy, Check } from 'lucide-react';
 import { Map, MapMarker, MarkerContent, MarkerTooltip } from '@/components/ui/mapcn-marker-content';
 import { GooglePlaceReviewBadge } from '@/user/components/GooglePlaceReviewBadge';
 import { STORE_INFO } from '@/constants/storeInfo';
@@ -28,8 +28,8 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
       <div className="rounded-3xl border border-border/80 bg-card p-5 sm:p-8 shadow-xs space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 text-xs font-mono uppercase tracking-wider mb-2">
-              <Gem className="size-3.5 text-amber-600" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 text-xs font-mono uppercase tracking-wider mb-2">
+              <Gem className="size-3.5 text-neutral-700 dark:text-neutral-300" />
               <span>Historic Jewellery Quarter</span>
             </div>
             <h3 className="text-2xl sm:text-3xl font-serif font-light text-foreground tracking-tight">
@@ -89,17 +89,17 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
               <MapMarker longitude={boutiqueLng} latitude={boutiqueLat}>
                 <MarkerContent>
                   <div className="relative flex items-center justify-center cursor-pointer group">
-                    <span className="absolute size-9 rounded-full bg-amber-500/30 animate-ping" />
-                    <div className="relative size-10 rounded-full border-2 border-white bg-linear-to-tr from-amber-700 via-amber-600 to-amber-400 shadow-2xl flex items-center justify-center text-white transition-transform group-active:scale-95">
-                      <Gem className="size-5 text-amber-100" />
+                    <span className="absolute size-9 rounded-full bg-neutral-400/30 animate-ping" />
+                    <div className="relative size-10 rounded-full border-2 border-white bg-linear-to-tr from-neutral-800 via-neutral-900 to-neutral-700 shadow-2xl flex items-center justify-center text-white transition-transform group-active:scale-95">
+                      <Gem className="size-5 text-neutral-100" />
                     </div>
                   </div>
                 </MarkerContent>
                 <MarkerTooltip>
                   <div className="text-left py-1.5 px-1 max-w-[220px]">
-                    <div className="flex items-center gap-1.5 text-amber-400 mb-0.5">
-                      <Sparkles className="size-3.5" />
-                      <span className="font-serif font-bold text-xs">Khalil & Sons Jewellers</span>
+                    <div className="flex items-center gap-1.5 text-neutral-200 mb-0.5">
+                      <Gem className="size-3.5" />
+                      <span className="font-serif font-bold text-xs text-white">Khalil & Sons Jewellers</span>
                     </div>
                     <p className="text-[11px] text-neutral-200 line-clamp-2">
                       {STORE_INFO.address.full}
@@ -129,7 +129,7 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
           <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:max-w-md z-10 p-4 rounded-2xl bg-background/95 backdrop-blur-md border border-border shadow-xl space-y-3">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="size-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0">
+                <div className="size-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-800 dark:text-neutral-200 shrink-0">
                   <MapPin className="size-5" />
                 </div>
                 <div>
@@ -137,8 +137,8 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
                     <h4 className="font-serif text-sm font-semibold text-foreground">
                       Khalil & Sons Jewellers
                     </h4>
-                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 text-[10px] font-mono font-medium">
-                      <Star className="size-2.5 fill-amber-500 text-amber-500" />
+                    <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-foreground text-[10px] font-mono font-medium">
+                      <Star className="size-2.5 fill-amber-400 text-amber-400" />
                       5.0
                     </span>
                   </div>
@@ -160,7 +160,7 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
 
             <div className="flex items-center justify-between text-xs pt-2 border-t border-border/80">
               <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                <Clock className="size-3 text-amber-600" />
+                <Clock className="size-3 text-neutral-500" />
                 <span>Mon – Sat: 12:00 PM – 9:00 PM</span>
               </div>
 
@@ -168,7 +168,7 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
                 <button
                   type="button"
                   onClick={onOpenAppointment}
-                  className="text-xs text-amber-700 dark:text-amber-400 hover:underline font-medium cursor-pointer"
+                  className="text-xs text-foreground hover:underline font-medium cursor-pointer"
                 >
                   Book Private Viewing
                 </button>

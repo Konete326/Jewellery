@@ -244,7 +244,7 @@ export function CinematicFooter() {
           </div>
 
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-16 w-full max-w-5xl mx-auto text-center">
-            <span className="text-xs font-mono uppercase tracking-[0.3em] text-amber-600 dark:text-amber-400 mb-3 block font-medium">
+            <span className="text-xs font-mono uppercase tracking-[0.3em] text-neutral-600 dark:text-neutral-400 mb-3 block font-medium">
               Khalil & Sons • Handcrafted Fine Jewellery
             </span>
             <h2
@@ -260,43 +260,64 @@ export function CinematicFooter() {
             <div ref={linksRef} className="flex flex-col items-center gap-5 w-full">
               <div className="flex flex-wrap justify-center gap-4 w-full">
                 <LuxuryButton
-                  as="a"
-                  href="#collections"
+                  as={Link}
+                  to="/gallery"
                   variant="gold"
                 >
                   <Gem size={14} className="text-amber-200 inline-block" />
-                  Explore Collection
+                  Explore Gallery
                 </LuxuryButton>
                 
                 <LuxuryButton
-                  as="a"
-                  href="#atelier"
+                  as={Link}
+                  to="/contact"
                   variant="gold"
                 >
                   <Calendar size={14} className="text-amber-200 inline-block" />
-                  Book an Appointment
+                  Visit Showroom
                 </LuxuryButton>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-2.5 md:gap-4 w-full mt-2">
+              <div className="flex flex-wrap justify-center gap-2 md:gap-3 w-full mt-2">
                 <MagneticButton
-                  as="a"
-                  href="#heritage"
-                  className="border border-[#2d3435]/25 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xs text-[#2d3435] dark:text-neutral-200 px-5 py-2.5 text-xs tracking-widest uppercase hover:bg-[#2d3435] hover:text-white dark:hover:bg-white dark:hover:text-black transition-all font-medium cursor-pointer"
+                  as={Link}
+                  to="/"
+                  className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
                 >
-                  Our Story
+                  Home
                 </MagneticButton>
                 <MagneticButton
-                  as="a"
-                  href="#atelier"
-                  className="border border-[#2d3435]/25 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xs text-[#2d3435] dark:text-neutral-200 px-5 py-2.5 text-xs tracking-widest uppercase hover:bg-[#2d3435] hover:text-white dark:hover:bg-white dark:hover:text-black transition-all font-medium cursor-pointer"
+                  as={Link}
+                  to="/gallery"
+                  className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
                 >
-                  Karachi Boutique
+                  Gallery
+                </MagneticButton>
+                <MagneticButton
+                  as={Link}
+                  to="/about"
+                  className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
+                >
+                  About Us
+                </MagneticButton>
+                <MagneticButton
+                  as={Link}
+                  to="/reviews"
+                  className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
+                >
+                  Client Reviews
+                </MagneticButton>
+                <MagneticButton
+                  as={Link}
+                  to="/contact"
+                  className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
+                >
+                  Contact
                 </MagneticButton>
                 <MagneticButton
                   as={Link}
                   to="/auth"
-                  className="border border-[#2d3435]/25 bg-white/70 dark:bg-neutral-900/70 backdrop-blur-xs text-[#2d3435] dark:text-neutral-200 px-5 py-2.5 text-xs tracking-widest uppercase hover:bg-[#2d3435] hover:text-white dark:hover:bg-white dark:hover:text-black transition-all font-medium cursor-pointer"
+                  className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
                 >
                   Sign In
                 </MagneticButton>
@@ -304,9 +325,9 @@ export function CinematicFooter() {
                   <MagneticButton
                     as={Link}
                     to="/admin"
-                    className="border border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400 px-5 py-2.5 text-xs tracking-widest uppercase hover:bg-amber-600 hover:text-white transition-all font-semibold cursor-pointer"
+                    className="border border-border/80 bg-neutral-100 dark:bg-neutral-800 text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-semibold cursor-pointer shadow-2xs"
                   >
-                    Admin Portal →
+                    Admin Suite →
                   </MagneticButton>
                 )}
               </div>
@@ -316,44 +337,44 @@ export function CinematicFooter() {
                   href={STORE_INFO.whatsapp.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-foreground transition-colors px-3.5 py-1.5 rounded-full border border-border/80 hover:border-foreground/30 bg-white/80 dark:bg-neutral-900/80 shadow-2xs"
                 >
                   <WhatsAppIcon className="size-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>{STORE_INFO.phone.mobile}</span>
                 </a>
                 <a
                   href={`tel:${STORE_INFO.phone.landline}`}
-                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-foreground transition-colors px-3.5 py-1.5 rounded-full border border-border/80 hover:border-foreground/30 bg-white/80 dark:bg-neutral-900/80 shadow-2xs"
                 >
-                  <Phone className="size-3.5 text-amber-700 dark:text-amber-400" />
+                  <Phone className="size-3.5 text-neutral-600 dark:text-neutral-300" />
                   <span>{STORE_INFO.phone.landlineFormatted}</span>
                 </a>
                 <a
                   href={STORE_INFO.social.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-foreground transition-colors px-3.5 py-1.5 rounded-full border border-border/80 hover:border-foreground/30 bg-white/80 dark:bg-neutral-900/80 shadow-2xs"
                 >
-                  <InstagramIcon className="size-3.5 text-pink-600 dark:text-pink-400" />
+                  <InstagramIcon className="size-3.5 text-neutral-600 dark:text-neutral-300" />
                   <span>Instagram</span>
                 </a>
                 <a
                   href={STORE_INFO.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-foreground transition-colors px-3.5 py-1.5 rounded-full border border-border/80 hover:border-foreground/30 bg-white/80 dark:bg-neutral-900/80 shadow-2xs"
                 >
-                  <FacebookIcon className="size-3.5 text-blue-600 dark:text-blue-400" />
+                  <FacebookIcon className="size-3.5 text-neutral-600 dark:text-neutral-300" />
                   <span>Facebook</span>
                 </a>
                 <a
                   href={STORE_INFO.social.googleMapsDirections}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-amber-700 dark:hover:text-amber-400 transition-colors px-3.5 py-1.5 rounded-full border border-border/70 hover:border-amber-500/40 bg-background/60 hover:bg-amber-500/5 shadow-xs"
+                  className="inline-flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground hover:text-foreground transition-colors px-3.5 py-1.5 rounded-full border border-border/80 hover:border-foreground/30 bg-white/80 dark:bg-neutral-900/80 shadow-2xs"
                 >
-                  <MapPin className="size-3.5 text-amber-600" />
-                  <span>Get Directions • Saddar (5.0 ★)</span>
+                  <MapPin className="size-3.5 text-neutral-600 dark:text-neutral-300" />
+                  <span>Saddar, Karachi (5.0 ★)</span>
                 </a>
               </div>
             </div>

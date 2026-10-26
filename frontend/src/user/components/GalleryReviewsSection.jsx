@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, ShieldCheck, MessageSquare, Plus, Sparkles } from 'lucide-react';
+import { Star, ShieldCheck, MessageSquare, Plus, Gem } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }) {
@@ -33,12 +33,12 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
 
       {displayReviews.length === 0 ? (
         <div className="p-8 rounded-2xl bg-white/70 border border-neutral-200/80 text-center flex flex-col items-center justify-center space-y-3">
-          <div className="size-12 rounded-full bg-amber-500/10 text-amber-700 flex items-center justify-center">
-            <Sparkles className="size-5" />
+          <div className="size-12 rounded-full bg-neutral-100 text-neutral-800 flex items-center justify-center">
+            <Gem className="size-5" />
           </div>
           <div className="flex flex-col items-center">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/25 text-amber-900 text-xs font-serif font-medium mb-2">
-              <Sparkles className="size-3 text-amber-600" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 border border-neutral-200 text-neutral-800 text-xs font-serif font-medium mb-2">
+              <Gem className="size-3 text-neutral-600" />
               <span>Awaiting First Appraisal</span>
             </div>
             <h4 className="font-serif text-base font-medium text-[#2d3435]">Atelier Premier Creation</h4>

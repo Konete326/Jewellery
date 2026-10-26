@@ -31,7 +31,7 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           </span>
         </div>
         <GlobeWireframe
-          className="w-full aspect-square max-w-full absolute -top-12 left-0 text-amber-600 dark:text-amber-400"
+          className="w-full aspect-square max-w-full absolute -top-12 left-0 text-neutral-600 dark:text-neutral-400"
           variant="wireframesolid"
           autoRotate
           autoRotateSpeed={0.4}
@@ -48,40 +48,40 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-muted/20 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all shadow-2xs"
+          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
         >
           <div className="size-8 rounded-lg bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
             <MessageCircle className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-[10px] uppercase font-mono tracking-wider text-emerald-700 dark:text-emerald-400 block">WhatsApp</span>
-            <span className="text-xs font-medium text-foreground group-hover:text-amber-800 transition-colors block truncate">{STORE_INFO.phone.mobileFormatted}</span>
+            <span className="text-xs font-medium text-foreground group-hover:text-neutral-900 dark:group-hover:text-white transition-colors block truncate">{STORE_INFO.phone.mobileFormatted}</span>
           </div>
         </a>
 
         <a
           href={`tel:${STORE_INFO.phone.landline}`}
-          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-muted/20 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all shadow-2xs"
+          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
+          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0 group-hover:scale-105 transition-transform">
             <Phone className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 dark:text-amber-400 block">Landline</span>
-            <span className="text-xs font-medium text-foreground group-hover:text-amber-800 transition-colors block truncate">{STORE_INFO.phone.landlineFormatted}</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-500 dark:text-neutral-400 block">Landline</span>
+            <span className="text-xs font-medium text-foreground group-hover:text-neutral-900 dark:group-hover:text-white transition-colors block truncate">{STORE_INFO.phone.landlineFormatted}</span>
           </div>
         </a>
 
         <a
           href={`mailto:${STORE_INFO.email}`}
-          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-muted/20 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all shadow-2xs"
+          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
+          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0 group-hover:scale-105 transition-transform">
             <Mail className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 dark:text-amber-400 block">Email</span>
-            <span className="text-xs font-medium text-foreground group-hover:text-amber-800 transition-colors block truncate">{STORE_INFO.email}</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-500 dark:text-neutral-400 block">Email</span>
+            <span className="text-xs font-medium text-foreground group-hover:text-neutral-900 dark:group-hover:text-white transition-colors block truncate">{STORE_INFO.email}</span>
           </div>
         </a>
 
@@ -89,13 +89,13 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           href={STORE_INFO.social.googleMaps}
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-muted/20 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all shadow-2xs"
+          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
+          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0 group-hover:scale-105 transition-transform">
             <MapPin className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 dark:text-amber-400 block">Showroom</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-500 dark:text-neutral-400 block">Showroom</span>
             <span className="text-xs font-medium text-foreground block truncate">{STORE_INFO.address.short}</span>
           </div>
         </a>
@@ -106,7 +106,7 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           href={STORE_INFO.social.googleMapsDirections}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs font-mono text-amber-800 dark:text-amber-300 hover:text-amber-600 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-mono text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors"
         >
           <Navigation className="size-3.5" />
           <span>Maps & Directions &rarr;</span>

@@ -20,6 +20,7 @@ import InkHeadline from '@/components/ui/ink-headline';
 import { CircularTestimonials } from '@/components/ui/circular-testimonials';
 import TestimonialSection2 from '@/components/ui/testimonial-section-2';
 import { LumaSpin } from '@/components/ui/luma-spin';
+import FAQSection from '@/components/ui/faq1';
 import { galleryApi } from '@/api/galleryApi';
 import { updatePageSEO } from '@/utils/seo';
 
@@ -29,6 +30,29 @@ const fallbackAvatars = [
   'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80',
   'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
   'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80'
+];
+
+const reviewsFaqs = [
+  {
+    question: "How are client reviews and ratings verified?",
+    answer: "Every review and appraisal is cross-referenced with boutique order ledgers and physical Certificates of Authenticity to ensure genuine patron feedback."
+  },
+  {
+    question: "Can I leave an appraisal for an heirloom purchased years ago?",
+    answer: "Yes. Patrons who acquired pieces from our Saddar salon can submit an appraisal anytime by selecting 'Add Appraisal' and citing their piece reference or description."
+  },
+  {
+    question: "Where can I read independent Google Maps reviews?",
+    answer: "Our official Google Maps listing features verified 5.0-star customer evaluations with direct photographs of our Saddar salon and jewellery collections."
+  },
+  {
+    question: "Are bridal photos shared with privacy protection?",
+    answer: "Yes, client photographs are published strictly with written consent. Any personal identifying details are respectfully protected."
+  },
+  {
+    question: "Can I update or edit my appraisal after submission?",
+    answer: "Yes. If you wish to update your feedback or add wedding photos, you can contact our concierge via WhatsApp with your original inquiry details."
+  }
 ];
 
 export function ReviewsPage() {
@@ -375,6 +399,15 @@ export function ReviewsPage() {
             })}
           </div>
         )}
+
+        <div className="pt-10">
+          <FAQSection
+            faqs={reviewsFaqs}
+            category="Client Reviews & Feedback"
+            title="Review & Appraisal Standards"
+            subtitle="Transparent answers regarding how we collect, verify, and exhibit authentic client evaluations and heirloom appraisals."
+          />
+        </div>
       </main>
 
       <Footer />
