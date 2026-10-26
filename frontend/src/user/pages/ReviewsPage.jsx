@@ -5,6 +5,8 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
 import { CartDrawer } from '../components/CartDrawer';
+import InkHeadline from '@/components/ui/ink-headline';
+import { LumaSpin } from '@/components/ui/luma-spin';
 import { galleryApi } from '@/api/galleryApi';
 import { updatePageSEO } from '@/utils/seo';
 
@@ -54,17 +56,28 @@ export function ReviewsPage() {
             <Gem className="size-3.5 text-amber-600" />
             <span>Customer Reviews</span>
           </div>
-          <h1 className="font-headline text-3xl sm:text-5xl lg:text-6xl font-light text-[#2d3435] leading-tight mb-4">
-            Customer <span className="serif-italic">Reviews & Ratings</span>
-          </h1>
+          <InkHeadline
+            as="h1"
+            by="word"
+            trigger="inView"
+            duration={1600}
+            stagger={220}
+            inkColor="#2d3435"
+            className="font-headline text-3xl sm:text-5xl lg:text-6xl font-light text-[#2d3435] leading-tight mb-4"
+          >
+            Patron Appraisals & Testimonials
+          </InkHeadline>
           <p className="text-sm sm:text-base text-[#5a6061] font-light max-w-xl mx-auto leading-relaxed">
             Real feedback and ratings from customers who purchased our handcrafted jewellery.
           </p>
         </div>
 
         {loading ? (
-          <div className="py-24 flex items-center justify-center">
-            <div className="size-8 rounded-full border-2 border-neutral-300 border-t-[#2d3435] animate-spin" />
+          <div className="py-24 flex flex-col items-center justify-center gap-3">
+            <LumaSpin variant="amber" size={54} />
+            <span className="text-xs font-serif tracking-[0.2em] text-[#5a6061] uppercase">
+              Loading Appraisals...
+            </span>
           </div>
         ) : reviews.length === 0 ? (
           <div className="py-20 p-8 rounded-3xl bg-white border border-neutral-200/80 text-center max-w-xl mx-auto flex flex-col items-center justify-center space-y-4 shadow-xs">

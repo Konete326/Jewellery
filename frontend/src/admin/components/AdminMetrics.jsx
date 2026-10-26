@@ -1,42 +1,38 @@
-import { DollarSign, ShoppingBag, Gem, Calendar, Activity } from 'lucide-react'
+import { Gem, MessageSquare, Clock, Users, Activity } from 'lucide-react'
 
-export function AdminMetrics({ orders = [], products = [], inquiries = [], loading = false }) {
-  const totalRevenue = orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0)
-
-  const formattedRevenue = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0
-  }).format(totalRevenue)
+export function AdminMetrics({ galleryItems = [], inquiries = [], users = [], loading = false }) {
+  const pendingInquiries = inquiries.filter(
+    (i) => (i.status || 'Pending').toLowerCase() === 'pending'
+  ).length
 
   const metrics = [
     {
-      title: "Total Atelier Revenue",
-      value: loading ? "..." : formattedRevenue,
-      subtext: loading ? "Loading..." : `${orders.length} completed transactions`,
-      icon: DollarSign,
+      title: "Gallery Masterpieces",
+      value: loading ? "..." : `${galleryItems.length}`,
+      subtext: loading ? "Loading..." : "Published fine jewelry pieces",
+      icon: Gem,
       accent: "bg-amber-500/10 text-amber-600 dark:text-amber-400"
     },
     {
-      title: "Jewelry Orders",
-      value: loading ? "..." : `${orders.length}`,
-      subtext: loading ? "Loading..." : "Total recorded commissions",
-      icon: ShoppingBag,
-      accent: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-    },
-    {
-      title: "Active Masterpieces",
-      value: loading ? "..." : `${products.length}`,
-      subtext: loading ? "Loading..." : "Catalog items in database",
-      icon: Gem,
+      title: "Atelier Inquiries",
+      value: loading ? "..." : `${inquiries.length}`,
+      subtext: loading ? "Loading..." : "Total customer consultations",
+      icon: MessageSquare,
       accent: "bg-blue-500/10 text-blue-600 dark:text-blue-400"
     },
     {
-      title: "Bespoke Inquiries",
-      value: loading ? "..." : `${inquiries.length}`,
-      subtext: loading ? "Loading..." : "Customer consult requests",
-      icon: Calendar,
-      accent: "bg-purple-500/10 text-purple-600 dark:text-purple-400"
+      title: "Pending Appraisals",
+      value: loading ? "..." : `${pendingInquiries}`,
+      subtext: loading ? "Loading..." : "Awaiting bespoke response",
+      icon: Clock,
+      accent: "bg-rose-500/10 text-rose-600 dark:text-rose-400"
+    },
+    {
+      title: "Registered Clientele",
+      value: loading ? "..." : `${users.length}`,
+      subtext: loading ? "Loading..." : "Verified collectors & patrons",
+      icon: Users,
+      accent: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
     }
   ]
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { X, Mail, Send, Loader2, AlertCircle, CheckCircle2, History, Phone, MessageSquare, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { replyToInquiry } from '@/api/inquiryApi';
+import { replyToInquiry, updateInquiryStatus } from '@/api/inquiryApi';
+import { createWhatsAppInquiryUrl, formatPhoneDisplay } from '@/utils/phone';
 import { toast } from 'sonner';
 
 export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => {} }) {
@@ -67,12 +68,13 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
         message: body.trim(),
         sentBy: 'Khalil & Sons Concierge'
       });
+      await updateInquiryStatus(inquiry._id, 'Replied');
 
-      toast.success(`Email reply successfully dispatched to ${inquiry.email}`);
+      toast.success(`Response recorded & status updated to Replied`);
       onReplied();
       onClose();
     } catch (err) {
-      toast.error(err.message || 'Failed to dispatch email reply via SMTP.');
+      toast.error(err.message || 'Failed to dispatch email reply.');
     } finally {
       setSubmitting(false);
     }
@@ -118,13 +120,18 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
             </span>
             {inquiry.phone && (
               <a
-                href={`https://wa.me/${inquiry.phone.replace(/[^0-9]/g, '')}`}
+                href={createWhatsAppInquiryUrl(
+                  inquiry.phone,
+                  inquiry.customerName,
+                  inquiry.subject || inquiry.jewelryType
+                )}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 font-mono"
+                className="text-[11px] text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 flex items-center gap-1 font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 transition-colors"
+                title="Open WhatsApp Chat pre-filled with inquiry"
               >
                 <Phone className="size-3" />
-                <span>{inquiry.phone}</span>
+                <span>{formatPhoneDisplay(inquiry.phone)}</span>
               </a>
             )}
           </div>
@@ -181,7 +188,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
                 key={i}
                 type="button"
                 onClick={() => applyTemplate(tpl)}
-                className="px-2.5 py-1 rounded-md text-[11px] border border-border hover:border-amber-500/50 hover:bg-amber-500/10 text-muted-foreground hover:text-foreground transition-all cursor-pointer font-medium"
+                className="px-2.5 py-1 rounded-md text-[11px] border border-border hover:border-amber-500/50 hover:bg-amber-500/10 text-muted-foreground hover:text-foreground transition-colors duration-150 cursor-pointer font-medium"
               >
                 {tpl.label}
               </button>
@@ -213,7 +220,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
               onChange={(e) => setSubject(e.target.value)}
               onBlur={() => setTouched((p) => ({ ...p, subject: true }))}
               placeholder="Response subject..."
-              className="w-full bg-muted/30 border border-input rounded-xl px-4 py-2.5 text-sm text-foreground outline-none focus:border-amber-500/60 focus:ring-2 focus:ring-amber-500/15 transition-all"
+              className="w-full bg-muted/30 border border-input rounded-xl px-4 py-2.5 text-sm text-foreground focus-visible:outline-none focus-visible:border-amber-500/60 focus-visible:ring-2 focus-visible:ring-amber-500/20 transition-colors"
             />
           </div>
 
@@ -240,7 +247,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
               onChange={(e) => setBody(e.target.value)}
               onBlur={() => setTouched((p) => ({ ...p, body: true }))}
               placeholder="Type your response to the client..."
-              className="w-full bg-muted/30 border border-input rounded-xl px-4 py-3 text-sm text-foreground outline-none focus:border-amber-500/60 focus:ring-2 focus:ring-amber-500/15 transition-all resize-y"
+              className="w-full bg-muted/30 border border-input rounded-xl px-4 py-3 text-sm text-foreground focus-visible:outline-none focus-visible:border-amber-500/60 focus-visible:ring-2 focus-visible:ring-amber-500/20 transition-colors resize-y"
             />
           </div>
 

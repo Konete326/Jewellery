@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Calendar, Star, ArrowRight, Navigation } from 'lucide-react'
 import { LuxuryButton } from './LuxuryButton'
 import { NeuralNoise } from '@/components/ui/neural-noise'
+import InkHeadline from '@/components/ui/ink-headline'
 import { galleryApi } from '@/api/galleryApi'
 import { STORE_INFO } from '@/constants/storeInfo'
 import { StoreStatusBadge } from '@/components/StoreStatusBadge'
@@ -57,9 +58,17 @@ export function HistoricAtelier({ onBookClick }) {
           <span className="text-[#5f5e5e] tracking-[0.2em] uppercase text-xs mb-4 block font-medium">
             Visit Our Store
           </span>
-          <h2 className="font-headline text-4xl md:text-6xl text-[#2d3435] mb-8 leading-tight font-normal">
-            Visit Our <span className="serif-italic">Boutique</span> in Karachi
-          </h2>
+          <InkHeadline
+            as="h2"
+            by="word"
+            trigger="inView"
+            duration={1600}
+            stagger={220}
+            inkColor="#2d3435"
+            className="font-headline text-4xl md:text-6xl text-[#2d3435] mb-8 leading-tight font-normal"
+          >
+            Visit Our Boutique in Karachi
+          </InkHeadline>
           <p className="text-[#5a6061] text-base md:text-lg mb-10 max-w-lg leading-relaxed font-light">
             Located in Murshid Sunaar Tower on Dr. Daud Pota Road in Saddar, Karachi, our boutique welcomes you to experience certified 22K and 24K pure gold jewellery, custom bridal heirlooms, and bespoke design consultations.
           </p>

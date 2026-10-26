@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Send, Loader2, ShieldCheck } from 'lucide-react';
 import { submitInquiry } from '@/api/inquiryApi';
+import { normalizePhoneToE164 } from '@/utils/phone';
 import { LuxuryButton } from './LuxuryButton';
 import { toast } from 'sonner';
 
@@ -35,7 +36,7 @@ export function AtelierContactForm({ onSuccess }) {
       const payload = {
         customerName: formData.customerName.trim(),
         email: formData.email.trim(),
-        phone: formData.phone.trim(),
+        phone: normalizePhoneToE164(formData.phone.trim()),
         subject: formData.subject,
         jewelryType: formData.subject,
         preferredMetal: 'General Inquiry',

@@ -6,12 +6,20 @@ export function ConfirmDeleteModal({ isOpen, onClose, onConfirm, title, itemType
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" onClick={onClose} />
+      <button
+        type="button"
+        aria-label="Close dialog overlay"
+        onClick={onClose}
+        className="absolute inset-0 bg-black/50 backdrop-blur-xs cursor-default w-full h-full border-0 p-0 focus-visible:outline-none"
+        tabIndex={-1}
+      />
       <div className="relative w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
         <button
+          type="button"
+          aria-label="Close"
           onClick={onClose}
           disabled={loading}
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground cursor-pointer"
+          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500/50 focus-visible:outline-none rounded-md"
         >
           <X className="size-4" />
         </button>

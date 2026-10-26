@@ -1,13 +1,11 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { AppShell } from '@/components/app-shell'
 import { DashboardOverview } from './components/DashboardOverview'
 import { GalleryAdminView } from './components/GalleryAdminView'
 import { InquiriesAdminView } from './components/InquiriesAdminView'
 import { UsersAdminView } from './components/UsersAdminView'
-import { AdminPlaceholder } from './components/AdminPlaceholder'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { Package, ShoppingBag, Users, UserCheck, Settings } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function AdminPanel() {
@@ -55,45 +53,9 @@ export function AdminPanel() {
         return <InquiriesAdminView />
       case 'gallery':
         return <GalleryAdminView />
-      case 'products':
-        return (
-          <AdminPlaceholder
-            title="Products Catalog"
-            category="Commerce"
-            description="Manage high-jewelry masterpieces, precious gemstones, and handcrafted watches."
-            icon={Package}
-          />
-        )
-      case 'orders':
-        return (
-          <AdminPlaceholder
-            title="Bespoke Orders"
-            category="Commerce"
-            description="Track client commissions, bespoke order pipelines, and luxury deliveries."
-            icon={ShoppingBag}
-          />
-        )
       case 'customers':
       case 'users':
         return <UsersAdminView />
-      case 'profile':
-        return (
-          <AdminPlaceholder
-            title="Artisan Profile"
-            category="Account"
-            description="Manage master artisan credentials, security keys, and atelier access."
-            icon={UserCheck}
-          />
-        )
-      case 'settings':
-        return (
-          <AdminPlaceholder
-            title="Atelier Settings"
-            category="System"
-            description="Configure Cloudinary media storage, notification gateways, and currency rates."
-            icon={Settings}
-          />
-        )
       case 'dashboard':
       default:
         return <DashboardOverview />

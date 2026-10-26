@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, MessageSquare, Reply, Trash2, CheckCheckIcon, Search, RefreshCw, Clock, CheckCircle2 } from 'lucide-react';
+import { Mail, MessageSquare, Reply, Trash2, CheckCheckIcon, Search, RefreshCw, Clock, CheckCircle2, Phone } from 'lucide-react';
 import { fetchInquiries, updateInquiryStatus, deleteInquiry } from '@/api/inquiryApi';
+import { createWhatsAppInquiryUrl, formatPhoneDisplay } from '@/utils/phone';
 import { ReplyInquiryModal } from './ReplyInquiryModal';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { Button } from '@/components/ui/button';
+import { LumaSpin } from '@/components/ui/luma-spin';
 import { toast } from 'sonner';
 
 export function InquiriesAdminView() {
@@ -139,13 +141,16 @@ export function InquiriesAdminView() {
               placeholder="Filter by name, email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-muted/40 border border-input rounded-lg pl-8 pr-3 py-1.5 text-xs text-foreground outline-none focus:border-amber-500/50"
+              className="w-full bg-muted/40 border border-input rounded-lg pl-8 pr-3 py-1.5 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
             />
           </div>
         </div>
 
         {loading ? (
-          <div className="py-16 text-center text-xs text-muted-foreground">Synchronizing atelier records...</div>
+          <div className="py-16 flex flex-col items-center justify-center gap-3 text-muted-foreground">
+            <LumaSpin variant="amber" size={48} />
+            <span className="text-xs">Synchronizing atelier records...</span>
+          </div>
         ) : filtered.length === 0 ? (
           <div className="py-16 flex flex-col items-center justify-center text-center px-4">
             <div className="size-12 rounded-2xl bg-muted/50 border border-border/80 flex items-center justify-center text-muted-foreground mb-3">
@@ -173,9 +178,20 @@ export function InquiriesAdminView() {
                       <Mail className="size-3" /> {item.email}
                     </a>
                     {item.phone && (
-                      <span className="text-xs text-muted-foreground font-mono">
-                        • {item.phone}
-                      </span>
+                      <a
+                        href={createWhatsAppInquiryUrl(
+                          item.phone,
+                          item.customerName,
+                          item.subject || item.jewelryType
+                        )}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
+                        title="Open direct WhatsApp conversation"
+                      >
+                        <Phone className="size-3 text-emerald-600 dark:text-emerald-400" />
+                        <span>{formatPhoneDisplay(item.phone)}</span>
+                      </a>
                     )}
                     <span
                       className={`text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 rounded-full border ${
@@ -219,7 +235,7 @@ export function InquiriesAdminView() {
                   <select
                     value={item.status || 'Pending'}
                     onChange={(e) => handleStatusChange(item._id, e.target.value)}
-                    className="text-xs px-2.5 py-1.5 rounded-lg border border-input bg-background text-foreground shadow-xs cursor-pointer focus:outline-none"
+                    className="text-xs px-2.5 py-1.5 rounded-lg border border-input bg-background text-foreground shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
                   >
                     <option value="Pending">Pending</option>
                     <option value="Replied">Replied</option>

@@ -15,6 +15,7 @@ import { galleryApi } from '@/api/galleryApi';
 import { PolaroidLineCarousel } from '@/components/ui/polaroid-line-carousel';
 import { updatePageSEO, getProductSchema } from '@/utils/seo';
 import { LuxuryButton } from '../components/LuxuryButton';
+import { LumaSpin } from '@/components/ui/luma-spin';
 
 export function GalleryDetailPage() {
   const { id } = useParams();
@@ -140,8 +141,11 @@ export function GalleryDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f9f9f9] flex items-center justify-center">
-        <div className="size-8 rounded-full border-2 border-neutral-300 border-t-[#2d3435] animate-spin" />
+      <div className="min-h-screen bg-[#f9f9f9] flex flex-col items-center justify-center gap-4">
+        <LumaSpin variant="amber" size={65} />
+        <span className="text-xs font-serif tracking-[0.2em] text-[#5a6061] uppercase">
+          Unveiling Masterpiece...
+        </span>
       </div>
     );
   }

@@ -9,13 +9,16 @@ import { AdminPanel } from '@/admin/AdminPanel'
 import { AuthPage } from '@/components/auth/AuthPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { GoogleOneTapOverlay } from '@/components/auth/GoogleOneTapOverlay'
+import { GlobalSpinnerOverlay } from '@/components/GlobalSpinnerOverlay'
+import { LoadingProvider } from '@/context/LoadingContext'
 import { Toaster } from '@/components/ui/sonner'
 import { Agentation } from 'agentation'
 
 export default function App() {
   return (
-    <>
+    <LoadingProvider>
       <Toaster position="top-right" richColors />
+      <GlobalSpinnerOverlay />
       <BrowserRouter>
         <GoogleOneTapOverlay />
         <Routes>
@@ -51,6 +54,6 @@ export default function App() {
         </Routes>
       </BrowserRouter>
       {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}
-    </>
+    </LoadingProvider>
   )
 }

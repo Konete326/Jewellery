@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { MessageSquare, Calendar, Mail, Trash2, CheckCheckIcon, Reply } from 'lucide-react'
+import { MessageSquare, Calendar, Mail, Trash2, CheckCheckIcon, Reply, Phone } from 'lucide-react'
 import { updateInquiryStatus, deleteInquiry } from '@/api/inquiryApi'
+import { createWhatsAppInquiryUrl, formatPhoneDisplay } from '@/utils/phone'
 import { ConfirmDeleteModal } from './ConfirmDeleteModal'
 import { ReplyInquiryModal } from './ReplyInquiryModal'
 import { Button } from '@/components/ui/button'
@@ -87,11 +88,27 @@ export function AtelierInquiries({ inquiries = [], loading = false, onRefresh = 
               className="p-3.5 rounded-lg border border-border/50 bg-muted/20 hover:bg-muted/40 transition-colors flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
             >
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="font-medium text-sm text-foreground">{inq.customerName}</span>
                   <span className="text-xs text-muted-foreground flex items-center gap-1">
                     <Mail className="size-3" /> {inq.email}
                   </span>
+                  {inq.phone && (
+                    <a
+                      href={createWhatsAppInquiryUrl(
+                        inq.phone,
+                        inq.customerName,
+                        inq.subject || inq.jewelryType
+                      )}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
+                      title="Open WhatsApp Consultation"
+                    >
+                      <Phone className="size-3 text-emerald-600 dark:text-emerald-400" />
+                      <span>{formatPhoneDisplay(inq.phone)}</span>
+                    </a>
+                  )}
                 </div>
                 <p className="text-xs text-muted-foreground">{inq.jewelryType} • {inq.preferredMetal}</p>
                 <div className="flex items-center gap-3 text-xs text-muted-foreground pt-1">
@@ -115,7 +132,7 @@ export function AtelierInquiries({ inquiries = [], loading = false, onRefresh = 
                 <select
                   value={inq.status || 'Pending'}
                   onChange={(e) => handleStatusChange(inq._id, e.target.value)}
-                  className="text-xs px-2.5 py-1 rounded-md border border-input bg-background text-foreground shadow-xs cursor-pointer focus:outline-none"
+                  className="text-xs px-2.5 py-1 rounded-md border border-input bg-background text-foreground shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
                 >
                   <option value="Pending">Pending</option>
                   <option value="Replied">Replied</option>

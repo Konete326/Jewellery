@@ -1,5 +1,6 @@
 import { inquiryRepository } from './inquiry.repository.js';
 import { sendInquiryReplyEmail } from '../../utils/mailer.js';
+import { normalizePhoneToE164 } from '../../utils/phone.js';
 
 export class InquiryService {
   constructor(repo = inquiryRepository) {
@@ -24,7 +25,11 @@ export class InquiryService {
   }
 
   async submitInquiry(data) {
-    return this.repo.create(data);
+    const payload = { ...data };
+    if (payload.phone) {
+      payload.phone = normalizePhoneToE164(payload.phone);
+    }
+    return this.repo.create(payload);
   }
 
   async updateInquiryStatus(id, status) {
@@ -39,13 +44,18 @@ export class InquiryService {
       throw err;
     }
 
-    const emailResult = await sendInquiryReplyEmail({
-      to: inquiry.email,
-      customerName: inquiry.customerName,
-      subject,
-      message,
-      originalMessage: inquiry.message
-    });
+    let emailResult = null;
+    try {
+      emailResult = await sendInquiryReplyEmail({
+        to: inquiry.email,
+        customerName: inquiry.customerName,
+        subject,
+        message,
+        originalMessage: inquiry.message
+      });
+    } catch (e) {
+      emailResult = { error: e.message, sent: false };
+    }
 
     const replyRecord = {
       subject,

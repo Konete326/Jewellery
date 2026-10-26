@@ -6,6 +6,7 @@ import { UsersMetrics } from './UsersMetrics';
 import { UsersTable } from './UsersTable';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { Button } from '@/components/ui/button';
+import { LumaSpin } from '@/components/ui/luma-spin';
 import { toast } from 'sonner';
 
 export function UsersAdminView() {
@@ -130,7 +131,7 @@ export function UsersAdminView() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by client name or email..."
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500/40 text-foreground"
+            className="w-full pl-9 pr-4 py-2 text-xs rounded-lg border border-border bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/20 focus-visible:border-amber-500/40 text-foreground"
           />
         </div>
 
@@ -204,12 +205,19 @@ export function UsersAdminView() {
         </div>
       </div>
 
-      <UsersTable
-        users={filteredUsers}
-        onRoleToggle={handleRoleToggle}
-        onDelete={(u) => setDeletingUser(u)}
-        currentAdminEmail={currentUser?.email}
-      />
+      {loading ? (
+        <div className="py-20 flex flex-col items-center justify-center gap-3 text-muted-foreground border border-dashed border-border rounded-xl bg-card/40">
+          <LumaSpin variant="amber" size={48} />
+          <span className="text-xs">Synchronizing clientele records...</span>
+        </div>
+      ) : (
+        <UsersTable
+          users={filteredUsers}
+          onRoleToggle={handleRoleToggle}
+          onDelete={(u) => setDeletingUser(u)}
+          currentAdminEmail={currentUser?.email}
+        />
+      )}
 
       <ConfirmDeleteModal
         isOpen={Boolean(deletingUser)}

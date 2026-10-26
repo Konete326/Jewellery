@@ -1,4 +1,5 @@
 import { API_BASE_URL } from './endpoints.js';
+import { loadingManager } from '../lib/loadingManager.js';
 
 export async function apiClient(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
@@ -12,6 +13,11 @@ export async function apiClient(endpoint, options = {}) {
     ...options,
     headers
   };
+
+  const isSilent = Boolean(options.silent);
+  if (!isSilent) {
+    loadingManager.startRequest(options.loadingMessage || '');
+  }
 
   try {
     const response = await fetch(url, config);
@@ -28,7 +34,9 @@ export async function apiClient(endpoint, options = {}) {
     }
 
     return result;
-  } catch (error) {
-    throw error;
+  } finally {
+    if (!isSilent) {
+      loadingManager.endRequest();
+    }
   }
 }

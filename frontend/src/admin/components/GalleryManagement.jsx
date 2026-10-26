@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UploadCloud, Trash2, Pencil, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { LumaSpin } from '@/components/ui/luma-spin';
 import { galleryApi } from '@/api/galleryApi';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { EditGalleryModal } from './EditGalleryModal';
@@ -166,7 +167,7 @@ export function GalleryManagement() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. The Florentine Aurelian Sigil"
-                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
               />
             </div>
 
@@ -177,7 +178,7 @@ export function GalleryManagement() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer"
+                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 cursor-pointer"
               >
                 {JEWELLERY_CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>
@@ -196,7 +197,7 @@ export function GalleryManagement() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="e.g. 18K Hand-hammered gold with raw uncut diamond"
-                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
               />
             </div>
           </div>
@@ -270,8 +271,8 @@ export function GalleryManagement() {
         </div>
 
         {loading ? (
-          <div className="py-12 flex flex-col items-center justify-center gap-2 text-muted-foreground">
-            <Loader2 className="size-6 animate-spin text-amber-500" />
+          <div className="py-12 flex flex-col items-center justify-center gap-3 text-muted-foreground">
+            <LumaSpin variant="amber" size={48} />
             <span className="text-xs">Loading atelier archive...</span>
           </div>
         ) : items.length === 0 ? (
@@ -285,13 +286,13 @@ export function GalleryManagement() {
             {items.map((item) => (
               <div
                 key={item._id}
-                className="group relative rounded-xl border border-border bg-background overflow-hidden shadow-xs hover:border-amber-500/40 transition-all"
+                className="group relative rounded-xl border border-border bg-background overflow-hidden shadow-xs hover:border-amber-500/40 transition-colors duration-200"
               >
                 <div className="aspect-[4/3] w-full overflow-hidden bg-neutral-900">
                   <img
                     src={item.imageUrl}
                     alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-90"
                   />
                 </div>
                 <div className="p-3.5 flex items-start justify-between gap-2">

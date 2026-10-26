@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import InkHeadline from '@/components/ui/ink-headline'
 import { STORE_INFO } from '@/constants/storeInfo'
 
 export function HeritageStory() {
@@ -34,10 +35,17 @@ export function HeritageStory() {
           <span className="text-[#5f5e5e] tracking-[0.2em] uppercase text-xs block font-medium font-mono">
             Our Heritage • Est. {STORE_INFO.established}
           </span>
-          <h2 className="font-headline text-4xl md:text-6xl text-[#2d3435] leading-tight font-normal">
-            Master Goldsmithing <br />
-            <span className="serif-italic">Since 1992</span>
-          </h2>
+          <InkHeadline
+            as="h2"
+            by="word"
+            trigger="inView"
+            duration={1600}
+            stagger={220}
+            inkColor="#2d3435"
+            className="font-headline text-4xl md:text-6xl text-[#2d3435] leading-tight font-normal"
+          >
+            Master Goldsmithing Since 1992
+          </InkHeadline>
           <div className="space-y-5 text-[#5a6061] leading-relaxed text-base md:text-lg font-light">
             <p>
               Founded in 1992 by Mr. Khalil Ahmed in Murshid Bazaar, Saddar, Karachi, Khalil & Sons Jewellers preserves authentic artisanal goldsmithing and bridal jewelry across generations.

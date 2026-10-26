@@ -3,6 +3,7 @@ import { X, Send, Loader2, Gem, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GoogleIcon } from '@/components/google-icon';
 import { submitInquiry } from '@/api/inquiryApi';
+import { normalizePhoneToE164 } from '@/utils/phone';
 import { getAuthUser, loginWithGoogle } from '@/lib/auth';
 import { toast } from 'sonner';
 
@@ -61,7 +62,7 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
       await submitInquiry({
         customerName: customerName.trim(),
         email: email.trim(),
-        phone: phone.trim(),
+        phone: normalizePhoneToE164(phone.trim()),
         subject: `Inquiry: ${piece.title}`,
         message: `${message.trim()}\n\n[Reference ID: ${piece._id || piece.id}]`,
         jewelryType: piece.category || 'Bridal Sets',

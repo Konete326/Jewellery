@@ -6,6 +6,7 @@ import { SearchModal } from '../components/SearchModal';
 import { CartDrawer } from '../components/CartDrawer';
 import { Skiper54 } from '../components/Skiper54';
 import { ImageGallery } from '@/components/ui/image-gallery';
+import InkHeadline from '@/components/ui/ink-headline';
 import { GalleryPagination } from '../components/GalleryPagination';
 import { galleryApi } from '@/api/galleryApi';
 import { updatePageSEO } from '@/utils/seo';
@@ -125,9 +126,17 @@ export function GalleryPage() {
             <span className="text-xs uppercase tracking-widest text-amber-700 font-mono font-medium block mb-1.5">
               Handcrafted Gold & Diamond Jewellery
             </span>
-            <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl text-[#2d3435] leading-tight font-light mb-2.5">
-              Jewellery <span className="serif-italic">Gallery</span>
-            </h1>
+            <InkHeadline
+              as="h1"
+              by="word"
+              trigger="inView"
+              duration={1600}
+              stagger={220}
+              inkColor="#2d3435"
+              className="font-headline text-3xl sm:text-4xl md:text-5xl text-[#2d3435] leading-tight font-light mb-2.5"
+            >
+              Haute Joaillerie & Bridal Gallery
+            </InkHeadline>
             <p className="text-[#5a6061] text-xs sm:text-sm leading-relaxed font-light max-w-md mx-auto">
               Explore our handcrafted gold and diamond jewellery collection, created with fine craftsmanship and authentic quality.
             </p>

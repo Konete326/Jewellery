@@ -1,5 +1,6 @@
 import { LuxuryButton } from './LuxuryButton'
 import { NeuralNoise } from '@/components/ui/neural-noise'
+import InkHeadline from '@/components/ui/ink-headline'
 import { STORE_INFO } from '@/constants/storeInfo'
 
 export function Hero({ onExploreClick }) {
@@ -25,10 +26,17 @@ export function Hero({ onExploreClick }) {
         <span className="tracking-[0.2em] uppercase text-xs text-white/90 mb-4 block font-medium font-mono">
           Est. {STORE_INFO.established} • Saddar, Karachi
         </span>
-        <h1 className="font-headline text-5xl md:text-8xl text-white leading-[1.08] mb-8 tracking-tight font-light">
-          The Art of <br />
-          <span className="serif-italic">Handcrafted</span> Gold
-        </h1>
+        <InkHeadline
+          as="h1"
+          by="word"
+          trigger="inView"
+          duration={1600}
+          stagger={220}
+          inkColor="#ffffff"
+          className="font-headline text-5xl md:text-8xl text-white leading-[1.08] mb-8 tracking-tight font-light"
+        >
+          The Art of Handcrafted Gold
+        </InkHeadline>
         <p className="text-white/85 text-lg md:text-xl max-w-lg mb-10 leading-relaxed font-light">
           Master goldsmithing since 1992 in Saddar, Karachi. Crafting certified 22K and 24K gold bridal jewelry, solitaires, and polki heirlooms.
         </p>

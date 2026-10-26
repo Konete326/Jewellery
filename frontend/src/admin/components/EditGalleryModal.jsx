@@ -40,9 +40,11 @@ export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
         aria-modal="true"
       >
         <button
+          type="button"
+          aria-label="Close modal"
           onClick={onClose}
           disabled={loading}
-          className="absolute top-4 right-4 p-1.5 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer"
+          className="absolute top-4 right-4 p-1.5 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500/50 focus-visible:outline-none"
         >
           <X className="size-4" />
         </button>
@@ -91,7 +93,7 @@ export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Masterpiece title"
-              className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-amber-500"
+              className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
             />
           </div>
 
@@ -102,7 +104,7 @@ export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer"
+              className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 cursor-pointer"
             >
               {JEWELLERY_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -121,7 +123,7 @@ export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Details regarding materials, craft, or provenance"
-              className="w-full p-3 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-amber-500 resize-none"
+              className="w-full p-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 resize-none"
             />
           </div>
 
