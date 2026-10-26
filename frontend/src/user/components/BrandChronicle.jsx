@@ -5,7 +5,6 @@ import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp'
 import { getStoreStatus } from '@/utils/storeStatus'
 import { cn } from '@/lib/utils'
 import { LuxuryButton } from './LuxuryButton'
-import { AtelierSparklesBanner } from './AtelierSparklesBanner'
 
 const WEEKLY_SCHEDULE = [
   { days: 'Monday – Thursday', hours: '1:00 PM – 8:30 PM', note: 'Regular Boutique Hours', status: 'Open' },
@@ -114,7 +113,6 @@ export function BrandChronicle({ onOpenAppointment }) {
         ))}
       </div>
 
-      <AtelierSparklesBanner />
 
       <div className="mb-16 md:mb-24">
         <div className="text-center max-w-2xl mx-auto space-y-2 mb-10">
