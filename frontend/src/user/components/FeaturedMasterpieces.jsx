@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Star, ArrowRight, Eye, Sparkles } from 'lucide-react'
+import { Star, ArrowRight, Eye, Gem } from 'lucide-react'
 import { LuxuryButton } from './LuxuryButton'
 import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton'
 import { galleryApi } from '@/api/galleryApi'
@@ -85,7 +85,7 @@ export function FeaturedMasterpieces() {
           </div>
         ) : pieces.length === 0 ? (
           <div className="rounded-2xl border border-neutral-300/80 bg-white p-12 text-center max-w-xl mx-auto shadow-sm">
-            <Sparkles className="size-8 text-amber-600 mx-auto mb-4" />
+            <Gem className="size-8 text-neutral-600 mx-auto mb-4" />
             <h3 className="font-headline text-2xl text-[#2d3435] mb-2 font-normal">
               New Masterpieces in Crafting
             </h3>

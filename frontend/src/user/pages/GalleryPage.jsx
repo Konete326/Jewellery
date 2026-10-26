@@ -10,7 +10,7 @@ import InkHeadline from '@/components/ui/ink-headline';
 import { GalleryPagination } from '../components/GalleryPagination';
 import { galleryApi } from '@/api/galleryApi';
 import { updatePageSEO } from '@/utils/seo';
-import { Sparkles } from 'lucide-react';
+import { Gem } from 'lucide-react';
 
 const PAGE_SIZE = 9;
 
@@ -181,7 +181,7 @@ export function GalleryPage() {
               </div>
             ) : galleryItems.length === 0 ? (
               <div className="rounded-2xl border border-neutral-300/80 bg-white p-12 text-center max-w-md mx-auto shadow-sm">
-                <Sparkles className="size-8 text-amber-600 mx-auto mb-4" />
+                <Gem className="size-8 text-neutral-600 mx-auto mb-4" />
                 <h3 className="font-headline text-2xl text-[#2d3435] mb-2 font-normal">
                   Catalog Updating
                 </h3>

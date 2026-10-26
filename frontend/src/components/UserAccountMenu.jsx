@@ -18,7 +18,7 @@ import {
   Mail,
   ChevronDown,
   Images,
-  Sparkles,
+  Calendar,
   MapPin,
 } from "lucide-react";
 import { logoutUser } from "@/lib/auth";
@@ -155,7 +155,7 @@ export function UserAccountMenu({ user, onOpenVault, vaultCount = 0 }) {
           )}
           <DropdownMenuItem asChild className="p-2 rounded-lg cursor-pointer text-xs">
             <Link to="/#atelier" className="flex items-center gap-2.5 w-full">
-              <Sparkles className="size-4 text-amber-500" />
+              <Calendar className="size-4 text-neutral-600 dark:text-neutral-400" />
               <span>Bespoke Appointment</span>
             </Link>
           </DropdownMenuItem>

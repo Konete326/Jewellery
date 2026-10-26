@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Gem, ShieldCheck, Truck, Sparkles } from 'lucide-react';
+import { ArrowLeft, Gem, ShieldCheck, Truck } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
@@ -156,7 +156,7 @@ export function GalleryDetailPage() {
           cartCount={0}
         />
         <div className="max-w-md mx-auto text-center px-6 py-24">
-          <Sparkles className="size-10 text-amber-600 mx-auto mb-4" />
+          <Gem className="size-10 text-neutral-600 mx-auto mb-4" />
           <h2 className="font-headline text-3xl font-light mb-3">Piece Not Found</h2>
           <p className="text-sm text-[#5a6061] leading-relaxed mb-6 font-light">
             The requested jewellery masterpiece is no longer in our active exhibition or has been updated in the atelier.

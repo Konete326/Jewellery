@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { X, Heart, Trash2, ArrowRight, ShieldCheck, Sparkles, MessageCircle } from 'lucide-react';
+import { X, Heart, Trash2, ArrowRight, ShieldCheck, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GoogleIcon } from '@/components/google-icon';
 import { getAuthUser, loginWithGoogle } from '@/lib/auth';
@@ -132,9 +132,9 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
         </div>
 
         {!user && (
-          <div className="px-5 py-3 bg-amber-500/10 border-b border-amber-500/20 flex items-center justify-between gap-3 text-xs">
+          <div className="px-5 py-3 bg-neutral-100 dark:bg-neutral-800 border-b border-border/80 flex items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2 min-w-0">
-              <Sparkles className="size-4 text-amber-600 shrink-0" />
+              <ShieldCheck className="size-4 text-neutral-600 dark:text-neutral-400 shrink-0" />
               <span className="text-foreground truncate text-[11px]">
                 Sync vault with Google to access across devices
               </span>
