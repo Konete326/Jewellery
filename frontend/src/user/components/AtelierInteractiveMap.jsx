@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import { MapPin, Navigation, ExternalLink, Phone, Clock, Star, Gem, Copy, Check } from 'lucide-react';
-import { Map, MapMarker, MarkerContent, MarkerTooltip } from '@/components/ui/mapcn-marker-content';
+import { MapPin, Navigation, ExternalLink, Clock, Star, Gem, Copy, Check } from 'lucide-react';
 import { GooglePlaceReviewBadge } from '@/user/components/GooglePlaceReviewBadge';
 import { STORE_INFO } from '@/constants/storeInfo';
 import { toast } from 'sonner';
 
 export function AtelierInteractiveMap({ onOpenAppointment }) {
   const [copied, setCopied] = useState(false);
-  const [viewMode, setViewMode] = useState('vector');
-
-  const boutiqueLng = 67.025203;
-  const boutiqueLat = 24.859513;
 
   const handleCopyAddress = () => {
     try {
@@ -41,31 +36,6 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <div className="flex items-center p-1 rounded-xl bg-muted border border-border text-xs">
-              <button
-                type="button"
-                onClick={() => setViewMode('vector')}
-                className={`px-3 py-1.5 rounded-lg font-medium transition-colors cursor-pointer ${
-                  viewMode === 'vector'
-                    ? 'bg-background text-foreground shadow-xs'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Atelier Map
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('google')}
-                className={`px-3 py-1.5 rounded-lg font-medium transition-colors cursor-pointer ${
-                  viewMode === 'google'
-                    ? 'bg-background text-foreground shadow-xs'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                Google Embed
-              </button>
-            </div>
-
             <GooglePlaceReviewBadge variant="button" />
 
             <a
@@ -84,47 +54,17 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
         <GooglePlaceReviewBadge variant="card" />
 
         <div className="relative w-full h-[400px] sm:h-[480px] rounded-2xl overflow-hidden border border-border shadow-xs bg-muted/40">
-          {viewMode === 'vector' ? (
-            <Map center={[boutiqueLng, boutiqueLat]} zoom={15.5} className="w-full h-full">
-              <MapMarker longitude={boutiqueLng} latitude={boutiqueLat}>
-                <MarkerContent>
-                  <div className="relative flex items-center justify-center cursor-pointer group">
-                    <span className="absolute size-9 rounded-full bg-neutral-400/30 animate-ping" />
-                    <div className="relative size-10 rounded-full border-2 border-white bg-linear-to-tr from-neutral-800 via-neutral-900 to-neutral-700 shadow-2xl flex items-center justify-center text-white transition-transform group-active:scale-95">
-                      <Gem className="size-5 text-neutral-100" />
-                    </div>
-                  </div>
-                </MarkerContent>
-                <MarkerTooltip>
-                  <div className="text-left py-1.5 px-1 max-w-[220px]">
-                    <div className="flex items-center gap-1.5 text-neutral-200 mb-0.5">
-                      <Gem className="size-3.5" />
-                      <span className="font-serif font-bold text-xs text-white">Khalil & Sons Jewellers</span>
-                    </div>
-                    <p className="text-[11px] text-neutral-200 line-clamp-2">
-                      {STORE_INFO.address.full}
-                    </p>
-                    <div className="flex items-center gap-1 text-[10px] text-amber-300 font-mono mt-1 pt-1 border-t border-white/10">
-                      <Clock className="size-3" />
-                      <span>Mon-Sat: 12:00 PM – 9:00 PM</span>
-                    </div>
-                  </div>
-                </MarkerTooltip>
-              </MapMarker>
-            </Map>
-          ) : (
-            <iframe
-              src={STORE_INFO.social.googleMapsEmbed}
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="strict-origin-when-cross-origin"
-              title="Khalil & Sons Jewellers Location on Google Maps"
-              className="w-full h-full"
-            />
-          )}
+          <iframe
+            src={STORE_INFO.social.googleMapsEmbed}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            title="Khalil & Sons Jewellers Location on Google Maps"
+            className="w-full h-full"
+          />
 
           <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:max-w-md z-10 p-4 rounded-2xl bg-background/95 backdrop-blur-md border border-border shadow-xl space-y-3">
             <div className="flex items-start justify-between gap-3">
@@ -161,7 +101,7 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
             <div className="flex items-center justify-between text-xs pt-2 border-t border-border/80">
               <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                 <Clock className="size-3 text-neutral-500" />
-                <span>Mon – Sat: 12:00 PM – 9:00 PM</span>
+                <span>Mon – Sat: 1:00 PM – 8:30 PM</span>
               </div>
 
               {onOpenAppointment && (

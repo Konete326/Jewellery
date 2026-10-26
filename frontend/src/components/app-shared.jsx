@@ -3,7 +3,8 @@ import {
   ImageIcon,
   MessageSquareIcon,
   UsersIcon,
-  StarIcon
+  StarIcon,
+  TrendingUpIcon
 } from "lucide-react";
 
 export const navGroups = [
@@ -33,6 +34,12 @@ export const navGroups = [
         path: "/admin/reviews",
         key: "reviews",
         icon: <StarIcon className="size-4" />
+      },
+      {
+        title: "Gold & Silver Rates",
+        path: "/admin/rates",
+        key: "rates",
+        icon: <TrendingUpIcon className="size-4" />
       }
     ]
   },

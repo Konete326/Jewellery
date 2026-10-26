@@ -5,6 +5,7 @@ import inquiryRoutes from '../modules/inquiries/inquiry.routes.js';
 import orderRoutes from '../modules/orders/order.routes.js';
 import galleryRoutes from '../modules/gallery/gallery.routes.js';
 import userRoutes from '../modules/users/user.routes.js';
+import rateRoutes from '../modules/rates/rate.routes.js';
 
 const apiRouter = Router();
 
@@ -14,5 +15,6 @@ apiRouter.use('/inquiries', inquiryRoutes);
 apiRouter.use('/orders', orderRoutes);
 apiRouter.use('/gallery', galleryRoutes);
 apiRouter.use('/users', userRoutes);
+apiRouter.use('/rates', rateRoutes);
 
 export default apiRouter;

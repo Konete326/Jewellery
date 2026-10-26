@@ -30,13 +30,15 @@ export function DesktopNav() {
 							<span className="text-muted-foreground text-xs font-light">
 								Looking for a bespoke custom design?
 							</span>
-							<a
-								className="font-medium text-xs text-amber-700 dark:text-amber-400 hover:underline inline-flex items-center gap-1"
-								href="/#atelier"
-							>
-								<span>Book an Appointment</span>
-								<span>→</span>
-							</a>
+							<NavigationMenuLink asChild>
+								<Link
+									className="font-medium text-xs text-amber-700 dark:text-amber-400 hover:underline inline-flex items-center gap-1"
+									to="/contact"
+								>
+									<span>Book an Appointment</span>
+									<span>→</span>
+								</Link>
+							</NavigationMenuLink>
 						</div>
 					</NavigationMenuContent>
 				</NavigationMenuItem>
@@ -60,7 +62,7 @@ export function DesktopNav() {
 									</span>
 									<div className="space-y-1">
 										{companyLinks2.map((item, i) => {
-											const isInternal = item.href.startsWith("/") && !item.href.startsWith("/#");
+											const isInternal = item.href.startsWith("/");
 											const rowClasses = "flex items-center gap-2.5 text-xs font-medium text-muted-foreground hover:text-foreground p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors";
 											return isInternal ? (
 												<NavigationMenuLink asChild key={`item-${item.label}-${i}`}>
@@ -106,6 +108,11 @@ export function DesktopNav() {
 						</div>
 					</NavigationMenuContent>
 				</NavigationMenuItem>
+				<NavigationMenuLink asChild className="px-3">
+					<Link className="rounded-md p-2 text-xs tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors" to="/rates">
+						Live Rates
+					</Link>
+				</NavigationMenuLink>
 				<NavigationMenuLink asChild className="px-3">
 					<Link className="rounded-md p-2 text-xs tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors" to="/gallery">
 						Gallery

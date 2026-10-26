@@ -154,7 +154,7 @@ export function UserAccountMenu({ user, onOpenVault, vaultCount = 0 }) {
             </DropdownMenuItem>
           )}
           <DropdownMenuItem asChild className="p-2 rounded-lg cursor-pointer text-xs">
-            <Link to="/#atelier" className="flex items-center gap-2.5 w-full">
+            <Link to="/contact" className="flex items-center gap-2.5 w-full">
               <Calendar className="size-4 text-neutral-600 dark:text-neutral-400" />
               <span>Bespoke Appointment</span>
             </Link>

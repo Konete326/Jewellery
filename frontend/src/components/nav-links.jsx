@@ -3,25 +3,25 @@ import { Diamond, Gem, Crown, Compass, BookOpen, ShieldCheck, Landmark, Calendar
 export const productLinks = [
   {
     label: "Gold Rings",
-    href: "/#collections",
+    href: "/gallery",
     description: "18K handmade gold with real diamonds",
     icon: <Diamond className="size-4" />
   },
   {
     label: "Pearl Jewellery",
-    href: "/#collections",
+    href: "/gallery",
     description: "Natural pearls crafted on gold wire",
     icon: <Gem className="size-4" />
   },
   {
     label: "Gold Bangles",
-    href: "/#collections",
+    href: "/gallery",
     description: "Solid 22K pure gold handcrafted bangles",
     icon: <Crown className="size-4" />
   },
   {
     label: "Custom Design",
-    href: "/#atelier",
+    href: "/contact",
     description: "Personal designs made just for you",
     icon: <Compass className="size-4" />
   }
@@ -36,13 +36,13 @@ export const companyLinks = [
   },
   {
     label: "Pure Gold Quality",
-    href: "/#heritage",
+    href: "/about",
     description: "Certified pure gold and conflict-free stones",
     icon: <ShieldCheck className="size-4" />
   },
   {
     label: "Karachi Boutique",
-    href: "/#atelier",
+    href: "/contact",
     description: "Our showroom and boutique in Saddar, Karachi",
     icon: <Landmark className="size-4" />
   }
@@ -56,12 +56,12 @@ export const companyLinks2 = [
   },
   {
     label: "Book Appointment",
-    href: "/#atelier",
+    href: "/contact",
     icon: <Calendar className="size-3.5" />
   },
   {
     label: "Atelier Archives",
-    href: "/#heritage",
+    href: "/about",
     icon: <Clock className="size-3.5" />
   }
 ];

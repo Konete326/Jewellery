@@ -6,11 +6,18 @@ import { Portal, PortalBackdrop } from "@/components/portal";
 import { companyLinks, companyLinks2, productLinks } from "@/components/nav-links";
 import { LinkItem } from "@/components/sheard";
 import { getAuthUser, logoutUser } from "@/lib/auth";
-import { XIcon, MenuIcon, ShieldCheck, LogOut, User } from "lucide-react";
+import { XIcon, MenuIcon, ShieldCheck, LogOut, User, Download } from "lucide-react";
 
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
 	const [user, setUser] = React.useState(() => getAuthUser());
+	const [isInstalled, setIsInstalled] = React.useState(() => {
+		if (typeof window === "undefined") return false;
+		return (
+			localStorage.getItem("khalil_pwa_installed") === "true" ||
+			window.matchMedia("(display-mode: standalone)").matches
+		);
+	});
 
 	React.useEffect(() => {
 		const syncAuth = () => setUser(getAuthUser());
@@ -98,6 +105,13 @@ export function MobileNav() {
 							</div>
 							<div className="pt-2 border-t border-border flex flex-col gap-1">
 								<Link
+									to="/rates"
+									onClick={() => setOpen(false)}
+									className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium uppercase tracking-widest text-foreground hover:bg-muted"
+								>
+									<span>Gold & Silver Rates</span>
+								</Link>
+								<Link
 									to="/gallery"
 									onClick={() => setOpen(false)}
 									className="flex items-center gap-2 p-2 rounded-lg text-xs font-medium uppercase tracking-widest text-foreground hover:bg-muted"
@@ -149,6 +163,21 @@ export function MobileNav() {
 										<User className="size-3.5" />
 										<span>Sign In</span>
 									</Link>
+								</Button>
+							)}
+
+							{!isInstalled && (
+								<Button
+									type="button"
+									variant="outline"
+									className="w-full border-amber-500/30 text-amber-700 dark:text-amber-400 hover:bg-amber-500/10 cursor-pointer"
+									onClick={() => {
+										setOpen(false);
+										window.dispatchEvent(new CustomEvent("khalil_open_pwa_prompt"));
+									}}
+								>
+									<Download className="size-3.5 mr-1.5 text-amber-500" />
+									<span>Install Mobile App</span>
 								</Button>
 							)}
 						</div>

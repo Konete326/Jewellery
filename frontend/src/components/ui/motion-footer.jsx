@@ -320,6 +320,14 @@ export function CinematicFooter() {
                 </MagneticButton>
                 <MagneticButton
                   as={Link}
+                  to="/rates"
+                  onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
+                  className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
+                >
+                  Live Rates
+                </MagneticButton>
+                <MagneticButton
+                  as={Link}
                   to="/reviews"
                   onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                   className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"

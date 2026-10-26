@@ -23,5 +23,10 @@ export const ENDPOINTS = {
   USER_BY_ID: (id) => `/users/${id}`,
   USERS_WISHLIST: (email) => `/users/wishlist/${encodeURIComponent(email)}`,
   USERS_WISHLIST_TOGGLE: '/users/wishlist/toggle',
-  USERS_WISHLIST_SYNC: '/users/wishlist/sync'
+  USERS_WISHLIST_SYNC: '/users/wishlist/sync',
+  RATES: '/rates',
+  RATES_SYNC: '/rates/sync',
+  RATES_OVERRIDE: '/rates/override',
+  RATES_HISTORY: '/rates/history',
+  RATES_HISTORY_ITEM: (id) => `/rates/history/${id}`
 };

@@ -25,7 +25,14 @@ app.use('/api', apiRouter);
 app.use('/', seoRouter);
 
 if (fs.existsSync(publicDir)) {
-  app.use(express.static(publicDir));
+  app.use(express.static(publicDir, {
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith('sw.js')) {
+        res.setHeader('Service-Worker-Allowed', '/');
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      }
+    }
+  }));
   app.use((req, res, next) => {
     if (req.method === 'GET' && !req.path.startsWith('/api')) {
       return res.sendFile(path.join(publicDir, 'index.html'));

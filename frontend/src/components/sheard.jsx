@@ -9,7 +9,7 @@ export function LinkItem({
 	href,
 	...props
 }) {
-	const isInternal = Boolean(href && href.startsWith("/") && !href.startsWith("/#"));
+	const isInternal = Boolean(href && href.startsWith("/"));
 
 	const content = (
 		<>
