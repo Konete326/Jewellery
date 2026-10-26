@@ -12,6 +12,7 @@ import { GoogleOneTapOverlay } from '@/components/auth/GoogleOneTapOverlay'
 import { GlobalSpinnerOverlay } from '@/components/GlobalSpinnerOverlay'
 import { LoadingProvider } from '@/context/LoadingContext'
 import { Toaster } from '@/components/ui/sonner'
+import { ScrollToTop } from '@/components/ScrollToTop'
 import { Agentation } from 'agentation'
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
       <Toaster position="top-right" richColors />
       <GlobalSpinnerOverlay />
       <BrowserRouter>
+        <ScrollToTop />
         <GoogleOneTapOverlay />
         <Routes>
           <Route path="/" element={<UserPanel />} />

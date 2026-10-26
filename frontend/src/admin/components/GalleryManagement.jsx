@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { UploadCloud, Trash2, Pencil, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { UploadCloud, Trash2, Pencil, Image as ImageIcon, Loader2, MessageSquare } from 'lucide-react';
 import { LumaSpin } from '@/components/ui/luma-spin';
 import { galleryApi } from '@/api/galleryApi';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { EditGalleryModal } from './EditGalleryModal';
+import { ProductReviewsModal } from './ProductReviewsModal';
 import { JEWELLERY_CATEGORIES } from '@/constants/categories';
 
 export function GalleryManagement() {
@@ -13,6 +14,7 @@ export function GalleryManagement() {
   const [deletingId, setDeletingId] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [itemToEdit, setItemToEdit] = useState(null);
+  const [reviewItemToInspect, setReviewItemToInspect] = useState(null);
   const [savingEdit, setSavingEdit] = useState(false);
 
   const [title, setTitle] = useState('');
@@ -130,6 +132,24 @@ export function GalleryManagement() {
     }
   };
 
+  const handleReviewUpdated = (pieceId, updatedReviews) => {
+    setItems((prev) =>
+      prev.map((it) => {
+        if (String(it._id) === String(pieceId)) {
+          const totalScore = updatedReviews.reduce((sum, r) => sum + Number(r.rating || 5), 0);
+          const newAvg = updatedReviews.length > 0 ? Number((totalScore / updatedReviews.length).toFixed(1)) : 0;
+          return {
+            ...it,
+            reviews: updatedReviews,
+            reviewCount: updatedReviews.length,
+            averageRating: newAvg
+          };
+        }
+        return it;
+      })
+    );
+  };
+
   return (
     <div className="space-y-6">
       <div className="rounded-xl border border-border bg-card p-6 shadow-xs">
@@ -167,7 +187,7 @@ export function GalleryManagement() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. The Florentine Aurelian Sigil"
-                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
+                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
               />
             </div>
 
@@ -178,7 +198,7 @@ export function GalleryManagement() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 cursor-pointer"
+                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 cursor-pointer"
               >
                 {JEWELLERY_CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>
@@ -197,7 +217,7 @@ export function GalleryManagement() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="e.g. 18K Hand-hammered gold with raw uncut diamond"
-                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
+                className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
               />
             </div>
           </div>
@@ -208,7 +228,7 @@ export function GalleryManagement() {
             </label>
             {!previewUrl ? (
               <label className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl p-6 bg-muted/20 hover:bg-muted/40 cursor-pointer transition-colors group">
-                <UploadCloud className="size-8 text-muted-foreground group-hover:text-amber-500 transition-colors mb-2" />
+                <UploadCloud className="size-8 text-muted-foreground group-hover:text-foreground transition-colors mb-2" />
                 <span className="text-xs font-medium text-foreground">Click to upload photo or drag & drop</span>
                 <span className="text-[10px] text-muted-foreground mt-0.5">PNG, JPG, WEBP up to 10MB</span>
                 <input
@@ -244,7 +264,7 @@ export function GalleryManagement() {
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium transition-colors shadow-xs cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-foreground hover:bg-neutral-800 text-background text-xs font-medium transition-colors shadow-xs cursor-pointer disabled:opacity-50"
             >
               {submitting ? (
                 <>
@@ -272,7 +292,7 @@ export function GalleryManagement() {
 
         {loading ? (
           <div className="py-12 flex items-center justify-center">
-            <LumaSpin variant="amber" size={28} />
+            <LumaSpin size={28} />
           </div>
         ) : items.length === 0 ? (
           <div className="py-12 flex flex-col items-center justify-center text-center p-4 border border-dashed border-border rounded-xl">
@@ -282,57 +302,87 @@ export function GalleryManagement() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {items.map((item) => (
-              <div
-                key={item._id}
-                className="group relative rounded-xl border border-border bg-background overflow-hidden shadow-xs hover:border-amber-500/40 transition-colors duration-200"
-              >
-                <div className="aspect-[4/3] w-full overflow-hidden bg-neutral-900">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-90"
-                  />
-                </div>
-                <div className="p-3.5 flex items-start justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                      <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20">
-                        {item.category || 'Bridal Sets'}
+            {items.map((item) => {
+              const reviewCount = item.reviewCount ?? item.reviews?.length ?? 0;
+
+              return (
+                <div
+                  key={item._id}
+                  className="group relative rounded-xl border border-border/80 bg-background overflow-hidden shadow-xs hover:border-foreground/30 transition-colors duration-200 flex flex-col justify-between"
+                >
+                  <div className="aspect-[4/3] w-full overflow-hidden bg-neutral-900 relative">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setReviewItemToInspect(item)}
+                      className="absolute top-2.5 right-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-background/90 backdrop-blur-md text-foreground text-xs font-mono border border-border/80 shadow-xs hover:bg-background transition-colors cursor-pointer"
+                      title="View real-time customer appraisals"
+                    >
+                      <MessageSquare className="size-3" />
+                      <span>{reviewCount}</span>
+                    </button>
+                  </div>
+                  <div className="p-3.5 flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                        <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-md bg-muted text-foreground border border-border/60">
+                          {item.category || 'Bridal Sets'}
+                        </span>
+                      </div>
+                      <h4 className="font-serif text-sm font-semibold text-foreground truncate">{item.title}</h4>
+                      {item.description && (
+                        <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2 leading-relaxed">
+                          {item.description}
+                        </p>
+                      )}
+                      <span className="text-[9px] font-mono text-muted-foreground/70 mt-1 block">
+                        {new Date(item.createdAt).toLocaleDateString()}
                       </span>
                     </div>
-                    <h4 className="font-serif text-sm font-semibold text-foreground truncate">{item.title}</h4>
-                    {item.description && (
-                      <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2 leading-relaxed">
-                        {item.description}
-                      </p>
-                    )}
-                    <span className="text-[9px] font-mono text-muted-foreground/70 mt-1 block">
-                      {new Date(item.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button
-                      onClick={() => setItemToEdit(item)}
-                      className="p-1.5 rounded-md text-muted-foreground hover:bg-amber-500/10 hover:text-amber-600 transition-colors cursor-pointer"
-                      title="Edit project"
-                    >
-                      <Pencil className="size-3.5" />
-                    </button>
-                    <button
-                      onClick={() => setItemToDelete(item)}
-                      className="p-1.5 rounded-md text-muted-foreground hover:bg-rose-500/10 hover:text-rose-500 transition-colors cursor-pointer"
-                      title="Remove project"
-                    >
-                      <Trash2 className="size-3.5" />
-                    </button>
+                    <div className="flex items-center gap-1 shrink-0 pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => setReviewItemToInspect(item)}
+                        className="p-1.5 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer"
+                        title="View appraisals"
+                      >
+                        <MessageSquare className="size-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setItemToEdit(item)}
+                        className="p-1.5 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer"
+                        title="Edit project"
+                      >
+                        <Pencil className="size-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setItemToDelete(item)}
+                        className="p-1.5 rounded-md text-muted-foreground hover:bg-rose-500/10 hover:text-rose-500 transition-colors cursor-pointer"
+                        title="Remove project"
+                      >
+                        <Trash2 className="size-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
+
+      <ProductReviewsModal
+        isOpen={Boolean(reviewItemToInspect)}
+        onClose={() => setReviewItemToInspect(null)}
+        item={reviewItemToInspect}
+        onReviewUpdated={handleReviewUpdated}
+      />
 
       <EditGalleryModal
         isOpen={Boolean(itemToEdit)}

@@ -2,12 +2,11 @@ import React from 'react';
 import { Eye, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { GalleryManagement } from './GalleryManagement';
-import { AdminReviewsList } from './AdminReviewsList';
 
 export function GalleryAdminView() {
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-linear-to-r from-amber-500/10 via-amber-500/5 to-transparent p-5 rounded-xl border border-amber-500/20">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-card p-5 rounded-xl border border-border/80 shadow-xs">
         <div>
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-foreground font-serif">
             Atelier Gallery Management
@@ -21,7 +20,7 @@ export function GalleryAdminView() {
             to="/gallery"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium rounded-lg border border-border bg-background hover:bg-muted text-foreground transition-colors shadow-xs"
+            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium rounded-lg border border-border bg-background hover:bg-muted text-foreground transition-colors shadow-xs cursor-pointer"
           >
             <Eye className="size-3.5" />
             <span>Preview Client Slider</span>
@@ -31,8 +30,6 @@ export function GalleryAdminView() {
       </div>
 
       <GalleryManagement />
-
-      <AdminReviewsList />
     </div>
   );
 }

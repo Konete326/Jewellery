@@ -282,6 +282,7 @@ export function CinematicFooter() {
                 <MagneticButton
                   as={Link}
                   to="/"
+                  onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                   className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
                 >
                   Home
@@ -289,6 +290,7 @@ export function CinematicFooter() {
                 <MagneticButton
                   as={Link}
                   to="/gallery"
+                  onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                   className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
                 >
                   Gallery
@@ -296,6 +298,7 @@ export function CinematicFooter() {
                 <MagneticButton
                   as={Link}
                   to="/about"
+                  onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                   className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
                 >
                   About Us
@@ -303,6 +306,7 @@ export function CinematicFooter() {
                 <MagneticButton
                   as={Link}
                   to="/reviews"
+                  onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                   className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
                 >
                   Client Reviews
@@ -310,6 +314,7 @@ export function CinematicFooter() {
                 <MagneticButton
                   as={Link}
                   to="/contact"
+                  onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                   className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
                 >
                   Contact
@@ -317,6 +322,7 @@ export function CinematicFooter() {
                 <MagneticButton
                   as={Link}
                   to="/auth"
+                  onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                   className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
                 >
                   Sign In
@@ -325,6 +331,7 @@ export function CinematicFooter() {
                   <MagneticButton
                     as={Link}
                     to="/admin"
+                    onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                     className="border border-border/80 bg-neutral-100 dark:bg-neutral-800 text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-semibold cursor-pointer shadow-2xs"
                   >
                     Admin Suite →
