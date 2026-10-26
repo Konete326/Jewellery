@@ -3,7 +3,7 @@ import { Star, ExternalLink, ShieldCheck, HeartHandshake } from 'lucide-react';
 import { STORE_INFO } from '@/constants/storeInfo';
 
 export function GooglePlaceReviewBadge({ variant = 'card', className = '' }) {
-  const reviewUrl = STORE_INFO.social.googleReviewUrl || 'https://search.google.com/local/writereview?placeid=ChIJRb_2v3E-sz4RVemQFNbtWy8';
+  const reviewUrl = STORE_INFO.social.googleReviewUrl || 'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7';
 
   if (variant === 'button') {
     return (

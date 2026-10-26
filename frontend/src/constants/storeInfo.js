@@ -39,7 +39,7 @@ export const STORE_INFO = {
     facebook: 'https://www.facebook.com/thekhalilandsons/',
     googleMaps: 'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7',
     googleMapsDirections: 'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7',
-    googleReviewUrl: 'https://search.google.com/local/writereview?placeid=ChIJRb_2v3E-sz4RVemQFNbtWy8',
+    googleReviewUrl: 'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7',
     googleMapsEmbed:
       'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.12697338097!2d67.02520288678227!3d24.85951258840349!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33e71bff6bf45%3A0x2f5bedb61490e955!2sKhalil%20%26%20Sons%20Jewellers!5e0!3m2!1sen!2s!4v1792945310254!5m2!1sen!2s',
     website: 'https://khalilandsonsjewellers.com'

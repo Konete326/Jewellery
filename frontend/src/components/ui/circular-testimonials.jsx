@@ -182,13 +182,13 @@ export const CircularTestimonials = ({
             >
               <div>
                 <h3
-                  className="font-serif font-light tracking-wide"
+                  className="font-serif font-light tracking-wide break-words max-w-full leading-snug"
                   style={{ color: colorName, fontSize: fontSizeName }}
                 >
                   {activeTestimonial.name}
                 </h3>
                 <p
-                  className="font-mono text-xs uppercase tracking-widest mt-1 text-amber-600 dark:text-amber-400"
+                  className="font-mono text-xs uppercase tracking-widest mt-1 text-amber-600 dark:text-amber-400 break-words"
                   style={{ fontSize: fontSizeDesignation }}
                 >
                   {activeTestimonial.designation}

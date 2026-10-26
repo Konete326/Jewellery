@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MapPin, Navigation, ExternalLink, Phone, Clock, Star, Gem, Sparkles, Copy, Check } from 'lucide-react';
 import { Map, MapMarker, MarkerContent, MarkerTooltip } from '@/components/ui/mapcn-marker-content';
+import { GooglePlaceReviewBadge } from '@/user/components/GooglePlaceReviewBadge';
 import { STORE_INFO } from '@/constants/storeInfo';
 import { toast } from 'sonner';
 
@@ -65,6 +66,8 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
               </button>
             </div>
 
+            <GooglePlaceReviewBadge variant="button" />
+
             <a
               href={STORE_INFO.social.googleMapsDirections}
               target="_blank"
@@ -77,6 +80,8 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
             </a>
           </div>
         </div>
+
+        <GooglePlaceReviewBadge variant="card" />
 
         <div className="relative w-full h-[400px] sm:h-[480px] rounded-2xl overflow-hidden border border-border shadow-xs bg-muted/40">
           {viewMode === 'vector' ? (

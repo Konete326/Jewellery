@@ -51,6 +51,13 @@ export function UsersAdminView() {
 
   const handleStatusToggleConfirm = async () => {
     if (!statusTargetUser?._id) return;
+    if (statusTargetUser.email?.toLowerCase() === currentUser?.email?.toLowerCase()) {
+      toast.error('Action blocked', {
+        description: 'You cannot deactivate your own administrative account.'
+      });
+      setStatusTargetUser(null);
+      return;
+    }
     const nextStatus = statusTargetUser.isActive === false;
     try {
       setStatusLoading(true);

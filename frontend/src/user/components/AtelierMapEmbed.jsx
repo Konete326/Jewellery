@@ -4,7 +4,7 @@ import { STORE_INFO } from '@/constants/storeInfo';
 import { GooglePlaceReviewBadge } from '@/user/components/GooglePlaceReviewBadge';
 
 export function AtelierMapEmbed() {
-  const reviewUrl = STORE_INFO.social.googleReviewUrl || 'https://search.google.com/local/writereview?placeid=ChIJRb_2v3E-sz4RVemQFNbtWy8';
+  const reviewUrl = STORE_INFO.social.googleReviewUrl || 'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7';
 
   return (
     <section className="w-full mt-10">

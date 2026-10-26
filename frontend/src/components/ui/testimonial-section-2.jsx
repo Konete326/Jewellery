@@ -172,44 +172,44 @@ export function TestimonialSection2({
                 <X size={18} />
               </button>
 
-              <div className="flex flex-col items-center text-center">
-                <p className="text-lg sm:text-xl font-serif font-light italic leading-relaxed mb-6 text-neutral-200">
+              <div className="flex flex-col items-center text-center w-full min-w-0">
+                <p className="text-lg sm:text-xl font-serif font-light italic leading-relaxed mb-6 text-neutral-200 break-words max-w-full">
                   &ldquo;{selected.quote}&rdquo;
                 </p>
 
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="relative size-12 rounded-full overflow-hidden border-2 border-amber-500/50">
+                <div className="flex items-center gap-4 mb-4 max-w-full min-w-0">
+                  <div className="relative size-12 rounded-full overflow-hidden border-2 border-amber-500/50 shrink-0">
                     <img
                       src={selected.image}
                       alt={selected.name}
                       className="size-full object-cover object-top"
                     />
                   </div>
-                  <div className="text-left">
-                    <h4 className="font-serif font-medium text-sm text-amber-200">
+                  <div className="text-left min-w-0 flex-1">
+                    <h4 className="font-serif font-medium text-sm text-amber-200 break-words leading-snug">
                       {selected.name}
                     </h4>
-                    <p className="text-xs text-neutral-400 font-mono uppercase tracking-wider">
+                    <p className="text-xs text-neutral-400 font-mono uppercase tracking-wider break-words mt-0.5">
                       {selected.role}
                     </p>
                   </div>
                 </div>
 
                 {selected.productTitle && (
-                  <div className="w-full mt-2 pt-4 border-t border-white/10 flex items-center justify-between text-left bg-white/5 p-3 rounded-xl">
-                    <div className="flex items-center gap-3">
+                  <div className="w-full mt-2 pt-4 border-t border-white/10 flex items-center justify-between text-left bg-white/5 p-3 rounded-xl gap-2">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
                       {selected.productImage && (
                         <img
                           src={selected.productImage}
                           alt={selected.productTitle}
-                          className="size-10 rounded-lg object-cover border border-amber-500/30"
+                          className="size-10 rounded-lg object-cover border border-amber-500/30 shrink-0"
                         />
                       )}
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <span className="text-[10px] text-amber-400 font-mono uppercase tracking-widest block">
                           Masterpiece Reviewed
                         </span>
-                        <span className="text-xs font-medium text-neutral-200 line-clamp-1">
+                        <span className="text-xs font-medium text-neutral-200 truncate block">
                           {selected.productTitle}
                         </span>
                       </div>
@@ -241,7 +241,7 @@ function Capsule({ testimonial, onClick }) {
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
       onClick={onClick}
-      className="group flex items-center gap-3.5 p-1.5 pr-6 rounded-full bg-background border border-border hover:border-amber-500/60 cursor-pointer transition-[border-color,box-shadow] shadow-xs hover:shadow-md text-left"
+      className="group flex items-center gap-3.5 p-1.5 pr-6 rounded-full bg-background border border-border hover:border-amber-500/60 cursor-pointer transition-[border-color,box-shadow] shadow-xs hover:shadow-md text-left max-w-[280px]"
     >
       <div className="relative size-11 rounded-full overflow-hidden border border-border group-hover:border-amber-500 transition-colors shrink-0">
         <img
@@ -251,11 +251,17 @@ function Capsule({ testimonial, onClick }) {
           loading="lazy"
         />
       </div>
-      <div className="flex flex-col items-start leading-tight">
-        <span className="text-xs font-semibold text-foreground group-hover:text-amber-600 transition-colors">
+      <div className="flex flex-col items-start leading-tight min-w-0">
+        <span
+          className="text-xs font-semibold text-foreground group-hover:text-amber-600 transition-colors truncate max-w-[140px] block"
+          title={testimonial.name}
+        >
           {testimonial.name}
         </span>
-        <span className="text-[10px] text-muted-foreground font-mono truncate max-w-[140px]">
+        <span
+          className="text-[10px] text-muted-foreground font-mono truncate max-w-[140px] block"
+          title={testimonial.productTitle || testimonial.role}
+        >
           {testimonial.productTitle || testimonial.role}
         </span>
       </div>
