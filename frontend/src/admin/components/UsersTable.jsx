@@ -1,8 +1,14 @@
 import React from 'react';
-import { Key, Shield, Trash2, ShieldCheck, User } from 'lucide-react';
+import { Key, Shield, ShieldCheck, ShieldAlert, User, Eye, UserX, UserCheck } from 'lucide-react';
 import { GoogleIcon } from '@/components/google-icon';
 
-export function UsersTable({ users = [], onRoleToggle, onDelete, currentAdminEmail }) {
+export function UsersTable({
+  users = [],
+  onViewActivities,
+  onRoleChange,
+  onStatusToggle,
+  currentAdminEmail
+}) {
   const formatDate = (dateString) => {
     if (!dateString) return '—';
     try {
@@ -64,6 +70,7 @@ export function UsersTable({ users = [], onRoleToggle, onDelete, currentAdminEma
             <th className="py-3 px-4">Client / Collector</th>
             <th className="py-3 px-4">Auth Method</th>
             <th className="py-3 px-4">Atelier Role</th>
+            <th className="py-3 px-4">Account Status</th>
             <th className="py-3 px-4">Joined Date</th>
             <th className="py-3 px-4">Last Activity</th>
             <th className="py-3 px-4 text-right">Actions</th>
@@ -73,6 +80,7 @@ export function UsersTable({ users = [], onRoleToggle, onDelete, currentAdminEma
           {users.map((user) => {
             const isGoogle = user.authProvider === 'google';
             const isAdmin = user.role === 'admin';
+            const isActive = user.isActive !== false;
             const isSelf = user.email?.toLowerCase() === currentAdminEmail?.toLowerCase();
 
             return (
@@ -125,16 +133,12 @@ export function UsersTable({ users = [], onRoleToggle, onDelete, currentAdminEma
                 </td>
 
                 <td className="py-3 px-4">
-                  <button
-                    type="button"
-                    disabled={isSelf}
-                    onClick={() => onRoleToggle && onRoleToggle(user)}
-                    title={isSelf ? 'Cannot change own role' : 'Click to toggle role'}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border transition-colors ${
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${
                       isAdmin
                         ? 'bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/25'
-                        : 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25'
-                    } ${isSelf ? 'cursor-default' : 'cursor-pointer hover:opacity-80'}`}
+                        : 'bg-muted text-muted-foreground border-border'
+                    }`}
                   >
                     {isAdmin ? (
                       <ShieldCheck className="size-3 shrink-0" />
@@ -142,7 +146,20 @@ export function UsersTable({ users = [], onRoleToggle, onDelete, currentAdminEma
                       <User className="size-3 shrink-0" />
                     )}
                     <span className="capitalize">{user.role}</span>
-                  </button>
+                  </span>
+                </td>
+
+                <td className="py-3 px-4">
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${
+                      isActive
+                        ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25'
+                        : 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/25'
+                    }`}
+                  >
+                    <span className={`size-1.5 rounded-full ${isActive ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                    <span>{isActive ? 'Active' : 'Deactivated'}</span>
+                  </span>
                 </td>
 
                 <td className="py-3 px-4 text-muted-foreground font-mono text-[11px]">
@@ -154,19 +171,46 @@ export function UsersTable({ users = [], onRoleToggle, onDelete, currentAdminEma
                 </td>
 
                 <td className="py-3 px-4 text-right">
-                  <button
-                    type="button"
-                    disabled={isSelf}
-                    onClick={() => onDelete && onDelete(user)}
-                    title={isSelf ? 'Cannot delete current account' : 'Delete user'}
-                    className={`p-1.5 rounded-md text-muted-foreground transition-colors ${
-                      isSelf
-                        ? 'opacity-30 cursor-not-allowed'
-                        : 'hover:text-rose-600 hover:bg-rose-500/10 cursor-pointer'
-                    }`}
-                  >
-                    <Trash2 className="size-4" />
-                  </button>
+                  <div className="flex items-center justify-end gap-1">
+                    <button
+                      type="button"
+                      onClick={() => onViewActivities && onViewActivities(user)}
+                      title="View client activity & dossier"
+                      className="p-1.5 rounded-md text-muted-foreground hover:text-amber-600 hover:bg-amber-500/10 transition-colors cursor-pointer"
+                    >
+                      <Eye className="size-4" />
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={isSelf}
+                      onClick={() => onRoleChange && onRoleChange(user)}
+                      title={isSelf ? 'Cannot modify own privileges' : (isAdmin ? 'Demote to Customer' : 'Promote to Administrator')}
+                      className={`p-1.5 rounded-md text-muted-foreground transition-colors ${
+                        isSelf
+                          ? 'opacity-30 cursor-not-allowed'
+                          : 'hover:text-purple-600 hover:bg-purple-500/10 cursor-pointer'
+                      }`}
+                    >
+                      {isAdmin ? <ShieldAlert className="size-4" /> : <ShieldCheck className="size-4" />}
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={isSelf}
+                      onClick={() => onStatusToggle && onStatusToggle(user)}
+                      title={isSelf ? 'Cannot deactivate own account' : (isActive ? 'Deactivate Account' : 'Activate Account')}
+                      className={`p-1.5 rounded-md transition-colors ${
+                        isSelf
+                          ? 'opacity-30 cursor-not-allowed text-muted-foreground'
+                          : isActive
+                          ? 'text-muted-foreground hover:text-amber-600 hover:bg-amber-500/10 cursor-pointer'
+                          : 'text-rose-600 hover:text-emerald-600 hover:bg-emerald-500/10 cursor-pointer'
+                      }`}
+                    >
+                      {isActive ? <UserX className="size-4" /> : <UserCheck className="size-4" />}
+                    </button>
+                  </div>
                 </td>
               </tr>
             );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, MessageCircle, Mail, Calendar, ZoomIn, Gem } from 'lucide-react';
+import { Star, MessageCircle, Mail, Calendar, ZoomIn, Gem, Sparkles } from 'lucide-react';
 import { LuxuryButton } from './LuxuryButton';
 import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
@@ -41,7 +41,7 @@ export function GalleryMasterpieceHero({
             </h1>
 
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              {hasQualifyingRating ? (
+              {reviewCount > 0 ? (
                 <div
                   onClick={onOpenReview}
                   className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/25 cursor-pointer hover:bg-amber-500/15 transition-colors group"
@@ -51,17 +51,17 @@ export function GalleryMasterpieceHero({
                     <span className="font-semibold text-xs text-[#2d3435]">{rating.toFixed(1)}</span>
                   </div>
                   <span className="text-[11px] text-[#5f5e5e] group-hover:text-amber-700">
-                    ({reviewCount} Verified Client Appraisals)
+                    ({reviewCount} Verified {reviewCount === 1 ? 'Appraisal' : 'Appraisals'})
                   </span>
                 </div>
               ) : (
                 <div
                   onClick={onOpenReview}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-amber-500/10 border border-neutral-200/80 cursor-pointer transition-colors"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 cursor-pointer transition-colors group"
                 >
-                  <Star className="size-3.5 text-amber-600" />
-                  <span className="text-xs font-medium text-[#2d3435]">Atelier Masterpiece</span>
-                  <span className="text-[11px] text-amber-700 underline underline-offset-2">Rate Piece</span>
+                  <Sparkles className="size-3.5 text-amber-600" />
+                  <span className="text-xs font-serif font-medium text-[#2d3435]">Awaiting First Appraisal</span>
+                  <span className="text-[11px] text-amber-700 font-medium underline underline-offset-2">Be First to Review</span>
                 </div>
               )}
 

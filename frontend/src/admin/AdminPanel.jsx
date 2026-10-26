@@ -5,6 +5,7 @@ import { DashboardOverview } from './components/DashboardOverview'
 import { GalleryAdminView } from './components/GalleryAdminView'
 import { InquiriesAdminView } from './components/InquiriesAdminView'
 import { UsersAdminView } from './components/UsersAdminView'
+import { ReviewsAdminView } from './components/ReviewsAdminView'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { toast } from 'sonner'
 
@@ -53,6 +54,9 @@ export function AdminPanel() {
         return <InquiriesAdminView />
       case 'gallery':
         return <GalleryAdminView />
+      case 'reviews':
+      case 'appraisals':
+        return <ReviewsAdminView />
       case 'customers':
       case 'users':
         return <UsersAdminView />

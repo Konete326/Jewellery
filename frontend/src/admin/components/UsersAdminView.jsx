@@ -4,7 +4,9 @@ import { usersApi } from '@/api/users.api.js';
 import { getAuthUser } from '@/lib/auth.js';
 import { UsersMetrics } from './UsersMetrics';
 import { UsersTable } from './UsersTable';
-import { ConfirmDeleteModal } from './ConfirmDeleteModal';
+import { ConfirmStatusModal } from './ConfirmStatusModal';
+import { ConfirmRoleModal } from './ConfirmRoleModal';
+import { UserActivityModal } from './UserActivityModal';
 import { Button } from '@/components/ui/button';
 import { LumaSpin } from '@/components/ui/luma-spin';
 import { toast } from 'sonner';
@@ -15,8 +17,13 @@ export function UsersAdminView() {
   const [searchQuery, setSearchQuery] = useState('');
   const [providerFilter, setProviderFilter] = useState('All');
   const [roleFilter, setRoleFilter] = useState('All');
-  const [deletingUser, setDeletingUser] = useState(null);
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('All');
+
+  const [activityUser, setActivityUser] = useState(null);
+  const [statusTargetUser, setStatusTargetUser] = useState(null);
+  const [statusLoading, setStatusLoading] = useState(false);
+  const [roleTargetUser, setRoleTargetUser] = useState(null);
+  const [roleLoading, setRoleLoading] = useState(false);
 
   const currentUser = getAuthUser();
 
@@ -42,37 +49,43 @@ export function UsersAdminView() {
     loadUsers();
   }, []);
 
-  const handleRoleToggle = async (targetUser) => {
-    const nextRole = targetUser.role === 'admin' ? 'customer' : 'admin';
+  const handleStatusToggleConfirm = async () => {
+    if (!statusTargetUser?._id) return;
+    const nextStatus = statusTargetUser.isActive === false;
     try {
-      await usersApi.updateRole(targetUser._id, nextRole);
-      toast.success(`Role updated for ${targetUser.name}`, {
-        description: `Now assigned as ${nextRole}`
+      setStatusLoading(true);
+      await usersApi.updateStatus(statusTargetUser._id, nextStatus);
+      toast.success(`Account ${nextStatus ? 'activated' : 'deactivated'}`, {
+        description: `${statusTargetUser.name}'s sign-in access is now ${nextStatus ? 'enabled' : 'suspended'}.`
       });
+      setStatusTargetUser(null);
       loadUsers();
     } catch (err) {
-      toast.error('Failed to update role', {
-        description: err.message || 'Unable to modify privileges'
+      toast.error('Failed to update account status', {
+        description: err.message || 'Unable to modify status'
       });
+    } finally {
+      setStatusLoading(false);
     }
   };
 
-  const handleDeleteConfirm = async () => {
-    if (!deletingUser?._id) return;
+  const handleRoleChangeConfirm = async () => {
+    if (!roleTargetUser?._id) return;
+    const nextRole = roleTargetUser.role === 'admin' ? 'customer' : 'admin';
     try {
-      setDeleteLoading(true);
-      await usersApi.delete(deletingUser._id);
-      toast.success('User account removed', {
-        description: `${deletingUser.name} has been deleted.`
+      setRoleLoading(true);
+      await usersApi.updateRole(roleTargetUser._id, nextRole);
+      toast.success(`Role updated for ${roleTargetUser.name}`, {
+        description: `Privileges changed to ${nextRole === 'admin' ? 'Administrator' : 'Customer'}`
       });
-      setDeletingUser(null);
+      setRoleTargetUser(null);
       loadUsers();
     } catch (err) {
-      toast.error('Failed to delete account', {
-        description: err.message || 'Could not complete deletion'
+      toast.error('Failed to change role', {
+        description: err.message || 'Unable to modify privileges'
       });
     } finally {
-      setDeleteLoading(false);
+      setRoleLoading(false);
     }
   };
 
@@ -89,7 +102,12 @@ export function UsersAdminView() {
     const matchesRole =
       roleFilter === 'All' || u.role === roleFilter;
 
-    return matchesSearch && matchesProvider && matchesRole;
+    const matchesStatus =
+      statusFilter === 'All' ||
+      (statusFilter === 'active' && u.isActive !== false) ||
+      (statusFilter === 'deactivated' && u.isActive === false);
+
+    return matchesSearch && matchesProvider && matchesRole && matchesStatus;
   });
 
   return (
@@ -105,7 +123,7 @@ export function UsersAdminView() {
             </h2>
           </div>
           <p className="text-xs text-muted-foreground">
-            Monitor registered buyers, VIP collectors, and authentication channels
+            Manage collector access, administrative privileges, and dossier activity records
           </p>
         </div>
 
@@ -135,9 +153,9 @@ export function UsersAdminView() {
           />
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0">
-          <div className="flex items-center gap-1.5 p-1 rounded-lg border border-border bg-muted/30 text-xs">
-            <Filter className="size-3.5 text-muted-foreground ml-1.5" />
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 flex-wrap">
+          <div className="flex items-center gap-1 p-1 rounded-lg border border-border bg-muted/30 text-xs">
+            <Filter className="size-3.5 text-muted-foreground ml-1.5 mr-0.5" />
             <button
               onClick={() => setProviderFilter('All')}
               className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
@@ -170,7 +188,7 @@ export function UsersAdminView() {
             </button>
           </div>
 
-          <div className="flex items-center gap-1.5 p-1 rounded-lg border border-border bg-muted/30 text-xs">
+          <div className="flex items-center gap-1 p-1 rounded-lg border border-border bg-muted/30 text-xs">
             <button
               onClick={() => setRoleFilter('All')}
               className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
@@ -202,30 +220,79 @@ export function UsersAdminView() {
               Admins
             </button>
           </div>
+
+          <div className="flex items-center gap-1 p-1 rounded-lg border border-border bg-muted/30 text-xs">
+            <button
+              onClick={() => setStatusFilter('All')}
+              className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                statusFilter === 'All'
+                  ? 'bg-background shadow-xs text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              All Status
+            </button>
+            <button
+              onClick={() => setStatusFilter('active')}
+              className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                statusFilter === 'active'
+                  ? 'bg-background shadow-xs text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Active
+            </button>
+            <button
+              onClick={() => setStatusFilter('deactivated')}
+              className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                statusFilter === 'deactivated'
+                  ? 'bg-background shadow-xs text-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Deactivated
+            </button>
+          </div>
         </div>
       </div>
 
       {loading ? (
-        <div className="py-20 flex flex-col items-center justify-center gap-3 text-muted-foreground border border-dashed border-border rounded-xl bg-card/40">
-          <LumaSpin variant="amber" size={48} />
-          <span className="text-xs">Synchronizing clientele records...</span>
+        <div className="py-20 flex items-center justify-center border border-dashed border-border rounded-xl bg-card/40">
+          <LumaSpin variant="amber" size={28} />
         </div>
       ) : (
         <UsersTable
           users={filteredUsers}
-          onRoleToggle={handleRoleToggle}
-          onDelete={(u) => setDeletingUser(u)}
+          onViewActivities={(u) => setActivityUser(u)}
+          onRoleChange={(u) => setRoleTargetUser(u)}
+          onStatusToggle={(u) => setStatusTargetUser(u)}
           currentAdminEmail={currentUser?.email}
         />
       )}
 
-      <ConfirmDeleteModal
-        isOpen={Boolean(deletingUser)}
-        onClose={() => setDeletingUser(null)}
-        onConfirm={handleDeleteConfirm}
-        title={deletingUser ? `${deletingUser.name} (${deletingUser.email})` : ''}
-        itemType="user account"
-        loading={deleteLoading}
+      <UserActivityModal
+        isOpen={Boolean(activityUser)}
+        onClose={() => setActivityUser(null)}
+        user={activityUser}
+        onToggleStatus={(u) => setStatusTargetUser(u)}
+        onToggleRole={(u) => setRoleTargetUser(u)}
+        isSelf={activityUser?.email?.toLowerCase() === currentUser?.email?.toLowerCase()}
+      />
+
+      <ConfirmStatusModal
+        isOpen={Boolean(statusTargetUser)}
+        onClose={() => setStatusTargetUser(null)}
+        onConfirm={handleStatusToggleConfirm}
+        user={statusTargetUser}
+        loading={statusLoading}
+      />
+
+      <ConfirmRoleModal
+        isOpen={Boolean(roleTargetUser)}
+        onClose={() => setRoleTargetUser(null)}
+        onConfirm={handleRoleChangeConfirm}
+        user={roleTargetUser}
+        loading={roleLoading}
       />
     </div>
   );

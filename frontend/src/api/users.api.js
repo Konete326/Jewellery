@@ -36,6 +36,19 @@ export const usersApi = {
     });
   },
 
+  async updateStatus(id, isActive) {
+    return await apiClient(ENDPOINTS.USERS_STATUS(id), {
+      method: 'PATCH',
+      body: JSON.stringify({ isActive })
+    });
+  },
+
+  async getActivities(id) {
+    return await apiClient(ENDPOINTS.USERS_ACTIVITIES(id), {
+      method: 'GET'
+    });
+  },
+
   async delete(id) {
     return await apiClient(ENDPOINTS.USER_BY_ID(id), {
       method: 'DELETE'

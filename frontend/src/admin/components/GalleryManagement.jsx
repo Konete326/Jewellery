@@ -271,9 +271,8 @@ export function GalleryManagement() {
         </div>
 
         {loading ? (
-          <div className="py-12 flex flex-col items-center justify-center gap-3 text-muted-foreground">
-            <LumaSpin variant="amber" size={48} />
-            <span className="text-xs">Loading atelier archive...</span>
+          <div className="py-12 flex items-center justify-center">
+            <LumaSpin variant="amber" size={28} />
           </div>
         ) : items.length === 0 ? (
           <div className="py-12 flex flex-col items-center justify-center text-center p-4 border border-dashed border-border rounded-xl">

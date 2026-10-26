@@ -1,14 +1,8 @@
-interface LumaSpinProps {
-  className?: string;
-  size?: number;
-  variant?: 'default' | 'amber' | 'gold' | 'light';
-}
-
 export const Component = ({
   className = '',
   size = 65,
   variant = 'default'
-}: LumaSpinProps) => {
+} = {}) => {
   const scale = size ? size / 65 : 1;
   const shadowColor = {
     default: 'shadow-gray-800 dark:shadow-gray-100',
@@ -22,14 +16,17 @@ export const Component = ({
       className={`relative inline-flex items-center justify-center shrink-0 ${className}`}
       style={{
         width: `${size}px`,
-        height: `${size}px`,
-        transform: scale !== 1 ? `scale(${scale})` : undefined,
-        transformOrigin: 'center center'
+        height: `${size}px`
       }}
       role="status"
       aria-label="Loading"
     >
-      <div className="relative w-[65px] aspect-square">
+      <div
+        className="relative w-[65px] aspect-square origin-center shrink-0"
+        style={{
+          transform: scale !== 1 ? `scale(${scale})` : undefined
+        }}
+      >
         <span
           className={`absolute rounded-[50px] animate-loaderAnim shadow-[inset_0_0_0_3px] ${shadowColor}`}
         />

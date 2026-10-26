@@ -11,6 +11,9 @@ export class UserService {
     const role = isAdminEmail(normalizedEmail) ? 'admin' : 'customer';
 
     if (user) {
+      if (user.isActive === false) {
+        throw new Error('This account has been deactivated. Please contact boutique concierge.');
+      }
       user.lastLoginAt = new Date();
       if (role === 'admin') user.role = 'admin';
       if (avatar && !user.avatar) user.avatar = avatar;
@@ -83,6 +86,9 @@ export class UserService {
 
     const user = await userRepository.findByEmail(normalizedEmail);
     if (!user) throw new Error('Invalid email or password');
+    if (user.isActive === false) {
+      throw new Error('This account has been deactivated. Please contact boutique concierge.');
+    }
     if (user.authProvider === 'google' && !user.password) {
       throw new Error('This account was registered with Google. Please use Google Sign-In.');
     }
@@ -99,15 +105,6 @@ export class UserService {
 
   async getAllUsers() {
     return await userRepository.findAll();
-  }
-
-  async updateUserRole(id, role) {
-    if (!['customer', 'admin'].includes(role)) throw new Error('Invalid user role');
-    return await userRepository.update(id, { role });
-  }
-
-  async deleteUser(id) {
-    return await userRepository.delete(id);
   }
 }
 

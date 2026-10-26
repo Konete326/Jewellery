@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, ShieldCheck, MessageSquare, Plus } from 'lucide-react';
+import { Star, ShieldCheck, MessageSquare, Plus, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }) {
@@ -34,21 +34,24 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
       {displayReviews.length === 0 ? (
         <div className="p-8 rounded-2xl bg-white/70 border border-neutral-200/80 text-center flex flex-col items-center justify-center space-y-3">
           <div className="size-12 rounded-full bg-amber-500/10 text-amber-700 flex items-center justify-center">
-            <MessageSquare className="size-5" />
+            <Sparkles className="size-5" />
           </div>
-          <div>
-            <h4 className="font-serif text-base font-medium text-[#2d3435]">No Reviews Yet</h4>
+          <div className="flex flex-col items-center">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/25 text-amber-900 text-xs font-serif font-medium mb-2">
+              <Sparkles className="size-3 text-amber-600" />
+              <span>Awaiting First Appraisal</span>
+            </div>
+            <h4 className="font-serif text-base font-medium text-[#2d3435]">Atelier Premier Creation</h4>
             <p className="text-xs text-[#5a6061] font-light mt-1 max-w-md">
-              Be the first to share your thoughts about this jewellery piece.
+              This handcrafted masterpiece has recently been unveiled from our Saddar atelier. Be the first patron to share your certified appraisal.
             </p>
           </div>
           <Button
             onClick={onOpenReviewModal}
             size="sm"
-            variant="outline"
-            className="text-xs uppercase tracking-wider font-medium mt-2"
+            className="text-xs uppercase tracking-wider font-medium mt-2 bg-amber-600 hover:bg-amber-700 text-white cursor-pointer"
           >
-            Write the First Review
+            Submit First Appraisal
           </Button>
         </div>
       ) : (

@@ -9,6 +9,8 @@ router.post('/register', userController.register);
 router.post('/login', userController.login);
 router.get('/', userController.getAll);
 router.patch('/:id/role', userController.updateRole);
+router.patch('/:id/status', userController.updateStatus);
+router.get('/:id/activities', userController.getActivities);
 router.delete('/:id', userController.delete);
 
 router.get('/wishlist/:email', wishlistController.getWishlist);

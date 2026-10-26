@@ -141,11 +141,8 @@ export function GalleryDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f9f9f9] flex flex-col items-center justify-center gap-4">
-        <LumaSpin variant="amber" size={65} />
-        <span className="text-xs font-serif tracking-[0.2em] text-[#5a6061] uppercase">
-          Unveiling Masterpiece...
-        </span>
+      <div className="min-h-screen bg-[#f9f9f9] flex items-center justify-center">
+        <LumaSpin variant="amber" size={30} />
       </div>
     );
   }

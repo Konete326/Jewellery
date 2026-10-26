@@ -147,9 +147,8 @@ export function InquiriesAdminView() {
         </div>
 
         {loading ? (
-          <div className="py-16 flex flex-col items-center justify-center gap-3 text-muted-foreground">
-            <LumaSpin variant="amber" size={48} />
-            <span className="text-xs">Synchronizing atelier records...</span>
+          <div className="py-16 flex items-center justify-center">
+            <LumaSpin variant="amber" size={28} />
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-16 flex flex-col items-center justify-center text-center px-4">

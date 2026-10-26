@@ -1,4 +1,5 @@
 import { userService } from './user.service.js';
+import { userAdminService } from './user.admin.service.js';
 import { sendSuccess, sendError } from '../../utils/apiResponse.js';
 
 export class UserController {
@@ -50,17 +51,38 @@ export class UserController {
     try {
       const { id } = req.params;
       const { role } = req.body;
-      const updated = await userService.updateUserRole(id, role);
+      const updated = await userAdminService.updateUserRole(id, role);
       return sendSuccess(res, 200, 'User role updated', updated);
     } catch (error) {
       return sendError(res, 400, error.message);
     }
   }
 
+  async updateStatus(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { isActive } = req.body;
+      const updated = await userAdminService.updateUserStatus(id, isActive);
+      return sendSuccess(res, 200, `User account ${isActive ? 'activated' : 'deactivated'}`, updated);
+    } catch (error) {
+      return sendError(res, 400, error.message);
+    }
+  }
+
+  async getActivities(req, res, next) {
+    try {
+      const { id } = req.params;
+      const data = await userAdminService.getUserActivities(id);
+      return sendSuccess(res, 200, 'User activities retrieved', data);
+    } catch (error) {
+      return sendError(res, 404, error.message);
+    }
+  }
+
   async delete(req, res, next) {
     try {
       const { id } = req.params;
-      await userService.deleteUser(id);
+      await userAdminService.deleteUser(id);
       return sendSuccess(res, 200, 'User removed successfully');
     } catch (error) {
       next(error);

@@ -2,7 +2,8 @@ import {
   LayoutGridIcon,
   ImageIcon,
   MessageSquareIcon,
-  UsersIcon
+  UsersIcon,
+  StarIcon
 } from "lucide-react";
 
 export const navGroups = [
@@ -22,10 +23,16 @@ export const navGroups = [
         icon: <ImageIcon className="size-4" />
       },
       {
-        title: "Inquiries & Appraisals",
+        title: "Inquiries & Consultations",
         path: "/admin/inquiries",
         key: "inquiries",
         icon: <MessageSquareIcon className="size-4" />
+      },
+      {
+        title: "Client Reviews",
+        path: "/admin/reviews",
+        key: "reviews",
+        icon: <StarIcon className="size-4" />
       }
     ]
   },

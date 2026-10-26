@@ -49,5 +49,25 @@ export const galleryApi = {
 
   getRecentReviews: async (limit = 15) => {
     return await apiClient(`${ENDPOINTS.GALLERY_RECENT_REVIEWS}?limit=${limit}`);
+  },
+
+  getAllReviews: async () => {
+    return await apiClient(ENDPOINTS.GALLERY_ALL_REVIEWS);
+  },
+
+  updateReview: async (pieceId, reviewId, data) => {
+    return await apiClient(ENDPOINTS.GALLERY_REVIEW_ITEM(pieceId, reviewId), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+  },
+
+  deleteReview: async (pieceId, reviewId) => {
+    return await apiClient(ENDPOINTS.GALLERY_REVIEW_ITEM(pieceId, reviewId), {
+      method: 'DELETE'
+    });
   }
 };

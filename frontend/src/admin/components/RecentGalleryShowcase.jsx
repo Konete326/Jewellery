@@ -32,9 +32,8 @@ export function RecentGalleryShowcase({ galleryItems = [], loading = false }) {
       </div>
 
       {loading ? (
-        <div className="py-10 flex flex-col items-center justify-center gap-2 text-xs text-muted-foreground">
-          <LumaSpin variant="amber" size={40} />
-          <span>Loading atelier masterpieces...</span>
+        <div className="py-10 flex items-center justify-center">
+          <LumaSpin variant="amber" size={26} />
         </div>
       ) : galleryItems.length === 0 ? (
         <div className="py-10 flex flex-col items-center justify-center text-center px-4">
