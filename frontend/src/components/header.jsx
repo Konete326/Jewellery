@@ -54,18 +54,18 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 						: "border-transparent bg-background/70 backdrop-blur-xs"
 				)}
 			>
-				<nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-8">
-					<div className="flex items-center gap-6">
+				<nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-3 sm:px-8">
+					<div className="flex items-center gap-3 sm:gap-6 min-w-0">
 						<Link
 							to="/"
-							className="flex items-center gap-3 group transition-opacity hover:opacity-90"
+							className="flex items-center gap-2 sm:gap-3 group transition-opacity hover:opacity-90 shrink-0"
 						>
 							<img
 								src="/assets/logo.png"
 								alt="Khalil & Sons"
-								className="size-8 object-contain"
+								className="size-7 sm:size-8 object-contain shrink-0"
 							/>
-							<span className="font-serif text-lg sm:text-xl tracking-[0.2em] font-light text-foreground">
+							<span className="font-serif text-xs sm:text-base md:text-xl tracking-[0.1em] sm:tracking-[0.18em] font-light text-foreground whitespace-nowrap">
 								KHALIL & SONS
 							</span>
 						</Link>
@@ -131,7 +131,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 							variant="ghost"
 							size="icon"
 							onClick={() => setVaultOpen(true)}
-							className="relative size-9 text-muted-foreground hover:text-foreground cursor-pointer"
+							className="relative size-9 text-muted-foreground hover:text-foreground cursor-pointer hidden sm:inline-flex"
 							aria-label="Atelier Vault"
 						>
 							<Heart className="size-4" />

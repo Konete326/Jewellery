@@ -173,7 +173,9 @@ export function CinematicFooter() {
     if (typeof window === "undefined") return;
     if (!wrapperRef.current) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
       gsap.fromTo(
         giantTextRef.current,
         { y: "6vh", scale: 0.92, opacity: 0 },
@@ -207,9 +209,23 @@ export function CinematicFooter() {
           },
         }
       );
-    }, wrapperRef);
+    });
 
-    return () => ctx.revert();
+    mm.add("(max-width: 767px)", () => {
+      gsap.set([headingRef.current, linksRef.current], {
+        opacity: 1,
+        y: 0,
+        clearProps: "all",
+      });
+      gsap.set(giantTextRef.current, {
+        opacity: 0.08,
+        y: 0,
+        scale: 1,
+        clearProps: "transform",
+      });
+    });
+
+    return () => mm.revert();
   }, []);
 
   const scrollToTop = () => {
@@ -222,38 +238,37 @@ export function CinematicFooter() {
       
       <div
         ref={wrapperRef}
-        className="relative h-screen w-full"
-        style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
+        className="relative w-full h-auto md:h-screen md:[clip-path:polygon(0%_0,100%_0%,100%_100%,0_100%)]"
       >
-        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-background text-foreground">
+        <footer className="relative md:fixed md:bottom-0 md:left-0 flex min-h-screen md:h-screen w-full flex-col justify-between overflow-visible md:overflow-hidden bg-background text-foreground pt-8 md:pt-0 pb-6 md:pb-0">
           <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[80px] pointer-events-none z-0" />
           <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none" />
 
           <div
             ref={giantTextRef}
-            className="footer-giant-bg-text absolute bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 z-0 pointer-events-none select-none font-serif text-center w-full max-w-full px-4"
+            className="footer-giant-bg-text absolute bottom-20 md:bottom-28 left-1/2 -translate-x-1/2 z-0 pointer-events-none select-none font-serif text-center w-full max-w-full px-4"
           >
             KHALIL & SONS
           </div>
 
-          <div className="absolute top-8 md:top-12 left-0 w-full overflow-hidden border-y border-border/50 bg-background/60 backdrop-blur-md py-3.5 z-10 -rotate-1 scale-105 shadow-xl">
+          <div className="relative md:absolute top-0 md:top-12 left-0 w-full overflow-hidden border-y border-border/50 bg-background/60 backdrop-blur-md py-2.5 md:py-3.5 z-10 md:-rotate-1 md:scale-105 shadow-xl mb-6 md:mb-0">
             <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-semibold tracking-[0.25em] text-muted-foreground uppercase">
               <MarqueeItem />
               <MarqueeItem />
             </div>
           </div>
 
-          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-16 w-full max-w-5xl mx-auto text-center">
-            <span className="text-xs font-mono uppercase tracking-[0.3em] text-neutral-600 dark:text-neutral-400 mb-3 block font-medium">
+          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 sm:px-6 md:mt-16 w-full max-w-5xl mx-auto text-center">
+            <span className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-neutral-600 dark:text-neutral-400 mb-2 sm:mb-3 block font-medium">
               Khalil & Sons • Handcrafted Fine Jewellery
             </span>
             <h2
               ref={headingRef}
-              className="text-4xl md:text-7xl font-light font-headline footer-text-glow tracking-tight mb-4"
+              className="text-3xl sm:text-5xl md:text-7xl font-light font-headline footer-text-glow tracking-tight mb-3 md:mb-4"
             >
               The Art of <span className="serif-italic">Handcrafted</span> Gold
             </h2>
-            <p className="text-xs md:text-base text-muted-foreground max-w-lg mb-8 leading-relaxed font-light">
+            <p className="text-xs md:text-base text-muted-foreground max-w-lg mb-6 md:mb-8 leading-relaxed font-light">
               Master goldsmithing since 1992 in Saddar, Karachi. Crafting certified 22K and 24K gold bridal jewelry, solitaires, and polki heirlooms.
             </p>
 
@@ -387,8 +402,8 @@ export function CinematicFooter() {
             </div>
           </div>
 
-          <div className="relative z-20 w-full pb-6 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border/30 bg-background/30 backdrop-blur-xs">
-            <div className="text-muted-foreground text-[10px] md:text-xs font-medium tracking-widest uppercase order-2 md:order-1 font-mono">
+          <div className="relative z-20 w-full mt-8 md:mt-0 py-6 px-4 sm:px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-border/30 bg-background/30 backdrop-blur-xs">
+            <div className="text-muted-foreground text-[10px] md:text-xs font-medium tracking-widest uppercase order-2 md:order-1 font-mono text-center md:text-left">
               © 2026 Khalil & Sons Jewellers • Saddar, Karachi. All rights reserved.
             </div>
 

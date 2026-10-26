@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const defaultTestimonials = [
+export const defaultTestimonials = [
   {
     id: "1",
     name: "Sarah Chen",
@@ -94,11 +94,12 @@ export function TestimonialSection2({
 } = {}) {
   const [selected, setSelected] = useState(null);
 
-  const list = testimonials && testimonials.length >= 6 ? testimonials : defaultTestimonials;
-  const third = Math.ceil(list.length / 3);
-  const row1 = list.slice(0, third);
-  const row2 = list.slice(third, third * 2);
-  const row3 = list.slice(third * 2);
+  const list = testimonials && testimonials.length > 0 ? testimonials : defaultTestimonials;
+  const safeList = list.length < 3 ? [...list, ...list, ...list] : list;
+  const third = Math.ceil(safeList.length / 3);
+  const row1 = safeList.slice(0, third);
+  const row2 = safeList.slice(third, third * 2);
+  const row3 = safeList.slice(third * 2);
 
   return (
     <div className="relative w-full py-16 overflow-hidden [--color-primary:var(--color-primary,#d97706)] bg-card text-foreground border-y border-border">

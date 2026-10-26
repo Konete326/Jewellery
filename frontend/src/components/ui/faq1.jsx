@@ -36,10 +36,11 @@ export default function FAQSection({
   title = "Frequently Asked Questions",
   subtitle = "Direct answers regarding our artisanal standards, bespoke commissions, and atelier heritage.",
   className = "",
+  containerClassName = "",
 }) {
   return (
     <section className={cn("w-full py-12 md:py-16", className)}>
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div className={cn("mx-auto max-w-4xl px-4 sm:px-6 lg:px-8", containerClassName)}>
         <div className="mb-10 text-center">
           {category && (
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 text-xs font-mono uppercase tracking-wider mb-3">
