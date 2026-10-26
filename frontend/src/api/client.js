@@ -1,5 +1,8 @@
 import { API_BASE_URL } from './endpoints.js';
 import { loadingManager } from '../lib/loadingManager.js';
+import { toast } from 'sonner';
+
+const DEFAULT_TIMEOUT_MS = 12000;
 
 export async function apiClient(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
@@ -9,9 +12,30 @@ export async function apiClient(endpoint, options = {}) {
     headers['Content-Type'] = headers['Content-Type'] || 'application/json';
   }
 
+  const timeoutMs = options.timeout !== undefined ? options.timeout : DEFAULT_TIMEOUT_MS;
+  const controller = new AbortController();
+  let timedOut = false;
+  let timerId = null;
+
+  if (timeoutMs && timeoutMs > 0) {
+    timerId = setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, timeoutMs);
+  }
+
+  if (options.signal) {
+    if (options.signal.aborted) {
+      controller.abort();
+    } else {
+      options.signal.addEventListener('abort', () => controller.abort(), { once: true });
+    }
+  }
+
   const config = {
     ...options,
-    headers
+    headers,
+    signal: controller.signal
   };
 
   const isSilent = Boolean(options.silent);
@@ -34,7 +58,22 @@ export async function apiClient(endpoint, options = {}) {
     }
 
     return result;
+  } catch (error) {
+    if (timedOut || error.name === 'AbortError') {
+      if (timedOut) {
+        toast.error('Network slow hai, barah-e-karam dobara koshish karein', {
+          description: 'Request exceeded 12-second response threshold.'
+        });
+        const timeoutError = new Error('Network slow hai, barah-e-karam dobara koshish karein');
+        timeoutError.isTimeout = true;
+        throw timeoutError;
+      }
+    }
+    throw error;
   } finally {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
     if (!isSilent) {
       loadingManager.endRequest();
     }

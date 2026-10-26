@@ -89,6 +89,21 @@ class LoadingManager {
       }
     }, remaining);
   }
+
+  reset() {
+    this.activeRequests = 0;
+    this.manualCount = 0;
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+    if (this.hideTimer) {
+      clearTimeout(this.hideTimer);
+      this.hideTimer = null;
+    }
+    this.state = { isLoading: false, message: '' };
+    this.notify();
+  }
 }
 
 export const loadingManager = new LoadingManager();
