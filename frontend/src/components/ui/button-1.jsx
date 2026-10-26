@@ -78,7 +78,7 @@ export const Button = ({
         shapes[shape]?.[size] || shapes.square.medium,
         shadow && "shadow-border-small border-none",
         fullWidth && "w-full",
-        variant === "unstyled" ? "outline-none px-0 h-fit bg-transparent hover:bg-transparent text-gray-1000" : "focus:shadow-focus-ring focus:outline-0",
+        variant === "unstyled" ? "focus-visible:outline-2 focus-visible:outline-offset-2 px-0 h-fit bg-transparent hover:bg-transparent text-gray-1000" : "focus-visible:shadow-focus-ring focus-visible:outline-2",
         className
       )}
       {...rest}

@@ -11,10 +11,10 @@ export function GooglePlaceReviewBadge({ variant = 'card', className = '' }) {
         href={reviewUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-amber-500/40 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent text-amber-900 dark:text-amber-300 hover:border-amber-500 hover:bg-amber-500/15 text-xs uppercase tracking-wider font-medium transition-all shadow-2xs group cursor-pointer ${className}`}
+        className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-amber-500/40 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent text-amber-900 dark:text-amber-300 hover:border-amber-500 hover:bg-amber-500/15 text-xs uppercase tracking-wider font-medium transition-colors shadow-2xs group cursor-pointer ${className}`}
       >
         <span className="flex items-center text-amber-500">
-          <Star className="size-3.5 fill-amber-400 text-amber-400 group-hover:scale-110 transition-transform" />
+          <Star className="size-3.5 fill-amber-400 text-amber-400" />
         </span>
         <span>Review Us on Google</span>
         <ExternalLink className="size-3 text-amber-600/70 dark:text-amber-400/70" />
@@ -90,7 +90,7 @@ export function GooglePlaceReviewBadge({ variant = 'card', className = '' }) {
         href={reviewUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-stone-900 border border-amber-500/40 text-amber-800 dark:text-amber-300 hover:bg-amber-500/10 text-xs uppercase tracking-wider font-medium transition-all shadow-xs shrink-0 cursor-pointer w-full sm:w-auto"
+        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-stone-900 border border-amber-500/40 text-amber-800 dark:text-amber-300 hover:bg-amber-500/10 text-xs uppercase tracking-wider font-medium transition-colors shadow-xs shrink-0 cursor-pointer w-full sm:w-auto"
       >
         <HeartHandshake className="size-3.5 text-amber-600" />
         <span>Review on Google</span>

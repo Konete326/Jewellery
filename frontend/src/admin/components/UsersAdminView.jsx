@@ -78,6 +78,13 @@ export function UsersAdminView() {
 
   const handleRoleChangeConfirm = async () => {
     if (!roleTargetUser?._id) return;
+    if (roleTargetUser.email?.toLowerCase() === currentUser?.email?.toLowerCase()) {
+      toast.error('Action blocked', {
+        description: 'You cannot modify your own administrative privileges.'
+      });
+      setRoleTargetUser(null);
+      return;
+    }
     const nextRole = roleTargetUser.role === 'admin' ? 'customer' : 'admin';
     try {
       setRoleLoading(true);
