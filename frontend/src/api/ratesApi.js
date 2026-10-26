@@ -40,5 +40,20 @@ export const ratesApi = {
       loadingMessage: 'Removing rate log...',
       ...options
     });
+  },
+
+  async getSchedulerStatus(options = {}) {
+    return apiClient(ENDPOINTS.RATES_SCHEDULER, {
+      method: 'GET',
+      ...options
+    });
+  },
+
+  async triggerScheduler(options = {}) {
+    return apiClient(ENDPOINTS.RATES_SCHEDULER_TRIGGER, {
+      method: 'POST',
+      loadingMessage: 'Executing Sarafa auto-sync cron test...',
+      ...options
+    });
   }
 };
