@@ -50,7 +50,7 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           rel="noopener noreferrer"
           className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+          <div className="size-8 rounded-lg bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shrink-0">
             <MessageCircle className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
@@ -63,7 +63,7 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           href={`tel:${STORE_INFO.phone.landline}`}
           className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0 group-hover:scale-105 transition-transform">
+          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0">
             <Phone className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
@@ -76,7 +76,7 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           href={`mailto:${STORE_INFO.email}`}
           className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0 group-hover:scale-105 transition-transform">
+          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0">
             <Mail className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
@@ -91,7 +91,7 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           rel="noopener noreferrer"
           className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0 group-hover:scale-105 transition-transform">
+          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0">
             <MapPin className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">

@@ -11,7 +11,7 @@ export function AdminMetrics({ galleryItems = [], inquiries = [], users = [], lo
       value: loading ? "..." : `${galleryItems.length}`,
       subtext: loading ? "Loading..." : "Published fine jewelry pieces",
       icon: Gem,
-      accent: "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+      accent: "bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700"
     },
     {
       title: "Atelier Inquiries",

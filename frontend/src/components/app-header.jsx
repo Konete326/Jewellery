@@ -28,7 +28,7 @@ export function AppHeader() {
 					to="/"
 					className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-border bg-background hover:bg-muted text-foreground transition-colors shadow-xs"
 				>
-					<Store className="size-3.5 text-amber-600" />
+					<Store className="size-3.5 text-neutral-700 dark:text-neutral-300" />
 					<span>Storefront</span>
 				</Link>
 				<Button aria-label="Notifications" size="icon" variant="ghost">

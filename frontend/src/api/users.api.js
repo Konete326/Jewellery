@@ -55,23 +55,29 @@ export const usersApi = {
     });
   },
 
-  async getWishlist(email) {
+  async getWishlist(email, options = {}) {
     return await apiClient(ENDPOINTS.USERS_WISHLIST(email), {
-      method: 'GET'
+      method: 'GET',
+      silent: true,
+      ...options
     });
   },
 
-  async toggleWishlist(email, pieceId) {
+  async toggleWishlist(email, pieceId, options = {}) {
     return await apiClient(ENDPOINTS.USERS_WISHLIST_TOGGLE, {
       method: 'POST',
-      body: JSON.stringify({ email, pieceId })
+      body: JSON.stringify({ email, pieceId }),
+      silent: true,
+      ...options
     });
   },
 
-  async syncWishlist(email, pieceIds) {
+  async syncWishlist(email, pieceIds, options = {}) {
     return await apiClient(ENDPOINTS.USERS_WISHLIST_SYNC, {
       method: 'POST',
-      body: JSON.stringify({ email, pieceIds })
+      body: JSON.stringify({ email, pieceIds }),
+      silent: true,
+      ...options
     });
   }
 };

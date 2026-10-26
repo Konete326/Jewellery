@@ -10,8 +10,8 @@ export const galleryApi = {
     return await apiClient(qs ? `${ENDPOINTS.GALLERY}?${qs}` : ENDPOINTS.GALLERY);
   },
 
-  getById: async (id) => {
-    return await apiClient(ENDPOINTS.GALLERY_BY_ID(id));
+  getById: async (id, options = {}) => {
+    return await apiClient(ENDPOINTS.GALLERY_BY_ID(id), options);
   },
 
   create: async (formData) => {

@@ -41,7 +41,7 @@ export function AppSidebar() {
               className="group-data-[collapsible=icon]:hidden flex items-center justify-between px-3 py-2 rounded-lg border border-border/80 bg-muted/40 hover:bg-muted text-xs font-medium text-foreground transition-colors"
             >
               <span className="flex items-center gap-2">
-                <Store className="size-3.5 text-amber-600" />
+                <Store className="size-3.5 text-neutral-700 dark:text-neutral-300" />
                 View Live Store
               </span>
               <span className="text-[10px] text-muted-foreground font-mono">/</span>

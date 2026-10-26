@@ -148,10 +148,10 @@ export function UserActivityModal({
                   src={clientUser.avatar}
                   alt={clientUser.name}
                   referrerPolicy="no-referrer"
-                  className="size-14 rounded-full object-cover border-2 border-amber-500/30 shrink-0 shadow-xs"
+                  className="size-14 rounded-full object-cover border-2 border-border shrink-0 shadow-xs"
                 />
               ) : (
-                <div className="size-14 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 font-serif font-bold text-lg border-2 border-amber-500/30 flex items-center justify-center shrink-0">
+                <div className="size-14 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 font-serif font-bold text-lg border-2 border-neutral-200 dark:border-neutral-700 flex items-center justify-center shrink-0">
                   {(clientUser.name || clientUser.email || 'U').charAt(0).toUpperCase()}
                 </div>
               )}
@@ -212,7 +212,7 @@ export function UserActivityModal({
                 {stats.inquiriesCount}
               </span>
               <span className="text-[11px] text-muted-foreground flex items-center justify-center gap-1 mt-0.5">
-                <MessageSquare className="size-3 text-amber-500" />
+                <MessageSquare className="size-3 text-neutral-500" />
                 Inquiries
               </span>
             </div>
@@ -291,7 +291,7 @@ export function UserActivityModal({
                   inquiries.map((inq) => (
                     <div
                       key={inq._id}
-                      className="p-3.5 rounded-xl border border-border bg-card hover:border-amber-500/40 transition-colors space-y-2.5"
+                      className="p-3.5 rounded-xl border border-border bg-card hover:border-foreground/30 transition-colors space-y-2.5"
                     >
                       <div className="flex items-start justify-between gap-2 flex-wrap">
                         <div>
@@ -312,7 +312,7 @@ export function UserActivityModal({
                               ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
                               : inq.status === 'Contacted'
                               ? 'bg-blue-500/10 text-blue-600 border border-blue-500/20'
-                              : 'bg-amber-500/10 text-amber-600 border border-amber-500/20'
+                              : 'bg-neutral-100 text-neutral-800 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-700'
                           }`}>
                             {inq.status}
                           </span>

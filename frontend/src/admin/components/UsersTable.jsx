@@ -98,7 +98,7 @@ export function UsersTable({
                         className="size-8 rounded-full object-cover border border-border/80 shrink-0"
                       />
                     ) : (
-                      <div className="size-8 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 flex items-center justify-center font-semibold text-xs shrink-0">
+                      <div className="size-8 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center font-semibold text-xs shrink-0">
                         {getInitials(user.name)}
                       </div>
                     )}
@@ -176,7 +176,7 @@ export function UsersTable({
                       type="button"
                       onClick={() => onViewActivities && onViewActivities(user)}
                       title="View client activity & dossier"
-                      className="p-1.5 rounded-md text-muted-foreground hover:text-amber-600 hover:bg-amber-500/10 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
                     >
                       <Eye className="size-4" />
                     </button>
@@ -204,7 +204,7 @@ export function UsersTable({
                         isSelf
                           ? 'opacity-30 cursor-not-allowed text-muted-foreground'
                           : isActive
-                          ? 'text-muted-foreground hover:text-amber-600 hover:bg-amber-500/10 cursor-pointer'
+                          ? 'text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer'
                           : 'text-rose-600 hover:text-emerald-600 hover:bg-emerald-500/10 cursor-pointer'
                       }`}
                     >

@@ -15,7 +15,7 @@ export function ReviewsMetrics({ reviews = [], loading = false }) {
       value: loading ? '—' : `${totalReviews}`,
       subtext: 'Client reviews received',
       icon: MessageSquare,
-      color: 'text-amber-500 bg-amber-500/10'
+      color: 'text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800'
     },
     {
       title: 'Average Rating',

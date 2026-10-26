@@ -14,7 +14,7 @@ export function UsersMetrics({ users = [] }) {
       value: total,
       sub: 'All registered clientele',
       icon: Users,
-      color: 'text-amber-600 bg-amber-500/10 border-amber-500/20'
+      color: 'text-neutral-800 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700'
     },
     {
       label: 'Google Sign-In',

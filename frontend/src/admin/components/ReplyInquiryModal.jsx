@@ -93,7 +93,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
       <div className="relative w-full max-w-xl rounded-2xl border border-border bg-card p-6 shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
         <div className="flex items-start justify-between border-b border-border pb-4">
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0">
+            <div className="size-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-800 dark:text-neutral-200 shrink-0">
               <Mail className="size-5" />
             </div>
             <div>
@@ -188,7 +188,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
                 key={i}
                 type="button"
                 onClick={() => applyTemplate(tpl)}
-                className="px-2.5 py-1 rounded-md text-[11px] border border-border hover:border-amber-500/50 hover:bg-amber-500/10 text-muted-foreground hover:text-foreground transition-colors duration-150 cursor-pointer font-medium"
+                className="px-2.5 py-1 rounded-md text-[11px] border border-border hover:border-foreground/30 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-muted-foreground hover:text-foreground transition-colors duration-150 cursor-pointer font-medium"
               >
                 {tpl.label}
               </button>
@@ -220,7 +220,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
               onChange={(e) => setSubject(e.target.value)}
               onBlur={() => setTouched((p) => ({ ...p, subject: true }))}
               placeholder="Response subject..."
-              className="w-full bg-muted/30 border border-input rounded-xl px-4 py-2.5 text-sm text-foreground focus-visible:outline-none focus-visible:border-amber-500/60 focus-visible:ring-2 focus-visible:ring-amber-500/20 transition-colors"
+              className="w-full bg-muted/30 border border-input rounded-xl px-4 py-2.5 text-sm text-foreground focus-visible:outline-none focus-visible:border-foreground/40 focus-visible:ring-2 focus-visible:ring-foreground/20 transition-colors"
             />
           </div>
 
@@ -247,7 +247,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
               onChange={(e) => setBody(e.target.value)}
               onBlur={() => setTouched((p) => ({ ...p, body: true }))}
               placeholder="Type your response to the client..."
-              className="w-full bg-muted/30 border border-input rounded-xl px-4 py-3 text-sm text-foreground focus-visible:outline-none focus-visible:border-amber-500/60 focus-visible:ring-2 focus-visible:ring-amber-500/20 transition-colors resize-y"
+              className="w-full bg-muted/30 border border-input rounded-xl px-4 py-3 text-sm text-foreground focus-visible:outline-none focus-visible:border-foreground/40 focus-visible:ring-2 focus-visible:ring-foreground/20 transition-colors resize-y"
             />
           </div>
 
@@ -268,12 +268,12 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
             >
               {submitting ? (
                 <>
-                  <Loader2 className="size-3.5 animate-spin text-amber-500" />
+                  <Loader2 className="size-3.5 animate-spin text-background" />
                   <span>Transmitting via SMTP...</span>
                 </>
               ) : (
                 <>
-                  <Send className="size-3.5 text-amber-500" />
+                  <Send className="size-3.5 text-background" />
                   <span>Send Direct Email</span>
                 </>
               )}

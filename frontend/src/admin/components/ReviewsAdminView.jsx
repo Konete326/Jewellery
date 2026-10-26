@@ -174,7 +174,7 @@ export function ReviewsAdminView() {
           <Button
             size="sm"
             onClick={() => setIsAddModalOpen(true)}
-            className="bg-amber-600 hover:bg-amber-700 text-white text-xs gap-1.5 cursor-pointer"
+            className="bg-foreground hover:bg-neutral-800 text-background text-xs gap-1.5 cursor-pointer shadow-xs"
           >
             <Plus className="size-3.5" />
             <span>Add In-Store Appraisal</span>

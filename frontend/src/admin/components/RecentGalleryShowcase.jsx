@@ -76,7 +76,7 @@ export function RecentGalleryShowcase({ galleryItems = [], loading = false }) {
                     <span className="font-medium text-xs text-foreground truncate">
                       {item.title}
                     </span>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-amber-500/10 text-amber-700 dark:text-amber-300 shrink-0">
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 shrink-0">
                       {item.category || 'Jewellery'}
                     </span>
                   </div>

@@ -23,7 +23,7 @@ export function ConfirmStatusModal({ isOpen, onClose, onConfirm, user, loading }
           aria-label="Close"
           onClick={onClose}
           disabled={loading}
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500/50 focus-visible:outline-none rounded-md"
+          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:ring-2 focus-visible:ring-foreground/20 focus-visible:outline-none rounded-md"
         >
           <X className="size-4" />
         </button>
@@ -31,7 +31,7 @@ export function ConfirmStatusModal({ isOpen, onClose, onConfirm, user, loading }
         <div className="flex items-center gap-3 mb-4">
           <div className={`size-11 rounded-full flex items-center justify-center shrink-0 border ${
             isCurrentlyActive
-              ? 'bg-amber-500/10 text-amber-600 border-amber-500/20'
+              ? 'bg-neutral-100 text-neutral-800 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-700'
               : 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
           }`}>
             {isCurrentlyActive ? <UserX className="size-5" /> : <UserCheck className="size-5" />}
@@ -55,7 +55,7 @@ export function ConfirmStatusModal({ isOpen, onClose, onConfirm, user, loading }
               className="size-9 rounded-full object-cover shrink-0 border border-border"
             />
           ) : (
-            <div className="size-9 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 font-semibold flex items-center justify-center text-xs shrink-0">
+            <div className="size-9 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 font-semibold flex items-center justify-center text-xs shrink-0">
               {(user.name || user.email || 'U').charAt(0).toUpperCase()}
             </div>
           )}

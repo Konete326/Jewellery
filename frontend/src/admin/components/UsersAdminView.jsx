@@ -129,7 +129,7 @@ export function UsersAdminView() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20">
+            <span className="p-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700">
               <UsersIcon className="size-4" />
             </span>
             <h2 className="font-serif text-2xl font-bold tracking-tight text-foreground">

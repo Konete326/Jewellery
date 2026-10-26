@@ -84,7 +84,7 @@ export function AtelierContactForm({ onSuccess }) {
               value={formData.customerName}
               onChange={(e) => handleChange('customerName', e.target.value)}
               placeholder="e.g. Sarah Jenkins"
-              className="w-full bg-white dark:bg-neutral-900 border border-input rounded-xl px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-foreground/40 focus:ring-1 focus:ring-foreground/20 transition-colors"
+              className="w-full bg-white dark:bg-neutral-900 border border-input rounded-xl px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30 focus-visible:border-foreground/60 transition-colors"
             />
           </div>
 
@@ -98,7 +98,7 @@ export function AtelierContactForm({ onSuccess }) {
               value={formData.email}
               onChange={(e) => handleChange('email', e.target.value)}
               placeholder="sarah@example.com"
-              className="w-full bg-white dark:bg-neutral-900 border border-input rounded-xl px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-foreground/40 focus:ring-1 focus:ring-foreground/20 transition-colors"
+              className="w-full bg-white dark:bg-neutral-900 border border-input rounded-xl px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30 focus-visible:border-foreground/60 transition-colors"
             />
           </div>
         </div>
@@ -114,7 +114,7 @@ export function AtelierContactForm({ onSuccess }) {
               value={formData.phone}
               onChange={handlePhoneChange}
               placeholder="+39 055 123 4567"
-              className="w-full bg-white dark:bg-neutral-900 border border-input rounded-xl px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-foreground/40 focus:ring-1 focus:ring-foreground/20 transition-colors"
+              className="w-full bg-white dark:bg-neutral-900 border border-input rounded-xl px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30 focus-visible:border-foreground/60 transition-colors"
             />
           </div>
 
@@ -125,7 +125,7 @@ export function AtelierContactForm({ onSuccess }) {
             <select
               value={formData.subject}
               onChange={(e) => handleChange('subject', e.target.value)}
-              className="w-full bg-white dark:bg-neutral-900 border border-input rounded-xl px-3.5 py-2 text-sm text-foreground outline-none focus:border-foreground/40 focus:ring-1 focus:ring-foreground/20 transition-colors cursor-pointer"
+              className="w-full bg-white dark:bg-neutral-900 border border-input rounded-xl px-3.5 py-2 text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30 focus-visible:border-foreground/60 transition-colors cursor-pointer"
             >
               <option value="General Inquiry & Questions">General Inquiry & Questions</option>
               <option value="Custom Jewellery & Bespoke Design">Custom Jewellery & Bespoke Design</option>
@@ -148,7 +148,7 @@ export function AtelierContactForm({ onSuccess }) {
             value={formData.message}
             onChange={(e) => handleChange('message', e.target.value)}
             placeholder="How can we assist you today? Write your message, inquiry, or question here..."
-            className="w-full bg-white dark:bg-neutral-900 border border-input rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-foreground/40 focus:ring-1 focus:ring-foreground/20 transition-colors resize-none"
+            className="w-full bg-white dark:bg-neutral-900 border border-input rounded-xl px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30 focus-visible:border-foreground/60 transition-colors resize-none"
           />
         </div>
 

@@ -1,39 +1,42 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { X, Heart, Trash2, ArrowRight, ShieldCheck, MessageCircle } from 'lucide-react';
+import { X, Heart, Trash2, ShieldCheck, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GoogleIcon } from '@/components/google-icon';
 import { getAuthUser, loginWithGoogle } from '@/lib/auth';
-import { getLocalVaultIds, toggleVaultPiece, fetchVaultFullItems } from '@/lib/wishlist';
+import { getLocalVaultIds, getLocalVaultItems, toggleVaultPiece, fetchVaultFullItems } from '@/lib/wishlist';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
 import { STORE_INFO } from '@/constants/storeInfo';
 import { toast } from 'sonner';
 
 export function AtelierVaultDrawer({ isOpen, onClose }) {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => getLocalVaultItems());
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(getAuthUser());
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  const loadItems = async () => {
-    setLoading(true);
+  const loadItems = async (isBackground = false) => {
+    const cached = getLocalVaultItems();
+    const localIds = getLocalVaultIds();
+    const needsFetch = cached.length === 0 && localIds.length > 0;
+
+    if (cached.length > 0) {
+      setItems(cached);
+    }
+
+    if (!isBackground && needsFetch) {
+      setLoading(true);
+    }
+
     try {
       const fullList = await fetchVaultFullItems();
       if (fullList && fullList.length) {
         setItems(fullList);
-      } else {
-        const localIds = getLocalVaultIds();
-        if (localIds.length > 0) {
-          const res = await fetch('/api/gallery').then((r) => r.json()).catch(() => null);
-          const all = res?.data?.items || res?.data || [];
-          const filtered = all.filter((p) => localIds.includes(String(p._id || p.id)));
-          setItems(filtered);
-        } else {
-          setItems([]);
-        }
+      } else if (localIds.length === 0) {
+        setItems([]);
       }
     } catch {
-      setItems([]);
+      if (!cached.length) setItems([]);
     } finally {
       setLoading(false);
     }
@@ -42,17 +45,23 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
   useEffect(() => {
     if (isOpen) {
       setUser(getAuthUser());
-      loadItems();
+      const cached = getLocalVaultItems();
+      if (cached.length > 0) {
+        setItems(cached);
+      }
+      loadItems(cached.length > 0);
     }
   }, [isOpen]);
 
   useEffect(() => {
     const handleVaultChange = () => {
-      if (isOpen) loadItems();
+      const updated = getLocalVaultItems();
+      setItems(updated);
+      if (isOpen) loadItems(true);
     };
     const handleAuthChange = (e) => {
       setUser(e.detail || getAuthUser());
-      if (isOpen) loadItems();
+      if (isOpen) loadItems(true);
     };
 
     window.addEventListener('khalil_vault_change', handleVaultChange);
@@ -65,8 +74,9 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
   }, [isOpen]);
 
   const handleRemove = async (piece) => {
+    const pieceId = String(piece._id || piece.id);
+    setItems((prev) => prev.filter((p) => String(p._id || p.id) !== pieceId));
     await toggleVaultPiece(piece);
-    setItems((prev) => prev.filter((p) => String(p._id || p.id) !== String(piece._id || piece.id)));
   };
 
   const handleGoogleConnect = async () => {
@@ -77,7 +87,7 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
       toast.success(`Vault linked to ${signedIn.name}`, {
         description: 'Your saved pieces are now preserved on Google'
       });
-      loadItems();
+      loadItems(false);
     } catch (err) {
       if (err?.code !== 'auth/popup-closed-by-user') {
         toast.error('Google Sign-In failed', { description: err.message });
@@ -162,9 +172,10 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
         )}
 
         <div className="flex-1 overflow-y-auto p-5 divide-y divide-border/60 space-y-4">
-          {loading && (
-            <div className="py-16 text-center text-xs text-muted-foreground">
-              Loading saved pieces...
+          {loading && items.length === 0 && (
+            <div className="py-16 text-center text-xs text-muted-foreground flex flex-col items-center justify-center gap-2">
+              <div className="size-5 rounded-full border-2 border-foreground/20 border-t-foreground animate-spin" />
+              <span>Opening vault...</span>
             </div>
           )}
 
@@ -192,64 +203,63 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
             </div>
           )}
 
-          {!loading &&
-            items.map((piece) => {
-              const waUrl = getPersonalizedWhatsAppInquiry({ piece });
-              const pieceId = piece._id || piece.id;
+          {items.map((piece) => {
+            const waUrl = getPersonalizedWhatsAppInquiry({ piece });
+            const pieceId = piece._id || piece.id;
 
-              return (
-                <div key={pieceId} className="pt-4 first:pt-0 flex items-center gap-3.5 group">
+            return (
+              <div key={pieceId} className="pt-4 first:pt-0 flex items-center gap-3.5 group">
+                <Link
+                  to={`/gallery/${pieceId}`}
+                  onClick={onClose}
+                  className="shrink-0 relative overflow-hidden rounded-xl size-18 border border-border bg-muted/30"
+                >
+                  <img
+                    src={piece.imageUrl || piece.src}
+                    alt={piece.title}
+                    className="size-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </Link>
+
+                <div className="flex-1 min-w-0">
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 dark:text-amber-400 block truncate">
+                    {piece.category || 'Bridal Sets'}
+                  </span>
                   <Link
                     to={`/gallery/${pieceId}`}
                     onClick={onClose}
-                    className="shrink-0 relative overflow-hidden rounded-xl size-18 border border-border bg-muted/30"
+                    className="font-serif text-sm font-semibold text-foreground hover:text-amber-600 transition-colors line-clamp-1"
                   >
-                    <img
-                      src={piece.imageUrl || piece.src}
-                      alt={piece.title}
-                      className="size-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                    {piece.title}
                   </Link>
+                  <p className="text-[11px] text-muted-foreground font-mono mt-0.5">
+                    Ref: KS-{String(pieceId).slice(-6).toUpperCase()}
+                  </p>
 
-                  <div className="flex-1 min-w-0">
-                    <span className="text-[10px] uppercase font-mono tracking-wider text-amber-700 dark:text-amber-400 block truncate">
-                      {piece.category || 'Bridal Sets'}
-                    </span>
-                    <Link
-                      to={`/gallery/${pieceId}`}
-                      onClick={onClose}
-                      className="font-serif text-sm font-semibold text-foreground hover:text-amber-600 transition-colors line-clamp-1"
+                  <div className="flex items-center gap-2 mt-2">
+                    <a
+                      href={waUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors"
                     >
-                      {piece.title}
-                    </Link>
-                    <p className="text-[11px] text-muted-foreground font-mono mt-0.5">
-                      Ref: KS-{String(pieceId).slice(-6).toUpperCase()}
-                    </p>
+                      <MessageCircle className="size-3" />
+                      <span>Inquire</span>
+                    </a>
 
-                    <div className="flex items-center gap-2 mt-2">
-                      <a
-                        href={waUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors"
-                      >
-                        <MessageCircle className="size-3" />
-                        <span>Inquire</span>
-                      </a>
-
-                      <button
-                        type="button"
-                        onClick={() => handleRemove(piece)}
-                        aria-label="Remove piece from vault"
-                        className="p-1 rounded-md text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-colors cursor-pointer"
-                      >
-                        <Trash2 className="size-3.5" />
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(piece)}
+                      aria-label="Remove piece from vault"
+                      className="p-1 rounded-md text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="size-3.5" />
+                    </button>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
         </div>
 
         {items.length > 0 && (
