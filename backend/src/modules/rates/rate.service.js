@@ -24,24 +24,39 @@ export const rateService = {
       silver24kGram: scraped.silver24kGram
     });
 
+    const current = await rateRepository.getActiveRate();
+    const isPriceChanged = !current ||
+      current.gold?.['24K']?.tola !== calculated.gold['24K'].tola ||
+      current.silver?.['24K']?.tola !== calculated.silver['24K'].tola;
+
+    const dayName = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Karachi',
+      weekday: 'long'
+    }).format(new Date());
+    const isSunday = dayName === 'Sunday';
+
     const rateData = {
       gold: calculated.gold,
       silver: calculated.silver,
-      marketSource: scraped.source || 'Karachi Sarafa Jewellers Association (gold.pk)',
-      marketStatus: 'Open',
+      marketSource: isSunday
+        ? 'Karachi Sarafa Association (Saturday Closing)'
+        : (scraped.source || 'Karachi Sarafa Jewellers Association (gold.pk)'),
+      marketStatus: isSunday ? 'Weekend (Saturday Closing)' : 'Open',
       isManualOverride: false,
       lastSyncedAt: new Date(),
       updatedBy: triggeredBy
     };
 
     const saved = await rateRepository.upsertActiveRate(rateData);
-    await rateRepository.logChange({
-      gold24kTola: scraped.gold24kTola,
-      silver24kTola: scraped.silver24kTola,
-      source: rateData.marketSource,
-      isManualOverride: false,
-      updatedBy: triggeredBy
-    });
+    if (isPriceChanged) {
+      await rateRepository.logChange({
+        gold24kTola: scraped.gold24kTola,
+        silver24kTola: scraped.silver24kTola,
+        source: rateData.marketSource,
+        isManualOverride: false,
+        updatedBy: triggeredBy
+      });
+    }
 
     return saved;
   },

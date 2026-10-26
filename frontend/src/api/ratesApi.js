@@ -55,5 +55,21 @@ export const ratesApi = {
       loadingMessage: 'Executing Sarafa auto-sync cron test...',
       ...options
     });
+  },
+
+  async getBroadcastStats(options = {}) {
+    return apiClient(ENDPOINTS.RATES_BROADCAST_STATS, {
+      method: 'GET',
+      ...options
+    });
+  },
+
+  async sendBroadcast(payload = {}, options = {}) {
+    return apiClient(ENDPOINTS.RATES_BROADCAST_SEND, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      loadingMessage: 'Dispatching bullion rates email broadcast...',
+      ...options
+    });
   }
 };

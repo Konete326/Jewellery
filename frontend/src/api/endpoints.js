@@ -30,5 +30,7 @@ export const ENDPOINTS = {
   RATES_HISTORY: '/rates/history',
   RATES_HISTORY_ITEM: (id) => `/rates/history/${id}`,
   RATES_SCHEDULER: '/rates/scheduler',
-  RATES_SCHEDULER_TRIGGER: '/rates/scheduler/trigger'
+  RATES_SCHEDULER_TRIGGER: '/rates/scheduler/trigger',
+  RATES_BROADCAST_STATS: '/rates/broadcast/stats',
+  RATES_BROADCAST_SEND: '/rates/broadcast/send'
 };

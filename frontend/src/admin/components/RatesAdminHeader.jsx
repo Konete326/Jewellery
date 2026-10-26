@@ -1,9 +1,16 @@
 import React from 'react';
-import { RefreshCw, RotateCcw } from 'lucide-react';
+import { RefreshCw, RotateCcw, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
-export function RatesAdminHeader({ rates, onSync, isSyncing, onRestoreMarket, isRestoring }) {
+export function RatesAdminHeader({
+  rates,
+  onSync,
+  isSyncing,
+  onRestoreMarket,
+  isRestoring,
+  onOpenBroadcastModal
+}) {
   const isOverride = Boolean(rates?.isManualOverride);
   const lastSyncStr = rates?.lastSyncedAt
     ? new Date(rates.lastSyncedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) + ', ' +
@@ -33,7 +40,18 @@ export function RatesAdminHeader({ rates, onSync, isSyncing, onRestoreMarket, is
         </p>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={onOpenBroadcastModal}
+          className="text-xs font-mono h-9 cursor-pointer border-amber-500/30 hover:bg-amber-500/10 text-foreground"
+        >
+          <Mail className="size-3.5 mr-1.5 text-amber-600 dark:text-amber-400" />
+          Broadcast Rates via Email
+        </Button>
+
         {isOverride && (
           <Button
             type="button"

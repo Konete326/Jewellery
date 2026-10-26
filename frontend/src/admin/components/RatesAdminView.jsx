@@ -3,6 +3,7 @@ import { ratesApi } from '@/api/ratesApi';
 import { RatesAdminHeader } from './RatesAdminHeader';
 import { RatesAdminHeroCard } from './RatesAdminHeroCard';
 import { RatesAdminHistoryList } from './RatesAdminHistoryList';
+import { RatesBroadcastModal } from './RatesBroadcastModal';
 import { toast } from 'sonner';
 
 export function RatesAdminView() {
@@ -12,6 +13,7 @@ export function RatesAdminView() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isBroadcastModalOpen, setIsBroadcastModalOpen] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
@@ -125,6 +127,7 @@ export function RatesAdminView() {
         isSyncing={isSyncing}
         onRestoreMarket={handleRestoreMarket}
         isRestoring={isRestoring}
+        onOpenBroadcastModal={() => setIsBroadcastModalOpen(true)}
       />
 
       <RatesAdminHeroCard
@@ -137,6 +140,13 @@ export function RatesAdminView() {
         history={history}
         onDeleteLog={handleDeleteLog}
         onReapplyRate={handleReapply}
+      />
+
+      <RatesBroadcastModal
+        isOpen={isBroadcastModalOpen}
+        onClose={() => setIsBroadcastModalOpen(false)}
+        rates={rates}
+        onBroadcastSuccess={loadData}
       />
     </div>
   );

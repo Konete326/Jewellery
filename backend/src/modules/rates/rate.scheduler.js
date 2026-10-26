@@ -30,11 +30,18 @@ async function runSync(slotName, retryCount = 0) {
       return;
     }
 
+    const dayName = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Karachi',
+      weekday: 'long'
+    }).format(new Date());
+
     const updated = await rateService.syncLiveRates(`Sarafa Auto-Sync (${slotName})`);
     schedulerStatus.lastRunAt = new Date();
     schedulerStatus.lastRunSlot = slotName;
     schedulerStatus.lastRunStatus = 'success';
-    schedulerStatus.lastRunMessage = `Synced at ${new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Karachi' })} PKT. 24K: Rs ${updated?.gold?.['24K']?.tola || 'N/A'}`;
+    schedulerStatus.lastRunMessage = dayName === 'Sunday'
+      ? `Verified Sunday market pause. Saturday benchmark maintained (24K: Rs ${updated?.gold?.['24K']?.tola || 'N/A'}).`
+      : `Synced at ${new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Karachi' })} PKT. 24K: Rs ${updated?.gold?.['24K']?.tola || 'N/A'}`;
     logger.info(`[Rate Scheduler] ${slotName} sync completed successfully.`);
   } catch (err) {
     logger.error(`[Rate Scheduler] ${slotName} sync failed: ${err.message}`);
