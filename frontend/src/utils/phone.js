@@ -28,13 +28,26 @@ export function formatE164ForWhatsApp(phone) {
   return e164.replace(/[^0-9]/g, '');
 }
 
-export function createWhatsAppInquiryUrl(phone, customerName = '', context = '') {
+export function createWhatsAppInquiryUrl(phone, customerName = '', context = '', status = '') {
   const digits = formatE164ForWhatsApp(phone);
   if (!digits) return '';
 
+  const normalizedStatus = String(status || '').trim().toLowerCase();
+  const isCompletedOrDelivered =
+    normalizedStatus === 'completed' ||
+    normalizedStatus === 'delivered' ||
+    normalizedStatus === 'resolved';
+
   const greeting = customerName ? `Hello ${customerName}, ` : 'Hello, ';
-  const topic = context ? ` regarding your inquiry: "${context}"` : '';
-  const message = `${greeting}we are contacting you from Khalil & Sons Jewellers Saddar Karachi${topic}. How may we assist you with our bespoke creations today?`;
+
+  let message = '';
+  if (isCompletedOrDelivered) {
+    const topic = context ? ` regarding your completed bespoke piece: "${context}"` : '';
+    message = `${greeting}thank you for choosing Khalil & Sons Jewellers, Saddar, Karachi${topic}. We hope you cherished our artisanal craftsmanship. Agar aapko hamari jewellery pasand aayi ho to kindly Google par apna qeemti 5-star review zaroor share karein:\nhttps://maps.app.goo.gl/49w2MCbeJfqTc8hT7\n\nThank you for trusting Khalil & Sons!`;
+  } else {
+    const topic = context ? ` regarding your inquiry: "${context}"` : '';
+    message = `${greeting}we are contacting you from Khalil & Sons Jewellers Saddar Karachi${topic}. How may we assist you with our bespoke creations today?`;
+  }
 
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }

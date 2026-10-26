@@ -1,9 +1,23 @@
+import * as React from "react"
 import { Toaster as Sonner } from "sonner"
 
-const Toaster = ({ ...props }) => {
+const Toaster = ({ visibleToasts, ...props }) => {
+  const [maxToasts, setMaxToasts] = React.useState(4)
+
+  React.useEffect(() => {
+    const updateMaxToasts = () => {
+      setMaxToasts(window.innerWidth < 640 ? 2 : 4)
+    }
+
+    updateMaxToasts()
+    window.addEventListener("resize", updateMaxToasts)
+    return () => window.removeEventListener("resize", updateMaxToasts)
+  }, [])
+
   return (
     <Sonner
       className="toaster group"
+      visibleToasts={visibleToasts ?? maxToasts}
       toastOptions={{
         classNames: {
           toast:

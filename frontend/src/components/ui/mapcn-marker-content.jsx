@@ -18,8 +18,56 @@ function cn(...inputs) {
 }
 
 const defaultStyles = {
-  dark: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
-  light: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+  light: {
+    version: 8,
+    sources: {
+      "carto-raster": {
+        type: "raster",
+        tiles: [
+          "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png",
+          "https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png",
+          "https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png",
+          "https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png"
+        ],
+        tileSize: 256,
+        attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
+      }
+    },
+    layers: [
+      {
+        id: "carto-raster-layer",
+        type: "raster",
+        source: "carto-raster",
+        minzoom: 0,
+        maxzoom: 20
+      }
+    ]
+  },
+  dark: {
+    version: 8,
+    sources: {
+      "carto-raster": {
+        type: "raster",
+        tiles: [
+          "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
+          "https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
+          "https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
+          "https://d.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png"
+        ],
+        tileSize: 256,
+        attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
+      }
+    },
+    layers: [
+      {
+        id: "carto-raster-layer",
+        type: "raster",
+        source: "carto-raster",
+        minzoom: 0,
+        maxzoom: 20
+      }
+    ]
+  }
 };
 
 const MapContext = createContext(null);
@@ -68,13 +116,14 @@ function useMap() {
   return context;
 }
 
-function DefaultLoader() {
+function DefaultLoader({ visible = true }) {
+  if (!visible) return null;
   return (
-    <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/50 backdrop-blur-xs">
+    <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/30 backdrop-blur-xs transition-opacity duration-300 pointer-events-none">
       <div className="flex gap-1">
-        <span className="size-1.5 animate-pulse rounded-full bg-muted-foreground/60" />
-        <span className="size-1.5 animate-pulse rounded-full bg-muted-foreground/60 [animation-delay:150ms]" />
-        <span className="size-1.5 animate-pulse rounded-full bg-muted-foreground/60 [animation-delay:300ms]" />
+        <span className="size-1.5 animate-pulse rounded-full bg-foreground/60" />
+        <span className="size-1.5 animate-pulse rounded-full bg-foreground/60 [animation-delay:150ms]" />
+        <span className="size-1.5 animate-pulse rounded-full bg-foreground/60 [animation-delay:300ms]" />
       </div>
     </div>
   );
@@ -101,6 +150,7 @@ const Map = forwardRef(function Map(
   const styleTimeoutRef = useRef(null);
   const internalUpdateRef = useRef(false);
   const resolvedTheme = useResolvedTheme(themeProp);
+  const currentThemeRef = useRef(resolvedTheme);
   const onViewportChangeRef = useRef(onViewportChange);
   onViewportChangeRef.current = onViewportChange;
 
@@ -120,33 +170,55 @@ const Map = forwardRef(function Map(
 
   useEffect(() => {
     if (!containerRef.current) return;
+    const initialStyle = resolvedTheme === "dark" ? mapStyles.dark : mapStyles.light;
+    currentThemeRef.current = resolvedTheme;
+
     const map = new MapLibreGL.Map({
       container: containerRef.current,
-      style: resolvedTheme === "dark" ? mapStyles.dark : mapStyles.light,
+      style: initialStyle,
       renderWorldCopies: false,
       attributionControl: { compact: true },
       ...props,
       ...viewport,
     });
 
+    const markLoaded = () => {
+      clearStyleTimeout();
+      setIsLoaded(true);
+      setIsStyleLoaded(true);
+    };
+
     const styleDataHandler = () => {
       clearStyleTimeout();
-      styleTimeoutRef.current = setTimeout(() => setIsStyleLoaded(true), 100);
+      styleTimeoutRef.current = setTimeout(() => {
+        setIsStyleLoaded(true);
+        setIsLoaded(true);
+      }, 50);
     };
-    const loadHandler = () => setIsLoaded(true);
+
+    const loadHandler = () => {
+      setIsLoaded(true);
+      setIsStyleLoaded(true);
+    };
+
     const moveHandler = () => {
       if (!internalUpdateRef.current) onViewportChangeRef.current?.(getViewport(map));
     };
 
     map.on("load", loadHandler);
     map.on("styledata", styleDataHandler);
+    map.on("idle", markLoaded);
     map.on("move", moveHandler);
     setMapInstance(map);
 
+    const safetyTimeout = setTimeout(markLoaded, 350);
+
     return () => {
+      clearTimeout(safetyTimeout);
       clearStyleTimeout();
       map.off("load", loadHandler);
       map.off("styledata", styleDataHandler);
+      map.off("idle", markLoaded);
       map.off("move", moveHandler);
       map.remove();
       setMapInstance(null);
@@ -157,6 +229,9 @@ const Map = forwardRef(function Map(
 
   useEffect(() => {
     if (!mapInstance) return;
+    if (currentThemeRef.current === resolvedTheme) return;
+    currentThemeRef.current = resolvedTheme;
+
     const nextStyle = resolvedTheme === "dark" ? mapStyles.dark : mapStyles.light;
     setIsStyleLoaded(false);
     mapInstance.setStyle(nextStyle);
@@ -171,12 +246,13 @@ const Map = forwardRef(function Map(
     });
   }, [mapInstance, viewport]);
 
-  const contextValue = useMemo(() => ({ map: mapInstance, isLoaded: isLoaded && isStyleLoaded }), [mapInstance, isLoaded, isStyleLoaded]);
+  const isFullyReady = isLoaded || isStyleLoaded;
+  const contextValue = useMemo(() => ({ map: mapInstance, isLoaded: isFullyReady }), [mapInstance, isFullyReady]);
 
   return (
     <MapContext.Provider value={contextValue}>
       <div ref={containerRef} className={cn("relative h-full w-full", className)}>
-        {(!isLoaded || loading) && <DefaultLoader />}
+        <DefaultLoader visible={!isFullyReady || loading} />
         {mapInstance && children}
       </div>
     </MapContext.Provider>

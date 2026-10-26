@@ -123,7 +123,8 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
                 href={createWhatsAppInquiryUrl(
                   inquiry.phone,
                   inquiry.customerName,
-                  inquiry.subject || inquiry.jewelryType
+                  inquiry.subject || inquiry.jewelryType,
+                  inquiry.status
                 )}
                 target="_blank"
                 rel="noreferrer"

@@ -127,7 +127,7 @@ export function Ecommerce5({
               <ul className="mt-6 space-y-2">
                 {features.map((feature, index) => (
                   <li key={index} className="flex items-center gap-2 text-sm text-[#2d3435]">
-                    <span className="size-1.5 rounded-full bg-amber-600" />
+                    <span className="size-1.5 rounded-full bg-foreground" />
                     {feature}
                   </li>
                 ))}

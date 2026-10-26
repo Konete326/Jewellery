@@ -181,7 +181,8 @@ export function InquiriesAdminView() {
                         href={createWhatsAppInquiryUrl(
                           item.phone,
                           item.customerName,
-                          item.subject || item.jewelryType
+                          item.subject || item.jewelryType,
+                          item.status
                         )}
                         target="_blank"
                         rel="noreferrer"

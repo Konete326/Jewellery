@@ -98,7 +98,8 @@ export function AtelierInquiries({ inquiries = [], loading = false, onRefresh = 
                       href={createWhatsAppInquiryUrl(
                         inq.phone,
                         inq.customerName,
-                        inq.subject || inq.jewelryType
+                        inq.subject || inq.jewelryType,
+                        inq.status
                       )}
                       target="_blank"
                       rel="noreferrer"

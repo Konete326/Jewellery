@@ -142,7 +142,7 @@ export function GalleryDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f9f9f9] flex items-center justify-center">
-        <LumaSpin variant="amber" size={30} />
+        <LumaSpin size={28} />
       </div>
     );
   }
@@ -156,12 +156,12 @@ export function GalleryDetailPage() {
           cartCount={0}
         />
         <div className="max-w-md mx-auto text-center px-6 py-24">
-          <Gem className="size-10 text-neutral-600 mx-auto mb-4" />
+          <Gem className="size-10 text-neutral-600 dark:text-neutral-400 mx-auto mb-4" />
           <h2 className="font-headline text-3xl font-light mb-3">Piece Not Found</h2>
           <p className="text-sm text-[#5a6061] leading-relaxed mb-6 font-light">
             The requested jewellery masterpiece is no longer in our active exhibition or has been updated in the atelier.
           </p>
-          <LuxuryButton onClick={() => navigate('/gallery')} variant="gold">
+          <LuxuryButton onClick={() => navigate('/gallery')} variant="dark">
             Return to Gallery
           </LuxuryButton>
         </div>
@@ -197,7 +197,7 @@ export function GalleryDetailPage() {
                 navigate('/gallery');
               }
             }}
-            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-amber-700 hover:text-amber-800 transition-colors cursor-pointer group py-1"
+            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors cursor-pointer group py-1"
           >
             <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-1" />
             <span>Back to Collection</span>
@@ -246,7 +246,7 @@ export function GalleryDetailPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
-              <div className="p-3 rounded-xl bg-amber-500/10 text-amber-700">
+              <div className="p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700">
                 <Gem className="size-5" />
               </div>
               <div>
@@ -258,7 +258,7 @@ export function GalleryDetailPage() {
             </div>
 
             <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
-              <div className="p-3 rounded-xl bg-amber-500/10 text-amber-700">
+              <div className="p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700">
                 <ShieldCheck className="size-5" />
               </div>
               <div>
@@ -270,7 +270,7 @@ export function GalleryDetailPage() {
             </div>
 
             <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
-              <div className="p-3 rounded-xl bg-amber-500/10 text-amber-700">
+              <div className="p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700">
                 <Truck className="size-5" />
               </div>
               <div>
