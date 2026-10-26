@@ -1,4 +1,5 @@
 import { rateService } from './rate.service.js';
+import { getSchedulerStatus, triggerManualScheduledSync } from './rate.scheduler.js';
 
 export const rateController = {
   async getRates(req, res, next) {
@@ -68,6 +69,32 @@ export const rateController = {
       return res.status(200).json({
         success: true,
         message: 'Rate log entry removed.'
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async getScheduler(req, res, next) {
+    try {
+      const status = getSchedulerStatus();
+      return res.status(200).json({
+        success: true,
+        data: status
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async triggerScheduler(req, res, next) {
+    try {
+      await triggerManualScheduledSync();
+      const status = getSchedulerStatus();
+      return res.status(200).json({
+        success: true,
+        message: 'Scheduled auto-sync task executed.',
+        data: status
       });
     } catch (err) {
       next(err);
