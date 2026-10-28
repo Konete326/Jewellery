@@ -28,7 +28,7 @@ export function ProfileAdminView() {
         founder: 'Mr. Khalil Ahmed',
         establishedYear: '1992',
         assayStandard:
-          'Certified 22K (916.6) & 24K (999.0) Hallmark Guaranteed'
+          'Certified 22K (916.6), 21K (875.0) & 18K (750.0) Hallmark Guaranteed'
       }
     );
   });
