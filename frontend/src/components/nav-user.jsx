@@ -66,32 +66,32 @@ export function NavUser() {
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem>
+					<DropdownMenuItem onClick={() => navigate('/admin/profile')} className="cursor-pointer">
 						<UserIcon />
 						Profile
 					</DropdownMenuItem>
-					<DropdownMenuItem>
+					<DropdownMenuItem onClick={() => navigate('/admin/inquiries')} className="cursor-pointer">
 						<BellIcon />
 						Notifications
 					</DropdownMenuItem>
-					<DropdownMenuItem>
+					<DropdownMenuItem onClick={() => navigate('/admin/rates')} className="cursor-pointer">
 						<CommandIcon />
-						Keyboard shortcuts
+						Gold Rates
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem>
+					<DropdownMenuItem onClick={() => navigate('/contact')} className="cursor-pointer">
 						<LifeBuoyIcon />
 						Atelier Support
 					</DropdownMenuItem>
-					<DropdownMenuItem>
+					<DropdownMenuItem onClick={() => navigate('/gallery')} className="cursor-pointer">
 						<BookOpenIcon />
-						Documentation
+						Live Catalog
 					</DropdownMenuItem>
-					<DropdownMenuItem>
+					<DropdownMenuItem onClick={() => navigate('/admin/accounts')} className="cursor-pointer">
 						<CreditCardIcon />
-						Plan & Billing
+						Bank Accounts
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />

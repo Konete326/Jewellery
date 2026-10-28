@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, Pencil, Trash2, Star, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BankBadge } from '@/components/bank-badge';
 import { toast } from 'sonner';
 
 export function PaymentAccountCard({
@@ -71,9 +72,12 @@ export function PaymentAccountCard({
         </div>
 
         <div className="mb-3">
-          <h4 className="font-serif text-lg font-semibold text-foreground tracking-tight">
-            {account.bankName}
-          </h4>
+          <div className="flex items-center justify-between gap-2">
+            <h4 className="font-serif text-lg font-semibold text-foreground tracking-tight">
+              {account.bankName}
+            </h4>
+            <BankBadge name={account.bankName} type={account.accountType} />
+          </div>
           <p className="text-xs text-muted-foreground mt-0.5">
             Title: <strong className="text-foreground font-medium">{account.accountTitle}</strong>
           </p>

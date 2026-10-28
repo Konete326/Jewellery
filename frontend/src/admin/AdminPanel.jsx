@@ -8,6 +8,7 @@ import { UsersAdminView } from './components/UsersAdminView'
 import { ReviewsAdminView } from './components/ReviewsAdminView'
 import { RatesAdminView } from './components/RatesAdminView'
 import { PaymentAccountsAdminView } from './components/PaymentAccountsAdminView'
+import { ProfileAdminView } from './components/ProfileAdminView'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { toast } from 'sonner'
 
@@ -69,6 +70,9 @@ export function AdminPanel() {
       case 'customers':
       case 'users':
         return <UsersAdminView />
+      case 'profile':
+      case 'settings':
+        return <ProfileAdminView />
       case 'dashboard':
       default:
         return <DashboardOverview />

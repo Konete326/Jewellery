@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Landmark, Copy, Check, ShieldCheck, Zap, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BankBadge } from '@/components/bank-badge';
 import { fetchActivePaymentAccounts } from '@/api/paymentAccountsApi';
 import { openWhatsAppChat } from '@/utils/whatsapp';
 import { toast } from 'sonner';
@@ -101,10 +102,11 @@ export function BankSettlementModal({ isOpen, onClose }) {
                 className="p-5 rounded-2xl border border-border/80 bg-background/60 shadow-xs"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-serif font-medium text-base text-foreground">
                       {acc.bankName}
                     </span>
+                    <BankBadge name={acc.bankName} type={acc.accountType} />
                     <span className="text-[10px] font-mono uppercase text-muted-foreground">
                       ({acc.accountType || 'Bank Account'})
                     </span>

@@ -106,6 +106,47 @@ export function PaymentAccountsAdminView() {
   const handleToggleStatus = async (account) => {
     setActionLoadingId(account._id);
     const newStatus = !account.isActive;
+
+    if (!newStatus && account.isDefault) {
+      const otherActive = accounts.filter(
+        (a) => a._id !== account._id && a.isActive
+      );
+
+      if (otherActive.length === 0) {
+        toast.error('Primary Account Protection', {
+          description:
+            'Cannot deactivate the primary account when no other active accounts exist. Please activate or add another account first.'
+        });
+        setActionLoadingId(null);
+        return;
+      }
+
+      const nextPrimary = otherActive[0];
+      try {
+        await updatePaymentAccount(nextPrimary._id, {
+          ...nextPrimary,
+          isDefault: true
+        });
+        await updatePaymentAccount(account._id, {
+          ...account,
+          isActive: false,
+          isDefault: false
+        });
+        toast.info('Primary Reassigned', {
+          description: `${nextPrimary.bankName} is now set as the primary payment account.`
+        });
+        toast.success(`${account.bankName} deactivated`);
+        await loadAccounts(true);
+      } catch (err) {
+        toast.error('Failed to update account', {
+          description: err.message
+        });
+      } finally {
+        setActionLoadingId(null);
+      }
+      return;
+    }
+
     try {
       await updatePaymentAccount(account._id, { ...account, isActive: newStatus });
       toast.success(`Account ${newStatus ? 'activated' : 'deactivated'}`);
@@ -123,6 +164,20 @@ export function PaymentAccountsAdminView() {
     if (!deletingAccount) return;
     setDeleteLoading(true);
     try {
+      if (deletingAccount.isDefault) {
+        const otherActive = accounts.filter(
+          (a) => a._id !== deletingAccount._id && a.isActive
+        );
+        if (otherActive.length > 0) {
+          await updatePaymentAccount(otherActive[0]._id, {
+            ...otherActive[0],
+            isDefault: true
+          });
+          toast.info('Primary Reassigned', {
+            description: `${otherActive[0].bankName} is now set as the primary payment account.`
+          });
+        }
+      }
       await deletePaymentAccount(deletingAccount._id);
       toast.success(`${deletingAccount.bankName} removed`);
       setDeletingAccount(null);
