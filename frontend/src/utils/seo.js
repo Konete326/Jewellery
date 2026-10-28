@@ -1,5 +1,5 @@
 const DEFAULT_TITLE = 'Khalil & Sons Jewellers | Master Goldsmithing & Bridal Jewellery Karachi';
-const DEFAULT_DESCRIPTION = 'Khalil & Sons Jewellers — Master goldsmiths since 1992 in Murshid Sunaar Tower, Saddar, Karachi. Specializing in certified 22K/24K gold, bespoke bridal jewellery heirlooms, uncut Polki diamonds, and lifetime hallmark guarantee.';
+const DEFAULT_DESCRIPTION = 'Khalil & Sons Jewellers — Master goldsmiths since 1992 in Murshid Sunaar Tower, Saddar, Karachi. Specializing in certified 22K, 21K and 18K gold bridal jewellery heirlooms, uncut Polki diamonds, and lifetime hallmark guarantee.';
 const DEFAULT_KEYWORDS = 'Khalil and Sons, Khalil and Sons Jewellers, jewellery in Karachi, gold jewellery Saddar, Murshid Sunaar Tower, best jewelers Karachi, 22K gold bridal jewelry, 24K gold bullion, polki diamonds, custom wedding jewellery, Karachi sarafa bazaar, Pakistani bridal jewellery, gold kada, jhumka, guluband';
 const DEFAULT_IMAGE = 'https://khalilandsonsjewellers.com/og-image.jpg';
 const BASE_URL = 'https://khalilandsonsjewellers.com';
