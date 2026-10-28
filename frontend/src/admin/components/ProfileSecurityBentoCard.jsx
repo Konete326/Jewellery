@@ -62,7 +62,7 @@ export function ProfileSecurityBentoCard({
               type="text"
               value={formData.assayStandard || ''}
               onChange={(e) => onChange('assayStandard', e.target.value)}
-              placeholder="Certified 22K (916.6) & 24K (999.0) Hallmark Guaranteed"
+              placeholder="Certified 22K (916.6), 21K (875.0) & 18K (750.0) Hallmark Guaranteed"
               className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs font-mono focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground/20"
             />
           </div>
