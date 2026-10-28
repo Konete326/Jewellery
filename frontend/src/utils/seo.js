@@ -1,7 +1,7 @@
 const DEFAULT_TITLE = 'Khalil & Sons Jewellers | Master Goldsmithing & Bridal Jewellery Karachi';
 const DEFAULT_DESCRIPTION = 'Khalil & Sons Jewellers — Master goldsmiths since 1992 in Murshid Sunaar Tower, Saddar, Karachi. Specializing in certified 22K/24K gold, bespoke bridal jewellery heirlooms, uncut Polki diamonds, and lifetime hallmark guarantee.';
 const DEFAULT_KEYWORDS = 'Khalil and Sons, Khalil and Sons Jewellers, jewellery in Karachi, gold jewellery Saddar, Murshid Sunaar Tower, best jewelers Karachi, 22K gold bridal jewelry, 24K gold bullion, polki diamonds, custom wedding jewellery, Karachi sarafa bazaar, Pakistani bridal jewellery, gold kada, jhumka, guluband';
-const DEFAULT_IMAGE = 'https://khalilandsonsjewellers.com/assets/logo.png';
+const DEFAULT_IMAGE = 'https://khalilandsonsjewellers.com/og-image.jpg';
 const BASE_URL = 'https://khalilandsonsjewellers.com';
 
 const optimizeCloudinaryUrl = (url = '') => {
@@ -67,7 +67,7 @@ export function updatePageSEO({
 
   const fullTitle = title ? `${title} | Khalil & Sons Jewellers` : DEFAULT_TITLE;
   const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : BASE_URL);
-  const fullImage = image?.startsWith('http') ? image : `${BASE_URL}${image || '/assets/logo.png'}`;
+  const fullImage = image?.startsWith('http') ? image : `${BASE_URL}${image || '/og-image.jpg'}`;
 
   document.title = fullTitle;
 
@@ -78,6 +78,9 @@ export function updatePageSEO({
   setMetaTag('meta[property="og:title"]', 'content', fullTitle);
   setMetaTag('meta[property="og:description"]', 'content', description);
   setMetaTag('meta[property="og:image"]', 'content', fullImage);
+  setMetaTag('meta[property="og:image:secure_url"]', 'content', fullImage);
+  setMetaTag('meta[property="og:image:width"]', 'content', '1200');
+  setMetaTag('meta[property="og:image:height"]', 'content', '630');
   setMetaTag('meta[property="og:url"]', 'content', currentUrl);
   setMetaTag('meta[property="og:type"]', 'content', type);
   setMetaTag('meta[property="og:site_name"]', 'content', 'Khalil & Sons Jewellers');

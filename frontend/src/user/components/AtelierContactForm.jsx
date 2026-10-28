@@ -57,6 +57,7 @@ export function AtelierContactForm({ onSuccess }) {
   const handleCopyCode = (code) => {
     navigator.clipboard.writeText(code);
     setCopiedCode(true);
+    toast.success('Inquiry reference code copied to clipboard');
     setTimeout(() => setCopiedCode(false), 2000);
   };
 

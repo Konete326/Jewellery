@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, Pencil, Trash2, Star, CheckCircle, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 export function PaymentAccountCard({
   account,
@@ -12,10 +13,11 @@ export function PaymentAccountCard({
 }) {
   const [copiedField, setCopiedField] = useState(null);
 
-  const handleCopy = (text, field) => {
+  const handleCopy = (text, field, label = 'Account Number') => {
     if (!text) return;
     navigator.clipboard.writeText(text);
     setCopiedField(field);
+    toast.success(`${account.bankName} ${label} copied to clipboard`);
     setTimeout(() => {
       setCopiedField(null);
     }, 2000);
@@ -80,7 +82,7 @@ export function PaymentAccountCard({
             </div>
             <button
               type="button"
-              onClick={() => handleCopy(account.accountNumber, 'acc')}
+              onClick={() => handleCopy(account.accountNumber, 'acc', 'Account Number')}
               className="p-1.5 rounded-lg border border-border/80 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
               title="Copy Account Number"
             >
@@ -104,7 +106,7 @@ export function PaymentAccountCard({
               </div>
               <button
                 type="button"
-                onClick={() => handleCopy(account.iban, 'iban')}
+                onClick={() => handleCopy(account.iban, 'iban', 'IBAN')}
                 className="p-1.5 rounded-lg border border-border/80 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
                 title="Copy IBAN"
               >

@@ -49,6 +49,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
   const handleCopyCode = (code) => {
     navigator.clipboard.writeText(code)
     setCopiedCode(true)
+    toast.success('Appointment reference code copied to clipboard')
     setTimeout(() => setCopiedCode(false), 2000)
   }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Landmark, Copy, Check, ShieldCheck, Zap } from 'lucide-react';
 import { fetchActivePaymentAccounts } from '@/api/paymentAccountsApi';
+import { toast } from 'sonner';
 
 export function BankSettlementModal({ isOpen, onClose }) {
   const [accounts, setAccounts] = useState([]);
@@ -30,10 +31,11 @@ export function BankSettlementModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const handleCopy = (text, key) => {
+  const handleCopy = (text, key, label = 'Account Number') => {
     if (!text) return;
     navigator.clipboard.writeText(text);
     setCopiedField(key);
+    toast.success(`${label} copied to clipboard`);
     setTimeout(() => setCopiedField(null), 2000);
   };
 
@@ -57,33 +59,30 @@ export function BankSettlementModal({ isOpen, onClose }) {
         </button>
 
         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border/70">
-          <div className="size-10 rounded-full border border-amber-500/30 bg-amber-500/10 flex items-center justify-center text-amber-700 shrink-0">
+          <div className="size-10 rounded-full border border-border bg-muted/40 flex items-center justify-center text-foreground shrink-0">
             <Landmark className="size-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="font-serif text-lg sm:text-xl font-semibold text-foreground tracking-tight">
-                Official Bank Settlement Accounts
+                Bank Accounts
               </h3>
-              <span className="font-mono text-[9px] uppercase tracking-widest text-amber-900 border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 rounded-full font-medium">
-                AU · SETTLEMENT
-              </span>
             </div>
             <p className="text-xs text-muted-foreground font-light">
-              Official accounts for bespoke jewellery bookings, bullion lock-in, and appraisals.
+              Official accounts for custom jewelry orders and advances
             </p>
           </div>
         </div>
 
         {loading ? (
           <div className="py-12 text-center text-xs font-mono text-muted-foreground animate-pulse">
-            Loading verified atelier accounts...
+            Loading verified accounts...
           </div>
         ) : accounts.length === 0 ? (
           <div className="py-10 text-center space-y-2">
             <ShieldCheck className="size-8 mx-auto text-muted-foreground/60" />
             <p className="text-xs font-mono text-muted-foreground">
-              Direct settlement accounts available via WhatsApp concierge.
+              Direct accounts available via WhatsApp concierge.
             </p>
           </div>
         ) : (
@@ -91,11 +90,7 @@ export function BankSettlementModal({ isOpen, onClose }) {
             {accounts.map((acc) => (
               <div
                 key={acc._id || acc.id}
-                className={`p-5 rounded-2xl border transition-all ${
-                  acc.isInstantSettlement
-                    ? 'border-amber-500/40 bg-gradient-to-br from-amber-500/5 via-card to-background shadow-xs'
-                    : 'border-border/80 bg-background/60'
-                }`}
+                className="p-5 rounded-2xl border border-border/80 bg-background/60 shadow-xs"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                   <div className="flex items-center gap-2">
@@ -103,20 +98,13 @@ export function BankSettlementModal({ isOpen, onClose }) {
                       {acc.bankName}
                     </span>
                     <span className="text-[10px] font-mono uppercase text-muted-foreground">
-                      ({acc.accountType})
+                      ({acc.accountType || 'Bank Account'})
                     </span>
                   </div>
-
-                  {acc.isInstantSettlement && (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-amber-500/15 text-amber-900 border border-amber-500/30">
-                      <Zap className="size-3 fill-amber-600 text-amber-600" />
-                      Instant Settlement
-                    </span>
-                  )}
                 </div>
 
                 <div className="text-xs text-muted-foreground mb-3 font-light">
-                  Beneficiary Title: <strong className="text-foreground font-medium">{acc.accountTitle}</strong>
+                  Beneficiary: <strong className="text-foreground font-medium">{acc.accountTitle}</strong>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
@@ -131,8 +119,8 @@ export function BankSettlementModal({ isOpen, onClose }) {
                     </div>
                     <button
                       type="button"
-                      onClick={() => handleCopy(acc.accountNumber, `acc-${acc._id}`)}
-                      className="p-1 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                      onClick={() => handleCopy(acc.accountNumber, `acc-${acc._id}`, `${acc.bankName} Account / Raast ID`)}
+                      className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                       title="Copy Account Number"
                     >
                       {copiedField === `acc-${acc._id}` ? (
@@ -155,8 +143,8 @@ export function BankSettlementModal({ isOpen, onClose }) {
                       </div>
                       <button
                         type="button"
-                        onClick={() => handleCopy(acc.iban, `iban-${acc._id}`)}
-                        className="p-1 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                        onClick={() => handleCopy(acc.iban, `iban-${acc._id}`, `${acc.bankName} IBAN`)}
+                        className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                         title="Copy IBAN"
                       >
                         {copiedField === `iban-${acc._id}` ? (
@@ -168,12 +156,6 @@ export function BankSettlementModal({ isOpen, onClose }) {
                     </div>
                   )}
                 </div>
-
-                {acc.instructions && (
-                  <p className="mt-2.5 text-[11px] font-mono text-muted-foreground/90 bg-muted/20 p-2 rounded-lg border border-border/40">
-                    ℹ️ {acc.instructions}
-                  </p>
-                )}
               </div>
             ))}
           </div>
