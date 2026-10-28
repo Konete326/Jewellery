@@ -66,8 +66,8 @@ export function GalleryDetailPage() {
 
           updatePageSEO({
             title: itemPayload.title,
-            description: itemPayload.description || `Discover ${itemPayload.title} - handcrafted certified 22K gold jewellery by Khalil & Sons Jewellers, Murshid Sunaar Tower, Saddar, Karachi.`,
-            keywords: `${itemPayload.title}, ${itemPayload.category || 'Bridal Sets'}, gold jewellery Karachi, certified 22K gold, Pakistani jewellery, Khalil & Sons`,
+            description: itemPayload.description || `Discover ${itemPayload.title} - handcrafted certified 22K, 21K and 18K gold jewellery by Khalil & Sons Jewellers, Murshid Sunaar Tower, Saddar, Karachi.`,
+            keywords: `${itemPayload.title}, ${itemPayload.category || 'Bridal Sets'}, gold jewellery Karachi, certified 22K 21K 18K gold, Pakistani jewellery, Khalil & Sons`,
             image: itemPayload.imageUrl,
             type: 'product',
             schema: getProductSchema(itemPayload)
