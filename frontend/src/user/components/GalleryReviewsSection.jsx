@@ -94,7 +94,7 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
                 </div>
 
                 <div className="flex items-center justify-between pt-3 border-t border-neutral-100 text-[11px] text-neutral-400 font-mono">
-                  <span className="flex items-center gap-1 text-emerald-700">
+                  <span className="flex items-center gap-1 text-[#99794d]">
                     <ShieldCheck className="size-3" />
                     <span>Verified Buyer</span>
                   </span>

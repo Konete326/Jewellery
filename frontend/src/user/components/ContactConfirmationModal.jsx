@@ -63,7 +63,7 @@ export function ContactConfirmationModal({ isOpen, onClose, inquiryData }) {
             <span className="font-medium text-foreground">{jewelryType}</span>
           </div>
 
-          <div className="flex items-center gap-2 pt-1 text-[11px] text-emerald-700 dark:text-emerald-400">
+          <div className="flex items-center gap-2 pt-1 text-[11px] text-amber-800 dark:text-amber-300">
             <ShieldCheck className="size-3.5 shrink-0" />
             <span>We will reply to your message within 24 hours.</span>
           </div>

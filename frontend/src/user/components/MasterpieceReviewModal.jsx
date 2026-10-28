@@ -206,7 +206,7 @@ export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitt
 
             <div className="flex items-center justify-between text-[11px] text-muted-foreground font-light pt-1">
               <span className="flex items-center gap-1">
-                <ShieldCheck className="size-3.5 text-emerald-600" />
+                <ShieldCheck className="size-3.5 text-amber-700" />
                 Verified Buyer
               </span>
               <span>Logged in as {user.name || user.email}</span>

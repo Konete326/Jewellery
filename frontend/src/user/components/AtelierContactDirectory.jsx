@@ -1,12 +1,12 @@
 import React from 'react';
-import { Mail, MapPin, Phone, Calendar, MessageCircle, Navigation } from 'lucide-react';
+import { Mail, MapPin, Phone, Calendar, MessageCircle, Navigation, Landmark } from 'lucide-react';
 import { GlobeWireframe } from '@/components/ui/contact-with-globe';
 import { STORE_INFO } from '@/constants/storeInfo';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
 import { LuxuryButton } from './LuxuryButton';
 import { StoreStatusBadge } from '@/components/StoreStatusBadge';
 
-export function AtelierContactDirectory({ onOpenAppointment }) {
+export function AtelierContactDirectory({ onOpenAppointment, onOpenBankAccounts }) {
   const whatsappUrl = getPersonalizedWhatsAppInquiry();
 
   return (
@@ -102,15 +102,28 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
       </div>
 
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-border/80">
-        <a
-          href={STORE_INFO.social.googleMapsDirections}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs font-mono text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors"
-        >
-          <Navigation className="size-3.5" />
-          <span>Maps & Directions &rarr;</span>
-        </a>
+        <div className="flex items-center gap-3 flex-wrap">
+          <a
+            href={STORE_INFO.social.googleMapsDirections}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-neutral-600 dark:text-neutral-400 hover:text-foreground transition-colors"
+          >
+            <Navigation className="size-3.5" />
+            <span>Maps & Directions &rarr;</span>
+          </a>
+
+          {onOpenBankAccounts && (
+            <button
+              type="button"
+              onClick={onOpenBankAccounts}
+              className="inline-flex items-center gap-1.5 text-xs font-mono text-amber-900 hover:underline cursor-pointer font-medium"
+            >
+              <Landmark className="size-3.5 text-amber-700" />
+              <span>Bank Accounts &rarr;</span>
+            </button>
+          )}
+        </div>
 
         {onOpenAppointment && (
           <LuxuryButton

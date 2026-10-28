@@ -207,7 +207,7 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
 
           <div className="flex items-center justify-between pt-2 border-t border-border">
             <span className="text-[11px] text-muted-foreground flex items-center gap-1">
-              <ShieldCheck className="size-3.5 text-emerald-600" />
+              <ShieldCheck className="size-3.5 text-amber-700" />
               Direct Atelier Dispatch
             </span>
             <div className="flex items-center gap-2">

@@ -171,7 +171,7 @@ export function GalleryManagement() {
         )}
 
         {successMsg && (
-          <div className="mb-4 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-medium">
+          <div className="mb-4 p-3 rounded-lg bg-muted/60 border border-border/80 text-foreground text-xs font-medium">
             {successMsg}
           </div>
         )}

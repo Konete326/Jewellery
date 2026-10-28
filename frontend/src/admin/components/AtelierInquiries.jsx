@@ -24,12 +24,7 @@ export function AtelierInquiries({ inquiries = [], loading = false, onRefresh = 
   const handleStatusChange = async (id, newStatus) => {
     try {
       await updateInquiryStatus(id, newStatus)
-      toast.custom(() => (
-        <Alert className="border-emerald-600 text-emerald-600 dark:border-emerald-400 dark:text-emerald-400 *:[svg]:row-span-1">
-          <CheckCheckIcon />
-          <AlertTitle>Inquiry status updated to {newStatus}</AlertTitle>
-        </Alert>
-      ))
+      toast.success(`Inquiry status updated to ${newStatus}`)
       onRefresh()
     } catch (err) {
       toast.error(err.message || 'Failed to update status')
@@ -41,12 +36,7 @@ export function AtelierInquiries({ inquiries = [], loading = false, onRefresh = 
     setDeleteLoading(true)
     try {
       await deleteInquiry(deletingInquiry._id)
-      toast.custom(() => (
-        <Alert className="border-emerald-600 text-emerald-600 dark:border-emerald-400 dark:text-emerald-400 *:[svg]:row-span-1">
-          <CheckCheckIcon />
-          <AlertTitle>Inquiry removed from registry</AlertTitle>
-        </Alert>
-      ))
+      toast.success('Inquiry removed from registry')
       setDeletingInquiry(null)
       onRefresh()
     } catch (err) {
@@ -103,10 +93,10 @@ export function AtelierInquiries({ inquiries = [], loading = false, onRefresh = 
                       )}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
+                      className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-md bg-muted/40 text-foreground border border-border/80 hover:bg-muted transition-colors"
                       title="Open WhatsApp Consultation"
                     >
-                      <Phone className="size-3 text-emerald-600 dark:text-emerald-400" />
+                      <Phone className="size-3 text-muted-foreground" />
                       <span>{formatPhoneDisplay(inq.phone)}</span>
                     </a>
                   )}

@@ -39,15 +39,15 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
         className={cn(
           'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider border shadow-2xs select-none transition-all duration-200 cursor-pointer',
           isOpen
-            ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-500/50'
-            : 'border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-300 hover:bg-amber-500/20 hover:border-amber-500/50',
+            ? 'border-border/80 bg-muted/40 text-foreground hover:bg-muted/70 hover:border-border'
+            : 'border-border/60 bg-muted/20 text-muted-foreground hover:bg-muted/40',
           className
         )}
       >
         <span
           className={cn(
-            'size-2 rounded-full shrink-0',
-            isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-amber-600'
+            'size-1.5 rounded-full shrink-0',
+            isOpen ? 'bg-amber-600 dark:bg-amber-400' : 'bg-muted-foreground'
           )}
         />
         <span className="font-semibold">{isOpen ? 'Open Now' : 'Closed'}</span>
@@ -67,10 +67,7 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
           }
         }}
         className={cn(
-          'p-3.5 rounded-2xl border transition-all duration-200 select-none shadow-xs cursor-pointer hover:border-amber-500/50',
-          isOpen
-            ? 'border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent'
-            : 'border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent',
+          'p-3.5 rounded-2xl border border-border/80 bg-card transition-all duration-200 select-none shadow-xs cursor-pointer hover:border-amber-500/40',
           className
         )}
       >
@@ -78,8 +75,8 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
           <div className="flex items-center gap-2">
             <span
               className={cn(
-                'size-2.5 rounded-full shrink-0',
-                isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-amber-600'
+                'size-2 rounded-full shrink-0',
+                isOpen ? 'bg-amber-600 dark:bg-amber-400' : 'bg-muted-foreground'
               )}
             />
             <span className="text-xs font-mono font-bold tracking-wider uppercase text-foreground">
@@ -110,15 +107,15 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
       className={cn(
         'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider border select-none transition-all duration-200 cursor-pointer',
         isOpen
-          ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-500/20'
-          : 'border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-300 hover:bg-amber-500/20',
+          ? 'border-border/80 bg-muted/40 text-foreground hover:bg-muted/70'
+          : 'border-border/60 bg-muted/20 text-muted-foreground hover:bg-muted/40',
         className
       )}
     >
       <span
         className={cn(
           'size-1.5 rounded-full shrink-0',
-          isOpen ? 'bg-emerald-500 animate-pulse' : 'bg-amber-600'
+          isOpen ? 'bg-amber-600 dark:bg-amber-400' : 'bg-muted-foreground'
         )}
       />
       <span className="font-semibold">{isOpen ? 'Open Now' : 'Closed'}</span>

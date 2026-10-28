@@ -32,7 +32,7 @@ export function AdminMetrics({ galleryItems = [], inquiries = [], users = [], lo
       value: loading ? "..." : `${users.length}`,
       subtext: loading ? "Loading..." : "Verified collectors & patrons",
       icon: Users,
-      accent: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+      accent: "bg-amber-500/10 text-amber-700 dark:text-amber-400"
     }
   ]
 

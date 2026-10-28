@@ -34,6 +34,7 @@ export function PaymentAccountModal({ isOpen, onClose, onSave, account = null, l
     accountType: 'Bank Account',
     swiftCode: '',
     instructions: '',
+    isInstantSettlement: false,
     isDefault: false,
     isActive: true
   });
@@ -51,6 +52,7 @@ export function PaymentAccountModal({ isOpen, onClose, onSave, account = null, l
         accountType: account.accountType || 'Bank Account',
         swiftCode: account.swiftCode || '',
         instructions: account.instructions || '',
+        isInstantSettlement: Boolean(account.isInstantSettlement),
         isDefault: Boolean(account.isDefault),
         isActive: account.isActive !== undefined ? Boolean(account.isActive) : true
       });
@@ -64,6 +66,7 @@ export function PaymentAccountModal({ isOpen, onClose, onSave, account = null, l
         accountType: 'Bank Account',
         swiftCode: '',
         instructions: '',
+        isInstantSettlement: false,
         isDefault: false,
         isActive: true
       });
@@ -301,11 +304,24 @@ export function PaymentAccountModal({ isOpen, onClose, onSave, account = null, l
               <label className="flex items-center gap-2 cursor-pointer text-xs text-foreground select-none">
                 <input
                   type="checkbox"
+                  checked={formData.isInstantSettlement}
+                  onChange={(e) => handleChange('isInstantSettlement', e.target.checked)}
+                  className="rounded border-border text-amber-600 focus:ring-amber-500/30"
+                />
+                <span className="inline-flex items-center gap-1.5 font-medium">
+                  <span className="size-1.5 rounded-full bg-amber-600" />
+                  Instant Settlement
+                </span>
+              </label>
+
+              <label className="flex items-center gap-2 cursor-pointer text-xs text-foreground select-none">
+                <input
+                  type="checkbox"
                   checked={formData.isDefault}
                   onChange={(e) => handleChange('isDefault', e.target.checked)}
                   className="rounded border-border text-amber-600 focus:ring-amber-500/30"
                 />
-                <span className="font-medium">Primary Settlement Account</span>
+                <span className="font-medium">Primary</span>
               </label>
 
               <label className="flex items-center gap-2 cursor-pointer text-xs text-foreground select-none">

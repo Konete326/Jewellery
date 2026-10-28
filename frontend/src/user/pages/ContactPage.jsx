@@ -5,6 +5,7 @@ import { SearchModal } from '@/user/components/SearchModal';
 import { CartDrawer } from '@/user/components/CartDrawer';
 import { BespokeAppointmentModal } from '@/user/components/BespokeAppointmentModal';
 import { ContactConfirmationModal } from '@/user/components/ContactConfirmationModal';
+import { BankSettlementModal } from '@/user/components/BankSettlementModal';
 import { AtelierContactDirectory } from '@/user/components/AtelierContactDirectory';
 import { AtelierContactForm } from '@/user/components/AtelierContactForm';
 import { AtelierInteractiveMap } from '@/user/components/AtelierInteractiveMap';
@@ -14,6 +15,7 @@ export function ContactPage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
+  const [isBankModalOpen, setIsBankModalOpen] = useState(false);
   const [confirmationData, setConfirmationData] = useState(null);
 
   useEffect(() => {
@@ -41,6 +43,7 @@ export function ContactPage() {
           <div className="lg:col-span-5 xl:col-span-5 h-full">
             <AtelierContactDirectory
               onOpenAppointment={() => setIsAppointmentOpen(true)}
+              onOpenBankAccounts={() => setIsBankModalOpen(true)}
             />
           </div>
 
@@ -65,6 +68,11 @@ export function ContactPage() {
       <BespokeAppointmentModal
         isOpen={isAppointmentOpen}
         onClose={() => setIsAppointmentOpen(false)}
+      />
+
+      <BankSettlementModal
+        isOpen={isBankModalOpen}
+        onClose={() => setIsBankModalOpen(false)}
       />
 
       <SearchModal

@@ -32,7 +32,7 @@ export function ConfirmStatusModal({ isOpen, onClose, onConfirm, user, loading }
           <div className={`size-11 rounded-full flex items-center justify-center shrink-0 border ${
             isCurrentlyActive
               ? 'bg-neutral-100 text-neutral-800 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-700'
-              : 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+              : 'bg-muted text-foreground border-border/80'
           }`}>
             {isCurrentlyActive ? <UserX className="size-5" /> : <UserCheck className="size-5" />}
           </div>
@@ -95,7 +95,7 @@ export function ConfirmStatusModal({ isOpen, onClose, onConfirm, user, loading }
             className={`px-4 py-2 text-xs font-medium rounded-lg text-white transition-colors cursor-pointer flex items-center gap-2 disabled:opacity-50 ${
               isCurrentlyActive
                 ? 'bg-amber-600 hover:bg-amber-700'
-                : 'bg-emerald-600 hover:bg-emerald-700'
+                : 'bg-foreground hover:bg-neutral-800 text-background'
             }`}
           >
             {loading && <LumaSpin variant="white" size={14} />}

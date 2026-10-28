@@ -112,7 +112,7 @@ export function AdminReviewsList() {
                 </div>
 
                 <div className="text-[11px] font-mono text-muted-foreground shrink-0 text-right">
-                  <span className="flex items-center gap-1 text-emerald-600 justify-end mb-1">
+                  <span className="flex items-center gap-1 text-amber-700 dark:text-amber-400 justify-end mb-1">
                     <ShieldCheck className="size-3" />
                     <span>Verified</span>
                   </span>

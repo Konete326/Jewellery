@@ -42,6 +42,10 @@ const paymentAccountSchema = new mongoose.Schema(
       trim: true,
       default: ''
     },
+    isInstantSettlement: {
+      type: Boolean,
+      default: false
+    },
     isDefault: {
       type: Boolean,
       default: false

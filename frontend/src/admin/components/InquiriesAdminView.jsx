@@ -110,9 +110,9 @@ export function InquiriesAdminView() {
           <span className="text-[11px] uppercase tracking-wider font-mono text-amber-700 dark:text-amber-400">Awaiting Response</span>
           <p className="text-2xl font-serif font-semibold text-amber-700 dark:text-amber-400 mt-1">{pendingCount}</p>
         </div>
-        <div className="p-4 rounded-xl border border-emerald-500/25 bg-emerald-500/5 shadow-xs">
-          <span className="text-[11px] uppercase tracking-wider font-mono text-emerald-700 dark:text-emerald-400">Transmitted Replies</span>
-          <p className="text-2xl font-serif font-semibold text-emerald-700 dark:text-emerald-400 mt-1">{repliedCount}</p>
+        <div className="p-4 rounded-xl border border-border/80 bg-card shadow-xs">
+          <span className="text-[11px] uppercase tracking-wider font-mono text-muted-foreground">Transmitted Replies</span>
+          <p className="text-2xl font-serif font-semibold text-foreground mt-1">{repliedCount}</p>
         </div>
       </div>
 
@@ -186,17 +186,17 @@ export function InquiriesAdminView() {
                         )}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 hover:bg-emerald-500/20 transition-colors"
+                        className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-md bg-muted/40 text-foreground border border-border/80 hover:bg-muted transition-colors"
                         title="Open direct WhatsApp conversation"
                       >
-                        <Phone className="size-3 text-emerald-600 dark:text-emerald-400" />
+                        <Phone className="size-3 text-muted-foreground" />
                         <span>{formatPhoneDisplay(item.phone)}</span>
                       </a>
                     )}
                     <span
                       className={`text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 rounded-full border ${
                         item.status === 'Replied'
-                          ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/25'
+                          ? 'bg-muted/60 text-foreground border-border/80'
                           : item.status === 'Pending'
                             ? 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/25'
                             : 'bg-muted text-muted-foreground border-border'
@@ -215,7 +215,7 @@ export function InquiriesAdminView() {
                   </p>
 
                   {item.replies && item.replies.length > 0 && (
-                    <div className="pt-1 flex items-center gap-2 text-[11px] text-emerald-600 dark:text-emerald-400">
+                    <div className="pt-1 flex items-center gap-2 text-[11px] text-amber-800 dark:text-amber-300">
                       <CheckCircle2 className="size-3" />
                       <span>{item.replies.length} {item.replies.length === 1 ? 'reply' : 'replies'} dispatched</span>
                     </div>

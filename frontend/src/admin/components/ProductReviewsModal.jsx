@@ -187,7 +187,7 @@ export function ProductReviewsModal({ isOpen, onClose, item, onReviewUpdated }) 
                           <span className="font-medium text-xs text-foreground truncate">
                             {rev.userName || 'Valued Patron'}
                           </span>
-                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 shrink-0">
+                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-mono bg-amber-500/10 text-amber-900 dark:text-amber-300 border border-amber-500/20 shrink-0">
                             <CheckCircle2 className="size-2.5" />
                             <span>Verified</span>
                           </span>

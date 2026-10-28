@@ -1,7 +1,6 @@
 import React from 'react';
 import { RefreshCw, RotateCcw, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 
 export function RatesAdminHeader({
   rates,
@@ -18,21 +17,20 @@ export function RatesAdminHeader({
     : 'Pending';
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border/40">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-border/60">
       <div>
-        <div className="flex items-center gap-2 mb-1">
-          <h2 className="text-xl font-serif font-light text-foreground tracking-tight">
+        <div className="flex items-center gap-2.5 mb-1">
+          <h2 className="text-xl sm:text-2xl font-serif font-light text-foreground tracking-tight">
             Bullion Market Rates
           </h2>
           {isOverride ? (
-            <Badge variant="outline" className="border-amber-500/40 bg-amber-500/10 text-amber-800 dark:text-amber-300 font-mono text-[10px]">
+            <span className="font-mono text-[10px] tracking-wider uppercase px-2.5 py-0.5 rounded-full border border-amber-500/30 bg-amber-500/5 text-amber-900/90 dark:text-amber-200 font-medium">
               Custom Benchmark
-            </Badge>
+            </span>
           ) : (
-            <Badge variant="outline" className="border-emerald-500/40 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 font-mono text-[10px]">
-              <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse mr-1.5" />
-              Automated Live Sync
-            </Badge>
+            <span className="font-mono text-[10px] tracking-wider uppercase px-2.5 py-0.5 rounded-full border border-border/80 bg-muted/40 text-foreground font-medium">
+              Market Live Sync
+            </span>
           )}
         </div>
         <p className="text-xs text-muted-foreground font-mono">
@@ -46,10 +44,10 @@ export function RatesAdminHeader({
           variant="outline"
           size="sm"
           onClick={onOpenBroadcastModal}
-          className="text-xs font-mono h-9 cursor-pointer border-amber-500/30 hover:bg-amber-500/10 text-foreground"
+          className="text-xs font-mono h-9 cursor-pointer border-border hover:bg-muted text-foreground"
         >
-          <Mail className="size-3.5 mr-1.5 text-amber-600 dark:text-amber-400" />
-          Broadcast Rates via Email
+          <Mail className="size-3.5 mr-1.5 text-muted-foreground" />
+          Broadcast Rates
         </Button>
 
         {isOverride && (
@@ -71,7 +69,7 @@ export function RatesAdminHeader({
           size="sm"
           onClick={onSync}
           disabled={isSyncing}
-          className="bg-foreground text-background hover:opacity-90 text-xs font-mono h-9 cursor-pointer"
+          className="bg-foreground text-background hover:bg-neutral-800 text-xs font-mono h-9 px-4 cursor-pointer shadow-xs"
         >
           <RefreshCw className={`size-3.5 mr-1.5 ${isSyncing ? 'animate-spin' : ''}`} />
           {isSyncing ? 'Syncing...' : 'Sync Live Market'}

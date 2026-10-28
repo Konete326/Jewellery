@@ -136,7 +136,7 @@ export function AtelierContactForm({ onSuccess }) {
       <div className="rounded-2xl border border-border/80 bg-white p-6 sm:p-8 shadow-xs flex flex-col justify-between h-full gap-5 animate-in fade-in duration-200">
         <div className="space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-border/70">
-            <span className="font-mono text-[9px] uppercase tracking-widest text-emerald-800 dark:text-emerald-300 border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-0.5 rounded-full font-medium">
+            <span className="font-mono text-[9px] uppercase tracking-widest text-amber-900/90 dark:text-amber-200 border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 rounded-full font-medium">
               AU · INQUIRY DISPATCHED
             </span>
             <span className="text-xs text-muted-foreground font-mono">
@@ -153,7 +153,7 @@ export function AtelierContactForm({ onSuccess }) {
             </p>
           </div>
 
-          <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 space-y-2">
+          <div className="p-4 rounded-xl border border-amber-500/25 bg-amber-500/5 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
                 Inquiry Reference
@@ -163,14 +163,14 @@ export function AtelierContactForm({ onSuccess }) {
                 onClick={() => handleCopyCode(submittedConfirmation.refCode)}
                 className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground cursor-pointer"
               >
-                {copiedCode ? <Check className="size-3 text-emerald-600" /> : <Copy className="size-3" />}
+                {copiedCode ? <Check className="size-3 text-amber-700" /> : <Copy className="size-3" />}
                 {copiedCode ? 'Copied' : 'Copy'}
               </button>
             </div>
             <div className="font-mono text-base font-semibold text-foreground tracking-wider">
               {submittedConfirmation.refCode}
             </div>
-            <div className="text-xs text-muted-foreground leading-relaxed pt-1 border-t border-emerald-500/20">
+            <div className="text-xs text-muted-foreground leading-relaxed pt-1 border-t border-amber-500/20">
               Confirmation dispatched to{' '}
               <strong className="text-foreground font-medium underline underline-offset-2">
                 {submittedConfirmation.email}
@@ -200,9 +200,9 @@ export function AtelierContactForm({ onSuccess }) {
               href={whatsAppUrl}
               target="_blank"
               rel="noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium transition-colors shadow-xs"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-xl bg-foreground hover:bg-neutral-800 text-background text-xs font-medium transition-colors shadow-xs"
             >
-              <MessageSquare className="size-3.5" />
+              <MessageSquare className="size-3.5 text-amber-300" />
               Chat on WhatsApp
             </a>
           )}

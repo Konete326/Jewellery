@@ -120,7 +120,7 @@ export function RatesAdminView() {
   }
 
   return (
-    <div className="space-y-6 max-w-5xl">
+    <div className="w-full space-y-6">
       <RatesAdminHeader
         rates={rates}
         onSync={handleSync}

@@ -39,17 +39,23 @@ export function PaymentAccountCard({
       <div>
         <div className="flex items-center justify-between gap-2 mb-4 pb-3.5 border-b border-border/70">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-mono text-[9px] uppercase tracking-widest text-amber-800 dark:text-amber-300 border border-amber-500/25 bg-amber-500/10 px-2.5 py-0.5 rounded-full font-medium">
+            <span className="font-mono text-[9px] uppercase tracking-widest text-amber-900/90 dark:text-amber-200 border border-amber-500/25 bg-amber-500/5 px-2.5 py-0.5 rounded-full font-medium">
               {isDigital ? 'AU · DIGITAL' : 'AU · SETTLE'}
             </span>
             <span className="text-[11px] font-mono text-muted-foreground uppercase">
               {account.accountType}
             </span>
+            {account.isInstantSettlement && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-amber-500/10 text-amber-900 border border-amber-500/30">
+                <span className="size-1.5 rounded-full bg-amber-600 animate-pulse" />
+                Instant Settlement
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-1.5 shrink-0">
             {account.isDefault && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-medium text-amber-900 dark:text-amber-200 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 text-[10px] font-medium text-amber-900 dark:text-amber-200 bg-amber-500/10 border border-amber-500/25 px-2 py-0.5 rounded-full">
                 <Star className="size-3 fill-amber-500 text-amber-500" />
                 Primary
               </span>
@@ -57,13 +63,13 @@ export function PaymentAccountCard({
             <span
               className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border ${
                 account.isActive
-                  ? 'text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 border-emerald-500/20'
-                  : 'text-muted-foreground bg-muted border-border/80'
+                  ? 'text-foreground bg-muted/60 border-border/80'
+                  : 'text-muted-foreground bg-muted/20 border-border/60'
               }`}
             >
               <span
                 className={`size-1.5 rounded-full ${
-                  account.isActive ? 'bg-emerald-500' : 'bg-muted-foreground'
+                  account.isActive ? 'bg-amber-600' : 'bg-muted-foreground'
                 }`}
               />
               {account.isActive ? 'Active' : 'Inactive'}
@@ -97,7 +103,7 @@ export function PaymentAccountCard({
               title="Copy Account Number"
             >
               {copiedField === 'acc' ? (
-                <Check className="size-3.5 text-emerald-600" />
+                <Check className="size-3.5 text-amber-700" />
               ) : (
                 <Copy className="size-3.5" />
               )}
@@ -121,7 +127,7 @@ export function PaymentAccountCard({
                 title="Copy IBAN"
               >
                 {copiedField === 'iban' ? (
-                  <Check className="size-3.5 text-emerald-600" />
+                  <Check className="size-3.5 text-amber-700" />
                 ) : (
                   <Copy className="size-3.5" />
                 )}
@@ -192,7 +198,7 @@ export function PaymentAccountCard({
               </>
             ) : (
               <>
-                <CheckCircle className="size-3 mr-1 text-emerald-600" />
+                <CheckCircle className="size-3 mr-1 text-foreground" />
                 Activate
               </>
             )}

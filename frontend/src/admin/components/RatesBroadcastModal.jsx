@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Mail, Send, Users, Sparkles, CheckCircle2, Clock, ExternalLink } from 'lucide-react';
+import { X, Mail, Send, Users, CheckCircle2, Clock, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ratesApi } from '@/api/ratesApi';

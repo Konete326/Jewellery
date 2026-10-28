@@ -6,7 +6,6 @@ import {
   RefreshCw,
   CreditCard,
   CheckCircle2,
-  Sparkles,
   ArrowUpDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -278,7 +277,7 @@ export function PaymentAccountsAdminView() {
         <div className="rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-xs">
           <div className="flex items-center justify-between text-muted-foreground text-xs mb-2">
             <span>Active Settlement Channels</span>
-            <CheckCircle2 className="size-4 text-emerald-600" />
+            <CheckCircle2 className="size-4 text-amber-700 dark:text-amber-400" />
           </div>
           <div className="text-2xl font-serif font-light text-foreground">
             {activeCount}
@@ -366,7 +365,7 @@ export function PaymentAccountsAdminView() {
                 onClick={handleSeedDefaults}
                 className="h-9 px-4 text-xs cursor-pointer"
               >
-                <Sparkles className="size-3.5 mr-1.5 text-amber-600" />
+                <Plus className="size-3.5 mr-1.5 text-muted-foreground" />
                 Initialize Standard Accounts
               </Button>
             )}

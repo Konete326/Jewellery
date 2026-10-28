@@ -153,11 +153,11 @@ export function UsersTable({
                   <span
                     className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${
                       isActive
-                        ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25'
+                        ? 'bg-muted/60 text-foreground border-border/80'
                         : 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/25'
                     }`}
                   >
-                    <span className={`size-1.5 rounded-full ${isActive ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                    <span className={`size-1.5 rounded-full ${isActive ? 'bg-amber-600' : 'bg-rose-500'}`} />
                     <span>{isActive ? 'Active' : 'Deactivated'}</span>
                   </span>
                 </td>
@@ -205,7 +205,7 @@ export function UsersTable({
                           ? 'opacity-30 cursor-not-allowed text-muted-foreground'
                           : isActive
                           ? 'text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer'
-                          : 'text-rose-600 hover:text-emerald-600 hover:bg-emerald-500/10 cursor-pointer'
+                          : 'text-rose-600 hover:text-foreground hover:bg-muted cursor-pointer'
                       }`}
                     >
                       {isActive ? <UserX className="size-4" /> : <UserCheck className="size-4" />}

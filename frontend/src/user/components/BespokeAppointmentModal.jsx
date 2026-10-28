@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'sonner'
-import { X, Crown, Calendar, Copy, Check, MessageSquare, CheckCircle2 } from 'lucide-react'
+import { X, Crown, Calendar, Copy, Check, MessageSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Field, FieldLabel, FieldDescription, FieldError } from '@/components/ui/field'
@@ -115,7 +115,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
         {bookingConfirmation ? (
           <div className="space-y-4 pt-2">
             <div className="flex items-center justify-between pb-3 border-b border-border/70">
-              <span className="font-mono text-[9px] uppercase tracking-widest text-emerald-800 dark:text-emerald-300 border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-0.5 rounded-full font-medium">
+              <span className="font-mono text-[9px] uppercase tracking-widest text-amber-900/90 dark:text-amber-200 border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 rounded-full font-medium">
                 AU · APPOINTMENT RESERVED
               </span>
               <span className="text-xs text-muted-foreground font-mono">
@@ -132,7 +132,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
               </p>
             </div>
 
-            <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 space-y-2">
+            <div className="p-4 rounded-xl border border-amber-500/25 bg-amber-500/5 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
                   Booking Reference
@@ -142,14 +142,14 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                   onClick={() => handleCopyCode(bookingConfirmation.refCode)}
                   className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground cursor-pointer"
                 >
-                  {copiedCode ? <Check className="size-3 text-emerald-600" /> : <Copy className="size-3" />}
+                  {copiedCode ? <Check className="size-3 text-amber-700" /> : <Copy className="size-3" />}
                   {copiedCode ? 'Copied' : 'Copy'}
                 </button>
               </div>
               <div className="font-mono text-base font-semibold text-foreground tracking-wider">
                 {bookingConfirmation.refCode}
               </div>
-              <div className="text-xs text-muted-foreground pt-1 border-t border-emerald-500/20">
+              <div className="text-xs text-muted-foreground pt-1 border-t border-amber-500/20">
                 Official confirmation dispatched to{' '}
                 <strong className="text-foreground font-medium underline underline-offset-2">
                   {bookingConfirmation.email}
@@ -190,9 +190,9 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                 )}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium transition-colors shadow-xs"
+                className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl bg-foreground hover:bg-neutral-800 text-background text-xs font-medium transition-colors shadow-xs"
               >
-                <MessageSquare className="size-3.5" />
+                <MessageSquare className="size-3.5 text-amber-300" />
                 WhatsApp Atelier
               </a>
             </div>
