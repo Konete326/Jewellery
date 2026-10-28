@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 
 function formatPkr(num) {
   if (!num && num !== 0) return '—';
-  return 'Rs. ' + Math.round(num).toLocaleString('en-PK');
+  return 'PKR ' + Math.round(num).toLocaleString('en-PK');
 }
 
 export function RatesBroadcastModal({ isOpen, onClose, rates, onBroadcastSuccess }) {

@@ -16,7 +16,7 @@ const inquiryFormSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().min(7, 'Phone number must be at least 7 digits').max(20),
   jewelryType: z.enum(['Bridal Set', 'Custom Ring', 'Diamond Necklace', 'Bespoke Bracelet', 'Other']),
-  preferredMetal: z.enum(['24K Yellow Gold', '22K Gold', '18K White Gold', '18K Rose Gold', 'Platinum']),
+  preferredMetal: z.enum(['22K Gold', '21K Gold', '18K Gold', '18K White Gold', '18K Rose Gold']),
   estimatedBudget: z.string().min(2, 'Budget estimate is required').max(50),
   message: z.string().min(10, 'Please share at least 10 characters detailing your vision').max(1000),
   acceptTerms: z.boolean().refine(val => val === true, {
@@ -32,7 +32,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
       email: '',
       phone: '',
       jewelryType: 'Custom Ring',
-      preferredMetal: '18K White Gold',
+      preferredMetal: '22K Gold',
       estimatedBudget: '$5,000 - $15,000',
       message: '',
       acceptTerms: false
@@ -184,11 +184,11 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                     {...field}
                     className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
                   >
-                    <option value="18K White Gold">18K White Gold</option>
-                    <option value="24K Yellow Gold">24K Yellow Gold</option>
-                    <option value="22K Gold">22K Gold</option>
+                    <option value="22K Gold">22K Gold (Traditional & Bridal)</option>
+                    <option value="21K Gold">21K Gold (Heritage Standard)</option>
+                    <option value="18K Gold">18K Yellow Gold</option>
+                    <option value="18K White Gold">18K White Gold (Diamond Mounts)</option>
                     <option value="18K Rose Gold">18K Rose Gold</option>
-                    <option value="Platinum">Platinum</option>
                   </select>
                 </Field>
               )}

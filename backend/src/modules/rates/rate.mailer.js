@@ -78,7 +78,7 @@ export const sendGoldDigestEmail = async ({ to, clientName, rates, websiteUrl })
           </div>
 
           <div style="display: flex; justify-content: space-between;">
-            <span style="font-size: 12px; color: #78716c;">24K Pure Silver (1 Tola)</span>
+            <span style="font-size: 12px; color: #78716c;">925 Pure Silver (1 Tola)</span>
             <span style="font-size: 14px; font-weight: 600; color: #292524;">${formatPkr(silver['24K']?.tola)}</span>
           </div>
         </div>

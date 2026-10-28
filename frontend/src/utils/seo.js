@@ -122,8 +122,8 @@ export function getLocalBusinessSchema() {
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'],
-        opens: '13:00',
-        closes: '20:30'
+        opens: '14:00',
+        closes: '21:00'
       },
       {
         '@type': 'OpeningHoursSpecification',
@@ -134,8 +134,8 @@ export function getLocalBusinessSchema() {
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: 'Saturday',
-        opens: '13:30',
-        closes: '20:30'
+        opens: '14:00',
+        closes: '21:00'
       }
     ],
     sameAs: [

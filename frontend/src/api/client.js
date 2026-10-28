@@ -61,10 +61,10 @@ export async function apiClient(endpoint, options = {}) {
   } catch (error) {
     if (timedOut || error.name === 'AbortError') {
       if (timedOut) {
-        toast.error('Network slow hai, barah-e-karam dobara koshish karein', {
-          description: 'Request exceeded 12-second response threshold.'
+        toast.error('Network connection is slow. Please try again.', {
+          description: 'Request exceeded response threshold.'
         });
-        const timeoutError = new Error('Network slow hai, barah-e-karam dobara koshish karein');
+        const timeoutError = new Error('Network connection is slow. Please try again.');
         timeoutError.isTimeout = true;
         throw timeoutError;
       }

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Users, ShieldCheck, Mail, ArrowRight } from 'lucide-react'
 import { LumaSpin } from '@/components/ui/luma-spin'
+import { PatronMonogram } from '@/components/ui/PatronMonogram'
 
 export function RecentClientele({ users = [], loading = false }) {
   const recentUsers = users.slice(0, 5)
@@ -56,9 +57,7 @@ export function RecentClientele({ users = [], loading = false }) {
                 className="flex items-center justify-between p-3 rounded-lg border border-border/50 hover:border-border bg-muted/20 hover:bg-muted/40 transition-colors gap-3"
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className="size-9 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 font-serif font-semibold text-xs flex items-center justify-center shrink-0">
-                    {(client.name || 'C').charAt(0).toUpperCase()}
-                  </div>
+                  <PatronMonogram name={client.name} size="size-9" />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
                       <span className="font-medium text-xs text-foreground truncate">

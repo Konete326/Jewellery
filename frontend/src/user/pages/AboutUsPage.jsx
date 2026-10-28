@@ -10,6 +10,7 @@ import { BrandChronicle } from '@/user/components/BrandChronicle'
 import { AtelierInteractiveMap } from '@/user/components/AtelierInteractiveMap'
 import FAQSection from '@/components/ui/faq1'
 import { updatePageSEO } from '@/utils/seo'
+import { broadcastCartUpdate, subscribeToTabSync } from '@/utils/tabSync'
 
 const aboutFaqs = [
   {
@@ -59,8 +60,19 @@ export function AboutUsPage() {
   useEffect(() => {
     try {
       localStorage.setItem('khalil_cart', JSON.stringify(cartItems))
+      const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0)
+      broadcastCartUpdate(count, cartItems)
     } catch {}
   }, [cartItems])
+
+  useEffect(() => {
+    const unsubscribe = subscribeToTabSync((data) => {
+      if (data?.type === 'CART_UPDATE' && Array.isArray(data.items)) {
+        setCartItems(data.items)
+      }
+    })
+    return unsubscribe
+  }, [])
 
   useEffect(() => {
     if (location.hash) {

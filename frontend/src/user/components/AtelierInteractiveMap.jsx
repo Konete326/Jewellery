@@ -101,7 +101,7 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
             <div className="flex items-center justify-between text-xs pt-2 border-t border-border/80">
               <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                 <Clock className="size-3 text-neutral-500" />
-                <span>Mon – Sat: 1:00 PM – 8:30 PM</span>
+                <span>Mon – Sat: 2:00 PM – 9:00 PM (Fri: 3:30 PM – 9:30 PM)</span>
               </div>
 
               {onOpenAppointment && (

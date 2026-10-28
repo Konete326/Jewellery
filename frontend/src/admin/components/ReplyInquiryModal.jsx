@@ -23,12 +23,12 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
     {
       label: 'Bespoke Commission',
       subject: `Bespoke Commission Consultation - Khalil & Sons`,
-      text: `Dear ${clientName},\n\nThank you for choosing Khalil & Sons Jewellers for your custom jewelry commission. Our master goldsmiths are prepared to bring your vision to life in 22K/24K certified gold.\n\nWe would love to invite you for a design discussion at our Karachi atelier at your convenience.\n\nWarm regards,\nAtelier Director\nKhalil & Sons Jewellers\nMurshid Sunaar Tower, Saddar, Karachi\nTel: +92 314 2004245`
+      text: `Dear ${clientName},\n\nThank you for choosing Khalil & Sons Jewellers for your custom jewelry commission. Our master goldsmiths are prepared to bring your vision to life in certified 18K, 21K, or 22K hallmark gold.\n\nWe would love to invite you for a design discussion at our Karachi atelier at your convenience.\n\nWarm regards,\nAtelier Director\nKhalil & Sons Jewellers\nMurshid Sunaar Tower, Saddar, Karachi\nTel: +92 314 2004245`
     },
     {
       label: 'Price & Bullion',
       subject: `Pricing & Availability Details - Khalil & Sons`,
-      text: `Dear ${clientName},\n\nThank you for your interest in our pieces. All our creations are hallmarked in 22K/24K pure gold, priced transparently according to current bullion rates and artisanal craftsmanship.\n\nPlease find the details regarding your requested piece below:\n\n\nWarm regards,\nAtelier Director\nKhalil & Sons Jewellers\nMurshid Sunaar Tower, Saddar, Karachi\nTel: +92 314 2004245`
+      text: `Dear ${clientName},\n\nThank you for your interest in our pieces. All our jewellery creations are hallmarked in certified 18K, 21K, or 22K gold, priced transparently according to current bullion rates and artisanal craftsmanship.\n\nPlease find the details regarding your requested piece below:\n\n\nWarm regards,\nAtelier Director\nKhalil & Sons Jewellers\nMurshid Sunaar Tower, Saddar, Karachi\nTel: +92 314 2004245`
     }
   ];
 
@@ -70,7 +70,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
       });
       await updateInquiryStatus(inquiry._id, 'Replied');
 
-      toast.success(`Response recorded & status updated to Replied`);
+      toast.success('Email reply delivered to patron & inquiry marked as Replied');
       onReplied();
       onClose();
     } catch (err) {

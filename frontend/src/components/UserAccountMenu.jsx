@@ -12,15 +12,14 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   ShieldCheck,
-  User,
   LogOut,
-  Heart,
   Mail,
   ChevronDown,
   Images,
   Calendar,
   MapPin,
 } from "lucide-react";
+import { UserIcon, HeartIcon } from "@/components/icons";
 import { logoutUser } from "@/lib/auth";
 
 export function UserAccountMenu({ user, onOpenVault, vaultCount = 0 }) {
@@ -29,7 +28,10 @@ export function UserAccountMenu({ user, onOpenVault, vaultCount = 0 }) {
   if (!user) {
     return (
       <Button asChild variant="outline" size="sm" className="h-8 text-xs px-3.5 rounded-full font-medium tracking-wider uppercase">
-        <Link to="/auth">Sign In</Link>
+        <Link to="/auth" className="flex items-center gap-1.5">
+          <UserIcon size={16} className="shrink-0" />
+          <span>Sign In</span>
+        </Link>
       </Button>
     );
   }
@@ -143,7 +145,7 @@ export function UserAccountMenu({ user, onOpenVault, vaultCount = 0 }) {
               className="p-2 rounded-lg cursor-pointer text-xs flex items-center justify-between"
             >
               <div className="flex items-center gap-2.5">
-                <Heart className="size-4 text-rose-500" />
+                <HeartIcon size={16} className="text-rose-500 shrink-0" />
                 <span>Saved Heirlooms</span>
               </div>
               {vaultCount > 0 && (

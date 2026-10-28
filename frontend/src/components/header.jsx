@@ -9,16 +9,27 @@ import { DesktopNav } from "@/components/desktop-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { getAuthUser } from "@/lib/auth";
 import { getLocalVaultIds } from "@/lib/wishlist";
+import { getLocalCartCount, subscribeToTabSync } from "@/utils/tabSync";
 import { AtelierVaultDrawer } from "@/components/vault/AtelierVaultDrawer";
-import { Search, ShoppingBag, Heart } from "lucide-react";
+import { SearchIcon, CartIcon, HeartIcon } from "@/components/icons";
 import { StoreStatusBadge } from "@/components/StoreStatusBadge";
 import { UserAccountMenu } from "@/components/UserAccountMenu";
 
-export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
+export function Header({ onOpenSearch, onOpenCart, cartCount }) {
 	const scrolled = useScroll(10);
 	const [user, setUser] = useState(getAuthUser());
 	const [vaultOpen, setVaultOpen] = useState(false);
 	const [vaultCount, setVaultCount] = useState(getLocalVaultIds().length);
+	const [currentCartCount, setCurrentCartCount] = useState(() => {
+		if (typeof cartCount === "number" && cartCount > 0) return cartCount;
+		return getLocalCartCount();
+	});
+
+	useEffect(() => {
+		if (typeof cartCount === "number") {
+			setCurrentCartCount(cartCount);
+		}
+	}, [cartCount]);
 
 	useEffect(() => {
 		const handleAuthChange = (e) => {
@@ -32,15 +43,29 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 		const handleVaultChange = (e) => {
 			setVaultCount(e.detail?.count ?? getLocalVaultIds().length);
 		};
+		const handleCartChange = (e) => {
+			setCurrentCartCount(e.detail?.count ?? getLocalCartCount());
+		};
+
+		const unsubscribe = subscribeToTabSync((data) => {
+			if (data?.type === "CART_UPDATE") {
+				setCurrentCartCount(data.count ?? getLocalCartCount());
+			} else if (data?.type === "VAULT_UPDATE") {
+				setVaultCount(data.count ?? getLocalVaultIds().length);
+			}
+		});
 
 		window.addEventListener("khalil_auth_change", handleAuthChange);
 		window.addEventListener("storage", handleStorage);
 		window.addEventListener("khalil_vault_change", handleVaultChange);
+		window.addEventListener("khalil_cart_change", handleCartChange);
 
 		return () => {
+			unsubscribe();
 			window.removeEventListener("khalil_auth_change", handleAuthChange);
 			window.removeEventListener("storage", handleStorage);
 			window.removeEventListener("khalil_vault_change", handleVaultChange);
+			window.removeEventListener("khalil_cart_change", handleCartChange);
 		};
 	}, []);
 
@@ -82,7 +107,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 								className="size-9 text-muted-foreground hover:text-foreground cursor-pointer"
 								aria-label="Search collections"
 							>
-								<Search className="size-4" />
+								<SearchIcon size={18} className="shrink-0" />
 							</Button>
 						)}
 
@@ -94,7 +119,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 							aria-label="Atelier Vault"
 							title="Atelier Vault (Saved Heirlooms)"
 						>
-							<Heart className="size-4" />
+							<HeartIcon size={18} className="shrink-0" />
 							{vaultCount > 0 && (
 								<span className="absolute -top-0.5 -right-0.5 bg-rose-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-mono">
 									{vaultCount}
@@ -110,10 +135,10 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 								className="relative size-9 text-muted-foreground hover:text-foreground cursor-pointer"
 								aria-label="Shopping bag"
 							>
-								<ShoppingBag className="size-4" />
-								{cartCount > 0 && (
+								<CartIcon size={18} className="shrink-0" />
+								{currentCartCount > 0 && (
 									<span className="absolute -top-0.5 -right-0.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-mono">
-										{cartCount}
+										{currentCartCount}
 									</span>
 								)}
 							</Button>
@@ -134,7 +159,7 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 							className="relative size-9 text-muted-foreground hover:text-foreground cursor-pointer hidden sm:inline-flex"
 							aria-label="Atelier Vault"
 						>
-							<Heart className="size-4" />
+							<HeartIcon size={18} className="shrink-0" />
 							{vaultCount > 0 && (
 								<span className="absolute -top-0.5 -right-0.5 bg-rose-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-mono">
 									{vaultCount}
@@ -147,12 +172,12 @@ export function Header({ onOpenSearch, onOpenCart, cartCount = 0 }) {
 								variant="ghost"
 								size="icon"
 								onClick={onOpenCart}
-								className="relative size-9 text-muted-foreground hover:text-foreground"
+								className="relative size-9 text-muted-foreground hover:text-foreground cursor-pointer"
 							>
-								<ShoppingBag className="size-4" />
-								{cartCount > 0 && (
+								<CartIcon size={18} className="shrink-0" />
+								{currentCartCount > 0 && (
 									<span className="absolute -top-0.5 -right-0.5 bg-foreground text-background text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-mono">
-										{cartCount}
+										{currentCartCount}
 									</span>
 								)}
 							</Button>

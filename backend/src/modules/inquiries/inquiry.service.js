@@ -1,5 +1,6 @@
 import { inquiryRepository } from './inquiry.repository.js';
 import { sendInquiryReplyEmail } from '../../utils/mailer.js';
+import { sendInquiryReceivedEmail } from './inquiry.mailer.js';
 import { normalizePhoneToE164 } from '../../utils/phone.js';
 
 export class InquiryService {
@@ -29,7 +30,16 @@ export class InquiryService {
     if (payload.phone) {
       payload.phone = normalizePhoneToE164(payload.phone);
     }
-    return this.repo.create(payload);
+    const created = await this.repo.create(payload);
+    if (created?.email) {
+      sendInquiryReceivedEmail({
+        to: created.email,
+        customerName: created.customerName,
+        subject: created.subject || created.jewelryType,
+        inquiryId: created._id
+      }).catch(() => {});
+    }
+    return created;
   }
 
   async updateInquiryStatus(id, status) {

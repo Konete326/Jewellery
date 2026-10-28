@@ -1,9 +1,8 @@
 import React from 'react';
-import { Gem, ShieldCheck, Sparkles, TrendingUp } from 'lucide-react';
 
 function formatPkr(num) {
   if (!num && num !== 0) return '—';
-  return 'Rs. ' + Math.round(num).toLocaleString('en-PK');
+  return 'PKR ' + Math.round(num).toLocaleString('en-PK');
 }
 
 export function RatesCardsGrid({ rates }) {
@@ -12,44 +11,44 @@ export function RatesCardsGrid({ rates }) {
 
   const cards = [
     {
+      hallmark: 'AU · 999.0',
       title: '24 Karat Pure Gold',
       subtitle: 'Bullion standard (.999 pure)',
       badge: '99.9% Pure',
       badgeClass: 'bg-amber-500/10 text-amber-800 dark:text-amber-300 border-amber-500/20',
-      icon: <Gem className="size-5 text-amber-700 dark:text-amber-400" />,
       tola: gold['24K']?.tola,
       tenG: gold['24K']?.tenGram,
       oneG: gold['24K']?.gram,
       note: 'Reference bullion rate for Sarafa trading'
     },
     {
+      hallmark: 'AU · 916.6',
       title: '22 Karat Bridal Gold',
       subtitle: 'Pakistani bridal & wedding jewellery',
       badge: 'Most Popular',
-      badgeClass: 'bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border-emerald-500/20',
-      icon: <ShieldCheck className="size-5 text-emerald-600 dark:text-emerald-400" />,
+      badgeClass: 'bg-amber-500/10 text-amber-900 border-amber-500/30',
       tola: gold['22K']?.tola,
       tenG: gold['22K']?.tenGram,
       oneG: gold['22K']?.gram,
       note: 'Optimal tensile strength for intricate filigree & stones'
     },
     {
+      hallmark: 'AU · 875.0',
       title: '21 Karat Traditional Gold',
       subtitle: 'Antique finish & heirloom bangles',
       badge: '87.5% Purity',
       badgeClass: 'bg-neutral-500/10 text-neutral-800 dark:text-neutral-300 border-neutral-500/20',
-      icon: <Sparkles className="size-5 text-neutral-600 dark:text-neutral-300" />,
       tola: gold['21K']?.tola,
       tenG: gold['21K']?.tenGram,
       oneG: gold['21K']?.gram,
       note: 'Traditional South Asian gold craft standard'
     },
     {
+      hallmark: 'AG · 999.0',
       title: '24 Karat Pure Silver',
       subtitle: 'Fine silver (Chandi) bullion',
       badge: 'Fine Silver',
       badgeClass: 'bg-slate-500/10 text-slate-800 dark:text-slate-300 border-slate-500/20',
-      icon: <TrendingUp className="size-5 text-slate-600 dark:text-slate-400" />,
       tola: silver['24K']?.tola,
       tenG: silver['24K']?.tenGram,
       oneG: silver['24K']?.gram,
@@ -66,9 +65,9 @@ export function RatesCardsGrid({ rates }) {
         >
           <div>
             <div className="flex items-center justify-between gap-2 mb-4">
-              <div className="size-10 rounded-xl bg-muted/60 flex items-center justify-center">
-                {item.icon}
-              </div>
+              <span className="text-[11px] font-mono tracking-widest uppercase font-semibold text-amber-900/80 dark:text-amber-400">
+                {item.hallmark}
+              </span>
               <span className={`text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full border ${item.badgeClass}`}>
                 {item.badge}
               </span>

@@ -3,7 +3,7 @@ import { STORE_INFO } from '@/constants/storeInfo';
 
 function formatCurrency(amount) {
   if (!amount && amount !== 0) return '—';
-  return 'Rs. ' + Math.round(amount).toLocaleString('en-PK');
+  return 'PKR ' + Math.round(amount).toLocaleString('en-PK');
 }
 
 export function generateRateBulletinPdf(ratesData) {
@@ -164,8 +164,8 @@ export function generateRateBulletinPdf(ratesData) {
 
   const silver = ratesData?.silver || {};
   const silverRows = [
-    { label: '24 Karat (Fine Silver)', purity: '99.9% (.999)', tola: silver['24K']?.tola, tenG: silver['24K']?.tenGram, oneG: silver['24K']?.gram },
-    { label: '22 Karat (Sterling 925)', purity: '92.5% (.925)', tola: silver['22K']?.tola, tenG: silver['22K']?.tenGram, oneG: silver['22K']?.gram }
+    { label: '925 Pure Silver (Sterling)', purity: '92.5% (.925)', tola: silver['22K']?.tola, tenG: silver['22K']?.tenGram, oneG: silver['22K']?.gram },
+    { label: 'Fine Silver Bullion (999)', purity: '99.9% (.999)', tola: silver['24K']?.tola, tenG: silver['24K']?.tenGram, oneG: silver['24K']?.gram }
   ];
 
   silverRows.forEach((row, idx) => {

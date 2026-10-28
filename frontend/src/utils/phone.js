@@ -43,7 +43,7 @@ export function createWhatsAppInquiryUrl(phone, customerName = '', context = '',
   let message = '';
   if (isCompletedOrDelivered) {
     const topic = context ? ` regarding your completed bespoke piece: "${context}"` : '';
-    message = `${greeting}thank you for choosing Khalil & Sons Jewellers, Saddar, Karachi${topic}. We hope you cherished our artisanal craftsmanship. Agar aapko hamari jewellery pasand aayi ho to kindly Google par apna qeemti 5-star review zaroor share karein:\nhttps://maps.app.goo.gl/49w2MCbeJfqTc8hT7\n\nThank you for trusting Khalil & Sons!`;
+    message = `${greeting}thank you for choosing Khalil & Sons Jewellers, Saddar, Karachi${topic}. We hope you cherished our artisanal craftsmanship. If you appreciated our creations, please consider sharing your valuable 5-star review on Google:\nhttps://maps.app.goo.gl/49w2MCbeJfqTc8hT7\n\nThank you for trusting Khalil & Sons!`;
   } else {
     const topic = context ? ` regarding your inquiry: "${context}"` : '';
     message = `${greeting}we are contacting you from Khalil & Sons Jewellers Saddar Karachi${topic}. How may we assist you with our bespoke creations today?`;

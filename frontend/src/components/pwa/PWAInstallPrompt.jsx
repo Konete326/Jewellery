@@ -16,6 +16,18 @@ export function PWAInstallPrompt() {
       return;
     }
 
+    const isDismissed = () => {
+      const dismissedUntil = localStorage.getItem('khalil_pwa_dismissed_until');
+      return dismissedUntil && Date.now() < Number(dismissedUntil);
+    };
+
+    const recordDismissal = () => {
+      localStorage.setItem(
+        'khalil_pwa_dismissed_until',
+        String(Date.now() + 48 * 60 * 60 * 1000)
+      );
+    };
+
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isIOS = /iphone|ipad|ipod/.test(userAgent) && !window.MSStream;
 
@@ -54,6 +66,8 @@ export function PWAInstallPrompt() {
           deferredPromptRef.current = null;
           toast.dismiss('pwa-install-toast');
           toast.success('Thank you for installing Khalil & Sons!');
+        } else {
+          recordDismissal();
         }
       } catch {
         toast.error('Unable to complete installation at this time.');
@@ -61,26 +75,31 @@ export function PWAInstallPrompt() {
     };
 
     const showInstallToast = () => {
-      toast('Install Khalil & Sons App', {
+      const isMobile = window.innerWidth < 768;
+      const toastDuration = isMobile ? 5000 : 8000;
+
+      toast('Install App', {
         id: 'pwa-install-toast',
-        description: '1-tap access to 22K gold bridal vaults & offline appraisals.',
+        description: 'Quick access to Khalil & Sons',
         icon: (
           <img
             src="/assets/logo.png"
             alt="Khalil & Sons"
-            className="size-5 object-contain"
+            className="size-4 object-contain shrink-0"
           />
         ),
-        duration: 10000,
+        duration: toastDuration,
+        onDismiss: () => {
+          recordDismissal();
+        },
+        onAutoClose: () => {
+          recordDismissal();
+        },
         action: {
           label: 'Install',
           onClick: () => {
             triggerInstall();
           }
-        },
-        cancel: {
-          label: 'Not Now',
-          onClick: () => {}
         }
       });
     };
@@ -90,7 +109,9 @@ export function PWAInstallPrompt() {
     window.addEventListener('khalil_open_pwa_prompt', showInstallToast);
 
     const timer = setTimeout(() => {
-      showInstallToast();
+      if (!isDismissed()) {
+        showInstallToast();
+      }
     }, 2500);
 
     return () => {

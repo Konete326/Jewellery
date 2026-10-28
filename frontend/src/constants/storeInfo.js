@@ -44,17 +44,18 @@ export const STORE_INFO = {
       'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.1271135585234!2d67.0300738!3d24.8595078!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33e71bff6bf45%3A0x2f5bedb61490e955!2sKhalil%20%26%20Sons%20Jewellers!5e0!3m2!1sen!2s!4v1793008108712!5m2!1sen!2s',
     website: 'https://khalilandsonsjewellers.com'
   },
-  email: 'info@khalilandsonsjewellers.com',
+  email: import.meta.env.VITE_CONTACT_EMAIL || 'khalilandsonsjewellers@gmail.com',
   hours: {
-    monThu: '1:00 PM – 8:30 PM',
+    monThu: '2:00 PM – 9:00 PM',
     fri: '3:30 PM – 9:30 PM',
-    sat: '1:30 PM – 8:30 PM',
+    sat: '2:00 PM – 9:00 PM',
     sun: 'Closed',
-    summary: 'Mon–Thu: 1:00 PM – 8:30 PM | Fri: 3:30 PM – 9:30 PM | Sat: 1:30 PM – 8:30 PM'
+    summary: 'Mon–Sat: 2:00 PM – 9:00 PM (Fri: 3:30 PM – 9:30 PM) | Sun: Closed'
   },
   specialties: [
-    'Certified 22K (.916) Pure Gold',
-    'Solid 24K Gold',
+    'Certified 22K (.916) Hallmark Gold',
+    'Certified 21K (.875) Heritage Gold',
+    'Artisanal 18K (.750) Diamond Mounts',
     'Custom Bridal Jewellery Heirlooms',
     'Natural Uncut Polki Diamonds',
     'Precious & Semi-Precious Gemstones',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, ShieldCheck, CheckCircle2, MapPin, Sparkles } from 'lucide-react';
+import { Award, MapPin } from 'lucide-react';
 import { STORE_INFO } from '@/constants/storeInfo';
 
 export function RatesKnowledgeGuide() {
@@ -68,10 +68,10 @@ export function RatesKnowledgeGuide() {
 
       <div className="rounded-3xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-start gap-4">
-          <div className="size-12 rounded-2xl bg-amber-500/15 text-amber-800 dark:text-amber-300 flex items-center justify-center shrink-0">
-            <ShieldCheck className="size-6" />
-          </div>
           <div>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-amber-800 dark:text-amber-300 font-semibold block mb-1">
+              Atelier Assaying Bench
+            </span>
             <h3 className="text-lg font-serif font-medium text-foreground tracking-tight mb-1">
               Visit the Saddar Boutique for Live In-Store Appraisals
             </h3>

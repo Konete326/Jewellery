@@ -25,13 +25,13 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
 
       <div className="relative overflow-hidden h-28 rounded-xl border border-neutral-200/80 bg-muted/20 shadow-2xs p-2.5">
         <div className="absolute top-2 left-2.5 z-10 flex items-center gap-2">
-          <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="size-1.5 rounded-full bg-amber-600 animate-pulse" />
           <span className="text-[10px] uppercase font-mono tracking-widest text-muted-foreground">
             Saddar Karachi Concierge
           </span>
         </div>
         <GlobeWireframe
-          className="w-full aspect-square max-w-full absolute -top-12 left-0 text-neutral-600 dark:text-neutral-400"
+          className="w-full aspect-square max-w-full absolute -top-12 left-0 text-neutral-600"
           variant="wireframesolid"
           autoRotate
           autoRotateSpeed={0.4}
@@ -40,7 +40,7 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           strokeColor="currentColor"
           sphereOutlineColor="currentColor"
         />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-card dark:via-card/80" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white via-white/80 to-transparent" />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -48,40 +48,40 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
+          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white hover:border-neutral-400 hover:bg-neutral-50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shrink-0">
+          <div className="size-8 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-900 shrink-0">
             <MessageCircle className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-emerald-700 dark:text-emerald-400 block">WhatsApp</span>
-            <span className="text-xs font-medium text-foreground group-hover:text-neutral-900 dark:group-hover:text-white transition-colors block truncate">{STORE_INFO.phone.mobileFormatted}</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-amber-900 block">WhatsApp</span>
+            <span className="text-xs font-medium text-foreground group-hover:text-neutral-900 transition-colors block truncate">{STORE_INFO.phone.mobileFormatted}</span>
           </div>
         </a>
 
         <a
           href={`tel:${STORE_INFO.phone.landline}`}
-          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
+          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white hover:border-neutral-400 hover:bg-neutral-50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0">
+          <div className="size-8 rounded-lg bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-700 shrink-0">
             <Phone className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-500 dark:text-neutral-400 block">Landline</span>
-            <span className="text-xs font-medium text-foreground group-hover:text-neutral-900 dark:group-hover:text-white transition-colors block truncate">{STORE_INFO.phone.landlineFormatted}</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-500 block">Landline</span>
+            <span className="text-xs font-medium text-foreground group-hover:text-neutral-900 transition-colors block truncate">{STORE_INFO.phone.landlineFormatted}</span>
           </div>
         </a>
 
         <a
           href={`mailto:${STORE_INFO.email}`}
-          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
+          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white hover:border-neutral-400 hover:bg-neutral-50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0">
+          <div className="size-8 rounded-lg bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-700 shrink-0">
             <Mail className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-500 dark:text-neutral-400 block">Email</span>
-            <span className="text-xs font-medium text-foreground group-hover:text-neutral-900 dark:group-hover:text-white transition-colors block truncate">{STORE_INFO.email}</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-500 block">Email</span>
+            <span className="text-xs font-medium text-foreground group-hover:text-neutral-900 transition-colors block truncate">{STORE_INFO.email}</span>
           </div>
         </a>
 
@@ -89,13 +89,13 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
           href={STORE_INFO.social.googleMaps}
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white dark:bg-neutral-900/60 hover:border-neutral-400 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors shadow-2xs"
+          className="group flex items-center gap-2.5 p-2.5 rounded-xl border border-border/80 bg-white hover:border-neutral-400 hover:bg-neutral-50 transition-colors shadow-2xs"
         >
-          <div className="size-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0">
+          <div className="size-8 rounded-lg bg-neutral-100 border border-neutral-200 flex items-center justify-center text-neutral-700 shrink-0">
             <MapPin className="size-3.5" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-500 dark:text-neutral-400 block">Showroom</span>
+            <span className="text-[10px] uppercase font-mono tracking-wider text-neutral-500 block">Showroom</span>
             <span className="text-xs font-medium text-foreground block truncate">{STORE_INFO.address.short}</span>
           </div>
         </a>

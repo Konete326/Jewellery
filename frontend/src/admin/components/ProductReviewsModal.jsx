@@ -3,6 +3,7 @@ import { X, Star, Trash2, RefreshCw, MessageSquare, Gem, CheckCircle2 } from 'lu
 import { galleryApi } from '@/api/galleryApi';
 import { LumaSpin } from '@/components/ui/luma-spin';
 import { Button } from '@/components/ui/button';
+import { PatronMonogram } from '@/components/ui/PatronMonogram';
 import { toast } from 'sonner';
 
 export function ProductReviewsModal({ isOpen, onClose, item, onReviewUpdated }) {
@@ -179,19 +180,22 @@ export function ProductReviewsModal({ isOpen, onClose, item, onReviewUpdated }) 
                   className="p-4 rounded-xl border border-border/80 bg-background flex flex-col justify-between space-y-2.5 shadow-2xs hover:border-foreground/30 transition-colors"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-xs text-foreground">
-                          {rev.userName || 'Valued Patron'}
-                        </span>
-                        <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
-                          <CheckCircle2 className="size-2.5" />
-                          <span>Verified</span>
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <PatronMonogram name={rev.userName} size="size-7" />
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-xs text-foreground truncate">
+                            {rev.userName || 'Valued Patron'}
+                          </span>
+                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 shrink-0">
+                            <CheckCircle2 className="size-2.5" />
+                            <span>Verified</span>
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-muted-foreground font-mono block mt-0.5 truncate">
+                          {rev.userEmail || 'In-store client'}
                         </span>
                       </div>
-                      <span className="text-[11px] text-muted-foreground font-mono block mt-0.5">
-                        {rev.userEmail || 'In-store client'}
-                      </span>
                     </div>
 
                     <div className="flex items-center gap-0.5 shrink-0">

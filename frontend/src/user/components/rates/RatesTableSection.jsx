@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Gem, ShieldCheck, Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 function formatPkr(num) {
   if (!num && num !== 0) return '—';
-  return 'Rs. ' + Math.round(num).toLocaleString('en-PK');
+  return 'PKR ' + Math.round(num).toLocaleString('en-PK');
 }
 
 export function RatesTableSection({ rates }) {
@@ -13,158 +13,169 @@ export function RatesTableSection({ rates }) {
 
   const goldRows = [
     {
-      karat: '24 Karat',
-      name: 'Pure Bullion (Fine Gold)',
-      purity: '99.9% (.999)',
+      karat: '24 Karat Gold',
+      purity: '99.9%',
+      hallmark: 'AU · 999.0',
+      subtitle: 'Pure Bullion (24K)',
       tola: gold['24K']?.tola,
       tenG: gold['24K']?.tenGram,
       oneG: gold['24K']?.gram,
-      ounce: gold['24K']?.ounce,
-      application: 'Investment bars, bullion biscuits, asset preservation'
+      isPrimary: false
     },
     {
-      karat: '22 Karat',
-      name: 'Bridal Standard (Jewellers Hallmark)',
-      purity: '91.67% (.916)',
+      karat: '22 Karat Gold',
+      purity: '91.6%',
+      hallmark: 'AU · 916.6',
+      subtitle: 'Jewellery Standard (22K)',
       tola: gold['22K']?.tola,
       tenG: gold['22K']?.tenGram,
       oneG: gold['22K']?.gram,
-      ounce: null,
-      application: 'Bridal sets, handcrafted kadas, churyan, Mughal necklaces'
+      isPrimary: true
     },
     {
-      karat: '21 Karat',
-      name: 'Traditional South Asian Gold',
-      purity: '87.5% (.875)',
+      karat: '21 Karat Gold',
+      purity: '87.5%',
+      hallmark: 'AU · 875.0',
+      subtitle: 'Traditional Jewellery',
       tola: gold['21K']?.tola,
       tenG: gold['21K']?.tenGram,
       oneG: gold['21K']?.gram,
-      ounce: null,
-      application: 'Antique filigree work, daily heirloom bangles'
+      isPrimary: false
     },
     {
-      karat: '18 Karat',
-      name: 'Diamond Setting Benchmark',
-      purity: '75.0% (.750)',
+      karat: '18 Karat Gold',
+      purity: '75.0%',
+      hallmark: 'AU · 750.0',
+      subtitle: 'Diamond Jewellery Benchmark',
       tola: gold['18K']?.tola,
       tenG: gold['18K']?.tenGram,
       oneG: gold['18K']?.gram,
-      ounce: null,
-      application: 'Solitaire diamond engagement rings, delicate fine jewelry'
+      isPrimary: false
     }
   ];
 
   const silverRows = [
     {
-      karat: '24 Karat',
-      name: 'Fine Silver Bullion (999)',
-      purity: '99.99% (.999)',
-      tola: silver['24K']?.tola,
-      tenG: silver['24K']?.tenGram,
-      oneG: silver['24K']?.gram,
-      application: 'Pure silver bullion bars, commemorative coins'
-    },
-    {
-      karat: '22 Karat',
-      name: 'Sterling Silver (925)',
-      purity: '92.5% (.925)',
+      karat: '925 Pure Silver',
+      purity: '92.5%',
+      hallmark: 'AG · 925.0',
+      subtitle: 'Sterling Silver (925)',
       tola: silver['22K']?.tola,
       tenG: silver['22K']?.tenGram,
       oneG: silver['22K']?.gram,
-      application: 'Heirloom tableware, custom rings, artisan jewelry'
+      isPrimary: true
+    },
+    {
+      karat: 'Fine Silver Bullion',
+      purity: '99.9%',
+      hallmark: 'AG · 999.0',
+      subtitle: 'Pure Silver Bullion (999)',
+      tola: silver['24K']?.tola,
+      tenG: silver['24K']?.tenGram,
+      oneG: silver['24K']?.gram,
+      isPrimary: false
     }
   ];
 
   const currentRows = activeTab === 'gold' ? goldRows : silverRows;
 
   return (
-    <div className="w-full rounded-3xl border border-border/80 bg-card p-6 sm:p-8 shadow-xs mb-12">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div>
-          <span className="text-xs uppercase tracking-[0.25em] text-amber-800 dark:text-amber-400 font-mono font-medium block mb-1">
-            Complete Market Breakdown
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-serif font-light text-foreground tracking-tight">
-            Detailed Bullion & Karat Benchmark
-          </h2>
-        </div>
-
-        <div className="inline-flex rounded-xl p-1 bg-muted/60 border border-border/60 self-start sm:self-auto">
+    <div className="w-full rounded-2xl border border-border/80 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md p-4 sm:p-8 shadow-xs mb-12">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-border/80 mb-6">
+        <div className="inline-flex rounded-xl p-1 bg-muted/80 border border-border/80 self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setActiveTab('gold')}
-            className={`px-4 py-1.5 rounded-lg text-xs uppercase tracking-wider font-medium transition-all cursor-pointer ${
+            className={cn(
+              'px-4 sm:px-5 py-2 rounded-lg text-xs uppercase tracking-wider font-mono transition-all cursor-pointer',
               activeTab === 'gold'
                 ? 'bg-background text-foreground shadow-xs font-semibold'
                 : 'text-muted-foreground hover:text-foreground'
-            }`}
+            )}
           >
             Gold Rates
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('silver')}
-            className={`px-4 py-1.5 rounded-lg text-xs uppercase tracking-wider font-medium transition-all cursor-pointer ${
+            className={cn(
+              'px-4 sm:px-5 py-2 rounded-lg text-xs uppercase tracking-wider font-mono transition-all cursor-pointer',
               activeTab === 'silver'
                 ? 'bg-background text-foreground shadow-xs font-semibold'
                 : 'text-muted-foreground hover:text-foreground'
-            }`}
+            )}
           >
             Silver Rates
           </button>
+        </div>
+
+        <div className="text-xs font-mono text-muted-foreground">
+          Standard: <span className="text-foreground font-semibold">1 Tola = 11.664 Grams</span>
         </div>
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-border/80">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-border/80 bg-muted/30 text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
-              <th className="py-3 px-4 sm:px-6">Specification</th>
-              <th className="py-3 px-4">Purity</th>
-              <th className="py-3 px-4 text-right">Per 1 Tola</th>
-              <th className="py-3 px-4 text-right">Per 10 Grams</th>
-              <th className="py-3 px-4 text-right">Per 1 Gram</th>
-              <th className="py-3 px-4 sm:px-6 hidden md:table-cell">Crafting Application</th>
+            <tr className="border-b border-border/80 bg-muted/40 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
+              <th className="py-3 sm:py-4 px-3 sm:px-6">Karat / Quality</th>
+              <th className="py-3 sm:py-4 px-3 sm:px-6 text-right">Per 1 Tola</th>
+              <th className="py-3 sm:py-4 px-3 sm:px-6 text-right">Per 10 Gram</th>
+              <th className="py-3 sm:py-4 px-3 sm:px-6 text-right">Per 1 Gram</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border/60 text-sm">
-            {currentRows.map((row, idx) => (
-              <tr key={idx} className="hover:bg-muted/30 transition-colors">
-                <td className="py-4 px-4 sm:px-6">
-                  <div className="font-medium text-foreground">{row.karat}</div>
-                  <div className="text-xs text-muted-foreground font-light">{row.name}</div>
+          <tbody className="divide-y divide-border/60">
+            {currentRows.map((row) => (
+              <tr
+                key={row.hallmark}
+                className={cn(
+                  'hover:bg-muted/30 transition-colors',
+                  row.isPrimary && 'bg-amber-500/[0.03]'
+                )}
+              >
+                <td className="py-3.5 sm:py-4 px-3 sm:px-6">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <span className="font-mono text-[9px] sm:text-[10px] tracking-wider uppercase font-semibold text-amber-900/90 dark:text-amber-400 bg-amber-500/10 px-1.5 sm:px-2 py-0.5 rounded border border-amber-500/20 shrink-0">
+                      {row.hallmark}
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <span className="font-serif font-medium text-foreground text-sm sm:text-base lg:text-lg tracking-tight">
+                          {row.karat}
+                        </span>
+                        <span className="font-mono text-[11px] sm:text-xs text-muted-foreground">
+                          ({row.purity})
+                        </span>
+                        {row.isPrimary && (
+                          <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-900 border border-amber-500/30 font-medium">
+                            Most Popular
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-[11px] sm:text-xs text-muted-foreground font-light">
+                        {row.subtitle}
+                      </div>
+                    </div>
+                  </div>
                 </td>
-                <td className="py-4 px-4 font-mono text-xs text-foreground/80">
-                  <span className="inline-flex items-center gap-1">
-                    <Check className="size-3 text-emerald-600" />
-                    {row.purity}
-                  </span>
+
+                <td className="py-3.5 sm:py-4 px-3 sm:px-6 text-right">
+                  <div className="font-serif text-base sm:text-lg lg:text-xl font-semibold text-amber-950 dark:text-amber-100 tracking-tight whitespace-nowrap">
+                    {formatPkr(row.tola)}
+                  </div>
                 </td>
-                <td className="py-4 px-4 text-right font-serif text-base sm:text-lg font-light text-foreground whitespace-nowrap">
-                  {formatPkr(row.tola)}
-                </td>
-                <td className="py-4 px-4 text-right font-mono text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">
+
+                <td className="py-3.5 sm:py-4 px-3 sm:px-6 text-right font-mono text-xs sm:text-sm lg:text-base font-medium text-foreground whitespace-nowrap">
                   {formatPkr(row.tenG)}
                 </td>
-                <td className="py-4 px-4 text-right font-mono text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">
+
+                <td className="py-3.5 sm:py-4 px-3 sm:px-6 text-right font-mono text-xs sm:text-sm lg:text-base font-normal text-muted-foreground whitespace-nowrap">
                   {formatPkr(row.oneG)}
-                </td>
-                <td className="py-4 px-4 sm:px-6 text-xs text-muted-foreground font-light hidden md:table-cell max-w-xs">
-                  {row.application}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
-
-      <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground font-light pt-2">
-        <span className="font-mono">
-          * 1 Tola = 11.6638 Metric Grams (Standard Pakistani Sarafa Calibration)
-        </span>
-        <span>
-          Making charges (jurai) & gemstone settings calculated individually per bespoke design.
-        </span>
       </div>
     </div>
   );

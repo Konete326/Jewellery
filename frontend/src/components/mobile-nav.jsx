@@ -6,7 +6,8 @@ import { Portal, PortalBackdrop } from "@/components/portal";
 import { companyLinks, companyLinks2, productLinks } from "@/components/nav-links";
 import { LinkItem } from "@/components/sheard";
 import { getAuthUser, logoutUser } from "@/lib/auth";
-import { XIcon, MenuIcon, ShieldCheck, LogOut, User, Download } from "lucide-react";
+import { XIcon, MenuIcon, ShieldCheck, LogOut, Download } from "lucide-react";
+import { UserIcon } from "@/components/icons";
 
 export function MobileNav() {
 	const [open, setOpen] = React.useState(false);
@@ -160,7 +161,7 @@ export function MobileNav() {
 							) : (
 								<Button asChild className="w-full" variant="outline" onClick={() => setOpen(false)}>
 									<Link to="/auth" className="flex items-center justify-center gap-1.5">
-										<User className="size-3.5" />
+										<UserIcon size={16} className="shrink-0" />
 										<span>Sign In</span>
 									</Link>
 								</Button>

@@ -34,7 +34,7 @@ const CONTACT_LINKS = [
   },
   {
     icon: Clock,
-    label: "Mon - Sat: 1:00 PM - 9:30 PM PKT",
+    label: "Mon - Sat: 2:00 PM - 9:00 PM PKT (Fri: 3:30 PM - 9:30 PM)",
     href: "#",
     subtext: "Private viewings & consultations"
   }

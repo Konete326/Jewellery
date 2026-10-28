@@ -9,11 +9,11 @@ export const CATEGORIES = [
 
 export const METALS = [
   'All Metals',
-  '24K Gold',
   '22K Gold',
+  '21K Gold',
+  '18K Gold',
   '18K White Gold',
-  '18K Rose Gold',
-  'Platinum'
+  '18K Rose Gold'
 ];
 
 export const FEATURED_SHOWCASE = [

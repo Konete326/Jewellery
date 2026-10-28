@@ -8,8 +8,6 @@ import {
   Trash2,
   MessageSquare,
   ExternalLink,
-  ShieldCheck,
-  Gem,
   LayoutGrid,
   Layers
 } from 'lucide-react';
@@ -22,7 +20,38 @@ import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { CalendlyCarousel } from '@/components/ui/connected-carousel';
 import { LumaSpin } from '@/components/ui/luma-spin';
 import { Button } from '@/components/ui/button';
+import { PatronMonogram } from '@/components/ui/PatronMonogram';
 import { toast } from 'sonner';
+
+function ReviewPieceThumbnail({ src, alt }) {
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setHasError(false);
+  }, [src]);
+
+  if (hasError || !src) {
+    return (
+      <div className="size-12 rounded-lg bg-gradient-to-br from-amber-500/10 via-muted to-amber-500/5 border border-amber-500/20 flex flex-col items-center justify-center text-center shrink-0 select-none">
+        <span className="font-serif italic text-xs font-semibold text-amber-900/90 dark:text-amber-300 leading-none">
+          AU
+        </span>
+        <span className="text-[7px] font-mono tracking-widest text-muted-foreground/75 uppercase mt-0.5">
+          Seal
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      onError={() => setHasError(true)}
+      className="size-12 rounded-lg object-cover border border-border shrink-0"
+    />
+  );
+}
 
 export function ReviewsAdminView() {
   const [reviews, setReviews] = useState([]);
@@ -123,6 +152,17 @@ export function ReviewsAdminView() {
     }
   };
 
+  const ratingCounts = useMemo(() => {
+    const counts = { All: reviews.length, '5': 0, '4': 0, '3': 0, '2': 0, '1': 0 };
+    reviews.forEach((rev) => {
+      const r = String(Math.round(Number(rev.rating)));
+      if (counts[r] !== undefined) {
+        counts[r] += 1;
+      }
+    });
+    return counts;
+  }, [reviews]);
+
   const filteredReviews = useMemo(() => {
     return reviews.filter((rev) => {
       const q = searchQuery.toLowerCase().trim();
@@ -143,13 +183,14 @@ export function ReviewsAdminView() {
   const carouselItems = useMemo(() => {
     return filteredReviews.map((rev) => ({
       id: rev._id,
-      stat: `${Number(rev.rating || 5).toFixed(1)} ★ ${rev.title || 'Client Appraisal'}`,
-      quote: rev.comment || 'Exquisite master goldsmithing from Khalil & Sons atelier.',
-      author: rev.userName || 'Valued Patron',
-      role: `${rev.userEmail || 'Client'} • ${rev.masterpieceTitle || 'Fine Jewellery'}`,
-      defaultImage: rev.masterpieceImage || '/assets/products/choker-ruby-01.jpg',
-      selectedImage: rev.masterpieceImage || '/assets/products/choker-ruby-01.jpg',
-      alt: rev.masterpieceTitle || 'Masterpiece',
+      rating: Number(rev.rating) || 5,
+      comment: rev.comment || '',
+      userName: rev.userName || 'Valued Patron',
+      userEmail: rev.userEmail || '',
+      masterpieceTitle: rev.masterpieceTitle || 'Masterpiece',
+      masterpieceCategory: rev.masterpieceCategory || 'Jewellery',
+      masterpieceImage: rev.masterpieceImage || '/assets/products/choker-ruby-01.jpg',
+      date: formatDate(rev.createdAt),
       rawReview: rev
     }));
   }, [filteredReviews]);
@@ -168,13 +209,13 @@ export function ReviewsAdminView() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="space-y-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
         <div>
-          <h2 className="font-serif text-2xl font-bold tracking-tight text-foreground">
+          <h2 className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-foreground">
             Client Appraisals & Reviews
           </h2>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-[11px] text-muted-foreground">
             Manage evaluations, ratings, and customer testimonials across all masterpieces
           </p>
         </div>
@@ -184,7 +225,7 @@ export function ReviewsAdminView() {
             size="sm"
             onClick={loadReviews}
             disabled={loading}
-            className="text-xs gap-1.5 cursor-pointer"
+            className="h-8 text-xs gap-1.5 cursor-pointer"
           >
             <RefreshCw className={`size-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
@@ -192,7 +233,7 @@ export function ReviewsAdminView() {
           <Button
             size="sm"
             onClick={() => setIsAddModalOpen(true)}
-            className="bg-foreground hover:bg-neutral-800 text-background text-xs gap-1.5 cursor-pointer shadow-xs"
+            className="h-8 bg-foreground hover:bg-neutral-800 text-background text-xs gap-1.5 cursor-pointer shadow-xs"
           >
             <Plus className="size-3.5" />
             <span>Add In-Store Appraisal</span>
@@ -202,7 +243,7 @@ export function ReviewsAdminView() {
 
       <ReviewsMetrics reviews={reviews} loading={loading} />
 
-      <div className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-xs space-y-4">
+      <div className="rounded-xl border border-border bg-card p-3 sm:p-4 shadow-xs space-y-3">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div className="relative flex-1 max-w-md">
             <Search className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -211,33 +252,37 @@ export function ReviewsAdminView() {
               placeholder="Search appraisals by patron, piece, or comment..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+              className="w-full pl-9 pr-4 py-1.5 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
             />
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <div className="flex items-center gap-1.5 p-1 rounded-lg bg-muted border border-border shrink-0 overflow-x-auto">
-              {['All', '5', '4', '3', '2', '1'].map((r) => (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => setRatingFilter(r)}
-                  className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
-                    ratingFilter === r
-                      ? 'bg-background shadow-xs text-foreground font-semibold'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  {r === 'All' ? 'All Ratings' : `${r} ★`}
-                </button>
-              ))}
+            <div className="flex items-center gap-1 p-0.5 rounded-lg bg-muted border border-border shrink-0 overflow-x-auto">
+              {['All', '5', '4', '3', '2', '1'].map((r) => {
+                const count = ratingCounts[r] ?? 0;
+                return (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setRatingFilter(r)}
+                    className={`px-2 py-0.5 rounded-md text-xs font-medium transition-colors cursor-pointer flex items-center gap-1 ${
+                      ratingFilter === r
+                        ? 'bg-background shadow-xs text-foreground font-semibold'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    <span>{r === 'All' ? 'All Ratings' : `${r} ★`}</span>
+                    <span className="text-[10px] font-mono opacity-80">({count})</span>
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="flex items-center p-1 rounded-lg bg-muted border border-border">
+            <div className="flex items-center p-0.5 rounded-lg bg-muted border border-border">
               <button
                 type="button"
                 onClick={() => setViewLayout('carousel')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                   viewLayout === 'carousel'
                     ? 'bg-background text-foreground shadow-xs'
                     : 'text-muted-foreground hover:text-foreground'
@@ -249,7 +294,7 @@ export function ReviewsAdminView() {
               <button
                 type="button"
                 onClick={() => setViewLayout('grid')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+                className={`flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium transition-colors cursor-pointer ${
                   viewLayout === 'grid'
                     ? 'bg-background text-foreground shadow-xs'
                     : 'text-muted-foreground hover:text-foreground'
@@ -319,29 +364,22 @@ export function ReviewsAdminView() {
             />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[calc(100vh-320px)] min-h-[240px] overflow-y-auto pr-1">
             {filteredReviews.map((rev) => {
               const rating = Number(rev.rating) || 5;
 
               return (
                 <div
                   key={rev._id}
-                  className="p-4 rounded-xl border border-border/80 bg-background flex flex-col justify-between space-y-3 hover:border-foreground/40 transition-colors shadow-xs"
+                  className="p-3.5 rounded-xl border border-border/80 bg-background flex flex-col justify-between space-y-2.5 hover:border-foreground/40 transition-colors shadow-xs"
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between pb-3 border-b border-border/80">
                       <div className="flex items-center gap-3 min-w-0">
-                        {rev.masterpieceImage ? (
-                          <img
-                            src={rev.masterpieceImage}
-                            alt={rev.masterpieceTitle || 'Piece'}
-                            className="size-12 rounded-lg object-cover border border-border shrink-0"
-                          />
-                        ) : (
-                          <div className="size-12 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-foreground shrink-0">
-                            <Gem className="size-5" />
-                          </div>
-                        )}
+                        <ReviewPieceThumbnail
+                          src={rev.masterpieceImage}
+                          alt={rev.masterpieceTitle || 'Piece'}
+                        />
                         <div className="min-w-0">
                           <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground block truncate">
                             {rev.masterpieceCategory || 'Jewellery'}
@@ -363,23 +401,26 @@ export function ReviewsAdminView() {
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-xs font-medium text-foreground block">
-                          {rev.userName}
-                        </span>
-                        <span className="text-[11px] text-muted-foreground font-mono">
-                          {rev.userEmail || 'In-store patron'}
-                        </span>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <PatronMonogram name={rev.userName} size="size-7" />
+                        <div className="min-w-0">
+                          <span className="text-xs font-medium text-foreground block truncate">
+                            {rev.userName || 'Valued Patron'}
+                          </span>
+                          <span className="text-[11px] text-muted-foreground font-mono block truncate">
+                            {rev.userEmail || 'In-store patron'}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-0.5">
+                      <div className="flex items-center gap-0.5 shrink-0">
                         {[1, 2, 3, 4, 5].map((s) => (
                           <Star
                             key={s}
                             className={`size-3.5 ${
                               s <= rating
-                                ? 'fill-neutral-900 dark:fill-neutral-100 text-neutral-900 dark:text-neutral-100'
-                                : 'text-neutral-300 dark:text-neutral-700'
+                                ? 'fill-neutral-900 text-neutral-900'
+                                : 'text-neutral-300'
                             }`}
                           />
                         ))}

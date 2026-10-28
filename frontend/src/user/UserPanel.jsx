@@ -9,6 +9,7 @@ import { SearchModal } from './components/SearchModal'
 import { CartDrawer } from './components/CartDrawer'
 import { BespokeAppointmentModal } from './components/BespokeAppointmentModal'
 import { updatePageSEO, getLocalBusinessSchema } from '@/utils/seo'
+import { broadcastCartUpdate, subscribeToTabSync } from '@/utils/tabSync'
 
 export function UserPanel() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -32,8 +33,19 @@ export function UserPanel() {
   useEffect(() => {
     try {
       localStorage.setItem('khalil_cart', JSON.stringify(cartItems))
+      const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0)
+      broadcastCartUpdate(count, cartItems)
     } catch {}
   }, [cartItems])
+
+  useEffect(() => {
+    const unsubscribe = subscribeToTabSync((data) => {
+      if (data?.type === 'CART_UPDATE' && Array.isArray(data.items)) {
+        setCartItems(data.items)
+      }
+    })
+    return unsubscribe
+  }, [])
 
   const handleIncrement = (id) => {
     setCartItems((prev) =>

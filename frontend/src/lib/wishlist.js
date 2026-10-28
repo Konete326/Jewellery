@@ -1,6 +1,7 @@
 import { usersApi } from '@/api/users.api';
 import { galleryApi } from '@/api/galleryApi';
 import { getAuthUser } from './auth';
+import { broadcastVaultUpdate } from '@/utils/tabSync';
 
 const STORAGE_KEY = 'khalil_atelier_vault';
 const ITEMS_STORAGE_KEY = 'khalil_atelier_vault_items';
@@ -32,11 +33,7 @@ export function getLocalVaultItems() {
 export function saveVaultIdsLocally(ids = []) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
-    window.dispatchEvent(
-      new CustomEvent('khalil_vault_change', {
-        detail: { count: ids.length, ids }
-      })
-    );
+    broadcastVaultUpdate(ids.length, ids);
   } catch {}
 }
 

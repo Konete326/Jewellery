@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Star, ShieldCheck, RefreshCw, MessageSquare } from 'lucide-react';
 import { galleryApi } from '@/api/galleryApi';
 import { Button } from '@/components/ui/button';
+import { PatronMonogram } from '@/components/ui/PatronMonogram';
 
 export function AdminReviewsList() {
   const [reviews, setReviews] = useState([]);
@@ -96,9 +97,12 @@ export function AdminReviewsList() {
                         ))}
                       </div>
                     </div>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
-                      By <span className="text-foreground font-medium">{rev.userName}</span> ({rev.userEmail})
-                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <PatronMonogram name={rev.userName} size="size-5" className="text-[10px]" />
+                      <p className="text-[11px] text-muted-foreground truncate">
+                        By <span className="text-foreground font-medium">{rev.userName}</span> ({rev.userEmail || 'In-store patron'})
+                      </p>
+                    </div>
                     {rev.comment && (
                       <p className="text-xs text-foreground/80 italic mt-1 line-clamp-2">
                         "{rev.comment}"

@@ -7,9 +7,9 @@ import { cn } from '@/lib/utils'
 import { LuxuryButton } from './LuxuryButton'
 
 const WEEKLY_SCHEDULE = [
-  { days: 'Monday – Thursday', hours: '1:00 PM – 8:30 PM', note: 'Regular Boutique Hours', status: 'Open' },
+  { days: 'Monday – Thursday', hours: '2:00 PM – 9:00 PM', note: 'Regular Boutique Hours', status: 'Open' },
   { days: 'Friday', hours: '3:30 PM – 9:30 PM', note: 'Opens After Jummah Prayers', status: 'Open' },
-  { days: 'Saturday', hours: '1:30 PM – 8:30 PM', note: 'Weekend Consultations', status: 'Open' },
+  { days: 'Saturday', hours: '2:00 PM – 9:00 PM', note: 'Weekend Consultations', status: 'Open' },
   { days: 'Sunday', hours: 'Closed', note: 'Weekly Rest Day', status: 'Closed' }
 ]
 

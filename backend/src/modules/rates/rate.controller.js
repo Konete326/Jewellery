@@ -1,16 +1,20 @@
-import { rateService } from './rate.service.js';
+import { rateService, getVerifiedBenchmark } from './rate.service.js';
 import { getSchedulerStatus, triggerManualScheduledSync } from './rate.scheduler.js';
 
 export const rateController = {
   async getRates(req, res, next) {
     try {
+      res.setHeader('Cache-Control', 'public, max-age=30, stale-while-revalidate=120');
       const rates = await rateService.getCurrentRates();
       return res.status(200).json({
         success: true,
         data: rates
       });
-    } catch (err) {
-      next(err);
+    } catch {
+      return res.status(200).json({
+        success: true,
+        data: getVerifiedBenchmark()
+      });
     }
   },
 
