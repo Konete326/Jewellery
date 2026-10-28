@@ -28,11 +28,16 @@ export const STORE_INFO = {
   },
   whatsapp: {
     number: '+92 333 3213613',
-    url: 'https://wa.me/923333213613',
-    inquiryUrl: (message) =>
-      `https://wa.me/923333213613?text=${encodeURIComponent(
+    url: 'https://api.whatsapp.com/send?phone=923333213613',
+    inquiryUrl: (message) => {
+      const encoded = encodeURIComponent(
         message || 'Hello Khalil & Sons, I would like to inquire about fine jewellery.'
-      )}`
+      );
+      if (typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        return `https://api.whatsapp.com/send?phone=923333213613&text=${encoded}`;
+      }
+      return `https://web.whatsapp.com/send?phone=923333213613&text=${encoded}`;
+    }
   },
   social: {
     instagram: 'https://www.instagram.com/khalilandsons/',

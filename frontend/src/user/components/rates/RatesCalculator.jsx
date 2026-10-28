@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Calculator, ArrowRight, MessageCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Calculator, MessageCircle } from 'lucide-react';
 import { STORE_INFO } from '@/constants/storeInfo';
+import { openWhatsAppChat } from '@/utils/whatsapp';
 
 const TOLA_IN_GRAMS = 11.6638;
 
@@ -38,8 +40,7 @@ export function RatesCalculator({ rates }) {
     const unitLabel = unit === 'tola' ? 'Tola' : unit === 'gram' ? 'Grams' : unit === 'masha' ? 'Masha' : 'Ratti';
     const metalLabel = metal === 'gold' ? `Gold (${karat})` : (karat === '925' ? '925 Pure Silver' : 'Fine Silver 999');
     const message = `Hello Khalil & Sons Jewellers,\nI calculated an estimate on your website for:\n• Metal: ${metalLabel}\n• Weight: ${weight} ${unitLabel} (~${grams.toFixed(2)} grams)\n• Today's Estimated Raw Metal Value: PKR ${totalEstimate.toLocaleString('en-PK')}\n\nI would like to inquire about custom crafting and making charges for this specification.`;
-    const url = `https://wa.me/${STORE_INFO.phone.mobileRaw}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    openWhatsAppChat(message, STORE_INFO?.phone?.mobileRaw || '923333213613');
   };
 
   return (
@@ -184,10 +185,33 @@ export function RatesCalculator({ rates }) {
         </div>
 
         <div className="lg:col-span-5">
-          <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/5 via-card to-background p-6 sm:p-8 flex flex-col justify-between">
-            <span className="text-xs font-mono uppercase tracking-widest text-amber-800 dark:text-amber-300 block mb-1">
-              Estimated Raw Bullion Value
-            </span>
+          <motion.div
+            key={`${metal}-${karat}`}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.28, ease: 'easeOut' }}
+            className={`rounded-2xl border p-6 sm:p-8 flex flex-col justify-between transition-colors shadow-xs ${
+              metal === 'silver'
+                ? 'border-slate-400/40 bg-gradient-to-br from-slate-500/10 via-card to-background'
+                : 'border-amber-500/30 bg-gradient-to-br from-amber-500/5 via-card to-background'
+            }`}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <span className={`text-xs font-mono uppercase tracking-widest block ${
+                metal === 'silver' ? 'text-slate-700 dark:text-slate-300' : 'text-amber-800 dark:text-amber-300'
+              }`}>
+                Estimated Raw Bullion Value
+              </span>
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium border ${
+                metal === 'silver'
+                  ? 'bg-slate-500/15 text-slate-800 dark:text-slate-200 border-slate-500/30'
+                  : 'bg-amber-500/15 text-amber-900 dark:text-amber-200 border-amber-500/30'
+              }`}>
+                <span className={`size-1.5 rounded-full shrink-0 ${metal === 'silver' ? 'bg-slate-500' : 'bg-amber-600'}`} />
+                {metal === 'silver' ? `Silver (${karat}) Calculated` : `Gold (${karat}) Calculated`}
+              </span>
+            </div>
+
             <div className="text-3xl sm:text-4xl font-serif font-light text-foreground tracking-tight my-2">
               PKR {totalEstimate.toLocaleString('en-PK')}
             </div>
@@ -195,15 +219,21 @@ export function RatesCalculator({ rates }) {
             <div className="space-y-1.5 py-3 border-y border-border/60 text-xs text-muted-foreground font-light mb-4">
               <div className="flex justify-between">
                 <span>Selected Metal:</span>
-                <span className="font-mono text-foreground">{metal === 'gold' ? `Gold (${karat})` : (karat === '925' ? '925 Pure Silver' : 'Fine Silver (999)')}</span>
+                <span className="font-mono text-foreground font-medium">
+                  {metal === 'gold' ? `Gold (${karat})` : (karat === '925' ? '925 Pure Silver' : 'Fine Silver (999)')}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span>Unit Benchmark Rate:</span>
-                <span className="font-mono text-foreground">PKR {Math.round(currentRateItem?.tola || 0).toLocaleString('en-PK')} / tola</span>
+                <span className="font-mono text-foreground">
+                  PKR {Math.round(currentRateItem?.tola || 0).toLocaleString('en-PK')} / tola
+                </span>
               </div>
               <div className="flex justify-between">
                 <span>Per Gram Rate:</span>
-                <span className="font-mono text-foreground">PKR {Math.round(currentRateItem?.gram || 0).toLocaleString('en-PK')} / g</span>
+                <span className="font-mono text-foreground">
+                  PKR {Math.round(currentRateItem?.gram || 0).toLocaleString('en-PK')} / g
+                </span>
               </div>
             </div>
 
@@ -215,7 +245,7 @@ export function RatesCalculator({ rates }) {
               <MessageCircle className="size-4" />
               <span>Inquire This Estimate via WhatsApp</span>
             </button>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

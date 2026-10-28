@@ -25,6 +25,16 @@ app.use('/api', apiRouter);
 app.use('/', seoRouter);
 
 if (fs.existsSync(publicDir)) {
+  app.get('/favicon.ico', (req, res) => {
+    res.setHeader('Content-Type', 'image/x-icon');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.sendFile(path.join(publicDir, 'favicon.ico'));
+  });
+  app.get('/favicon.svg', (req, res) => {
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.sendFile(path.join(publicDir, 'favicon.svg'));
+  });
   app.use(express.static(publicDir, {
     setHeaders: (res, filePath) => {
       if (filePath.endsWith('sw.js')) {

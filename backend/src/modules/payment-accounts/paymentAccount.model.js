@@ -29,7 +29,7 @@ const paymentAccountSchema = new mongoose.Schema(
     },
     accountType: {
       type: String,
-      enum: ['Bank Account', 'Digital Wallet', 'Raast ID', 'Wire Transfer'],
+      trim: true,
       default: 'Bank Account'
     },
     swiftCode: {

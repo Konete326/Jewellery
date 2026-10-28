@@ -32,5 +32,8 @@ export const ENDPOINTS = {
   RATES_SCHEDULER: '/rates/scheduler',
   RATES_SCHEDULER_TRIGGER: '/rates/scheduler/trigger',
   RATES_BROADCAST_STATS: '/rates/broadcast/stats',
-  RATES_BROADCAST_SEND: '/rates/broadcast/send'
+  RATES_BROADCAST_SEND: '/rates/broadcast/send',
+  PAYMENT_ACCOUNTS: '/payment-accounts',
+  PAYMENT_ACCOUNTS_ACTIVE: '/payment-accounts/active',
+  PAYMENT_ACCOUNT_BY_ID: (id) => `/payment-accounts/${id}`
 };

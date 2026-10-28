@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Send, Loader2, ShieldCheck, Lock, CheckCircle2 } from 'lucide-react';
+import { Send, Loader2, ShieldCheck, Lock, CheckCircle2, Copy, Check, MessageSquare, Plus } from 'lucide-react';
 import { submitInquiry } from '@/api/inquiryApi';
-import { normalizePhoneToE164 } from '@/utils/phone';
+import { normalizePhoneToE164, createWhatsAppInquiryUrl } from '@/utils/phone';
 import { LuxuryButton } from './LuxuryButton';
 import { Button } from '@/components/ui/button';
+import { CountryCodeSelect } from './CountryCodeSelect';
 import { getAuthUser } from '@/lib/auth';
 import { toast } from 'sonner';
 
@@ -13,6 +14,7 @@ export function AtelierContactForm({ onSuccess }) {
   const location = useLocation();
   const [user, setUser] = useState(getAuthUser());
 
+  const [countryCode, setCountryCode] = useState('+92');
   const [formData, setFormData] = useState(() => {
     const current = getAuthUser();
     return {
@@ -24,6 +26,8 @@ export function AtelierContactForm({ onSuccess }) {
     };
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittedConfirmation, setSubmittedConfirmation] = useState(null);
+  const [copiedCode, setCopiedCode] = useState(false);
 
   useEffect(() => {
     const handleAuthChange = (e) => {
@@ -46,8 +50,14 @@ export function AtelierContactForm({ onSuccess }) {
   };
 
   const handlePhoneChange = (e) => {
-    const sanitized = e.target.value.replace(/[^0-9+\s\-()]/g, '');
+    const sanitized = e.target.value.replace(/[^0-9\s\-()]/g, '');
     handleChange('phone', sanitized);
+  };
+
+  const handleCopyCode = (code) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCode(true);
+    setTimeout(() => setCopiedCode(false), 2000);
   };
 
   const handleSubmit = async (e) => {
@@ -67,10 +77,14 @@ export function AtelierContactForm({ onSuccess }) {
 
     setIsSubmitting(true);
     try {
+      const fullPhone = formData.phone.trim()
+        ? normalizePhoneToE164(`${countryCode}${formData.phone.trim()}`)
+        : '';
+
       const payload = {
         customerName: formData.customerName.trim(),
         email: formData.email.trim(),
-        phone: normalizePhoneToE164(formData.phone.trim()),
+        phone: fullPhone,
         subject: formData.subject,
         jewelryType: formData.subject,
         preferredMetal: 'General Inquiry',
@@ -78,23 +92,124 @@ export function AtelierContactForm({ onSuccess }) {
         message: formData.message.trim()
       };
 
-      await submitInquiry(payload);
+      const res = await submitInquiry(payload);
+      const generatedId = res?.data?._id || res?.data?.id || Date.now().toString().slice(-6);
+      const refCode = `KS-INQ-${String(generatedId).slice(-6).toUpperCase()}`;
+
+      setSubmittedConfirmation({
+        refCode,
+        email: formData.email.trim(),
+        customerName: formData.customerName.trim(),
+        subject: formData.subject,
+        phone: fullPhone
+      });
+
       toast.success('Inquiry Submitted', {
-        description: `Confirmation email sent to ${formData.email.trim()}`
+        description: `Confirmation email dispatched to ${formData.email.trim()}`
       });
       onSuccess?.(payload);
-      setFormData((prev) => ({
-        ...prev,
-        phone: '',
-        subject: 'General Inquiry & Questions',
-        message: ''
-      }));
     } catch (err) {
       toast.error(err.message || 'Failed to submit inquiry. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const handleResetForNew = () => {
+    setSubmittedConfirmation(null);
+    setFormData((prev) => ({
+      ...prev,
+      phone: '',
+      subject: 'General Inquiry & Questions',
+      message: ''
+    }));
+  };
+
+  if (submittedConfirmation) {
+    const whatsAppUrl = createWhatsAppInquiryUrl(
+      '+923331234567',
+      submittedConfirmation.customerName,
+      `${submittedConfirmation.refCode} - ${submittedConfirmation.subject}`
+    );
+
+    return (
+      <div className="rounded-2xl border border-border/80 bg-white p-6 sm:p-8 shadow-xs flex flex-col justify-between h-full gap-5 animate-in fade-in duration-200">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-border/70">
+            <span className="font-mono text-[9px] uppercase tracking-widest text-emerald-800 dark:text-emerald-300 border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-0.5 rounded-full font-medium">
+              AU · INQUIRY DISPATCHED
+            </span>
+            <span className="text-xs text-muted-foreground font-mono">
+              Just now
+            </span>
+          </div>
+
+          <div className="space-y-1.5">
+            <h3 className="text-2xl font-serif font-light text-foreground tracking-tight">
+              Inquiry Confirmed
+            </h3>
+            <p className="text-xs text-muted-foreground font-light leading-relaxed">
+              Your inquiry has been safely received by the master jewelers at Khalil & Sons.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
+                Inquiry Reference
+              </span>
+              <button
+                type="button"
+                onClick={() => handleCopyCode(submittedConfirmation.refCode)}
+                className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground cursor-pointer"
+              >
+                {copiedCode ? <Check className="size-3 text-emerald-600" /> : <Copy className="size-3" />}
+                {copiedCode ? 'Copied' : 'Copy'}
+              </button>
+            </div>
+            <div className="font-mono text-base font-semibold text-foreground tracking-wider">
+              {submittedConfirmation.refCode}
+            </div>
+            <div className="text-xs text-muted-foreground leading-relaxed pt-1 border-t border-emerald-500/20">
+              Confirmation dispatched to{' '}
+              <strong className="text-foreground font-medium underline underline-offset-2">
+                {submittedConfirmation.email}
+              </strong>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-muted/40 border border-border/70 text-xs text-muted-foreground space-y-1 leading-relaxed">
+            <div className="font-medium text-foreground">Estimated Response Time:</div>
+            <div>Our atelier concierge typically reviews inquiries and replies within 2–4 business hours.</div>
+          </div>
+        </div>
+
+        <div className="pt-4 border-t border-border/70 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleResetForNew}
+            className="w-full sm:w-auto h-9 px-4 text-xs cursor-pointer"
+          >
+            <Plus className="size-3.5 mr-1.5" />
+            Send Another Inquiry
+          </Button>
+
+          {whatsAppUrl && (
+            <a
+              href={whatsAppUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 h-9 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium transition-colors shadow-xs"
+            >
+              <MessageSquare className="size-3.5" />
+              Chat on WhatsApp
+            </a>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-2xl border border-border/80 bg-white p-5 sm:p-7 shadow-xs flex flex-col justify-between h-full gap-4">
@@ -178,14 +293,20 @@ export function AtelierContactForm({ onSuccess }) {
             <label className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
               Phone / WhatsApp (Optional)
             </label>
-            <input
-              type="tel"
-              inputMode="tel"
-              value={formData.phone}
-              onChange={handlePhoneChange}
-              placeholder="+92 333 1234567"
-              className="w-full bg-white border border-input rounded-xl px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30 focus-visible:border-foreground/60 transition-colors"
-            />
+            <div className="flex gap-2">
+              <CountryCodeSelect
+                value={countryCode}
+                onChange={setCountryCode}
+              />
+              <input
+                type="tel"
+                inputMode="tel"
+                value={formData.phone}
+                onChange={handlePhoneChange}
+                placeholder="333 1234567"
+                className="w-full bg-white border border-input rounded-xl px-3.5 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30 focus-visible:border-foreground/60 transition-colors"
+              />
+            </div>
           </div>
 
           <div className="flex flex-col gap-1">
