@@ -70,7 +70,7 @@ export function HistoricAtelier({ onBookClick }) {
             Visit Our Boutique in Karachi
           </InkHeadline>
           <p className="text-[#5a6061] text-base md:text-lg mb-10 max-w-lg leading-relaxed font-light">
-            Located in Murshid Sunaar Tower on Dr. Daud Pota Road in Saddar, Karachi, our boutique welcomes you to experience certified 22K and 24K pure gold jewellery, custom bridal heirlooms, and bespoke design consultations.
+            Located in Murshid Sunaar Tower on Dr. Daud Pota Road in Saddar, Karachi, our boutique welcomes you to experience certified 22K, 21K and 18K fine gold jewellery, custom bridal heirlooms, and bespoke design consultations.
           </p>
           <div className="space-y-6 border-l border-neutral-300 pl-6 mb-10">
             <div>
