@@ -38,7 +38,7 @@ export function Hero({ onExploreClick }) {
           The Art of Handcrafted Gold
         </InkHeadline>
         <p className="text-white/85 text-lg md:text-xl max-w-lg mb-10 leading-relaxed font-light">
-          Master goldsmithing since 1992 in Saddar, Karachi. Crafting certified 22K and 24K gold bridal jewelry, solitaires, and polki heirlooms.
+          Master goldsmithing since 1992 in Saddar, Karachi. Crafting certified 22K, 21K and 18K gold bridal jewelry, solitaires, and polki heirlooms.
         </p>
         <div>
           <LuxuryButton onClick={onExploreClick} variant="gold">
