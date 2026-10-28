@@ -430,6 +430,7 @@ export function PaymentAccountsAdminView() {
         }}
         onSave={handleSaveAccount}
         account={editingAccount}
+        existingAccounts={accounts}
         loading={modalLoading}
       />
 

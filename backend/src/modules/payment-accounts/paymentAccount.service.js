@@ -9,6 +9,18 @@ export const paymentAccountService = {
     return paymentAccountRepository.findActive();
   },
 
+  async checkDuplicate({ iban, accountNumber }, excludeId = null) {
+    if (iban && String(iban).trim()) {
+      const match = await paymentAccountRepository.findByIban(iban, excludeId);
+      if (match) return { field: 'iban', bankName: match.bankName };
+    }
+    if (accountNumber && String(accountNumber).trim()) {
+      const match = await paymentAccountRepository.findByAccountNumber(accountNumber, excludeId);
+      if (match) return { field: 'accountNumber', bankName: match.bankName };
+    }
+    return null;
+  },
+
   async create(data) {
     if (data.isDefault) {
       await paymentAccountRepository.clearDefault();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { X, Landmark, Check, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -18,7 +18,14 @@ const PROVIDER_PRESETS = {
   'Digital Wallet': ['JazzCash', 'EasyPaisa', 'SadaPay', 'NayaPay']
 };
 
-export function PaymentAccountModal({ isOpen, onClose, onSave, account = null, loading = false }) {
+export function PaymentAccountModal({
+  isOpen,
+  onClose,
+  onSave,
+  account = null,
+  loading = false,
+  existingAccounts = []
+}) {
   const [formData, setFormData] = useState({
     bankName: '',
     accountTitle: 'Khalil & Sons Jewellers',
@@ -31,6 +38,26 @@ export function PaymentAccountModal({ isOpen, onClose, onSave, account = null, l
   });
 
   const [errors, setErrors] = useState({});
+
+  const duplicateIbanMatch = useMemo(() => {
+    const cleanCurrentIban = formData.iban ? formData.iban.replace(/\s+/g, '').toUpperCase() : '';
+    if (!cleanCurrentIban || cleanCurrentIban.length < 8) return null;
+    return existingAccounts.find((item) => {
+      if (account && String(item._id) === String(account._id)) return false;
+      const otherIban = item.iban ? String(item.iban).replace(/\s+/g, '').toUpperCase() : '';
+      return otherIban && otherIban === cleanCurrentIban;
+    });
+  }, [formData.iban, existingAccounts, account]);
+
+  const duplicateAccountMatch = useMemo(() => {
+    const cleanCurrentAcc = formData.accountNumber ? String(formData.accountNumber).trim() : '';
+    if (!cleanCurrentAcc || cleanCurrentAcc.length < 4) return null;
+    return existingAccounts.find((item) => {
+      if (account && String(item._id) === String(account._id)) return false;
+      const otherAcc = item.accountNumber ? String(item.accountNumber).trim() : '';
+      return otherAcc && otherAcc === cleanCurrentAcc;
+    });
+  }, [formData.accountNumber, existingAccounts, account]);
 
   useEffect(() => {
     if (account) {
@@ -126,6 +153,13 @@ export function PaymentAccountModal({ isOpen, onClose, onSave, account = null, l
       } else if (hasIban && formData.iban.length > 0 && !isIbanValid) {
         newErrors.iban = 'Invalid Pakistani IBAN format (must be 24 chars e.g. PK36MEZN...)';
       }
+    }
+
+    if (duplicateIbanMatch) {
+      newErrors.iban = `This IBAN already belongs to ${duplicateIbanMatch.bankName}`;
+    }
+    if (duplicateAccountMatch) {
+      newErrors.accountNumber = `This account number already belongs to ${duplicateAccountMatch.bankName}`;
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -268,7 +302,13 @@ export function PaymentAccountModal({ isOpen, onClose, onSave, account = null, l
                   errors.accountNumber ? 'border-rose-500' : 'border-input'
                 }`}
               />
-              {errors.accountNumber && <p className="text-xs text-rose-500">{errors.accountNumber}</p>}
+              {errors.accountNumber && !duplicateAccountMatch && <p className="text-xs text-rose-500">{errors.accountNumber}</p>}
+              {duplicateAccountMatch && (
+                <div className="flex items-center gap-1.5 p-2 rounded-lg bg-rose-500/10 border border-rose-500/25 text-rose-600 dark:text-rose-400 text-xs mt-1.5 font-medium">
+                  <AlertCircle className="size-3.5 shrink-0" />
+                  <span>This account number already belongs to {duplicateAccountMatch.bankName}</span>
+                </div>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -313,7 +353,13 @@ export function PaymentAccountModal({ isOpen, onClose, onSave, account = null, l
                   ) : null}
                 </div>
               )}
-              {errors.iban && !errors.accountNumber && <p className="text-xs text-rose-500">{errors.iban}</p>}
+              {errors.iban && !errors.accountNumber && !duplicateIbanMatch && <p className="text-xs text-rose-500">{errors.iban}</p>}
+              {duplicateIbanMatch && (
+                <div className="flex items-center gap-1.5 p-2 rounded-lg bg-rose-500/10 border border-rose-500/25 text-rose-600 dark:text-rose-400 text-xs mt-1.5 font-medium">
+                  <AlertCircle className="size-3.5 shrink-0" />
+                  <span>This IBAN already belongs to {duplicateIbanMatch.bankName}</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -368,8 +414,8 @@ export function PaymentAccountModal({ isOpen, onClose, onSave, account = null, l
               </Button>
               <Button
                 type="submit"
-                disabled={loading}
-                className="h-9 px-5 text-xs bg-foreground text-background hover:bg-neutral-800 cursor-pointer shadow-xs"
+                disabled={loading || Boolean(duplicateIbanMatch || duplicateAccountMatch)}
+                className="h-9 px-5 text-xs bg-foreground text-background hover:bg-neutral-800 cursor-pointer shadow-xs disabled:opacity-50"
               >
                 {loading ? 'Saving...' : account ? 'Update' : 'Save'}
               </Button>

@@ -4,10 +4,7 @@ export const paymentAccountController = {
   async getAll(req, res, next) {
     try {
       const accounts = await paymentAccountService.getAll();
-      return res.status(200).json({
-        success: true,
-        data: accounts
-      });
+      return res.status(200).json({ success: true, data: accounts });
     } catch (err) {
       next(err);
     }
@@ -16,10 +13,7 @@ export const paymentAccountController = {
   async getActive(req, res, next) {
     try {
       const accounts = await paymentAccountService.getActive();
-      return res.status(200).json({
-        success: true,
-        data: accounts
-      });
+      return res.status(200).json({ success: true, data: accounts });
     } catch (err) {
       next(err);
     }
@@ -36,6 +30,17 @@ export const paymentAccountController = {
           success: false,
           message: 'Bank name, account title, and either account number or IBAN are required.'
         });
+      }
+
+      if (cleanIban || cleanAcc) {
+        const dup = await paymentAccountService.checkDuplicate({ iban: cleanIban, accountNumber: cleanAcc });
+        if (dup) {
+          const label = dup.field === 'iban' ? 'IBAN' : 'account number';
+          return res.status(409).json({
+            success: false,
+            message: `This ${label} already belongs to ${dup.bankName}`
+          });
+        }
       }
 
       const payload = {
@@ -69,12 +74,23 @@ export const paymentAccountController = {
       if (payload.bankName) payload.bankName = payload.bankName.trim();
       if (payload.accountTitle) payload.accountTitle = payload.accountTitle.trim();
 
+      if (payload.iban || payload.accountNumber) {
+        const dup = await paymentAccountService.checkDuplicate(
+          { iban: payload.iban, accountNumber: payload.accountNumber },
+          req.params.id
+        );
+        if (dup) {
+          const label = dup.field === 'iban' ? 'IBAN' : 'account number';
+          return res.status(409).json({
+            success: false,
+            message: `This ${label} already belongs to ${dup.bankName}`
+          });
+        }
+      }
+
       const account = await paymentAccountService.update(req.params.id, payload);
       if (!account) {
-        return res.status(404).json({
-          success: false,
-          message: 'Payment account not found.'
-        });
+        return res.status(404).json({ success: false, message: 'Payment account not found.' });
       }
       return res.status(200).json({
         success: true,
@@ -90,15 +106,9 @@ export const paymentAccountController = {
     try {
       const account = await paymentAccountService.delete(req.params.id);
       if (!account) {
-        return res.status(404).json({
-          success: false,
-          message: 'Payment account not found.'
-        });
+        return res.status(404).json({ success: false, message: 'Payment account not found.' });
       }
-      return res.status(200).json({
-        success: true,
-        message: 'Payment account deleted successfully.'
-      });
+      return res.status(200).json({ success: true, message: 'Payment account deleted successfully.' });
     } catch (err) {
       next(err);
     }
