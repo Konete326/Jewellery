@@ -21,7 +21,7 @@ export function UsersMetrics({ users = [] }) {
       value: googleCount,
       sub: `${total > 0 ? Math.round((googleCount / total) * 100) : 0}% of all users`,
       customIcon: <GoogleIcon className="size-5 shrink-0" />,
-      color: 'text-blue-600 bg-blue-500/10 border-blue-500/20'
+      color: 'bg-background border-border/80 shadow-2xs'
     },
     {
       label: 'Email & Password',

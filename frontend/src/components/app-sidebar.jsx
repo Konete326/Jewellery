@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenuButton,
@@ -12,7 +11,6 @@ import {
 } from "@/components/ui/sidebar";
 import { NavGroup } from "@/components/nav-group";
 import { navGroups } from "@/components/app-shared";
-import { LatestChange } from "@/components/latest-change";
 import { Store } from "lucide-react";
 
 export function AppSidebar() {
@@ -52,9 +50,6 @@ export function AppSidebar() {
           <NavGroup key={`sidebar-group-${index}`} {...group} />
         ))}
       </SidebarContent>
-      <SidebarFooter>
-        <LatestChange />
-      </SidebarFooter>
     </Sidebar>
   );
 }
