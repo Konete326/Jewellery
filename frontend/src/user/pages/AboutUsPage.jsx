@@ -19,7 +19,7 @@ const aboutFaqs = [
   },
   {
     question: "What hallmark certification accompanies your gold jewellery?",
-    answer: "Every gold creation is rigorously tested and certified for 22K (.916) or 24K pure gold purity, stamped with our authentic atelier hallmark and issued with a physical purity certificate."
+    answer: "Every gold creation is rigorously tested and certified for 22K (.916), 21K (.875) or 18K (.750) hallmark purity, stamped with our authentic atelier hallmark and issued with a physical purity certificate."
   },
   {
     question: "How long does a bespoke bridal heirloom commission take?",
@@ -52,7 +52,7 @@ export function AboutUsPage() {
   useEffect(() => {
     updatePageSEO({
       title: 'Our Heritage & 3-Decade Legacy (Est. 1992)',
-      description: 'The story of Khalil & Sons Jewellers. Founded in 1992 by Mr. Khalil Ahmed in Murshid Bazaar, Saddar, Karachi. Three decades of authentic Mughal filigree, 22K/24K purity, and bespoke bridal goldsmithing.',
+      description: 'The story of Khalil & Sons Jewellers. Founded in 1992 by Mr. Khalil Ahmed in Murshid Bazaar, Saddar, Karachi. Three decades of authentic Mughal filigree, certified 22K/21K/18K purity, and bespoke bridal goldsmithing.',
       keywords: 'Khalil and Sons history, master goldsmith Karachi, 1992 jewellery Saddar, Murshid Bazaar Karachi, family jewelers Karachi'
     })
   }, [])

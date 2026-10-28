@@ -25,7 +25,7 @@ const ERAS = [
     year: '2010',
     title: 'Sarafa Bullion & Purity Vault',
     location: 'Murshid Sunaar Tower',
-    description: 'Pioneered stringent purity testing and bullion standards in Saddar Sarafa. Guaranteeing certified 22K (.916) and 24K pure gold with unmatched honesty and lifetime trust.',
+    description: 'Pioneered stringent purity testing in Saddar Sarafa. Guaranteeing certified 22K (.916), 21K (.875) and 18K (.750) fine gold with unmatched honesty and lifetime trust.',
     highlight: 'Certified Hallmark Standard'
   },
   {

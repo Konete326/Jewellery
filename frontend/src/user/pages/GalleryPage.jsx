@@ -38,7 +38,7 @@ export function GalleryPage() {
   useEffect(() => {
     updatePageSEO({
       title: 'Haute Joaillerie Gallery & Bridal Heirlooms',
-      description: 'Explore the complete Khalil & Sons fine jewellery collection. Certified 22K/24K gold bridal sets, Polki diamond heirlooms, kadas, and gulubands in Saddar, Karachi.',
+      description: 'Explore the complete Khalil & Sons fine jewellery collection. Certified 22K, 21K and 18K gold bridal sets, Polki diamond heirlooms, kadas, and gulubands in Saddar, Karachi.',
       keywords: 'jewellery gallery Karachi, 22K gold bridal sets, Pakistani gold jewellery, polki collection, handcrafted kadas Karachi'
     });
   }, []);
