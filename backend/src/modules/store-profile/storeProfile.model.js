@@ -66,3 +66,4 @@ const storeProfileSchema = new mongoose.Schema(
 
 export const StoreProfile =
   mongoose.models.StoreProfile || mongoose.model('StoreProfile', storeProfileSchema);
+

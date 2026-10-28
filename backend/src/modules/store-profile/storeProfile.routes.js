@@ -7,3 +7,4 @@ router.get('/', storeProfileController.get);
 router.put('/', storeProfileController.update);
 
 export default router;
+
