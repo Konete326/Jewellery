@@ -3,7 +3,10 @@ import {
   Landmark,
   Plus,
   Search,
-  RefreshCw
+  RefreshCw,
+  Wallet,
+  Zap,
+  Building2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -22,6 +25,7 @@ export function PaymentAccountsAdminView() {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -142,6 +146,7 @@ export function PaymentAccountsAdminView() {
         iban: 'PK36MEZN0001080105829101',
         accountType: 'Bank Account',
         isDefault: true,
+        isInstantSettlement: false,
         isActive: true
       });
       await createPaymentAccount({
@@ -151,6 +156,7 @@ export function PaymentAccountsAdminView() {
         iban: '',
         accountType: 'Raast ID',
         isDefault: false,
+        isInstantSettlement: true,
         isActive: true
       });
       toast.success('Default accounts added');
@@ -164,6 +170,16 @@ export function PaymentAccountsAdminView() {
     }
   };
 
+  const counts = useMemo(() => {
+    const total = accounts.length;
+    const bankAccounts = accounts.filter(
+      (a) => a.accountType !== 'Raast ID' && a.accountType !== 'Digital Wallet'
+    ).length;
+    const raast = accounts.filter((a) => a.accountType === 'Raast ID').length;
+    const wallets = accounts.filter((a) => a.accountType === 'Digital Wallet').length;
+    return { total, bankAccounts, raast, wallets };
+  }, [accounts]);
+
   const filteredAccounts = useMemo(() => {
     return accounts.filter((acc) => {
       const q = searchQuery.toLowerCase().trim();
@@ -176,22 +192,37 @@ export function PaymentAccountsAdminView() {
 
       if (!matchesSearch) return false;
 
+      if (categoryFilter === 'Bank Accounts') {
+        if (acc.accountType === 'Raast ID' || acc.accountType === 'Digital Wallet') return false;
+      } else if (categoryFilter === 'Raast') {
+        if (acc.accountType !== 'Raast ID') return false;
+      } else if (categoryFilter === 'Wallets') {
+        if (acc.accountType !== 'Digital Wallet') return false;
+      }
+
       if (statusFilter === 'Active') return acc.isActive === true;
       if (statusFilter === 'Inactive') return acc.isActive === false;
 
       return true;
     });
-  }, [accounts, searchQuery, statusFilter]);
+  }, [accounts, searchQuery, categoryFilter, statusFilter]);
+
+  const categoryTabs = [
+    { label: 'All', count: counts.total, icon: Landmark },
+    { label: 'Bank Accounts', count: counts.bankAccounts, icon: Building2 },
+    { label: 'Raast', count: counts.raast, icon: Zap },
+    { label: 'Wallets', count: counts.wallets, icon: Wallet }
+  ];
 
   return (
     <div className="w-full space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/70">
         <div>
           <h1 className="font-serif text-2xl font-light text-foreground tracking-tight">
-            Bank Accounts
+            Bank Accounts & Settlement
           </h1>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Manage receiving bank accounts and online payment methods
+            Manage receiving bank accounts, Raast IDs, and digital wallets for online orders
           </p>
         </div>
 
@@ -220,6 +251,37 @@ export function PaymentAccountsAdminView() {
         </div>
       </div>
 
+      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        {categoryTabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = categoryFilter === tab.label;
+          return (
+            <button
+              key={tab.label}
+              type="button"
+              onClick={() => setCategoryFilter(tab.label)}
+              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-mono transition-colors cursor-pointer shrink-0 border ${
+                isActive
+                  ? 'bg-foreground text-background border-foreground font-semibold shadow-xs'
+                  : 'bg-card border-border/80 text-muted-foreground hover:bg-muted hover:text-foreground'
+              }`}
+            >
+              <Icon className="size-3" />
+              <span>{tab.label}</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded-full font-sans ${
+                  isActive
+                    ? 'bg-background/20 text-background'
+                    : 'bg-muted text-muted-foreground'
+                }`}
+              >
+                {tab.count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-sm">
           <Search className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -227,8 +289,8 @@ export function PaymentAccountsAdminView() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search accounts..."
-            className="w-full bg-background border border-input rounded-xl pl-9 pr-3.5 py-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30"
+            placeholder="Search bank name, title, or IBAN..."
+            className="w-full bg-background border border-input rounded-xl pl-9 pr-3.5 py-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30 font-mono"
           />
         </div>
 
@@ -253,16 +315,20 @@ export function PaymentAccountsAdminView() {
       {loading ? (
         <div className="min-h-[200px] flex flex-col items-center justify-center gap-2">
           <LumaSpin size={28} />
-          <p className="text-xs text-muted-foreground font-light">Loading...</p>
+          <p className="text-xs text-muted-foreground font-light">Loading accounts...</p>
         </div>
       ) : filteredAccounts.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border p-8 text-center bg-card/40">
           <Landmark className="size-8 text-muted-foreground mx-auto mb-2 opacity-60" />
           <h3 className="font-serif text-base font-semibold text-foreground mb-1">
-            {searchQuery || statusFilter !== 'All' ? 'No Accounts Match Filter' : 'No Bank Accounts Yet'}
+            {searchQuery || categoryFilter !== 'All' || statusFilter !== 'All'
+              ? 'No Accounts Match Current Filter'
+              : 'No Bank Accounts Yet'}
           </h3>
           <p className="text-xs text-muted-foreground max-w-sm mx-auto mb-4 font-light">
-            Add bank details so customers can transfer payments.
+            {searchQuery || categoryFilter !== 'All' || statusFilter !== 'All'
+              ? 'Try selecting a different filter tab or clearing your search.'
+              : 'Add bank details so customers can transfer payments.'}
           </p>
           <div className="flex items-center justify-center gap-2.5">
             <Button
@@ -316,7 +382,7 @@ export function PaymentAccountsAdminView() {
         isOpen={Boolean(deletingAccount)}
         onClose={() => setDeletingAccount(null)}
         onConfirm={handleDeleteConfirm}
-        title={deletingAccount ? `${deletingAccount.bankName} (${deletingAccount.accountNumber})` : ''}
+        title={deletingAccount ? `${deletingAccount.bankName} (${deletingAccount.accountNumber || deletingAccount.iban})` : ''}
         itemType="account"
         loading={deleteLoading}
       />
