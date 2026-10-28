@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Compass, Gem, PhoneCall, ArrowRight } from 'lucide-react';
+import { Compass, Gem, PhoneCall, ArrowRight } from 'lucide-react';
 import { Header } from '@/components/header';
 import { Footer } from '@/user/components/Footer';
 import { NotFoundPage as NotFoundComponent } from '@/components/ui/not-found-page';
@@ -38,10 +38,7 @@ export function NotFoundPage() {
             homeHref="/"
             icon={
               <div className="relative mx-auto mb-2 flex h-24 w-24 items-center justify-center rounded-full bg-[#f6f2ec] border border-[#e5dacd] text-[#99794d] shadow-inner">
-                <Compass className="h-12 w-12 stroke-[1.25] animate-pulse" />
-                <div className="absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[#1a1a1a] text-[#c5a880]">
-                  <Sparkles className="h-3.5 w-3.5" />
-                </div>
+                <Compass className="h-12 w-12 stroke-[1.25]" />
               </div>
             }
             buttonClassName="bg-[#1a1a1a] hover:bg-[#2b2b2b] text-[#fcfbfa] font-sans font-medium px-6 py-3 rounded-full text-xs tracking-widest uppercase border border-neutral-800 shadow-md transition-all hover:scale-[1.02]"

@@ -1,6 +1,5 @@
 import React from 'react';
 import { History, RotateCcw, Trash2 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 function formatPkr(num) {
@@ -11,22 +10,22 @@ function formatPkr(num) {
 export function RatesAdminHistoryList({ history = [], onDeleteLog, onReapplyRate }) {
   if (!history || history.length === 0) {
     return (
-      <div className="rounded-2xl border border-border/60 bg-card p-6 text-center">
-        <History className="size-8 mx-auto text-muted-foreground/40 mb-2" />
-        <p className="text-sm font-light text-muted-foreground">No rate change records logged yet.</p>
+      <div className="rounded-2xl border border-border/70 bg-card p-6 text-center">
+        <History className="size-6 mx-auto text-muted-foreground/40 mb-1.5" />
+        <p className="text-xs text-muted-foreground">No rate history recorded yet.</p>
       </div>
     );
   }
 
   return (
     <div className="rounded-2xl border border-border/80 bg-card overflow-hidden shadow-xs">
-      <div className="p-4 sm:p-5 border-b border-border/40 flex items-center justify-between">
+      <div className="p-4 border-b border-border/40 flex items-center justify-between">
         <div>
           <h3 className="text-sm font-medium text-foreground tracking-tight">
-            Recent Rate Audit Trail
+            Rate History
           </h3>
-          <p className="text-xs text-muted-foreground font-mono">
-            Automated market syncs and atelier benchmark adjustments
+          <p className="text-xs text-muted-foreground">
+            Recent price updates and adjustments
           </p>
         </div>
         <span className="text-xs font-mono text-muted-foreground">
@@ -35,7 +34,7 @@ export function RatesAdminHistoryList({ history = [], onDeleteLog, onReapplyRate
       </div>
 
       <div className="divide-y divide-border/40">
-        {history.slice(0, 10).map((item) => {
+        {history.slice(0, 8).map((item) => {
           const d = new Date(item.createdAt || item.timestamp);
           const timeStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ', ' +
             d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
@@ -45,7 +44,7 @@ export function RatesAdminHistoryList({ history = [], onDeleteLog, onReapplyRate
           return (
             <div
               key={item._id || item.id}
-              className="p-3.5 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-muted/10 transition-colors"
+              className="p-3 sm:px-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 hover:bg-muted/15 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <span className="text-xs font-mono text-muted-foreground min-w-[120px]">
@@ -53,7 +52,7 @@ export function RatesAdminHistoryList({ history = [], onDeleteLog, onReapplyRate
                 </span>
 
                 <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-sm font-medium text-foreground">
+                  <span className="font-mono text-xs font-semibold text-foreground">
                     {formatPkr(item.gold24kTola)}
                   </span>
                   <span className="text-[10px] font-mono text-muted-foreground">
@@ -71,15 +70,8 @@ export function RatesAdminHistoryList({ history = [], onDeleteLog, onReapplyRate
               </div>
 
               <div className="flex items-center gap-2 self-end sm:self-auto">
-                <Badge
-                  variant={isManual ? 'secondary' : 'outline'}
-                  className="text-[10px] font-mono uppercase"
-                >
+                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full border border-border bg-muted/30 text-muted-foreground">
                   {isManual ? 'Manual' : 'Live Sync'}
-                </Badge>
-
-                <span className="text-[11px] font-mono text-muted-foreground truncate max-w-[100px] hidden md:inline-block">
-                  {item.updatedBy || 'System'}
                 </span>
 
                 {onReapplyRate && (

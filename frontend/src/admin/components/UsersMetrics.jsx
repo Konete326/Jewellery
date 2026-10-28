@@ -28,7 +28,7 @@ export function UsersMetrics({ users = [] }) {
       value: localCount,
       sub: `${total > 0 ? Math.round((localCount / total) * 100) : 0}% traditional accounts`,
       icon: Key,
-      color: 'text-emerald-600 bg-emerald-500/10 border-emerald-500/20'
+      color: 'text-amber-800 dark:text-amber-300 bg-amber-500/10 border-amber-500/20'
     },
     {
       label: 'Atelier Admins',

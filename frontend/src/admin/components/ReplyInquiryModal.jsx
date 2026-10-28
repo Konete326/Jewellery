@@ -128,7 +128,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
                 )}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[11px] text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 flex items-center gap-1 font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 transition-colors"
+                className="text-[11px] text-foreground flex items-center gap-1 font-mono px-2 py-0.5 rounded-md bg-muted/40 border border-border/80 hover:bg-muted transition-colors"
                 title="Open WhatsApp Chat pre-filled with inquiry"
               >
                 <Phone className="size-3" />
@@ -205,7 +205,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
               </label>
               {touched.subject && (
                 subjectValid ? (
-                  <span className="text-[10px] text-emerald-600 flex items-center gap-1">
+                  <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                     <CheckCircle2 className="size-3" /> Valid
                   </span>
                 ) : (
@@ -232,7 +232,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
               </label>
               {touched.body && (
                 bodyValid ? (
-                  <span className="text-[10px] text-emerald-600 flex items-center gap-1">
+                  <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                     <CheckCircle2 className="size-3" /> Valid
                   </span>
                 ) : (

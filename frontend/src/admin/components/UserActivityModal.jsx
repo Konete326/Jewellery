@@ -181,7 +181,7 @@ export function UserActivityModal({
                   </span>
                   <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase font-mono ${
                     isActive
-                      ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/25'
+                      ? 'bg-muted/60 text-foreground border border-border/80'
                       : 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/25'
                   }`}>
                     {isActive ? <CheckCircle2 className="size-3" /> : <AlertCircle className="size-3" />}
@@ -201,7 +201,7 @@ export function UserActivityModal({
               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground text-[11px] font-mono transition-colors cursor-pointer self-start sm:self-auto shrink-0"
               title="Copy Client ID"
             >
-              {copied ? <Check className="size-3 text-emerald-600" /> : <Copy className="size-3" />}
+              {copied ? <Check className="size-3 text-amber-700" /> : <Copy className="size-3" />}
               <span>{copied ? 'ID Copied' : 'Copy ID'}</span>
             </button>
           </div>
@@ -217,11 +217,11 @@ export function UserActivityModal({
               </span>
             </div>
             <div className="p-3 rounded-xl border border-border bg-card/80 text-center">
-              <span className="text-xl font-bold font-mono text-emerald-600 dark:text-emerald-400 block">
+              <span className="text-xl font-bold font-mono text-foreground block">
                 {stats.repliedCount}
               </span>
               <span className="text-[11px] text-muted-foreground flex items-center justify-center gap-1 mt-0.5">
-                <CheckCircle2 className="size-3 text-emerald-500" />
+                <CheckCircle2 className="size-3 text-muted-foreground" />
                 Replied
               </span>
             </div>
@@ -309,7 +309,7 @@ export function UserActivityModal({
                         <div className="flex items-center gap-2">
                           <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium font-mono uppercase ${
                             inq.status === 'Replied'
-                              ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
+                              ? 'bg-muted/60 text-foreground border border-border/80'
                               : inq.status === 'Contacted'
                               ? 'bg-blue-500/10 text-blue-600 border border-blue-500/20'
                               : 'bg-neutral-100 text-neutral-800 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-700'
@@ -327,8 +327,8 @@ export function UserActivityModal({
                       </div>
 
                       {inq.replies && inq.replies.length > 0 && (
-                        <div className="pl-3 border-l-2 border-emerald-500/50 space-y-1 pt-1">
-                          <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold uppercase tracking-wider block">
+                        <div className="pl-3 border-l-2 border-border space-y-1 pt-1">
+                          <span className="text-[10px] font-mono text-muted-foreground font-semibold uppercase tracking-wider block">
                             Atelier Reply ({inq.replies.length})
                           </span>
                           <p className="text-xs text-foreground/90">
@@ -378,7 +378,7 @@ export function UserActivityModal({
                       <CheckCircle2 className="size-3.5" />
                       Portal Sign-In Status
                     </span>
-                    <span className={`font-semibold ${isActive ? 'text-emerald-600' : 'text-rose-600'}`}>
+                    <span className={`font-semibold ${isActive ? 'text-foreground' : 'text-rose-600'}`}>
                       {isActive ? 'Authorized (Active)' : 'Suspended (Deactivated)'}
                     </span>
                   </div>
@@ -422,7 +422,7 @@ export function UserActivityModal({
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 text-white ${
                   isActive
                     ? 'bg-amber-600 hover:bg-amber-700'
-                    : 'bg-emerald-600 hover:bg-emerald-700'
+                    : 'bg-foreground hover:bg-neutral-800 text-background'
                 }`}
               >
                 {isActive ? <UserX className="size-3.5" /> : <UserCheck className="size-3.5" />}

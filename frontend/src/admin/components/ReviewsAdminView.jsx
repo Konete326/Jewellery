@@ -180,6 +180,19 @@ export function ReviewsAdminView() {
     });
   }, [reviews, searchQuery, ratingFilter]);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return '—';
+    try {
+      return new Date(dateString).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    } catch {
+      return '—';
+    }
+  };
+
   const carouselItems = useMemo(() => {
     return filteredReviews.map((rev) => ({
       id: rev._id,
@@ -194,19 +207,6 @@ export function ReviewsAdminView() {
       rawReview: rev
     }));
   }, [filteredReviews]);
-
-  const formatDate = (dateString) => {
-    if (!dateString) return '—';
-    try {
-      return new Date(dateString).toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      });
-    } catch {
-      return '—';
-    }
-  };
 
   return (
     <div className="space-y-3">

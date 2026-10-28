@@ -21,37 +21,19 @@ export function PaymentAccountCard({
     }, 2000);
   };
 
-  const isDigital =
-    account.accountType === 'Digital Wallet' ||
-    account.accountType === 'Raast ID' ||
-    account.bankName.toLowerCase().includes('raast') ||
-    account.bankName.toLowerCase().includes('jazzcash') ||
-    account.bankName.toLowerCase().includes('nayapay');
-
   return (
     <div
-      className={`relative rounded-2xl border p-5 sm:p-6 transition-all flex flex-col justify-between ${
+      className={`relative rounded-2xl border p-5 transition-all flex flex-col justify-between ${
         account.isDefault
-          ? 'border-amber-500/50 bg-gradient-to-br from-amber-500/5 via-card to-card shadow-md'
+          ? 'border-foreground/30 bg-muted/20 shadow-xs'
           : 'border-border/80 bg-card hover:border-border shadow-xs'
-      } ${!account.isActive ? 'opacity-70' : ''}`}
+      } ${!account.isActive ? 'opacity-65' : ''}`}
     >
       <div>
-        <div className="flex items-center justify-between gap-2 mb-4 pb-3.5 border-b border-border/70">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-mono text-[9px] uppercase tracking-widest text-amber-900/90 dark:text-amber-200 border border-amber-500/25 bg-amber-500/5 px-2.5 py-0.5 rounded-full font-medium">
-              {isDigital ? 'AU · DIGITAL' : 'AU · SETTLE'}
-            </span>
-            <span className="text-[11px] font-mono text-muted-foreground uppercase">
-              {account.accountType}
-            </span>
-            {account.isInstantSettlement && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-amber-500/10 text-amber-900 border border-amber-500/30">
-                <span className="size-1.5 rounded-full bg-amber-600 animate-pulse" />
-                Instant Settlement
-              </span>
-            )}
-          </div>
+        <div className="flex items-center justify-between gap-2 mb-3 pb-3 border-b border-border/70">
+          <span className="text-xs font-mono text-muted-foreground uppercase">
+            {account.accountType || 'Bank Account'}
+          </span>
 
           <div className="flex items-center gap-1.5 shrink-0">
             {account.isDefault && (
@@ -77,20 +59,20 @@ export function PaymentAccountCard({
           </div>
         </div>
 
-        <div className="mb-4">
+        <div className="mb-3">
           <h4 className="font-serif text-lg font-semibold text-foreground tracking-tight">
             {account.bankName}
           </h4>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Beneficiary: <strong className="text-foreground font-medium">{account.accountTitle}</strong>
+            Title: <strong className="text-foreground font-medium">{account.accountTitle}</strong>
           </p>
         </div>
 
-        <div className="space-y-2.5 text-xs">
+        <div className="space-y-2 text-xs">
           <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 flex items-center justify-between gap-3">
             <div className="min-w-0">
               <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
-                Account Number / ID
+                Account Number
               </span>
               <span className="font-mono text-xs sm:text-sm font-semibold text-foreground truncate block">
                 {account.accountNumber}
@@ -134,40 +116,10 @@ export function PaymentAccountCard({
               </button>
             </div>
           )}
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-muted-foreground pt-1">
-            {account.branchName && (
-              <div>
-                <span className="font-mono uppercase text-[9px] block text-muted-foreground/75">
-                  Branch / Location
-                </span>
-                <span className="text-foreground truncate block">{account.branchName}</span>
-              </div>
-            )}
-            {account.swiftCode && (
-              <div>
-                <span className="font-mono uppercase text-[9px] block text-muted-foreground/75">
-                  SWIFT / BIC
-                </span>
-                <span className="font-mono font-medium text-foreground truncate block uppercase">
-                  {account.swiftCode}
-                </span>
-              </div>
-            )}
-          </div>
-
-          {account.instructions && (
-            <div className="mt-2 p-2.5 rounded-xl border border-amber-500/20 bg-amber-500/5 text-[11px] text-muted-foreground leading-relaxed">
-              <span className="font-medium text-amber-900 dark:text-amber-200 block mb-0.5">
-                Settlement Instructions:
-              </span>
-              {account.instructions}
-            </div>
-          )}
         </div>
       </div>
 
-      <div className="mt-5 pt-3.5 border-t border-border/70 flex items-center justify-between gap-2 flex-wrap">
+      <div className="mt-4 pt-3 border-t border-border/70 flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-1.5">
           {!account.isDefault && (
             <Button
@@ -176,10 +128,10 @@ export function PaymentAccountCard({
               size="sm"
               disabled={actionLoading}
               onClick={() => onSetDefault(account)}
-              className="h-8 px-2.5 text-[11px] cursor-pointer"
+              className="h-7 px-2 text-[11px] cursor-pointer"
             >
               <Star className="size-3 mr-1 text-amber-600" />
-              Set Primary
+              Make Primary
             </Button>
           )}
 
@@ -189,7 +141,7 @@ export function PaymentAccountCard({
             size="sm"
             disabled={actionLoading}
             onClick={() => onToggleStatus(account)}
-            className="h-8 px-2 text-[11px] cursor-pointer text-muted-foreground hover:text-foreground"
+            className="h-7 px-2 text-[11px] cursor-pointer text-muted-foreground hover:text-foreground"
           >
             {account.isActive ? (
               <>
@@ -212,7 +164,7 @@ export function PaymentAccountCard({
             size="sm"
             disabled={actionLoading}
             onClick={() => onEdit(account)}
-            className="h-8 px-2.5 text-[11px] cursor-pointer"
+            className="h-7 px-2.5 text-[11px] cursor-pointer"
           >
             <Pencil className="size-3 mr-1" />
             Edit
@@ -224,7 +176,7 @@ export function PaymentAccountCard({
             size="sm"
             disabled={actionLoading}
             onClick={() => onDelete(account)}
-            className="h-8 px-2 text-[11px] text-rose-600 hover:text-rose-700 hover:bg-rose-500/10 cursor-pointer"
+            className="h-7 px-2 text-[11px] text-rose-600 hover:text-rose-700 hover:bg-rose-500/10 cursor-pointer"
           >
             <Trash2 className="size-3.5" />
           </Button>

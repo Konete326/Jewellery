@@ -1,5 +1,5 @@
 import React from 'react';
-import { RefreshCw, RotateCcw, Mail } from 'lucide-react';
+import { RefreshCw, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function RatesAdminHeader({
@@ -7,8 +7,7 @@ export function RatesAdminHeader({
   onSync,
   isSyncing,
   onRestoreMarket,
-  isRestoring,
-  onOpenBroadcastModal
+  isRestoring
 }) {
   const isOverride = Boolean(rates?.isManualOverride);
   const lastSyncStr = rates?.lastSyncedAt
@@ -17,39 +16,22 @@ export function RatesAdminHeader({
     : 'Pending';
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-border/60">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/70">
       <div>
-        <div className="flex items-center gap-2.5 mb-1">
-          <h2 className="text-xl sm:text-2xl font-serif font-light text-foreground tracking-tight">
-            Bullion Market Rates
-          </h2>
-          {isOverride ? (
-            <span className="font-mono text-[10px] tracking-wider uppercase px-2.5 py-0.5 rounded-full border border-amber-500/30 bg-amber-500/5 text-amber-900/90 dark:text-amber-200 font-medium">
-              Custom Benchmark
-            </span>
-          ) : (
-            <span className="font-mono text-[10px] tracking-wider uppercase px-2.5 py-0.5 rounded-full border border-border/80 bg-muted/40 text-foreground font-medium">
-              Market Live Sync
-            </span>
-          )}
+        <div className="flex items-center gap-2 mb-0.5">
+          <h1 className="text-2xl font-serif font-light text-foreground tracking-tight">
+            Gold Rates
+          </h1>
+          <span className="font-mono text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-full border border-border/80 bg-muted/40 text-foreground">
+            {isOverride ? 'Manual Rate' : 'Market Live'}
+          </span>
         </div>
         <p className="text-xs text-muted-foreground font-mono">
-          Karachi Sarafa Source (gold.pk) • Last pulse: {lastSyncStr}
+          Sarafa Market (gold.pk) • Last synced: {lastSyncStr}
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={onOpenBroadcastModal}
-          className="text-xs font-mono h-9 cursor-pointer border-border hover:bg-muted text-foreground"
-        >
-          <Mail className="size-3.5 mr-1.5 text-muted-foreground" />
-          Broadcast Rates
-        </Button>
-
+      <div className="flex items-center gap-2">
         {isOverride && (
           <Button
             type="button"
@@ -60,7 +42,7 @@ export function RatesAdminHeader({
             className="text-xs font-mono h-9 cursor-pointer"
           >
             <RotateCcw className={`size-3.5 mr-1.5 ${isRestoring ? 'animate-spin' : ''}`} />
-            Revert to Market
+            Revert to Live
           </Button>
         )}
 

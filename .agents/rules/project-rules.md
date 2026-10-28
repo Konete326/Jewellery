@@ -39,3 +39,6 @@ This document contains strict coding and formatting rules that any AI Agent MUST
 
 ## 11. UI Content Language Standard
 * **English Only in UI/Code:** Across the entire project codebase, user interface, labels, headings, buttons, and content, absolutely NO Urdu, Roman Urdu, or Hindi is allowed. All customer-facing and admin UI copy must be in clean, professional basic English only.
+
+## 12. Deployment & Hostinger Workflow
+* **No Continuous Hostinger Checks:** Never repeatedly inspect, poll, or setup Hostinger on routine development tasks. Workflow is simply `git add .`, commit, and `git push origin main`. Hostinger automatically builds and deploys every push to production via its Git webhook. Only check or interact with Hostinger tools if the user explicitly instructs to do so.

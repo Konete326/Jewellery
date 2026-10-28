@@ -3,7 +3,6 @@ import { ratesApi } from '@/api/ratesApi';
 import { RatesAdminHeader } from './RatesAdminHeader';
 import { RatesAdminHeroCard } from './RatesAdminHeroCard';
 import { RatesAdminHistoryList } from './RatesAdminHistoryList';
-import { RatesBroadcastModal } from './RatesBroadcastModal';
 import { toast } from 'sonner';
 
 export function RatesAdminView() {
@@ -13,7 +12,6 @@ export function RatesAdminView() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isBroadcastModalOpen, setIsBroadcastModalOpen] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
@@ -28,7 +26,7 @@ export function RatesAdminView() {
         setHistory(histRes.data);
       }
     } catch {
-      toast.error('Failed to load bullion rates data.');
+      toast.error('Failed to load rates.');
     } finally {
       setLoading(false);
     }
@@ -41,15 +39,15 @@ export function RatesAdminView() {
   const handleSync = async () => {
     setIsSyncing(true);
     try {
-      const res = await ratesApi.syncRates('Artisan Admin');
+      const res = await ratesApi.syncRates('Admin');
       if (res?.success && res.data) {
         setRates(res.data);
-        toast.success(res.message || 'Synchronized with Karachi Sarafa Market.');
+        toast.success(res.message || 'Synchronized with Sarafa Market');
         const histRes = await ratesApi.getHistory(30);
         if (histRes?.data) setHistory(histRes.data);
       }
     } catch {
-      toast.error('Could not sync with Sarafa market source.');
+      toast.error('Could not sync with Sarafa market');
     } finally {
       setIsSyncing(false);
     }
@@ -58,15 +56,15 @@ export function RatesAdminView() {
   const handleRestoreMarket = async () => {
     setIsRestoring(true);
     try {
-      const res = await ratesApi.syncRates('Artisan Admin (Revert)');
+      const res = await ratesApi.syncRates('Admin (Revert)');
       if (res?.success && res.data) {
         setRates(res.data);
-        toast.success('Benchmark restored to live market rates.');
+        toast.success('Restored to live market rate');
         const histRes = await ratesApi.getHistory(30);
         if (histRes?.data) setHistory(histRes.data);
       }
     } catch {
-      toast.error('Could not restore live market rate.');
+      toast.error('Could not restore live rate');
     } finally {
       setIsRestoring(false);
     }
@@ -77,16 +75,16 @@ export function RatesAdminView() {
     try {
       const res = await ratesApi.updateOverride({
         ...payload,
-        updatedBy: 'Artisan Admin'
+        updatedBy: 'Admin'
       });
       if (res?.success && res.data) {
         setRates(res.data);
-        toast.success(res.message || 'Rates updated and auto-calculated.');
+        toast.success('Rates updated');
         const histRes = await ratesApi.getHistory(30);
         if (histRes?.data) setHistory(histRes.data);
       }
     } catch {
-      toast.error('Failed to update benchmark rates.');
+      toast.error('Failed to update rates');
     } finally {
       setIsSaving(false);
     }
@@ -96,9 +94,9 @@ export function RatesAdminView() {
     try {
       await ratesApi.deleteHistory(id);
       setHistory((prev) => prev.filter((item) => (item._id || item.id) !== id));
-      toast.success('Rate log entry removed.');
+      toast.success('Record removed');
     } catch {
-      toast.error('Failed to delete log entry.');
+      toast.error('Failed to delete record');
     }
   };
 
@@ -120,14 +118,13 @@ export function RatesAdminView() {
   }
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-5">
       <RatesAdminHeader
         rates={rates}
         onSync={handleSync}
         isSyncing={isSyncing}
         onRestoreMarket={handleRestoreMarket}
         isRestoring={isRestoring}
-        onOpenBroadcastModal={() => setIsBroadcastModalOpen(true)}
       />
 
       <RatesAdminHeroCard
@@ -140,13 +137,6 @@ export function RatesAdminView() {
         history={history}
         onDeleteLog={handleDeleteLog}
         onReapplyRate={handleReapply}
-      />
-
-      <RatesBroadcastModal
-        isOpen={isBroadcastModalOpen}
-        onClose={() => setIsBroadcastModalOpen(false)}
-        rates={rates}
-        onBroadcastSuccess={loadData}
       />
     </div>
   );

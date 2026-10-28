@@ -28,7 +28,7 @@ export function AppSidebar() {
             />
             <div className="flex flex-col text-left group-data-[collapsible=icon]:hidden">
               <span className="font-semibold text-sm tracking-tight text-sidebar-foreground">Khalil & Sons</span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-mono">Atelier Admin</span>
+              <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-mono">Admin Panel</span>
             </div>
           </Link>
         </SidebarMenuButton>

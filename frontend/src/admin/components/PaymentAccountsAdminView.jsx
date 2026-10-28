@@ -3,10 +3,7 @@ import {
   Landmark,
   Plus,
   Search,
-  RefreshCw,
-  CreditCard,
-  CheckCircle2,
-  ArrowUpDown
+  RefreshCw
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -33,7 +30,6 @@ export function PaymentAccountsAdminView() {
 
   const [deletingAccount, setDeletingAccount] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
-
   const [actionLoadingId, setActionLoadingId] = useState(null);
 
   const loadAccounts = async (silent = false) => {
@@ -44,7 +40,7 @@ export function PaymentAccountsAdminView() {
         setAccounts(res.data);
       }
     } catch (err) {
-      toast.error('Failed to load payment accounts', {
+      toast.error('Failed to load accounts', {
         description: err.message
       });
     } finally {
@@ -71,14 +67,10 @@ export function PaymentAccountsAdminView() {
     try {
       if (editingAccount) {
         await updatePaymentAccount(editingAccount._id, formData);
-        toast.success('Payment Account Updated', {
-          description: `${formData.bankName} details saved.`
-        });
+        toast.success(`${formData.bankName} updated`);
       } else {
         await createPaymentAccount(formData);
-        toast.success('Payment Account Added', {
-          description: `${formData.bankName} added to settlement accounts.`
-        });
+        toast.success(`${formData.bankName} added`);
       }
       setIsModalOpen(false);
       setEditingAccount(null);
@@ -96,12 +88,10 @@ export function PaymentAccountsAdminView() {
     setActionLoadingId(account._id);
     try {
       await updatePaymentAccount(account._id, { ...account, isDefault: true });
-      toast.success('Default Account Updated', {
-        description: `${account.bankName} set as primary settlement account.`
-      });
+      toast.success(`${account.bankName} set as primary`);
       await loadAccounts(true);
     } catch (err) {
-      toast.error('Failed to set default account', {
+      toast.error('Failed to update primary account', {
         description: err.message
       });
     } finally {
@@ -114,9 +104,7 @@ export function PaymentAccountsAdminView() {
     const newStatus = !account.isActive;
     try {
       await updatePaymentAccount(account._id, { ...account, isActive: newStatus });
-      toast.success(`Account ${newStatus ? 'Activated' : 'Deactivated'}`, {
-        description: `${account.bankName} status updated.`
-      });
+      toast.success(`Account ${newStatus ? 'activated' : 'deactivated'}`);
       await loadAccounts(true);
     } catch (err) {
       toast.error('Failed to update status', {
@@ -132,9 +120,7 @@ export function PaymentAccountsAdminView() {
     setDeleteLoading(true);
     try {
       await deletePaymentAccount(deletingAccount._id);
-      toast.success('Account Removed', {
-        description: `${deletingAccount.bankName} removed from atelier accounts.`
-      });
+      toast.success(`${deletingAccount.bankName} removed`);
       setDeletingAccount(null);
       await loadAccounts(true);
     } catch (err) {
@@ -151,32 +137,26 @@ export function PaymentAccountsAdminView() {
     try {
       await createPaymentAccount({
         bankName: 'Meezan Bank',
-        accountTitle: 'Khalil & Sons Jewellers (Pvt) Ltd',
+        accountTitle: 'Khalil & Sons Jewellers',
         accountNumber: '01080105829101',
         iban: 'PK36MEZN0001080105829101',
-        branchName: 'Cloth Market Branch (0108), Saddar, Karachi',
-        accountType: 'Corporate Account',
-        swiftCode: 'MEZNPKKA',
-        instructions: 'Please WhatsApp payment confirmation slip with your order or inquiry ID to verify booking.',
+        accountType: 'Bank Account',
         isDefault: true,
         isActive: true
       });
       await createPaymentAccount({
-        bankName: 'Raast Digital ID',
+        bankName: 'Raast ID',
         accountTitle: 'Khalil & Sons Jewellers',
         accountNumber: '03331234567',
         iban: '',
-        branchName: 'State Bank of Pakistan Raast Gateway',
         accountType: 'Raast ID',
-        swiftCode: '',
-        instructions: 'Instant zero-fee settlement via any Pakistani banking app using Raast ID.',
         isDefault: false,
         isActive: true
       });
-      toast.success('Default Accounts Initialized');
+      toast.success('Default accounts added');
       await loadAccounts(true);
     } catch (err) {
-      toast.error('Failed to initialize default accounts', {
+      toast.error('Failed to add accounts', {
         description: err.message
       });
     } finally {
@@ -198,40 +178,20 @@ export function PaymentAccountsAdminView() {
 
       if (statusFilter === 'Active') return acc.isActive === true;
       if (statusFilter === 'Inactive') return acc.isActive === false;
-      if (statusFilter === 'Digital') {
-        return (
-          acc.accountType === 'Digital Wallet' ||
-          acc.accountType === 'Raast ID' ||
-          acc.bankName?.toLowerCase().includes('raast')
-        );
-      }
 
       return true;
     });
   }, [accounts, searchQuery, statusFilter]);
 
-  const defaultAccount = useMemo(() => {
-    return accounts.find((a) => a.isDefault);
-  }, [accounts]);
-
-  const activeCount = useMemo(() => {
-    return accounts.filter((a) => a.isActive).length;
-  }, [accounts]);
-
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/70">
+    <div className="w-full space-y-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/70">
         <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="font-serif text-2xl font-light text-foreground tracking-tight">
-              Payment & Settlement Accounts
-            </h1>
-            <span className="font-mono text-[9px] uppercase tracking-widest text-amber-800 dark:text-amber-300 border border-amber-500/25 bg-amber-500/10 px-2.5 py-0.5 rounded-full font-medium">
-              AU · TREASURY
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Manage receiving bank accounts, IBANs, and online settlement options for orders and bespoke advances.
+          <h1 className="font-serif text-2xl font-light text-foreground tracking-tight">
+            Bank Accounts
+          </h1>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Manage receiving bank accounts and online payment methods
           </p>
         </div>
 
@@ -260,61 +220,20 @@ export function PaymentAccountsAdminView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-xs">
-          <div className="flex items-center justify-between text-muted-foreground text-xs mb-2">
-            <span>Total Accounts</span>
-            <Landmark className="size-4 text-amber-600" />
-          </div>
-          <div className="text-2xl font-serif font-light text-foreground">
-            {accounts.length}
-          </div>
-          <p className="text-[11px] text-muted-foreground mt-1 font-light">
-            Configured settlement channels
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-xs">
-          <div className="flex items-center justify-between text-muted-foreground text-xs mb-2">
-            <span>Active Settlement Channels</span>
-            <CheckCircle2 className="size-4 text-amber-700 dark:text-amber-400" />
-          </div>
-          <div className="text-2xl font-serif font-light text-foreground">
-            {activeCount}
-          </div>
-          <p className="text-[11px] text-muted-foreground mt-1 font-light">
-            Available for customer payments
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-xs">
-          <div className="flex items-center justify-between text-muted-foreground text-xs mb-2">
-            <span>Primary Settlement Account</span>
-            <CreditCard className="size-4 text-amber-600" />
-          </div>
-          <div className="text-base font-serif font-semibold text-foreground truncate">
-            {defaultAccount ? defaultAccount.bankName : 'None Configured'}
-          </div>
-          <p className="text-[11px] text-muted-foreground mt-1 font-mono truncate">
-            {defaultAccount ? defaultAccount.accountNumber : 'Select a primary account'}
-          </p>
-        </div>
-      </div>
-
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        <div className="relative flex-1 max-w-md">
+        <div className="relative flex-1 max-w-sm">
           <Search className="size-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search bank name, title, account, IBAN..."
+            placeholder="Search accounts..."
             className="w-full bg-background border border-input rounded-xl pl-9 pr-3.5 py-2 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30"
           />
         </div>
 
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-          {['All', 'Active', 'Inactive', 'Digital'].map((filter) => (
+        <div className="flex items-center gap-1.5">
+          {['All', 'Active', 'Inactive'].map((filter) => (
             <button
               key={filter}
               type="button"
@@ -332,47 +251,42 @@ export function PaymentAccountsAdminView() {
       </div>
 
       {loading ? (
-        <div className="min-h-[280px] flex flex-col items-center justify-center gap-3">
-          <LumaSpin size={32} />
-          <p className="text-xs text-muted-foreground font-light">Loading payment accounts...</p>
+        <div className="min-h-[200px] flex flex-col items-center justify-center gap-2">
+          <LumaSpin size={28} />
+          <p className="text-xs text-muted-foreground font-light">Loading...</p>
         </div>
       ) : filteredAccounts.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border p-8 sm:p-12 text-center bg-card/50">
-          <div className="size-12 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400 mx-auto flex items-center justify-center mb-3">
-            <Landmark className="size-6" />
-          </div>
-          <h3 className="font-serif text-lg font-semibold text-foreground mb-1">
-            {searchQuery || statusFilter !== 'All' ? 'No Matching Accounts' : 'No Payment Accounts Yet'}
+        <div className="rounded-2xl border border-dashed border-border p-8 text-center bg-card/40">
+          <Landmark className="size-8 text-muted-foreground mx-auto mb-2 opacity-60" />
+          <h3 className="font-serif text-base font-semibold text-foreground mb-1">
+            {searchQuery || statusFilter !== 'All' ? 'No Accounts Match Filter' : 'No Bank Accounts Yet'}
           </h3>
-          <p className="text-xs text-muted-foreground max-w-md mx-auto mb-5 leading-relaxed font-light">
-            {searchQuery || statusFilter !== 'All'
-              ? 'Try adjusting your search criteria or clearing filter tabs.'
-              : 'Add your atelier bank account details or digital payment addresses so clients can verify payments easily.'}
+          <p className="text-xs text-muted-foreground max-w-sm mx-auto mb-4 font-light">
+            Add bank details so customers can transfer payments.
           </p>
-          <div className="flex items-center justify-center gap-3 flex-wrap">
+          <div className="flex items-center justify-center gap-2.5">
             <Button
               type="button"
               onClick={handleOpenAdd}
-              className="h-9 px-4 text-xs bg-foreground text-background hover:bg-neutral-800 cursor-pointer"
+              className="h-8 px-3.5 text-xs bg-foreground text-background hover:bg-neutral-800 cursor-pointer"
             >
               <Plus className="size-3.5 mr-1.5" />
-              Add Payment Account
+              Add Account
             </Button>
             {accounts.length === 0 && (
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleSeedDefaults}
-                className="h-9 px-4 text-xs cursor-pointer"
+                className="h-8 px-3.5 text-xs cursor-pointer"
               >
-                <Plus className="size-3.5 mr-1.5 text-muted-foreground" />
-                Initialize Standard Accounts
+                Add Sample Accounts
               </Button>
             )}
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredAccounts.map((account) => (
             <PaymentAccountCard
               key={account._id}
@@ -403,7 +317,7 @@ export function PaymentAccountsAdminView() {
         onClose={() => setDeletingAccount(null)}
         onConfirm={handleDeleteConfirm}
         title={deletingAccount ? `${deletingAccount.bankName} (${deletingAccount.accountNumber})` : ''}
-        itemType="payment account"
+        itemType="account"
         loading={deleteLoading}
       />
     </div>

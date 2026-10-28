@@ -10,7 +10,7 @@ import {
 
 export const navGroups = [
   {
-    label: "Atelier",
+    label: "Menu",
     items: [
       {
         title: "Dashboard",
@@ -19,42 +19,37 @@ export const navGroups = [
         icon: <LayoutGridIcon className="size-4" />
       },
       {
-        title: "Gallery Masterpieces",
+        title: "Gallery",
         path: "/admin/gallery",
         key: "gallery",
         icon: <ImageIcon className="size-4" />
       },
       {
-        title: "Inquiries & Consultations",
+        title: "Inquiries",
         path: "/admin/inquiries",
         key: "inquiries",
         icon: <MessageSquareIcon className="size-4" />
       },
       {
-        title: "Client Reviews",
+        title: "Reviews",
         path: "/admin/reviews",
         key: "reviews",
         icon: <StarIcon className="size-4" />
       },
       {
-        title: "Gold & Silver Rates",
+        title: "Gold Rates",
         path: "/admin/rates",
         key: "rates",
         icon: <TrendingUpIcon className="size-4" />
       },
       {
-        title: "Payment Accounts",
+        title: "Bank Accounts",
         path: "/admin/accounts",
         key: "accounts",
         icon: <LandmarkIcon className="size-4" />
-      }
-    ]
-  },
-  {
-    label: "Clientele",
-    items: [
+      },
       {
-        title: "Users & Accounts",
+        title: "Users",
         path: "/admin/customers",
         key: "customers",
         icon: <UsersIcon className="size-4" />
