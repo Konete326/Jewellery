@@ -12,105 +12,82 @@ export function RatesCardsGrid({ rates }) {
   const cards = [
     {
       hallmark: 'AU · 999.0',
-      title: '24 Karat Pure Gold',
-      subtitle: 'Bullion standard (.999 pure)',
-      badge: '99.9% Pure',
-      badgeClass: 'bg-amber-500/10 text-amber-800 dark:text-amber-300 border-amber-500/20',
+      title: '24K Pure Gold',
+      purity: '99.9% Pure',
       tola: gold['24K']?.tola,
       tenG: gold['24K']?.tenGram,
-      oneG: gold['24K']?.gram,
-      note: 'Reference bullion rate for Sarafa trading'
+      oneG: gold['24K']?.gram
     },
     {
       hallmark: 'AU · 916.6',
-      title: '22 Karat Bridal Gold',
-      subtitle: 'Pakistani bridal & wedding jewellery',
-      badge: 'Most Popular',
-      badgeClass: 'bg-amber-500/10 text-amber-900 border-amber-500/30',
+      title: '22K Bridal Gold',
+      purity: '91.6% Pure',
       tola: gold['22K']?.tola,
       tenG: gold['22K']?.tenGram,
-      oneG: gold['22K']?.gram,
-      note: 'Optimal tensile strength for intricate filigree & stones'
+      oneG: gold['22K']?.gram
     },
     {
       hallmark: 'AU · 875.0',
-      title: '21 Karat Traditional Gold',
-      subtitle: 'Antique finish & heirloom bangles',
-      badge: '87.5% Purity',
-      badgeClass: 'bg-neutral-500/10 text-neutral-800 dark:text-neutral-300 border-neutral-500/20',
+      title: '21K Heritage Gold',
+      purity: '87.5% Pure',
       tola: gold['21K']?.tola,
       tenG: gold['21K']?.tenGram,
-      oneG: gold['21K']?.gram,
-      note: 'Traditional South Asian gold craft standard'
+      oneG: gold['21K']?.gram
     },
     {
       hallmark: 'AG · 999.0',
-      title: '24 Karat Pure Silver',
-      subtitle: 'Fine silver (Chandi) bullion',
-      badge: 'Fine Silver',
-      badgeClass: 'bg-slate-500/10 text-slate-800 dark:text-slate-300 border-slate-500/20',
+      title: '24K Pure Silver',
+      purity: '99.9% Fine',
       tola: silver['24K']?.tola,
       tenG: silver['24K']?.tenGram,
-      oneG: silver['24K']?.gram,
-      note: 'Sarafa association certified silver bullion'
+      oneG: silver['24K']?.gram
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
       {cards.map((item, index) => (
         <div
           key={index}
-          className="relative rounded-2xl border border-border/80 bg-card p-6 flex flex-col justify-between hover:border-amber-500/30 hover:shadow-md transition-all duration-300 group"
+          className="rounded-xl border border-border/70 bg-card p-5 flex flex-col justify-between hover:border-amber-500/30 transition-colors"
         >
           <div>
-            <div className="flex items-center justify-between gap-2 mb-4">
-              <span className="text-[11px] font-mono tracking-widest uppercase font-semibold text-amber-900/80 dark:text-amber-400">
-                {item.hallmark}
-              </span>
-              <span className={`text-[10px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full border ${item.badgeClass}`}>
-                {item.badge}
-              </span>
+            <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-muted-foreground uppercase mb-3">
+              <span className="font-semibold text-foreground/80">{item.hallmark}</span>
+              <span className="text-[10px] text-muted-foreground">{item.purity}</span>
             </div>
 
-            <h3 className="text-base font-medium text-foreground tracking-tight mb-1">
+            <h3 className="text-base font-serif font-medium text-foreground tracking-tight">
               {item.title}
             </h3>
-            <p className="text-xs text-muted-foreground font-light mb-4">
-              {item.subtitle}
-            </p>
 
-            <div className="pt-2 pb-4 border-y border-border/60">
-              <span className="text-[11px] uppercase tracking-wider text-muted-foreground font-mono block mb-1">
-                1 Tola (11.664 Grams)
+            <div className="mt-4 pt-3 border-t border-border/50">
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono block">
+                1 Tola (11.66g)
               </span>
-              <div className="text-2xl sm:text-3xl font-serif font-light text-foreground tracking-tight">
+              <div className="text-2xl font-serif font-light text-foreground tracking-tight mt-0.5">
                 {formatPkr(item.tola)}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 pt-3">
-              <div>
-                <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono block">
-                  10 Grams
-                </span>
-                <span className="text-xs font-semibold font-mono text-foreground">
-                  {formatPkr(item.tenG)}
-                </span>
-              </div>
-              <div>
-                <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono block">
-                  1 Gram
-                </span>
-                <span className="text-xs font-semibold font-mono text-foreground">
-                  {formatPkr(item.oneG)}
-                </span>
               </div>
             </div>
           </div>
 
-          <div className="pt-4 mt-4 border-t border-border/40 text-[11px] text-muted-foreground/80 font-light">
-            {item.note}
+          <div className="grid grid-cols-2 gap-3 pt-3 mt-4 border-t border-border/40 text-xs">
+            <div>
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono block">
+                10 Grams
+              </span>
+              <span className="font-mono text-xs font-medium text-foreground">
+                {formatPkr(item.tenG)}
+              </span>
+            </div>
+            <div>
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-mono block">
+                1 Gram
+              </span>
+              <span className="font-mono text-xs font-medium text-foreground">
+                {formatPkr(item.oneG)}
+              </span>
+            </div>
           </div>
         </div>
       ))}

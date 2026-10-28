@@ -6,9 +6,7 @@ import { ratesApi } from '@/api/ratesApi';
 import {
   RatesHero,
   RatesCardsGrid,
-  RatesTableSection,
-  RatesCalculator,
-  RatesKnowledgeGuide
+  RatesTableSection
 } from '@/user/components/rates';
 import { updatePageSEO } from '@/utils/seo';
 import { broadcastRatesUpdate } from '@/utils/tabSync';
@@ -125,10 +123,6 @@ export default function RatesPage() {
         <RatesCardsGrid rates={rates} />
 
         <RatesTableSection rates={rates} />
-
-        <RatesCalculator rates={rates} />
-
-        <RatesKnowledgeGuide />
       </main>
 
       <Footer />

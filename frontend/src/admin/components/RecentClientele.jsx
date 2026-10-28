@@ -57,19 +57,21 @@ export function RecentClientele({ users = [], loading = false }) {
                 className="flex items-center justify-between p-3 rounded-lg border border-border/50 hover:border-border bg-muted/20 hover:bg-muted/40 transition-colors gap-3"
               >
                 <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <PatronMonogram name={client.name} size="size-9" />
+                  <div title={client.name}>
+                    <PatronMonogram name={client.name} size="size-9" />
+                  </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-medium text-xs text-foreground truncate">
+                      <span className="font-medium text-xs text-foreground truncate line-clamp-1" title={client.name}>
                         {client.name || 'Anonymous Collector'}
                       </span>
                       {isAdmin && (
-                        <span className="text-[10px] px-1.5 py-0.2 rounded-sm bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/20 font-mono">
+                        <span className="text-[10px] px-1.5 py-0.2 rounded-sm bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/20 font-mono shrink-0">
                           Admin
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] text-muted-foreground truncate">
+                    <p className="text-[11px] text-muted-foreground truncate" title={client.email}>
                       {client.email}
                     </p>
                   </div>

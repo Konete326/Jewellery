@@ -96,22 +96,26 @@ export function UsersTable({
                         alt={user.name}
                         referrerPolicy="no-referrer"
                         className="size-8 rounded-full object-cover border border-border/80 shrink-0"
+                        title={user.name}
                       />
                     ) : (
-                      <div className="size-8 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center font-semibold text-xs shrink-0">
+                      <div
+                        className="size-8 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center font-semibold text-xs shrink-0"
+                        title={user.name}
+                      >
                         {getInitials(user.name)}
                       </div>
                     )}
-                    <div className="min-w-0">
-                      <p className="font-medium text-foreground truncate max-w-[180px] sm:max-w-xs">
-                        {user.name}
+                    <div className="min-w-0 max-w-[150px] sm:max-w-[220px]">
+                      <p className="font-medium text-foreground truncate line-clamp-1 flex items-center" title={user.name}>
+                        <span className="truncate">{user.name}</span>
                         {isSelf && (
-                          <span className="ml-1.5 text-[9px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
+                          <span className="ml-1.5 text-[9px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground shrink-0">
                             You
                           </span>
                         )}
                       </p>
-                      <p className="text-[11px] text-muted-foreground truncate max-w-[180px] sm:max-w-xs font-mono">
+                      <p className="text-[11px] text-muted-foreground truncate font-mono" title={user.email}>
                         {user.email}
                       </p>
                     </div>
