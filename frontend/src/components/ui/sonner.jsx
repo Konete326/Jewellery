@@ -17,6 +17,7 @@ const Toaster = ({ visibleToasts, ...props }) => {
   return (
     <Sonner
       className="toaster group"
+      closeButton
       visibleToasts={visibleToasts ?? maxToasts}
       toastOptions={{
         classNames: {
@@ -27,6 +28,8 @@ const Toaster = ({ visibleToasts, ...props }) => {
             "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
           cancelButton:
             "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
+          closeButton:
+            "group-[.toast]:bg-background group-[.toast]:text-foreground group-[.toast]:border group-[.toast]:border-border/80 group-[.toast]:opacity-90 hover:group-[.toast]:opacity-100 hover:group-[.toast]:bg-muted group-[.toast]:transition-colors",
         },
       }}
       {...props}

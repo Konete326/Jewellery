@@ -3,6 +3,7 @@ import { ratesApi } from '@/api/ratesApi';
 import { RatesAdminHeader } from './RatesAdminHeader';
 import { RatesAdminHeroCard } from './RatesAdminHeroCard';
 import { RatesAdminHistoryList } from './RatesAdminHistoryList';
+import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { toast } from 'sonner';
 
 export function RatesAdminView() {
@@ -12,6 +13,8 @@ export function RatesAdminView() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [logToDelete, setLogToDelete] = useState(null);
+  const [isDeletingLog, setIsDeletingLog] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
@@ -90,21 +93,29 @@ export function RatesAdminView() {
     }
   };
 
-  const handleDeleteLog = async (id) => {
+  const handleConfirmDelete = async () => {
+    if (!logToDelete) return;
+    setIsDeletingLog(true);
     try {
+      const id = logToDelete._id || logToDelete.id;
       await ratesApi.deleteHistory(id);
       setHistory((prev) => prev.filter((item) => (item._id || item.id) !== id));
       toast.success('Record removed');
+      setLogToDelete(null);
     } catch {
       toast.error('Failed to delete record');
+    } finally {
+      setIsDeletingLog(false);
     }
   };
 
-  const handleReapply = async (logItem) => {
-    if (!logItem?.gold24kTola) return;
+  const handleReapply = async (logItem, tab = 'gold') => {
+    if (!logItem) return;
+    const currentGold = rates?.gold?.['24K']?.tola || 422000;
+    const currentSilver = rates?.silver?.['24K']?.tola || 6794;
     await handleSaveOverride({
-      gold24kTola: logItem.gold24kTola,
-      silver24kTola: logItem.silver24kTola || 6794,
+      gold24kTola: tab === 'gold' ? logItem.gold24kTola : currentGold,
+      silver24kTola: tab === 'silver' ? logItem.silver24kTola : currentSilver,
       isManualOverride: true
     });
   };
@@ -135,8 +146,21 @@ export function RatesAdminView() {
 
       <RatesAdminHistoryList
         history={history}
-        onDeleteLog={handleDeleteLog}
+        onRequestDelete={(item) => setLogToDelete(item)}
         onReapplyRate={handleReapply}
+      />
+
+      <ConfirmDeleteModal
+        isOpen={Boolean(logToDelete)}
+        onClose={() => setLogToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        title={
+          logToDelete
+            ? `rate entry (PKR ${(logToDelete.gold24kTola || logToDelete.silver24kTola)?.toLocaleString()})`
+            : 'rate record'
+        }
+        itemType="rate record"
+        loading={isDeletingLog}
       />
     </div>
   );

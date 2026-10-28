@@ -1,20 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MessageSquare, Pencil, Trash2, Star, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 export function GalleryProductCard({ item, onEdit, onDelete, onInspectReviews }) {
+  const [imageLoaded, setImageLoaded] = useState(false);
   const reviewCount = item.reviewCount ?? item.reviews?.length ?? 0;
   const rating = Number(item.averageRating || 0);
 
   return (
     <div className="group relative rounded-xl border border-border/80 bg-card overflow-hidden shadow-xs hover:border-foreground/40 transition-all duration-200 flex flex-col justify-between h-full">
       <div className="aspect-[4/3] w-full overflow-hidden bg-neutral-900 relative">
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-gradient-to-r from-muted/40 via-muted/70 to-muted/40 animate-pulse flex items-center justify-center">
+            <span className="size-4 rounded-full border-2 border-border/80 border-t-foreground animate-spin" />
+          </div>
+        )}
         <img
           src={item.imageUrl}
           alt={item.title}
           loading="lazy"
-          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onLoad={() => setImageLoaded(true)}
+          className={`size-full object-cover transition-all duration-500 group-hover:scale-105 ${
+            imageLoaded ? 'opacity-100 blur-0' : 'opacity-0 blur-xs'
+          }`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         

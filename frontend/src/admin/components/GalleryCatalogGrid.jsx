@@ -113,3 +113,4 @@ export function GalleryCatalogGrid({
     </div>
   );
 }
+

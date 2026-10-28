@@ -35,10 +35,18 @@ export const rateController = {
   async updateOverride(req, res, next) {
     try {
       const { gold24kTola, silver24kTola } = req.body;
-      if (!gold24kTola || Number(gold24kTola) <= 0) {
+      const gNum = Number(gold24kTola);
+      const sNum = Number(silver24kTola);
+      if (!gNum || gNum < 150000 || gNum > 1000000) {
         return res.status(400).json({
           success: false,
-          message: 'Valid 24K Gold price per Tola is required.'
+          message: 'Valid 24K Gold rate between PKR 150,000 and 1,000,000 is required.'
+        });
+      }
+      if (silver24kTola !== undefined && (sNum < 2000 || sNum > 50000)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Valid Silver rate between PKR 2,000 and 50,000 is required.'
         });
       }
       const user = req.body?.updatedBy || 'Artisan Admin';

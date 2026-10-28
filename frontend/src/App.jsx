@@ -21,7 +21,7 @@ import { Agentation } from 'agentation'
 export default function App() {
   return (
     <LoadingProvider>
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-right" richColors closeButton />
       <GlobalSpinnerOverlay />
       <PWAInstallPrompt />
       <BrowserRouter>

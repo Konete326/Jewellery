@@ -14,8 +14,8 @@ const paymentAccountSchema = new mongoose.Schema(
     },
     accountNumber: {
       type: String,
-      required: true,
-      trim: true
+      trim: true,
+      default: ''
     },
     iban: {
       type: String,

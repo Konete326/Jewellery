@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Landmark, Copy, Check, ShieldCheck, Zap } from 'lucide-react';
+import { X, Landmark, Copy, Check, ShieldCheck, Zap, MessageCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { fetchActivePaymentAccounts } from '@/api/paymentAccountsApi';
+import { openWhatsAppChat } from '@/utils/whatsapp';
 import { toast } from 'sonner';
 
 export function BankSettlementModal({ isOpen, onClose }) {
@@ -39,6 +41,12 @@ export function BankSettlementModal({ isOpen, onClose }) {
     setTimeout(() => setCopiedField(null), 2000);
   };
 
+  const handleWhatsAppReceipt = (account = null) => {
+    const bankDetails = account ? ` to ${account.bankName} (${account.accountType || 'Account'})` : '';
+    const message = `Hello Khalil & Sons Jewellers,\n\nI have completed an online bank transfer${bankDetails} for my jewellery bespoke order / advance.\n\nPlease find the payment screenshot / transfer receipt attached.\n\nBeneficiary: Khalil & Sons Jewellers\nDate: ${new Date().toLocaleDateString('en-GB')}`;
+    openWhatsAppChat(message);
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <button
@@ -65,11 +73,11 @@ export function BankSettlementModal({ isOpen, onClose }) {
           <div>
             <div className="flex items-center gap-2">
               <h3 className="font-serif text-lg sm:text-xl font-semibold text-foreground tracking-tight">
-                Bank Accounts
+                Bank Accounts & Instant Settlement
               </h3>
             </div>
             <p className="text-xs text-muted-foreground font-light">
-              Official accounts for custom jewelry orders and advances
+              Official verified accounts for custom bridal jewellery orders and bullion advances
             </p>
           </div>
         </div>
@@ -101,37 +109,73 @@ export function BankSettlementModal({ isOpen, onClose }) {
                       ({acc.accountType || 'Bank Account'})
                     </span>
                   </div>
+
+                  <div className="flex items-center gap-2">
+                    {acc.isInstantSettlement && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                        <Zap className="size-2.5" />
+                        <span>Instant Settlement</span>
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleWhatsAppReceipt(acc)}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors cursor-pointer border border-border/60"
+                      title="Send receipt for this specific account"
+                    >
+                      <MessageCircle className="size-2.5" />
+                      <span>Verify on WhatsApp</span>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="text-xs text-muted-foreground mb-3 font-light">
                   Beneficiary: <strong className="text-foreground font-medium">{acc.accountTitle}</strong>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                  <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 flex items-center justify-between">
-                    <div className="min-w-0">
-                      <span className="text-[9px] font-mono uppercase text-muted-foreground block">
-                        Account / Raast ID
-                      </span>
-                      <span className="font-mono text-xs font-semibold text-foreground truncate block">
-                        {acc.accountNumber}
-                      </span>
+                <div className={`grid ${acc.accountNumber && acc.iban ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'} gap-2 text-xs`}>
+                  {acc.accountNumber ? (
+                    <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 flex items-center justify-between">
+                      <div className="min-w-0">
+                        <span className="text-[9px] font-mono uppercase text-muted-foreground block">
+                          {acc.accountType === 'Raast ID'
+                            ? 'Raast ID'
+                            : acc.accountType === 'Digital Wallet'
+                            ? 'Wallet Number'
+                            : 'Account Number'}
+                        </span>
+                        <span className="font-mono text-xs font-semibold text-foreground truncate block">
+                          {acc.accountNumber}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleCopy(
+                            acc.accountNumber,
+                            `acc-${acc._id}`,
+                            `${acc.bankName} ${
+                              acc.accountType === 'Raast ID'
+                                ? 'Raast ID'
+                                : acc.accountType === 'Digital Wallet'
+                                ? 'Wallet Number'
+                                : 'Account Number'
+                            }`
+                          )
+                        }
+                        className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                        title="Copy Number"
+                      >
+                        {copiedField === `acc-${acc._id}` ? (
+                          <Check className="size-3.5 text-amber-700" />
+                        ) : (
+                          <Copy className="size-3.5" />
+                        )}
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleCopy(acc.accountNumber, `acc-${acc._id}`, `${acc.bankName} Account / Raast ID`)}
-                      className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                      title="Copy Account Number"
-                    >
-                      {copiedField === `acc-${acc._id}` ? (
-                        <Check className="size-3.5 text-amber-700" />
-                      ) : (
-                        <Copy className="size-3.5" />
-                      )}
-                    </button>
-                  </div>
+                  ) : null}
 
-                  {acc.iban && (
+                  {acc.iban ? (
                     <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 flex items-center justify-between">
                       <div className="min-w-0">
                         <span className="text-[9px] font-mono uppercase text-muted-foreground block">
@@ -154,10 +198,29 @@ export function BankSettlementModal({ isOpen, onClose }) {
                         )}
                       </button>
                     </div>
-                  )}
+                  ) : null}
                 </div>
               </div>
             ))}
+
+            <div className="mt-5 p-4 rounded-2xl border border-border/70 bg-muted/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h4 className="text-xs font-semibold text-foreground font-serif">
+                  Completed your payment transfer?
+                </h4>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  Send your transfer receipt screenshot to our official WhatsApp concierge for immediate appraisal & order dispatch.
+                </p>
+              </div>
+              <Button
+                type="button"
+                onClick={() => handleWhatsAppReceipt()}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-9 px-4 shrink-0 gap-2 cursor-pointer shadow-xs"
+              >
+                <MessageCircle className="size-3.5" />
+                <span>WhatsApp Payment Confirmation</span>
+              </Button>
+            </div>
           </div>
         )}
       </div>

@@ -2,9 +2,9 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Star, Plus, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Star, Plus, X, ExternalLink, ShieldCheck } from 'lucide-react';
 
-export function GalleryBentoHero({ items = [], onOpenUpload }) {
+export function GalleryBentoHero({ items = [], onOpenUpload, isUploadOpen = false }) {
   const totalCount = items.length;
   
   const categoryCounts = items.reduce((acc, it) => {
@@ -52,11 +52,21 @@ export function GalleryBentoHero({ items = [], onOpenUpload }) {
           <div className="ml-auto flex items-center gap-2">
             <Button
               size="sm"
+              variant={isUploadOpen ? 'outline' : 'default'}
               onClick={onOpenUpload}
               className="h-8 gap-1.5 text-xs font-medium cursor-pointer"
             >
-              <Plus className="size-3.5" />
-              <span>New Piece</span>
+              {isUploadOpen ? (
+                <>
+                  <X className="size-3.5" />
+                  <span>Close Form</span>
+                </>
+              ) : (
+                <>
+                  <Plus className="size-3.5" />
+                  <span>New Piece</span>
+                </>
+              )}
             </Button>
           </div>
         </div>
@@ -140,3 +150,4 @@ export function GalleryBentoHero({ items = [], onOpenUpload }) {
     </div>
   );
 }
+

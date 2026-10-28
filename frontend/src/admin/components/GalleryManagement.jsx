@@ -3,7 +3,6 @@ import { LumaSpin } from '@/components/ui/luma-spin';
 import { galleryApi } from '@/api/galleryApi';
 import { GalleryBentoHero } from './GalleryBentoHero';
 import { GalleryCarouselShowcase } from './GalleryCarouselShowcase';
-import { GalleryCatalogGrid } from './GalleryCatalogGrid';
 import { GalleryUploadCard } from './GalleryUploadCard';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { EditGalleryModal } from './EditGalleryModal';
@@ -112,6 +111,7 @@ export function GalleryManagement() {
     <div className="space-y-6">
       <GalleryBentoHero
         items={items}
+        isUploadOpen={isUploadOpen}
         onOpenUpload={() => setIsUploadOpen((prev) => !prev)}
       />
 
@@ -124,13 +124,6 @@ export function GalleryManagement() {
       )}
 
       <GalleryCarouselShowcase
-        items={items}
-        onEdit={setItemToEdit}
-        onDelete={setItemToDelete}
-        onInspectReviews={setReviewItemToInspect}
-      />
-
-      <GalleryCatalogGrid
         items={items}
         onEdit={setItemToEdit}
         onDelete={setItemToDelete}

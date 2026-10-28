@@ -71,30 +71,46 @@ export function PaymentAccountCard({
         </div>
 
         <div className="space-y-2 text-xs">
-          <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
-                Account Number
-              </span>
-              <span className="font-mono text-xs sm:text-sm font-semibold text-foreground truncate block">
-                {account.accountNumber}
-              </span>
+          {account.accountNumber ? (
+            <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
+                  {account.accountType === 'Raast ID'
+                    ? 'Raast ID / Number'
+                    : account.accountType === 'Digital Wallet'
+                    ? 'Wallet Mobile Number'
+                    : 'Account Number'}
+                </span>
+                <span className="font-mono text-xs sm:text-sm font-semibold text-foreground truncate block">
+                  {account.accountNumber}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  handleCopy(
+                    account.accountNumber,
+                    'acc',
+                    account.accountType === 'Raast ID'
+                      ? 'Raast ID'
+                      : account.accountType === 'Digital Wallet'
+                      ? 'Wallet Number'
+                      : 'Account Number'
+                  )
+                }
+                className="p-1.5 rounded-lg border border-border/80 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
+                title="Copy Number"
+              >
+                {copiedField === 'acc' ? (
+                  <Check className="size-3.5 text-amber-700" />
+                ) : (
+                  <Copy className="size-3.5" />
+                )}
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => handleCopy(account.accountNumber, 'acc', 'Account Number')}
-              className="p-1.5 rounded-lg border border-border/80 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
-              title="Copy Account Number"
-            >
-              {copiedField === 'acc' ? (
-                <Check className="size-3.5 text-amber-700" />
-              ) : (
-                <Copy className="size-3.5" />
-              )}
-            </button>
-          </div>
+          ) : null}
 
-          {account.iban && (
+          {account.iban ? (
             <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
@@ -117,7 +133,7 @@ export function PaymentAccountCard({
                 )}
               </button>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
 

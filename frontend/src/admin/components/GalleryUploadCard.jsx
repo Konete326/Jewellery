@@ -219,3 +219,4 @@ export function GalleryUploadCard({ isOpen, onClose, onUploaded }) {
     </div>
   );
 }
+

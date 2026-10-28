@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { History, RotateCcw, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -7,7 +7,9 @@ function formatPkr(num) {
   return 'PKR ' + Math.round(num).toLocaleString('en-PK');
 }
 
-export function RatesAdminHistoryList({ history = [], onDeleteLog, onReapplyRate }) {
+export function RatesAdminHistoryList({ history = [], onRequestDelete, onReapplyRate }) {
+  const [activeTab, setActiveTab] = useState('gold');
+
   if (!history || history.length === 0) {
     return (
       <div className="rounded-2xl border border-border/70 bg-card p-6 text-center">
@@ -17,29 +19,69 @@ export function RatesAdminHistoryList({ history = [], onDeleteLog, onReapplyRate
     );
   }
 
+  const filteredHistory = history.filter((item) => {
+    if (activeTab === 'gold') return Boolean(item.gold24kTola);
+    if (activeTab === 'silver') return Boolean(item.silver24kTola);
+    return true;
+  });
+
   return (
     <div className="rounded-2xl border border-border/80 bg-card overflow-hidden shadow-xs">
-      <div className="p-4 border-b border-border/40 flex items-center justify-between">
+      <div className="p-4 border-b border-border/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h3 className="text-sm font-medium text-foreground tracking-tight">
-            Rate History
+            {activeTab === 'gold' ? 'Gold Rate History' : 'Silver Rate History'}
           </h3>
           <p className="text-xs text-muted-foreground">
-            Recent price updates and adjustments
+            {activeTab === 'gold'
+              ? 'Past 24K gold bullion benchmark updates'
+              : 'Past silver bullion benchmark updates'}
           </p>
         </div>
-        <span className="text-xs font-mono text-muted-foreground">
-          {history.length} records
-        </span>
+
+        <div className="flex items-center gap-2">
+          <div className="flex items-center p-1 rounded-lg border border-border/60 bg-muted/30">
+            <button
+              type="button"
+              onClick={() => setActiveTab('gold')}
+              className={`px-3 py-1 rounded-md text-xs font-mono transition-colors cursor-pointer ${
+                activeTab === 'gold'
+                  ? 'bg-foreground text-background font-medium shadow-xs'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Gold Rates
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('silver')}
+              className={`px-3 py-1 rounded-md text-xs font-mono transition-colors cursor-pointer ${
+                activeTab === 'silver'
+                  ? 'bg-foreground text-background font-medium shadow-xs'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Silver Rates
+            </button>
+          </div>
+
+          <span className="text-xs font-mono text-muted-foreground hidden sm:inline">
+            {filteredHistory.length} records
+          </span>
+        </div>
       </div>
 
       <div className="divide-y divide-border/40">
-        {history.slice(0, 8).map((item) => {
+        {filteredHistory.slice(0, 10).map((item) => {
           const d = new Date(item.createdAt || item.timestamp);
-          const timeStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ', ' +
+          const timeStr =
+            d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) +
+            ', ' +
             d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
           const isManual = Boolean(item.isManualOverride);
+          const displayPrice =
+            activeTab === 'gold' ? item.gold24kTola : item.silver24kTola;
 
           return (
             <div
@@ -53,19 +95,11 @@ export function RatesAdminHistoryList({ history = [], onDeleteLog, onReapplyRate
 
                 <div className="flex items-baseline gap-2">
                   <span className="font-mono text-xs font-semibold text-foreground">
-                    {formatPkr(item.gold24kTola)}
+                    {formatPkr(displayPrice)}
                   </span>
                   <span className="text-[10px] font-mono text-muted-foreground">
-                    (Gold)
+                    / Tola ({activeTab === 'gold' ? '24K Gold' : 'Silver'})
                   </span>
-                  {item.silver24kTola && (
-                    <>
-                      <span className="text-muted-foreground text-xs">•</span>
-                      <span className="font-mono text-xs text-muted-foreground">
-                        {formatPkr(item.silver24kTola)} (Silver)
-                      </span>
-                    </>
-                  )}
                 </div>
               </div>
 
@@ -79,20 +113,20 @@ export function RatesAdminHistoryList({ history = [], onDeleteLog, onReapplyRate
                     type="button"
                     variant="ghost"
                     size="icon"
-                    onClick={() => onReapplyRate(item)}
-                    title="Restore this rate"
+                    onClick={() => onReapplyRate(item, activeTab)}
+                    title={`Restore this ${activeTab} rate`}
                     className="size-7 cursor-pointer text-muted-foreground hover:text-foreground"
                   >
                     <RotateCcw className="size-3" />
                   </Button>
                 )}
 
-                {onDeleteLog && (
+                {onRequestDelete && (
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon"
-                    onClick={() => onDeleteLog(item._id || item.id)}
+                    onClick={() => onRequestDelete(item)}
                     title="Delete log"
                     className="size-7 cursor-pointer text-muted-foreground hover:text-destructive"
                   >

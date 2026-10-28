@@ -7,6 +7,8 @@ function formatPkr(num) {
   return 'PKR ' + Math.round(num).toLocaleString('en-PK');
 }
 
+const DIGITS_ONLY_REGEX = /^\d+$/;
+
 export function RatesAdminHeroCard({ rates, onSaveOverride, isSaving }) {
   const gold = rates?.gold || {};
   const silver = rates?.silver || {};
@@ -16,6 +18,7 @@ export function RatesAdminHeroCard({ rates, onSaveOverride, isSaving }) {
 
   const [inputGold, setInputGold] = useState('');
   const [inputSilver, setInputSilver] = useState('');
+  const [touched, setTouched] = useState({ gold: false, silver: false });
 
   useEffect(() => {
     if (rates?.gold?.['24K']?.tola) {
@@ -26,14 +29,48 @@ export function RatesAdminHeroCard({ rates, onSaveOverride, isSaving }) {
     }
   }, [rates]);
 
+  const handleGoldChange = (e) => {
+    const val = e.target.value.replace(/[^\d]/g, '');
+    setInputGold(val);
+    if (!touched.gold) setTouched((prev) => ({ ...prev, gold: true }));
+  };
+
+  const handleSilverChange = (e) => {
+    const val = e.target.value.replace(/[^\d]/g, '');
+    setInputSilver(val);
+    if (!touched.silver) setTouched((prev) => ({ ...prev, silver: true }));
+  };
+
+  const goldNum = Number(inputGold);
+  const silverNum = Number(inputSilver);
+
+  const getGoldError = () => {
+    if (!inputGold) return '24K gold rate is required';
+    if (!DIGITS_ONLY_REGEX.test(inputGold)) return 'Digits only';
+    if (goldNum < 150000) return 'Rate too low (Min PKR 150,000 / tola)';
+    if (goldNum > 1000000) return 'Rate too high (Max PKR 1,000,000 / tola)';
+    return null;
+  };
+
+  const getSilverError = () => {
+    if (!inputSilver) return 'Silver rate is required';
+    if (!DIGITS_ONLY_REGEX.test(inputSilver)) return 'Digits only';
+    if (silverNum < 2000) return 'Rate too low (Min PKR 2,000 / tola)';
+    if (silverNum > 50000) return 'Rate too high (Max PKR 50,000 / tola)';
+    return null;
+  };
+
+  const goldError = getGoldError();
+  const silverError = getSilverError();
+  const isValid = !goldError && !silverError;
+
   const handleApply = (e) => {
     if (e) e.preventDefault();
-    const gVal = Number(inputGold);
-    const sVal = Number(inputSilver) || currentSilver24;
-    if (!gVal || gVal <= 0) return;
+    setTouched({ gold: true, silver: true });
+    if (!isValid) return;
     onSaveOverride({
-      gold24kTola: gVal,
-      silver24kTola: sVal,
+      gold24kTola: goldNum,
+      silver24kTola: silverNum,
       isManualOverride: true
     });
   };
@@ -88,43 +125,61 @@ export function RatesAdminHeroCard({ rates, onSaveOverride, isSaving }) {
       </div>
 
       <div className="pt-3 border-t border-border/40">
-        <form onSubmit={handleApply} className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-          <div className="relative flex-1">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-mono text-muted-foreground">
-              24K Gold:
-            </span>
-            <Input
-              type="number"
-              step="100"
-              required
-              value={inputGold}
-              onChange={(e) => setInputGold(e.target.value)}
-              placeholder="422000"
-              className="pl-24 font-mono text-sm bg-background h-10"
-            />
-          </div>
+        <form onSubmit={handleApply} className="space-y-2">
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-start">
+            <div className="flex-1 space-y-1">
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-mono text-muted-foreground">
+                  24K Gold:
+                </span>
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  required
+                  value={inputGold}
+                  onChange={handleGoldChange}
+                  onBlur={() => setTouched((prev) => ({ ...prev, gold: true }))}
+                  placeholder="e.g. 422000"
+                  className={`pl-24 font-mono text-sm bg-background h-10 ${
+                    touched.gold && goldError ? 'border-rose-500 focus-visible:ring-rose-500/20' : ''
+                  }`}
+                />
+              </div>
+              {touched.gold && goldError && (
+                <p className="text-[11px] text-rose-500 font-mono px-1">{goldError}</p>
+              )}
+            </div>
 
-          <div className="relative sm:w-60">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-mono text-muted-foreground">
-              Silver:
-            </span>
-            <Input
-              type="number"
-              step="10"
-              value={inputSilver}
-              onChange={(e) => setInputSilver(e.target.value)}
-              placeholder="6794"
-              className="pl-16 font-mono text-sm bg-background h-10"
-            />
-          </div>
+            <div className="sm:w-64 space-y-1">
+              <div className="relative">
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-mono text-muted-foreground">
+                  Silver:
+                </span>
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  value={inputSilver}
+                  onChange={handleSilverChange}
+                  onBlur={() => setTouched((prev) => ({ ...prev, silver: true }))}
+                  placeholder="e.g. 6794"
+                  className={`pl-16 font-mono text-sm bg-background h-10 ${
+                    touched.silver && silverError ? 'border-rose-500 focus-visible:ring-rose-500/20' : ''
+                  }`}
+                />
+              </div>
+              {touched.silver && silverError && (
+                <p className="text-[11px] text-rose-500 font-mono px-1">{silverError}</p>
+              )}
+            </div>
 
-          <Button
-            type="submit"
-            disabled={isSaving}
-            className="bg-foreground text-background hover:bg-neutral-800 font-mono text-xs h-10 px-5 shrink-0 cursor-pointer shadow-xs"
-          >
-            {isSaving ? 'Updating...' : 'Update Rates'}
-          </Button>
+            <Button
+              type="submit"
+              disabled={isSaving || !isValid}
+              className="bg-foreground text-background hover:bg-neutral-800 font-mono text-xs h-10 px-6 shrink-0 cursor-pointer shadow-xs disabled:opacity-50"
+            >
+              {isSaving ? 'Updating...' : 'Update Rates'}
+            </Button>
+          </div>
         </form>
       </div>
     </div>
