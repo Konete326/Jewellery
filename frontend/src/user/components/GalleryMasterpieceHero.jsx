@@ -31,7 +31,7 @@ export function GalleryMasterpieceHero({
             <div className="flex items-center gap-2 flex-wrap">
               <Badge variant="outline" className="px-3 py-1 text-xs uppercase tracking-wider font-mono border-neutral-300 dark:border-neutral-700 bg-white/80 dark:bg-neutral-900">
                 <Gem className="size-3 mr-1.5 text-neutral-700 dark:text-neutral-300" />
-                22K / 24K Certified Gold
+                22K · 21K · 18K Certified Gold
               </Badge>
               <Badge variant="secondary" className="px-2.5 py-1 text-xs font-mono uppercase tracking-wider bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200">
                 {piece.category || 'Bridal Sets'}
@@ -110,7 +110,7 @@ export function GalleryMasterpieceHero({
           <ul className="mt-6 space-y-2.5">
             <li className="flex items-center gap-2.5 text-sm text-foreground/90">
               <span className="size-1.5 rounded-full bg-foreground shrink-0" />
-              <span>Certified 22K / 24K hallmark purity guarantee with official stamp</span>
+              <span>Certified 22K, 21K & 18K hallmark purity guarantee with official stamp</span>
             </li>
             <li className="flex items-center gap-2.5 text-sm text-foreground/90">
               <span className="size-1.5 rounded-full bg-foreground shrink-0" />
@@ -129,7 +129,7 @@ export function GalleryMasterpieceHero({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-6">
             <div className="p-3 rounded-xl bg-card border border-border/80">
               <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">Purity</span>
-              <p className="text-xs font-medium text-foreground mt-0.5">22K / 24K Hallmarked</p>
+              <p className="text-xs font-medium text-foreground mt-0.5">22K, 21K & 18K Hallmarked</p>
             </div>
             <div className="p-3 rounded-xl bg-card border border-border/80">
               <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">Boutique</span>
