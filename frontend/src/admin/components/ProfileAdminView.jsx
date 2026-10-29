@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { LumaSpin } from '@/components/ui/luma-spin';
 import { ProfileIdentityBentoCard } from './ProfileIdentityBentoCard';
@@ -60,12 +60,46 @@ export function ProfileAdminView() {
     setHasChanges(true);
   };
 
+  const isEmailValid = useMemo(() => {
+    return formData.email
+      ? /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())
+      : false;
+  }, [formData.email]);
+
+  const isWhatsappValid = useMemo(() => {
+    return formData.whatsapp
+      ? /^\+?[0-9\s-]{10,18}$/.test(formData.whatsapp.trim())
+      : false;
+  }, [formData.whatsapp]);
+
+  const isYearValid = useMemo(() => {
+    return formData.establishedYear
+      ? /^(19\d{2}|20\d{2})$/.test(String(formData.establishedYear).trim())
+      : true;
+  }, [formData.establishedYear]);
+
+  const isFormValid = isEmailValid && isWhatsappValid && isYearValid;
+
   const handleSave = async (e) => {
     if (e) e.preventDefault();
 
-    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    if (!isEmailValid) {
       toast.error('Invalid email address', {
-        description: 'Please provide a valid official email address.'
+        description: 'Please enter a valid format e.g. name@domain.com'
+      });
+      return;
+    }
+
+    if (!isWhatsappValid) {
+      toast.error('Invalid WhatsApp number', {
+        description: 'WhatsApp number must contain 10 to 15 digits.'
+      });
+      return;
+    }
+
+    if (!isYearValid) {
+      toast.error('Invalid established year', {
+        description: 'Year must be a 4-digit year between 1900 and 2099.'
       });
       return;
     }
@@ -100,18 +134,18 @@ export function ProfileAdminView() {
 
   if (loading && !formData.name) {
     return (
-      <div className="py-24 flex items-center justify-center">
-        <LumaSpin size={32} />
+      <div className="py-20 flex items-center justify-center">
+        <LumaSpin size={28} />
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/70">
+    <div className="space-y-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-border/70">
         <div>
           <div className="flex items-center gap-2 mb-0.5">
-            <h1 className="text-2xl font-serif font-light text-foreground tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-serif font-light text-foreground tracking-tight">
               Atelier Profile
             </h1>
             {hasChanges && (
@@ -120,8 +154,8 @@ export function ProfileAdminView() {
               </span>
             )}
           </div>
-          <p className="text-xs text-muted-foreground font-mono">
-            Manage boutique identity, contact channels, and hallmark credentials
+          <p className="text-[11px] text-muted-foreground font-mono">
+            Manage boutique credentials, contact routing, and assay guarantee policy
           </p>
         </div>
 
@@ -132,9 +166,9 @@ export function ProfileAdminView() {
             size="sm"
             onClick={handleReload}
             disabled={saving}
-            className="cursor-pointer text-xs font-mono h-9 px-3 gap-1.5"
+            className="cursor-pointer text-xs font-mono h-8 px-3 gap-1.5"
           >
-            <RefreshCw className="size-3.5" />
+            <RefreshCw className="size-3" />
             <span>Reload</span>
           </Button>
 
@@ -142,17 +176,17 @@ export function ProfileAdminView() {
             type="button"
             size="sm"
             onClick={handleSave}
-            disabled={saving}
-            className="cursor-pointer text-xs font-mono h-9 px-4 gap-1.5 bg-foreground text-background hover:bg-neutral-800 shadow-xs"
+            disabled={saving || !isFormValid}
+            className="cursor-pointer text-xs font-mono h-8 px-4 gap-1.5 bg-foreground text-background hover:bg-neutral-800 shadow-xs disabled:opacity-50"
           >
             {saving ? (
               <>
-                <LumaSpin size={14} />
+                <LumaSpin size={12} />
                 <span>Saving...</span>
               </>
             ) : (
               <>
-                <Save className="size-3.5" />
+                <Save className="size-3" />
                 <span>Save Profile</span>
               </>
             )}
@@ -160,7 +194,7 @@ export function ProfileAdminView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-8">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-8">
         <ProfileIdentityBentoCard
           formData={formData}
           onChange={handleChange}
@@ -170,6 +204,8 @@ export function ProfileAdminView() {
         <ProfileContactBentoCard
           formData={formData}
           onChange={handleChange}
+          isEmailValid={isEmailValid}
+          isWhatsappValid={isWhatsappValid}
           className="lg:col-span-3"
         />
 
@@ -182,6 +218,7 @@ export function ProfileAdminView() {
         <ProfileSecurityBentoCard
           formData={formData}
           onChange={handleChange}
+          isYearValid={isYearValid}
           className="lg:col-span-4"
         />
       </div>

@@ -244,3 +244,4 @@ export function BankLogo({ name = '', type = '', logoUrl = '', className = 'size
 
   return <GenericBankLogo name={name} className={className} />;
 }
+
