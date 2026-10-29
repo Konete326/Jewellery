@@ -1,9 +1,14 @@
 import { categoryRepository } from './category.repository.js';
 import { Gallery } from '../gallery/gallery.model.js';
 import { uploadToCloudinary } from '../../config/cloudinary.js';
+import { DEFAULT_JEWELLERY_CATEGORIES } from './category.constants.js';
 
 export class CategoryService {
   async getAllCategories(filter = {}) {
+    const totalCount = await categoryRepository.count({});
+    if (totalCount === 0) {
+      await categoryRepository.insertMany(DEFAULT_JEWELLERY_CATEGORIES);
+    }
     const query = {};
     if (filter.isActive !== undefined) {
       query.isActive = filter.isActive === 'true' || filter.isActive === true;

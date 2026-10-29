@@ -150,3 +150,4 @@ export function ProductAdminCard({
     </div>
   );
 }
+

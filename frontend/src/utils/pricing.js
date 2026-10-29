@@ -79,3 +79,4 @@ export function sanitizePhoneInput(val) {
 export function sanitizeNameInput(val) {
   return String(val || '').replace(/[^a-zA-Z\s]/g, '').slice(0, 50);
 }
+

@@ -2,6 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Upload, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+const CORE_CATEGORY_PRESETS = [
+  { name: 'Gold Rings', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Fine artisan-crafted gold rings with authentic hallmark purity.' },
+  { name: 'Gold Chains', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Classic and modern solid gold chain links crafted for daily grace.' },
+  { name: 'Gold Bangles', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Traditional and contemporary handcrafted gold bangles.' },
+  { name: 'Gold Bracelets', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Exquisite flexible and structured gold bracelets with secure clasps.' },
+  { name: 'Gold Earrings', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Elegantly proportioned gold earrings from daily studs to chandelier drops.' },
+  { name: 'Gold Necklaces', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Statement gold necklaces reflecting heritage filigree and modern luxury.' },
+  { name: 'Gold Sets', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Complete bridal and ceremonial coordinated gold jewelry sets.' },
+  { name: 'Gold Coins / Bars', metalStandard: '24K Pure Gold', hallmark: 'AU · 999.0', description: 'Investment grade 24K pure gold bullion coins and minted bars.' }
+];
+
 const PRESET_STANDARDS = [
   '22K Gold',
   '24K Pure Gold',
@@ -66,6 +77,16 @@ export function CategoryModal({
     setName(val);
     if (!initialData || !initialData.slug) {
       setSlug(val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
+    }
+  };
+
+  const applyPreset = (preset) => {
+    setName(preset.name);
+    setSlug(preset.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
+    setMetalStandard(preset.metalStandard);
+    setHallmark(preset.hallmark);
+    if (!description) {
+      setDescription(preset.description);
     }
   };
 
@@ -142,6 +163,30 @@ export function CategoryModal({
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {!initialData && (
+            <div className="space-y-1.5 p-3 rounded-xl border border-amber-500/20 bg-amber-500/5">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-amber-900 dark:text-amber-300 font-semibold block">
+                Standard Category Presets
+              </span>
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {CORE_CATEGORY_PRESETS.map((preset) => (
+                  <button
+                    key={preset.name}
+                    type="button"
+                    onClick={() => applyPreset(preset)}
+                    className={`px-2.5 py-1 rounded-md text-[11px] font-medium border transition-colors cursor-pointer ${
+                      name === preset.name
+                        ? 'border-amber-500 bg-amber-500/20 text-amber-950 dark:text-amber-200 font-semibold'
+                        : 'border-border/80 bg-background/80 hover:bg-background text-foreground/80 hover:text-foreground'
+                    }`}
+                  >
+                    {preset.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-foreground">
               Category Title <span className="text-rose-500">*</span>
@@ -149,7 +194,7 @@ export function CategoryModal({
             <input
               type="text"
               required
-              placeholder="e.g. Rings & Solitaires, Chains, Bridal Sets"
+              placeholder="e.g. Gold Rings, Gold Chains, Gold Sets"
               value={name}
               onChange={(e) => handleNameChange(e.target.value)}
               className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
