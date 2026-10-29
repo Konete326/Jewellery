@@ -1,17 +1,9 @@
 import { categoryRepository } from './category.repository.js';
 import { Gallery } from '../gallery/gallery.model.js';
-import { defaultSeedCategories } from './category.seed.js';
+import { uploadToCloudinary } from '../../config/cloudinary.js';
 
 export class CategoryService {
-  async ensureSeedData() {
-    const count = await categoryRepository.count();
-    if (count === 0) {
-      await categoryRepository.insertMany(defaultSeedCategories);
-    }
-  }
-
   async getAllCategories(filter = {}) {
-    await this.ensureSeedData();
     const query = {};
     if (filter.isActive !== undefined) {
       query.isActive = filter.isActive === 'true' || filter.isActive === true;
@@ -41,7 +33,7 @@ export class CategoryService {
     return category;
   }
 
-  async createCategory(data) {
+  async createCategory(data, file) {
     if (!data.name || !data.name.trim()) {
       const error = new Error('Category name is required');
       error.status = 400;
@@ -53,16 +45,22 @@ export class CategoryService {
       error.status = 409;
       throw error;
     }
+    let finalImageUrl = data.imageUrl || '';
+    if (file && file.buffer) {
+      const uploadRes = await uploadToCloudinary(file.buffer, 'khalil_categories');
+      finalImageUrl = uploadRes.secure_url;
+    }
     const slug = (data.slug || data.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     return await categoryRepository.create({
       ...data,
       name: data.name.trim(),
       slug,
+      imageUrl: finalImageUrl,
       displayOrder: Number(data.displayOrder) || 0
     });
   }
 
-  async updateCategory(id, data) {
+  async updateCategory(id, data, file) {
     const existing = await categoryRepository.findById(id);
     if (!existing) {
       const error = new Error('Category not found');
@@ -78,6 +76,10 @@ export class CategoryService {
       }
     }
     const updatePayload = { ...data };
+    if (file && file.buffer) {
+      const uploadRes = await uploadToCloudinary(file.buffer, 'khalil_categories');
+      updatePayload.imageUrl = uploadRes.secure_url;
+    }
     if (data.name) {
       updatePayload.name = data.name.trim();
       if (!data.slug) {

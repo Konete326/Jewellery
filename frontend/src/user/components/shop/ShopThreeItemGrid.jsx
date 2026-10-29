@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShopTile } from './ShopTile';
 
-export function ShopThreeItemGrid({ items = [] }) {
+export function ShopThreeItemGrid({ items = [], onAddToCart }) {
   if (!items || items.length < 3) return null;
 
   const [firstItem, secondItem, thirdItem] = items;
@@ -14,6 +14,7 @@ export function ShopThreeItemGrid({ items = [] }) {
             piece={firstItem}
             priority={true}
             position="center"
+            onAddToCart={onAddToCart}
             className="h-full min-h-[360px] md:min-h-full"
           />
         </div>
@@ -23,6 +24,7 @@ export function ShopThreeItemGrid({ items = [] }) {
             piece={secondItem}
             priority={true}
             position="bottom"
+            onAddToCart={onAddToCart}
             className="h-full min-h-[260px] md:min-h-full"
           />
         </div>
@@ -32,6 +34,7 @@ export function ShopThreeItemGrid({ items = [] }) {
             piece={thirdItem}
             priority={false}
             position="bottom"
+            onAddToCart={onAddToCart}
             className="h-full min-h-[260px] md:min-h-full"
           />
         </div>

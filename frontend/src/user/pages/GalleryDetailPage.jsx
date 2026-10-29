@@ -16,6 +16,9 @@ import { PolaroidLineCarousel } from '@/components/ui/polaroid-line-carousel';
 import { updatePageSEO, getProductSchema } from '@/utils/seo';
 import { LuxuryButton } from '../components/LuxuryButton';
 import { LumaSpin } from '@/components/ui/luma-spin';
+import { broadcastCartUpdate, subscribeToTabSync } from '@/utils/tabSync';
+import { getEstimatedPiecePrice, sanitizeQuantity } from '@/utils/pricing';
+import { toast } from 'sonner';
 
 export function GalleryDetailPage() {
   const { id } = useParams();
@@ -23,6 +26,15 @@ export function GalleryDetailPage() {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('khalil_cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
@@ -139,6 +151,95 @@ export function GalleryDetailPage() {
     });
   };
 
+  useEffect(() => {
+    try {
+      localStorage.setItem('khalil_cart', JSON.stringify(cartItems));
+      const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+      broadcastCartUpdate(count, cartItems);
+    } catch {}
+  }, [cartItems]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToTabSync((data) => {
+      if (data?.type === 'CART_UPDATE' && Array.isArray(data.items)) {
+        setCartItems(data.items);
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  const handleAddToCart = (itemToAdd = piece) => {
+    if (!itemToAdd) return;
+    const pieceId = itemToAdd._id || itemToAdd.id;
+    const pricing = getEstimatedPiecePrice(itemToAdd);
+
+    setCartItems((prev) => {
+      const existing = prev.find((item) => String(item.id) === String(pieceId));
+      if (existing) {
+        return prev.map((item) =>
+          String(item.id) === String(pieceId) ? { ...item, quantity: (Number(item.quantity) || 1) + 1 } : item
+        );
+      }
+      return [
+        ...prev,
+        {
+          id: pieceId,
+          name: itemToAdd.title || 'Fine Jewellery Piece',
+          category: itemToAdd.category || 'Fine Jewellery',
+          image: itemToAdd.imageUrl || itemToAdd.src || '/assets/products/choker-ruby-01.jpg',
+          numericPrice: pricing.numericPrice,
+          price: pricing.formattedPrice,
+          quantity: 1,
+          material: pricing.purity
+        }
+      ];
+    });
+
+    toast.success(`${itemToAdd.title || 'Masterpiece'} added to your bag`, {
+      action: {
+        label: 'View Bag',
+        onClick: () => setIsCartOpen(true)
+      }
+    });
+  };
+
+  const handleUpdateQuantity = (cartItemId, newQty) => {
+    const clean = sanitizeQuantity(newQty);
+    setCartItems((prev) =>
+      prev.map((item) => (String(item.id) === String(cartItemId) ? { ...item, quantity: clean } : item))
+    );
+  };
+
+  const handleIncrement = (cartItemId) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        String(item.id) === String(cartItemId) ? { ...item, quantity: (Number(item.quantity) || 1) + 1 } : item
+      )
+    );
+  };
+
+  const handleDecrement = (cartItemId) => {
+    setCartItems((prev) =>
+      prev
+        .map((item) =>
+          String(item.id) === String(cartItemId) ? { ...item, quantity: (Number(item.quantity) || 1) - 1 } : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
+  };
+
+  const handleRemove = (cartItemId) => {
+    setCartItems((prev) => prev.filter((item) => String(item.id) !== String(cartItemId)));
+    toast.info('Item removed from bag');
+  };
+
+  const handleClearCart = () => {
+    setCartItems([]);
+    toast.info('Shopping bag cleared');
+  };
+
+  const totalCartCount = cartItems.reduce((acc, item) => acc + (Number(item.quantity) || 1), 0);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -175,7 +276,7 @@ export function GalleryDetailPage() {
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
-        cartCount={0}
+        cartCount={totalCartCount}
       />
 
       <main className="relative z-10 pt-24 md:pt-28 pb-16 w-full max-w-[1880px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
@@ -210,6 +311,7 @@ export function GalleryDetailPage() {
           onOpenReview={() => setIsReviewModalOpen(true)}
           onOpenInquiry={() => setIsInquiryModalOpen(true)}
           onOpenAppointment={() => setIsAppointmentModalOpen(true)}
+          onAddToCart={handleAddToCart}
         />
 
         <div className="w-full pt-10 pb-6 border-t border-border/60">
@@ -288,7 +390,12 @@ export function GalleryDetailPage() {
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
-        items={[]}
+        items={cartItems}
+        onIncrement={handleIncrement}
+        onDecrement={handleDecrement}
+        onRemove={handleRemove}
+        onUpdateQuantity={handleUpdateQuantity}
+        onClearCart={handleClearCart}
       />
     </div>
   );

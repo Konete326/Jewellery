@@ -1,18 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { X, Sparkles, Image as ImageIcon } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Upload, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-const PRESET_IMAGES = [
-  { label: 'Rings', url: '/assets/categories/rings.jpg' },
-  { label: 'Chokers', url: '/assets/categories/chokers.jpg' },
-  { label: 'Kadas', url: '/assets/categories/kadas.jpg' },
-  { label: 'Jhumkas', url: '/assets/categories/jhumkas.jpg' },
-  { label: 'Bridal Suites', url: '/assets/categories/bridal-suites.jpg' },
-  { label: 'Ruby Choker', url: '/assets/products/choker-ruby-01.jpg' },
-  { label: 'Emerald Necklace', url: '/assets/products/necklace-emerald-01.jpg' },
-  { label: 'Polki Bangles', url: '/assets/products/bangles-mughal-01.jpg' },
-  { label: 'Pure Bullion', url: '/assets/products/guluband-01.jpg' }
-];
 
 const PRESET_STANDARDS = [
   '22K Gold',
@@ -41,10 +29,12 @@ export function CategoryModal({
   const [metalStandard, setMetalStandard] = useState('22K Gold');
   const [hallmark, setHallmark] = useState('AU · 916.6');
   const [description, setDescription] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
   const [displayOrder, setDisplayOrder] = useState(0);
   const [isActive, setIsActive] = useState(true);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
   const [error, setError] = useState('');
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (initialData) {
@@ -53,19 +43,20 @@ export function CategoryModal({
       setMetalStandard(initialData.metalStandard || '22K Gold');
       setHallmark(initialData.hallmark || 'AU · 916.6');
       setDescription(initialData.description || '');
-      setImageUrl(initialData.imageUrl || '');
       setDisplayOrder(initialData.displayOrder ?? 0);
       setIsActive(initialData.isActive !== false);
+      setPreviewUrl(initialData.imageUrl || '');
     } else {
       setName('');
       setSlug('');
       setMetalStandard('22K Gold');
       setHallmark('AU · 916.6');
       setDescription('');
-      setImageUrl(PRESET_IMAGES[0].url);
       setDisplayOrder(0);
       setIsActive(true);
+      setPreviewUrl('');
     }
+    setSelectedFile(null);
     setError('');
   }, [initialData, isOpen]);
 
@@ -78,22 +69,49 @@ export function CategoryModal({
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        setError('Please select a valid image file');
+        return;
+      }
+      setSelectedFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setError('');
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedFile(null);
+    setPreviewUrl('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim()) {
       setError('Category title is required');
       return;
     }
-    onSave({
-      name: name.trim(),
-      slug: slug.trim() || name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      metalStandard: metalStandard.trim(),
-      hallmark: hallmark.trim(),
-      description: description.trim(),
-      imageUrl: imageUrl.trim(),
-      displayOrder: Number(displayOrder) || 0,
-      isActive
-    });
+    const formData = new FormData();
+    formData.append('name', name.trim());
+    formData.append('slug', slug.trim() || name.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
+    formData.append('metalStandard', metalStandard.trim());
+    formData.append('hallmark', hallmark.trim());
+    formData.append('description', description.trim());
+    formData.append('displayOrder', Number(displayOrder) || 0);
+    formData.append('isActive', isActive);
+
+    if (selectedFile) {
+      formData.append('image', selectedFile);
+    } else if (initialData?.imageUrl) {
+      formData.append('imageUrl', previewUrl);
+    }
+
+    onSave(formData);
   };
 
   return (
@@ -102,7 +120,7 @@ export function CategoryModal({
         <div className="flex items-center justify-between pb-3 border-b border-border">
           <div>
             <span className="text-[10px] uppercase font-mono tracking-widest text-amber-800 dark:text-amber-400 font-semibold block">
-              Atelier Classification
+              Atelier Architecture
             </span>
             <h3 className="font-serif text-lg font-semibold text-foreground">
               {initialData ? 'Edit Category' : 'Create New Category'}
@@ -172,11 +190,11 @@ export function CategoryModal({
 
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-foreground">
-              Description
+              Description (Optional)
             </label>
             <textarea
               rows={2}
-              placeholder="Brief description of this jewellery category..."
+              placeholder="Brief description of this jewellery collection..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 resize-none"
@@ -184,33 +202,63 @@ export function CategoryModal({
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground">
-              Showcase Image URL
+            <label className="text-xs font-medium text-foreground flex items-center justify-between">
+              <span>Showcase Image (Optional)</span>
+              <span className="text-[10px] text-muted-foreground font-mono">Cloudinary Powered</span>
             </label>
+
+            {previewUrl ? (
+              <div className="relative w-full aspect-[16/7] rounded-lg overflow-hidden border border-border bg-neutral-900 group">
+                <img
+                  src={previewUrl}
+                  alt="Category preview"
+                  className="size-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="h-8 text-xs bg-background/90 cursor-pointer"
+                  >
+                    Change Image
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    onClick={handleRemoveImage}
+                    className="h-8 text-xs cursor-pointer"
+                  >
+                    <Trash2 className="size-3.5" />
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full border-2 border-dashed border-border hover:border-foreground/40 rounded-xl p-4 sm:p-5 flex flex-col items-center justify-center gap-1.5 text-center cursor-pointer transition-colors bg-muted/20"
+              >
+                <div className="p-2 rounded-lg border border-border bg-card text-muted-foreground">
+                  <Upload className="size-4" />
+                </div>
+                <span className="text-xs font-medium text-foreground">
+                  Click to select an image from your computer
+                </span>
+                <span className="text-[10px] text-muted-foreground">
+                  PNG, JPG, WEBP up to 10MB • Uploads to Cloudinary
+                </span>
+              </div>
+            )}
+
             <input
-              type="text"
-              placeholder="/assets/categories/rings.jpg or https://..."
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
             />
-            <div className="flex items-center gap-1.5 pt-1 overflow-x-auto pb-1">
-              <span className="text-[10px] font-mono text-muted-foreground shrink-0">Presets:</span>
-              {PRESET_IMAGES.map((preset) => (
-                <button
-                  key={preset.url}
-                  type="button"
-                  onClick={() => setImageUrl(preset.url)}
-                  className={`px-2 py-0.5 rounded text-[10px] font-mono border transition-colors shrink-0 cursor-pointer ${
-                    imageUrl === preset.url
-                      ? 'bg-foreground text-background border-foreground font-semibold'
-                      : 'border-border bg-muted/60 text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  {preset.label}
-                </button>
-              ))}
-            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3 items-center">

@@ -1,17 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { UploadCloud, Trash2, Loader2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { JEWELLERY_CATEGORIES } from '@/constants/categories';
 import { galleryApi } from '@/api/galleryApi';
+import { fetchCategories } from '@/api/categoryApi';
 
 export function GalleryUploadCard({ isOpen, onClose, onUploaded }) {
   const [title, setTitle] = useState('');
+  const [categoriesList, setCategoriesList] = useState(JEWELLERY_CATEGORIES);
   const [category, setCategory] = useState(JEWELLERY_CATEGORIES[0]);
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchCategories({ isActive: true })
+      .then((res) => {
+        if (!isMounted) return;
+        const list = res?.data || [];
+        if (list.length > 0) {
+          const names = list.map((c) => c.name);
+          setCategoriesList(names);
+          setCategory((prev) => (names.includes(prev) ? prev : names[0]));
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   if (!isOpen) return null;
 
@@ -124,7 +144,7 @@ export function GalleryUploadCard({ isOpen, onClose, onUploaded }) {
               onChange={(e) => setCategory(e.target.value)}
               className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 cursor-pointer"
             >
-              {JEWELLERY_CATEGORIES.map((cat) => (
+              {categoriesList.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
                 </option>

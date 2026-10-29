@@ -14,6 +14,8 @@ import { fetchCategories } from '@/api/categoryApi';
 import { JEWELLERY_CATEGORIES } from '@/constants/categories';
 import { updatePageSEO } from '@/utils/seo';
 import { broadcastCartUpdate, subscribeToTabSync } from '@/utils/tabSync';
+import { getEstimatedPiecePrice, sanitizeQuantity } from '@/utils/pricing';
+import { toast } from 'sonner';
 import { LumaSpin } from '@/components/ui/luma-spin';
 import { Gem } from 'lucide-react';
 
@@ -221,6 +223,76 @@ export function ShopPage() {
     setSearchParams(new URLSearchParams());
   };
 
+  const handleAddToCart = (piece) => {
+    if (!piece) return;
+    const pieceId = piece._id || piece.id;
+    const pricing = getEstimatedPiecePrice(piece);
+
+    setCartItems((prev) => {
+      const existing = prev.find((item) => String(item.id) === String(pieceId));
+      if (existing) {
+        return prev.map((item) =>
+          String(item.id) === String(pieceId) ? { ...item, quantity: (Number(item.quantity) || 1) + 1 } : item
+        );
+      }
+      return [
+        ...prev,
+        {
+          id: pieceId,
+          name: piece.title || 'Fine Jewellery Piece',
+          category: piece.category || 'Fine Jewellery',
+          image: piece.imageUrl || piece.src || '/assets/products/choker-ruby-01.jpg',
+          numericPrice: pricing.numericPrice,
+          price: pricing.formattedPrice,
+          quantity: 1,
+          material: pricing.purity
+        }
+      ];
+    });
+
+    toast.success(`${piece.title || 'Masterpiece'} added to your bag`, {
+      action: {
+        label: 'View Bag',
+        onClick: () => setIsCartOpen(true)
+      }
+    });
+  };
+
+  const handleUpdateQuantity = (id, newQty) => {
+    const clean = sanitizeQuantity(newQty);
+    setCartItems((prev) =>
+      prev.map((item) => (String(item.id) === String(id) ? { ...item, quantity: clean } : item))
+    );
+  };
+
+  const handleIncrement = (id) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        String(item.id) === String(id) ? { ...item, quantity: (Number(item.quantity) || 1) + 1 } : item
+      )
+    );
+  };
+
+  const handleDecrement = (id) => {
+    setCartItems((prev) =>
+      prev
+        .map((item) =>
+          String(item.id) === String(id) ? { ...item, quantity: (Number(item.quantity) || 1) - 1 } : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
+  };
+
+  const handleRemove = (id) => {
+    setCartItems((prev) => prev.filter((item) => String(item.id) !== String(id)));
+    toast.info('Item removed from bag');
+  };
+
+  const handleClearCart = () => {
+    setCartItems([]);
+    toast.info('Shopping bag cleared');
+  };
+
   const hasActiveFilters =
     (selectedCategory && selectedCategory.toLowerCase() !== 'all') ||
     Boolean(searchQuery) ||
@@ -238,7 +310,10 @@ export function ShopPage() {
 
       <main className="relative z-10 pt-24 md:pt-28 pb-16 w-full max-w-[1880px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16">
         {!hasActiveFilters && featuredSpotlightItems.length >= 3 && !loading && (
-          <ShopThreeItemGrid items={featuredSpotlightItems} />
+          <ShopThreeItemGrid
+            items={featuredSpotlightItems}
+            onAddToCart={handleAddToCart}
+          />
         )}
 
         <ShopSearchHeader
@@ -288,7 +363,10 @@ export function ShopPage() {
               <ShopGrid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
                 {filteredItems.map((piece) => (
                   <ShopGrid.Item key={piece._id || piece.id}>
-                    <ShopTile piece={piece} />
+                    <ShopTile
+                      piece={piece}
+                      onAddToCart={handleAddToCart}
+                    />
                   </ShopGrid.Item>
                 ))}
               </ShopGrid>
@@ -315,9 +393,11 @@ export function ShopPage() {
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         items={cartItems}
-        onIncrement={(id) => setCartItems((p) => p.map((i) => (i.id === id ? { ...i, quantity: i.quantity + 1 } : i)))}
-        onDecrement={(id) => setCartItems((p) => p.map((i) => (i.id === id ? { ...i, quantity: i.quantity - 1 } : i)).filter((i) => i.quantity > 0))}
-        onRemove={(id) => setCartItems((p) => p.filter((i) => i.id !== id))}
+        onIncrement={handleIncrement}
+        onDecrement={handleDecrement}
+        onRemove={handleRemove}
+        onUpdateQuantity={handleUpdateQuantity}
+        onClearCart={handleClearCart}
       />
     </div>
   );

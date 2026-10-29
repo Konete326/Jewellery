@@ -49,17 +49,6 @@ export function CategoryAdminCard({
             </span>
           </div>
 
-          <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
-            <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-medium backdrop-blur-md border flex items-center gap-1 ${
-              isActive
-                ? 'bg-emerald-950/75 border-emerald-500/30 text-emerald-300'
-                : 'bg-neutral-950/75 border-neutral-700/50 text-neutral-400'
-            }`}>
-              <span className={`size-1.5 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-neutral-500'}`} />
-              <span>{isActive ? 'Live' : 'Hidden'}</span>
-            </span>
-          </div>
-
           <div className="absolute bottom-3 right-3 z-10">
             <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-black/60 text-white/90 backdrop-blur-md border border-white/10">
               {itemCount} {itemCount === 1 ? 'Masterpiece' : 'Masterpieces'}

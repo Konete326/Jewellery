@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, MessageCircle, Calendar, ZoomIn, Mail } from 'lucide-react';
+import { Star, MessageCircle, Calendar, ZoomIn, Mail, ShoppingBag } from 'lucide-react';
 import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
 import { cn } from '@/lib/utils';
@@ -9,7 +9,8 @@ export function GalleryMasterpieceHero({
   onOpenLightbox,
   onOpenReview,
   onOpenInquiry,
-  onOpenAppointment
+  onOpenAppointment,
+  onAddToCart
 }) {
   if (!piece) return null;
 
@@ -147,28 +148,36 @@ export function GalleryMasterpieceHero({
           </div>
 
           <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <button
+              type="button"
+              onClick={() => onAddToCart && onAddToCart(piece)}
+              className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wider font-medium transition-all shadow-xs cursor-pointer"
+            >
+              <ShoppingBag className="size-4" />
+              <span>Add to Atelier Bag</span>
+            </button>
+
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wider font-medium transition-all shadow-xs cursor-pointer"
-            >
-              <MessageCircle className="size-4" />
-              <span>Inquire via WhatsApp</span>
-            </a>
-
-            <button
-              type="button"
-              onClick={onOpenAppointment}
               className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl border border-border bg-card hover:bg-muted text-foreground text-xs uppercase tracking-wider font-medium transition-all cursor-pointer"
             >
-              <Calendar className="size-3.5 text-muted-foreground" />
-              <span>Book Private Viewing</span>
-            </button>
+              <MessageCircle className="size-4" />
+              <span>WhatsApp Inquire</span>
+            </a>
           </div>
 
           <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground font-mono">
-            <span>Showroom: Saddar, Karachi</span>
+            <button
+              type="button"
+              onClick={onOpenAppointment}
+              className="inline-flex items-center gap-1 hover:text-foreground transition-colors cursor-pointer underline underline-offset-2"
+            >
+              <Calendar className="size-3" />
+              <span>Book Showroom Viewing in Saddar</span>
+            </button>
+
             <button
               type="button"
               onClick={onOpenInquiry}

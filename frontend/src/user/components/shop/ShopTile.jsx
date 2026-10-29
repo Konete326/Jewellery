@@ -9,6 +9,7 @@ export function ShopTile({
   active,
   position = 'bottom',
   priority = false,
+  onAddToCart,
   className
 }) {
   if (!piece) return null;
@@ -55,6 +56,7 @@ export function ShopTile({
         title={title}
         subtitle={category}
         position={position}
+        onAddToCart={onAddToCart ? () => onAddToCart(piece) : undefined}
       />
     </div>
   );

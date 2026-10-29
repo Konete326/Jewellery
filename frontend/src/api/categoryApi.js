@@ -13,16 +13,18 @@ export const fetchCategoryById = async (id) => {
 };
 
 export const createCategory = async (data) => {
+  const isForm = data instanceof FormData;
   return apiClient(ENDPOINTS.CATEGORIES, {
     method: 'POST',
-    body: JSON.stringify(data)
+    body: isForm ? data : JSON.stringify(data)
   });
 };
 
 export const updateCategory = async (id, data) => {
+  const isForm = data instanceof FormData;
   return apiClient(ENDPOINTS.CATEGORY_BY_ID(id), {
     method: 'PUT',
-    body: JSON.stringify(data)
+    body: isForm ? data : JSON.stringify(data)
   });
 };
 

@@ -24,3 +24,4 @@ export function ShopGridItem({ className, children, ...props }) {
 }
 
 ShopGrid.Item = ShopGridItem;
+

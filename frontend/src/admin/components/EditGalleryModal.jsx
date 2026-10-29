@@ -1,12 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { X, Gem, Loader2, Save } from 'lucide-react';
 import { JEWELLERY_CATEGORIES } from '@/constants/categories';
+import { fetchCategories } from '@/api/categoryApi';
 
 export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
   const [title, setTitle] = useState('');
+  const [categoriesList, setCategoriesList] = useState(JEWELLERY_CATEGORIES);
   const [category, setCategory] = useState(JEWELLERY_CATEGORIES[0]);
   const [description, setDescription] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchCategories({ isActive: true })
+      .then((res) => {
+        if (!isMounted) return;
+        const list = res?.data || [];
+        if (list.length > 0) {
+          const names = list.map((c) => c.name);
+          setCategoriesList((prev) => {
+            const currentCat = item?.category;
+            if (currentCat && !names.includes(currentCat)) {
+              return [currentCat, ...names];
+            }
+            return names;
+          });
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, [item]);
 
   useEffect(() => {
     if (item) {
@@ -106,7 +131,7 @@ export function EditGalleryModal({ isOpen, onClose, onSave, item, loading }) {
               onChange={(e) => setCategory(e.target.value)}
               className="w-full h-10 px-3 rounded-lg border border-border bg-background text-foreground text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 cursor-pointer"
             >
-              {JEWELLERY_CATEGORIES.map((cat) => (
+              {categoriesList.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
                 </option>

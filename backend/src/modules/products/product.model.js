@@ -11,17 +11,28 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      lowercase: true
+      lowercase: true,
+      trim: true
     },
     category: {
       type: String,
       required: true,
-      enum: ['Rings', 'Necklaces', 'Bracelets', 'Earrings', 'Bespoke']
+      trim: true
     },
     metal: {
       type: String,
-      required: true,
-      enum: ['24K Gold', '22K Gold', '18K White Gold', '18K Rose Gold', 'Platinum']
+      trim: true,
+      default: '22K Gold'
+    },
+    hallmark: {
+      type: String,
+      trim: true,
+      default: 'AU · 916.6'
+    },
+    weight: {
+      type: String,
+      trim: true,
+      default: ''
     },
     price: {
       type: Number,
@@ -33,13 +44,18 @@ const productSchema = new mongoose.Schema(
       default: 1,
       min: 0
     },
+    isPublished: {
+      type: Boolean,
+      default: true
+    },
     isFeatured: {
       type: Boolean,
       default: false
     },
     description: {
       type: String,
-      required: true
+      trim: true,
+      default: ''
     },
     images: {
       type: [String],
