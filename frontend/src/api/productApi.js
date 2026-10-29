@@ -3,37 +3,43 @@ import { ENDPOINTS } from './endpoints.js';
 
 export const fetchProducts = async (params = {}) => {
   const query = new URLSearchParams();
-  if (params.category && params.category !== 'All') query.append('category', params.category);
-  if (params.metal && params.metal !== 'All Metals') query.append('metal', params.metal);
-  if (params.page) query.append('page', params.page);
-  if (params.limit) query.append('limit', params.limit);
-
-  const queryString = query.toString();
-  const endpoint = queryString ? `${ENDPOINTS.PRODUCTS}?${queryString}` : ENDPOINTS.PRODUCTS;
-  return apiClient(endpoint);
+  if (params.category && params.category !== 'all') query.set('category', params.category);
+  if (params.isPublished !== undefined) query.set('isPublished', params.isPublished);
+  if (params.search) query.set('search', params.search);
+  if (params.page) query.set('page', params.page);
+  if (params.limit) query.set('limit', params.limit);
+  const qs = query.toString();
+  return apiClient(qs ? `${ENDPOINTS.PRODUCTS}?${qs}` : ENDPOINTS.PRODUCTS);
 };
 
-export const fetchProductBySlug = async (slug) => {
-  return apiClient(ENDPOINTS.PRODUCT_BY_SLUG(slug));
+export const fetchProductById = async (id) => {
+  return apiClient(ENDPOINTS.PRODUCT_BY_ID(id));
 };
 
-export const createProduct = async (productData) => {
+export const createProduct = async (data) => {
+  const isForm = data instanceof FormData;
   return apiClient(ENDPOINTS.PRODUCTS, {
     method: 'POST',
-    body: JSON.stringify(productData)
+    body: isForm ? data : JSON.stringify(data)
   });
 };
 
-export const updateProduct = async (id, productData) => {
-  return apiClient(`${ENDPOINTS.PRODUCTS}/${id}`, {
+export const updateProduct = async (id, data) => {
+  const isForm = data instanceof FormData;
+  return apiClient(ENDPOINTS.PRODUCT_BY_ID(id), {
     method: 'PUT',
-    body: JSON.stringify(productData)
+    body: isForm ? data : JSON.stringify(data)
+  });
+};
+
+export const toggleProductPublish = async (id) => {
+  return apiClient(ENDPOINTS.PRODUCT_TOGGLE_PUBLISH(id), {
+    method: 'PATCH'
   });
 };
 
 export const deleteProduct = async (id) => {
-  return apiClient(`${ENDPOINTS.PRODUCTS}/${id}`, {
+  return apiClient(ENDPOINTS.PRODUCT_BY_ID(id), {
     method: 'DELETE'
   });
 };
-

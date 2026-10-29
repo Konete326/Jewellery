@@ -1,15 +1,21 @@
 import { Router } from 'express';
-import { getProducts, getProductBySlug, createProduct, updateProduct, deleteProduct } from './product.controller.js';
-import { validateRequest } from '../../middlewares/validateRequest.js';
-import { createProductSchema, queryProductSchema } from './product.validation.js';
+import {
+  getProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  togglePublish,
+  deleteProduct
+} from './product.controller.js';
+import { upload } from '../../middlewares/upload.js';
 
 const router = Router();
 
-router.get('/', validateRequest(queryProductSchema), getProducts);
-router.get('/:slug', getProductBySlug);
-router.post('/', validateRequest(createProductSchema), createProduct);
-router.put('/:id', updateProduct);
+router.get('/', getProducts);
+router.get('/:id', getProductById);
+router.post('/', upload.array('images', 6), createProduct);
+router.put('/:id', upload.array('images', 6), updateProduct);
+router.patch('/:id/toggle-publish', togglePublish);
 router.delete('/:id', deleteProduct);
 
 export default router;
-

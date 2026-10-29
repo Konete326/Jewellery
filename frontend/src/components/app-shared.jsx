@@ -2,6 +2,7 @@ import {
   LayoutGridIcon,
   ImageIcon,
   LayersIcon,
+  ShoppingBagIcon,
   MessageSquareIcon,
   UsersIcon,
   StarIcon,
@@ -31,6 +32,12 @@ export const navGroups = [
         path: "/admin/categories",
         key: "categories",
         icon: <LayersIcon className="size-4" />
+      },
+      {
+        title: "Products",
+        path: "/admin/products",
+        key: "products",
+        icon: <ShoppingBagIcon className="size-4" />
       },
       {
         title: "Inquiries",

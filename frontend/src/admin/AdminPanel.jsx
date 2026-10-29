@@ -4,6 +4,7 @@ import { AppShell } from '@/components/app-shell'
 import { DashboardOverview } from './components/DashboardOverview'
 import { GalleryAdminView } from './components/GalleryAdminView'
 import { CategoriesAdminView } from './components/CategoriesAdminView'
+import { ProductsAdminView } from './components/ProductsAdminView'
 import { InquiriesAdminView } from './components/InquiriesAdminView'
 import { UsersAdminView } from './components/UsersAdminView'
 import { ReviewsAdminView } from './components/ReviewsAdminView'
@@ -60,6 +61,8 @@ export function AdminPanel() {
         return <GalleryAdminView />
       case 'categories':
         return <CategoriesAdminView />
+      case 'products':
+        return <ProductsAdminView />
       case 'reviews':
       case 'appraisals':
         return <ReviewsAdminView />
