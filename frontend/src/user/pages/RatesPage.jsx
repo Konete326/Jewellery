@@ -5,7 +5,6 @@ import { Footer } from '@/user/components/Footer';
 import { ratesApi } from '@/api/ratesApi';
 import {
   RatesHero,
-  RatesCardsGrid,
   RatesTableSection
 } from '@/user/components/rates';
 import { updatePageSEO } from '@/utils/seo';
@@ -119,8 +118,6 @@ export default function RatesPage() {
           onRefresh={handleRefresh}
           isRefreshing={isRefreshing}
         />
-
-        <RatesCardsGrid rates={rates} />
 
         <RatesTableSection rates={rates} />
       </main>
