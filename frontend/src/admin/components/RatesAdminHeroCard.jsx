@@ -76,49 +76,49 @@ export function RatesAdminHeroCard({ rates, onSaveOverride, isSaving }) {
   };
 
   return (
-    <div className="rounded-2xl border border-border/80 bg-card p-5 sm:p-6 shadow-xs space-y-5">
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="p-3.5 rounded-xl border border-border/70 bg-muted/30">
+    <div className="rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-xs space-y-3.5">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+        <div className="p-3 rounded-xl border border-border/70 bg-muted/30">
           <span className="text-[10px] font-mono uppercase text-muted-foreground block mb-0.5">
             24K Gold / Tola
           </span>
-          <span className="text-lg font-serif font-semibold text-foreground block">
+          <span className="text-base sm:text-lg font-serif font-semibold text-foreground block">
             {formatPkr(gold['24K']?.tola)}
           </span>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-border/70 bg-muted/30">
+        <div className="p-3 rounded-xl border border-border/70 bg-muted/30">
           <span className="text-[10px] font-mono uppercase text-muted-foreground block mb-0.5">
             22K Gold / Tola
           </span>
-          <span className="text-lg font-serif font-semibold text-foreground block">
+          <span className="text-base sm:text-lg font-serif font-semibold text-foreground block">
             {formatPkr(gold['22K']?.tola)}
           </span>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-border/70 bg-muted/30">
+        <div className="p-3 rounded-xl border border-border/70 bg-muted/30">
           <span className="text-[10px] font-mono uppercase text-muted-foreground block mb-0.5">
             21K Gold / Tola
           </span>
-          <span className="text-lg font-serif font-semibold text-foreground block">
+          <span className="text-base sm:text-lg font-serif font-semibold text-foreground block">
             {formatPkr(gold['21K']?.tola)}
           </span>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-border/70 bg-muted/30">
+        <div className="p-3 rounded-xl border border-border/70 bg-muted/30">
           <span className="text-[10px] font-mono uppercase text-muted-foreground block mb-0.5">
             18K Gold / Tola
           </span>
-          <span className="text-lg font-serif font-semibold text-foreground block">
+          <span className="text-base sm:text-lg font-serif font-semibold text-foreground block">
             {formatPkr(gold['18K']?.tola || Math.round(currentGold24 * (18 / 24)))}
           </span>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-border/70 bg-muted/30">
+        <div className="p-3 rounded-xl border border-border/70 bg-muted/30">
           <span className="text-[10px] font-mono uppercase text-muted-foreground block mb-0.5">
             Silver / Tola
           </span>
-          <span className="text-lg font-serif font-semibold text-foreground block">
+          <span className="text-base sm:text-lg font-serif font-semibold text-foreground block">
             {formatPkr(silver['22K']?.tola || currentSilver24)}
           </span>
         </div>

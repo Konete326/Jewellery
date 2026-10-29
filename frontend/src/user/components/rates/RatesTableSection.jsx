@@ -110,7 +110,15 @@ export function RatesTableSection({ rates }) {
         </div>
 
         <div className="text-xs font-mono text-muted-foreground">
-          Standard: <span className="text-foreground font-semibold">1 Tola = 11.664 Grams</span>
+          {activeTab === 'gold' ? (
+            <span>
+              Gold Standard: <strong className="text-foreground font-semibold">1 Tola = 11.664 Grams</strong>
+            </span>
+          ) : (
+            <span>
+              Silver Standard: <strong className="text-foreground font-semibold">925 Sterling & 999 Fine Silver</strong>
+            </span>
+          )}
         </div>
       </div>
 
