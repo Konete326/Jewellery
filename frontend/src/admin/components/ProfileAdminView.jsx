@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { LumaSpin } from '@/components/ui/luma-spin';
 import { ProfileIdentityBentoCard } from './ProfileIdentityBentoCard';
 import { ProfileContactBentoCard } from './ProfileContactBentoCard';
@@ -8,7 +7,7 @@ import { ProfileLocationBentoCard } from './ProfileLocationBentoCard';
 import { ProfileSecurityBentoCard } from './ProfileSecurityBentoCard';
 import { storeProfileApi, getCachedStoreProfile } from '@/api/storeProfileApi';
 import { toast } from 'sonner';
-import { Save, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Save, RefreshCw } from 'lucide-react';
 
 export function ProfileAdminView() {
   const [formData, setFormData] = useState(() => {
@@ -91,6 +90,14 @@ export function ProfileAdminView() {
     }
   };
 
+  const handleReload = () => {
+    storeProfileApi.getProfile().then((res) => {
+      if (res?.data) setFormData(res.data);
+      setHasChanges(false);
+      toast.success('Profile reloaded');
+    });
+  };
+
   if (loading && !formData.name) {
     return (
       <div className="py-24 flex items-center justify-center">
@@ -100,41 +107,32 @@ export function ProfileAdminView() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-card/60 backdrop-blur-md p-5 sm:p-6 rounded-xl border border-border/80 shadow-xs">
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/70">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <Badge variant="outline" className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-              Boutique Settings
-            </Badge>
+          <div className="flex items-center gap-2 mb-0.5">
+            <h1 className="text-2xl font-serif font-light text-foreground tracking-tight">
+              Atelier Profile
+            </h1>
             {hasChanges && (
               <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
                 Unsaved Changes
               </span>
             )}
           </div>
-          <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-foreground font-serif">
-            Atelier Profile & Channels
-          </h2>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-            Configure boutique identity, contact routing, and hallmark credentials in a unified bento grid.
+          <p className="text-xs text-muted-foreground font-mono">
+            Manage boutique identity, contact channels, and hallmark credentials
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2">
           <Button
             type="button"
             variant="outline"
             size="sm"
-            onClick={() => {
-              storeProfileApi.getProfile().then((res) => {
-                if (res?.data) setFormData(res.data);
-                setHasChanges(false);
-                toast.success('Profile reloaded');
-              });
-            }}
+            onClick={handleReload}
             disabled={saving}
-            className="cursor-pointer text-xs h-9 px-3 gap-1.5"
+            className="cursor-pointer text-xs font-mono h-9 px-3 gap-1.5"
           >
             <RefreshCw className="size-3.5" />
             <span>Reload</span>
@@ -145,7 +143,7 @@ export function ProfileAdminView() {
             size="sm"
             onClick={handleSave}
             disabled={saving}
-            className="cursor-pointer text-xs h-9 px-4 gap-1.5 bg-foreground text-background hover:bg-neutral-800 shadow-xs"
+            className="cursor-pointer text-xs font-mono h-9 px-4 gap-1.5 bg-foreground text-background hover:bg-neutral-800 shadow-xs"
           >
             {saving ? (
               <>
@@ -190,4 +188,3 @@ export function ProfileAdminView() {
     </div>
   );
 }
-
