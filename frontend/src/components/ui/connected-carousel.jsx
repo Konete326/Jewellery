@@ -225,6 +225,8 @@ export function CalendlyCarousel({
           const isActive = offset === 0;
 
           if (!item) return null;
+          if (total === 1 && offset !== 0) return null;
+          if (total === 2 && (offset < -1 || offset > 1)) return null;
 
           const getVariant = () => {
             if (tier === "mobile") {
