@@ -35,5 +35,8 @@ export const ENDPOINTS = {
   RATES_BROADCAST_SEND: '/rates/broadcast/send',
   PAYMENT_ACCOUNTS: '/payment-accounts',
   PAYMENT_ACCOUNTS_ACTIVE: '/payment-accounts/active',
-  PAYMENT_ACCOUNT_BY_ID: (id) => `/payment-accounts/${id}`
+  PAYMENT_ACCOUNT_BY_ID: (id) => `/payment-accounts/${id}`,
+  CATEGORIES: '/categories',
+  CATEGORY_BY_ID: (id) => `/categories/${id}`,
+  CATEGORY_TOGGLE_STATUS: (id) => `/categories/${id}/toggle-status`
 };

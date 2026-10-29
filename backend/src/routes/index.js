@@ -8,6 +8,7 @@ import userRoutes from '../modules/users/user.routes.js';
 import rateRoutes from '../modules/rates/rate.routes.js';
 import paymentAccountRoutes from '../modules/payment-accounts/paymentAccount.routes.js';
 import storeProfileRoutes from '../modules/store-profile/storeProfile.routes.js';
+import categoryRoutes from '../modules/categories/category.routes.js';
 
 const apiRouter = Router();
 
@@ -20,5 +21,6 @@ apiRouter.use('/users', userRoutes);
 apiRouter.use('/rates', rateRoutes);
 apiRouter.use('/payment-accounts', paymentAccountRoutes);
 apiRouter.use('/store-profile', storeProfileRoutes);
+apiRouter.use('/categories', categoryRoutes);
 
 export default apiRouter;

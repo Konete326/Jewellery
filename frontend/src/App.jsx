@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { UserPanel } from '@/user/UserPanel'
+import { ShopPage } from '@/user/pages/ShopPage'
 import { GalleryPage } from '@/user/pages/GalleryPage'
 import { GalleryDetailPage } from '@/user/pages/GalleryDetailPage'
 import { ReviewsPage } from '@/user/pages/ReviewsPage'
@@ -29,9 +30,10 @@ export default function App() {
         <GoogleOneTapOverlay />
         <Routes>
           <Route path="/" element={<UserPanel />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/collections" element={<GalleryPage />} />
-          <Route path="/collections/:category" element={<GalleryPage />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/gallery" element={<ShopPage />} />
+          <Route path="/collections" element={<ShopPage />} />
+          <Route path="/collections/:category" element={<ShopPage />} />
           <Route path="/gallery/:id" element={<GalleryDetailPage />} />
           <Route path="/reviews" element={<ReviewsPage />} />
           <Route path="/rates" element={<RatesPage />} />

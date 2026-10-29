@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { AppShell } from '@/components/app-shell'
 import { DashboardOverview } from './components/DashboardOverview'
 import { GalleryAdminView } from './components/GalleryAdminView'
+import { CategoriesAdminView } from './components/CategoriesAdminView'
 import { InquiriesAdminView } from './components/InquiriesAdminView'
 import { UsersAdminView } from './components/UsersAdminView'
 import { ReviewsAdminView } from './components/ReviewsAdminView'
@@ -57,6 +58,8 @@ export function AdminPanel() {
         return <InquiriesAdminView />
       case 'gallery':
         return <GalleryAdminView />
+      case 'categories':
+        return <CategoriesAdminView />
       case 'reviews':
       case 'appraisals':
         return <ReviewsAdminView />

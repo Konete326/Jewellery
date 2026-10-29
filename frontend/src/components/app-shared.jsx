@@ -1,6 +1,7 @@
 import {
   LayoutGridIcon,
   ImageIcon,
+  LayersIcon,
   MessageSquareIcon,
   UsersIcon,
   StarIcon,
@@ -24,6 +25,12 @@ export const navGroups = [
         path: "/admin/gallery",
         key: "gallery",
         icon: <ImageIcon className="size-4" />
+      },
+      {
+        title: "Categories",
+        path: "/admin/categories",
+        key: "categories",
+        icon: <LayersIcon className="size-4" />
       },
       {
         title: "Inquiries",
