@@ -15,18 +15,18 @@ export function LinkItem({
 		<>
 			<div
 				className={cn(
-					"flex aspect-square size-10 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-800 dark:text-amber-300 shrink-0 transition-all duration-200 group-hover:bg-amber-500/25 group-hover:text-amber-950 dark:group-hover:text-amber-200 group-hover:border-amber-500/50 group-hover:scale-105",
-					"[&_svg:not([class*='size-'])]:size-4"
+					"flex aspect-square size-8 items-center justify-center rounded-lg border border-border/70 bg-muted/30 text-foreground shrink-0 transition-colors group-hover:bg-muted group-hover:text-foreground",
+					"[&_svg:not([class*='size-'])]:size-3.5"
 				)}
 			>
 				{icon}
 			</div>
 			<div className="flex flex-col items-start justify-center min-w-0">
-				<span className="font-medium text-xs sm:text-sm text-foreground tracking-wide group-hover:text-[#2d3435] dark:group-hover:text-amber-200 transition-colors">
+				<span className="font-medium text-xs text-foreground tracking-wide group-hover:text-foreground transition-colors">
 					{label}
 				</span>
 				{description && (
-					<span className="line-clamp-1 text-muted-foreground text-[11px] font-light leading-snug">
+					<span className="line-clamp-1 text-muted-foreground text-[10px] font-light leading-snug">
 						{description}
 					</span>
 				)}
@@ -35,7 +35,7 @@ export function LinkItem({
 	);
 
 	const linkClasses = cn(
-		"group flex items-center gap-3 p-2.5 rounded-xl transition-all duration-200 hover:bg-amber-500/8 dark:hover:bg-amber-500/10 border border-transparent hover:border-amber-500/20",
+		"group flex items-center gap-2.5 p-2 rounded-lg transition-colors hover:bg-muted/50 border border-transparent hover:border-border/40",
 		className
 	);
 

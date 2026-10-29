@@ -42,8 +42,10 @@ export function PaymentAccountModal({
   const duplicateIbanMatch = useMemo(() => {
     const cleanCurrentIban = formData.iban ? formData.iban.replace(/\s+/g, '').toUpperCase() : '';
     if (!cleanCurrentIban || cleanCurrentIban.length < 8) return null;
+    const currentId = account?._id || account?.id;
     return existingAccounts.find((item) => {
-      if (account && String(item._id) === String(account._id)) return false;
+      const targetId = item?._id || item?.id;
+      if (currentId && targetId && String(targetId) === String(currentId)) return false;
       const otherIban = item.iban ? String(item.iban).replace(/\s+/g, '').toUpperCase() : '';
       return otherIban && otherIban === cleanCurrentIban;
     });
@@ -52,8 +54,10 @@ export function PaymentAccountModal({
   const duplicateAccountMatch = useMemo(() => {
     const cleanCurrentAcc = formData.accountNumber ? String(formData.accountNumber).trim() : '';
     if (!cleanCurrentAcc || cleanCurrentAcc.length < 4) return null;
+    const currentId = account?._id || account?.id;
     return existingAccounts.find((item) => {
-      if (account && String(item._id) === String(account._id)) return false;
+      const targetId = item?._id || item?.id;
+      if (currentId && targetId && String(targetId) === String(currentId)) return false;
       const otherAcc = item.accountNumber ? String(item.accountNumber).trim() : '';
       return otherAcc && otherAcc === cleanCurrentAcc;
     });
