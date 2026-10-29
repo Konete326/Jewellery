@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, Pencil, Trash2, Star, CheckCircle, XCircle, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { BankBadge } from '@/components/bank-badge';
+import { BankLogo } from '@/components/BankLogo';
 import { toast } from 'sonner';
 
 export function PaymentAccountCard({
@@ -29,33 +29,46 @@ export function PaymentAccountCard({
 
   return (
     <div
-      className={`relative rounded-2xl border p-5 transition-all flex flex-col justify-between ${
+      className={`rounded-2xl border p-5 transition-all flex flex-col justify-between ${
         account.isDefault
           ? 'border-foreground/30 bg-muted/20 shadow-xs'
-          : 'border-border/80 bg-card hover:border-border shadow-xs'
+          : 'border-border/70 bg-card hover:border-border shadow-xs'
       } ${!account.isActive ? 'opacity-65' : ''}`}
     >
       <div>
-        <div className="flex items-center justify-between gap-2 mb-3 pb-3 border-b border-border/70">
-          <span className="text-xs font-mono text-muted-foreground uppercase">
-            {account.accountType || 'Bank Account'}
-          </span>
+        <div className="flex items-center justify-between gap-3 mb-4 pb-3.5 border-b border-border/60">
+          <div className="flex items-center gap-3 min-w-0">
+            <BankLogo
+              name={account.bankName}
+              type={account.accountType}
+              logoUrl={account.logoUrl}
+              className="size-9 rounded-xl shadow-xs shrink-0"
+            />
+            <div className="min-w-0">
+              <h4 className="font-serif text-base font-semibold text-foreground tracking-tight truncate">
+                {account.bankName}
+              </h4>
+              <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block">
+                {account.accountType || 'Bank Account'}
+              </span>
+            </div>
+          </div>
 
           <div className="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
             {account.isDefault && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-medium text-amber-900 dark:text-amber-200 bg-amber-500/10 border border-amber-500/25 px-2 py-0.5 rounded-full">
-                <Star className="size-3 fill-amber-500 text-amber-500" />
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-foreground bg-muted border border-border px-2 py-0.5 rounded-full font-medium">
+                <Star className="size-2.5 fill-foreground text-foreground" />
                 Primary
               </span>
             )}
             {account.isInstantSettlement && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-muted-foreground border border-border px-2 py-0.5 rounded-full">
                 <Zap className="size-2.5" />
-                Instant Settlement
+                Instant
               </span>
             )}
             <span
-              className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border ${
+              className={`inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border ${
                 account.isActive
                   ? 'text-foreground bg-muted/60 border-border/80'
                   : 'text-muted-foreground bg-muted/20 border-border/60'
@@ -63,7 +76,7 @@ export function PaymentAccountCard({
             >
               <span
                 className={`size-1.5 rounded-full ${
-                  account.isActive ? 'bg-amber-600' : 'bg-muted-foreground'
+                  account.isActive ? 'bg-foreground' : 'bg-muted-foreground/60'
                 }`}
               />
               {account.isActive ? 'Active' : 'Inactive'}
@@ -71,27 +84,24 @@ export function PaymentAccountCard({
           </div>
         </div>
 
-        <div className="mb-3">
-          <div className="flex items-center justify-between gap-2">
-            <h4 className="font-serif text-lg font-semibold text-foreground tracking-tight">
-              {account.bankName}
-            </h4>
-            <BankBadge name={account.bankName} type={account.accountType} />
-          </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Title: <strong className="text-foreground font-medium">{account.accountTitle}</strong>
+        <div className="mb-3.5">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
+            Account Beneficiary
+          </span>
+          <p className="text-sm font-medium text-foreground tracking-tight mt-0.5">
+            {account.accountTitle}
           </p>
         </div>
 
         <div className="space-y-2 text-xs">
           {account.accountNumber ? (
-            <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 flex items-center justify-between gap-3">
+            <div className="p-2.5 rounded-xl bg-muted/30 border border-border/60 flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
                   {account.accountType === 'Raast ID'
-                    ? 'Raast ID / Number'
+                    ? 'Raast ID / Mobile'
                     : account.accountType === 'Digital Wallet'
-                    ? 'Wallet Mobile Number'
+                    ? 'Wallet Number'
                     : 'Account Number'}
                 </span>
                 <span className="font-mono text-xs sm:text-sm font-semibold text-foreground truncate block">
@@ -115,7 +125,7 @@ export function PaymentAccountCard({
                 title="Copy Number"
               >
                 {copiedField === 'acc' ? (
-                  <Check className="size-3.5 text-amber-700" />
+                  <Check className="size-3.5 text-foreground" />
                 ) : (
                   <Copy className="size-3.5" />
                 )}
@@ -124,7 +134,7 @@ export function PaymentAccountCard({
           ) : null}
 
           {cleanIban ? (
-            <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 flex items-center justify-between gap-3">
+            <div className="p-2.5 rounded-xl bg-muted/30 border border-border/60 flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground block">
                   IBAN Number
@@ -140,7 +150,7 @@ export function PaymentAccountCard({
                 title="Copy Clean IBAN"
               >
                 {copiedField === 'iban' ? (
-                  <Check className="size-3.5 text-amber-700" />
+                  <Check className="size-3.5 text-foreground" />
                 ) : (
                   <Copy className="size-3.5" />
                 )}
@@ -150,7 +160,7 @@ export function PaymentAccountCard({
         </div>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-border/70 flex items-center justify-between gap-2 flex-wrap">
+      <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-1.5">
           {!account.isDefault && (
             <Button
@@ -159,9 +169,9 @@ export function PaymentAccountCard({
               size="sm"
               disabled={actionLoading}
               onClick={() => onSetDefault(account)}
-              className="h-7 px-2 text-[11px] cursor-pointer"
+              className="h-7 px-2 text-[11px] font-mono cursor-pointer"
             >
-              <Star className="size-3 mr-1 text-amber-600" />
+              <Star className="size-3 mr-1" />
               Make Primary
             </Button>
           )}
@@ -172,11 +182,11 @@ export function PaymentAccountCard({
             size="sm"
             disabled={actionLoading}
             onClick={() => onToggleStatus(account)}
-            className="h-7 px-2 text-[11px] cursor-pointer text-muted-foreground hover:text-foreground"
+            className="h-7 px-2 text-[11px] font-mono cursor-pointer text-muted-foreground hover:text-foreground"
           >
             {account.isActive ? (
               <>
-                <XCircle className="size-3 mr-1 text-rose-500" />
+                <XCircle className="size-3 mr-1 text-muted-foreground" />
                 Deactivate
               </>
             ) : (
@@ -195,7 +205,7 @@ export function PaymentAccountCard({
             size="sm"
             disabled={actionLoading}
             onClick={() => onEdit(account)}
-            className="h-7 px-2.5 text-[11px] cursor-pointer"
+            className="h-7 px-2.5 text-[11px] font-mono cursor-pointer"
           >
             <Pencil className="size-3 mr-1" />
             Edit
@@ -207,7 +217,8 @@ export function PaymentAccountCard({
             size="sm"
             disabled={actionLoading}
             onClick={() => onDelete(account)}
-            className="h-7 px-2 text-[11px] text-rose-600 hover:text-rose-700 hover:bg-rose-500/10 cursor-pointer"
+            className="h-7 px-2 text-[11px] text-muted-foreground hover:text-destructive hover:bg-destructive/10 cursor-pointer"
+            title="Delete Account"
           >
             <Trash2 className="size-3.5" />
           </Button>

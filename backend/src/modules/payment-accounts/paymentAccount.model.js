@@ -42,6 +42,11 @@ const paymentAccountSchema = new mongoose.Schema(
       trim: true,
       default: ''
     },
+    logoUrl: {
+      type: String,
+      trim: true,
+      default: ''
+    },
     isInstantSettlement: {
       type: Boolean,
       default: false

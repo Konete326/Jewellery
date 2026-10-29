@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { X, Landmark, Check, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BankLogo } from '@/components/BankLogo';
 
 const ACCOUNT_TYPES = [
   'Bank Account',
@@ -31,6 +32,7 @@ export function PaymentAccountModal({
     accountTitle: 'Khalil & Sons Jewellers',
     accountNumber: '',
     iban: '',
+    logoUrl: '',
     accountType: 'Bank Account',
     isDefault: false,
     isInstantSettlement: false,
@@ -70,6 +72,7 @@ export function PaymentAccountModal({
         accountTitle: account.accountTitle || 'Khalil & Sons Jewellers',
         accountNumber: account.accountNumber || '',
         iban: account.iban ? String(account.iban).replace(/\s+/g, '').toUpperCase() : '',
+        logoUrl: account.logoUrl || '',
         accountType: account.accountType || 'Bank Account',
         isDefault: Boolean(account.isDefault),
         isInstantSettlement: Boolean(account.isInstantSettlement),
@@ -81,6 +84,7 @@ export function PaymentAccountModal({
         accountTitle: 'Khalil & Sons Jewellers',
         accountNumber: '',
         iban: '',
+        logoUrl: '',
         accountType: 'Bank Account',
         isDefault: false,
         isInstantSettlement: false,
