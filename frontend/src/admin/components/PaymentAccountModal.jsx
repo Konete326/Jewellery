@@ -180,7 +180,8 @@ export function PaymentAccountModal({
       bankName: formData.bankName.trim(),
       accountTitle: formData.accountTitle.trim(),
       accountNumber: formData.accountNumber.trim(),
-      iban: formData.iban.replace(/\s+/g, '').toUpperCase()
+      iban: formData.iban.replace(/\s+/g, '').toUpperCase(),
+      logoUrl: formData.logoUrl?.trim() || ''
     });
   };
 
@@ -376,6 +377,33 @@ export function PaymentAccountModal({
               Spaces and hyphens in IBAN are automatically removed and saved in standard clean uppercase format.
             </p>
           )}
+
+          <div className="space-y-1.5 pt-1">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
+                Provider Logo (Auto-detected or Custom URL)
+              </label>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] text-muted-foreground font-mono">Preview:</span>
+                <BankLogo
+                  name={formData.bankName}
+                  type={formData.accountType}
+                  logoUrl={formData.logoUrl}
+                  className="size-5 rounded"
+                />
+              </div>
+            </div>
+            <input
+              type="url"
+              value={formData.logoUrl || ''}
+              onChange={(e) => handleChange('logoUrl', e.target.value)}
+              placeholder="e.g. Cloudinary image URL (optional)"
+              className="w-full bg-background border border-input rounded-xl px-3.5 py-2 text-xs font-mono text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-foreground/30"
+            />
+            <p className="text-[10px] text-muted-foreground font-light">
+              Default uses official vector badge for EasyPaisa, JazzCash, Meezan, HBL, Bank Alfalah, SadaPay, etc.
+            </p>
+          </div>
 
           <div className="pt-2 border-t border-border/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-3">
