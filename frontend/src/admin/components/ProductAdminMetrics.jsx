@@ -4,7 +4,12 @@ export function ProductAdminMetrics({ products = [] }) {
   const totalProducts = products.length;
   const publishedCount = products.filter((p) => p.isPublished).length;
   const totalStockUnits = products.reduce((sum, p) => sum + (Number(p.stock) || 0), 0);
-  const totalValuation = products.reduce((sum, p) => sum + ((Number(p.price) || 0) * (Number(p.stock) || 0)), 0);
+  const totalGoldGrams = products.reduce((sum, p) => sum + ((Number(p.netWeight) || 0) * (Number(p.stock) || 0)), 0);
+  const totalValuation = products.reduce((sum, p) => {
+    const unitPrice = Number(p.calculatedPrice) || Number(p.price) || 0;
+    const qty = Number(p.stock) || 0;
+    return sum + (unitPrice * qty);
+  }, 0);
 
   const formatPKR = (amount) => {
     return new Intl.NumberFormat('en-PK', {
@@ -53,17 +58,17 @@ export function ProductAdminMetrics({ products = [] }) {
       <div className="p-4 rounded-xl border border-border/80 bg-card shadow-xs">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
-            Stock Units
+            Gold on Hand
           </span>
-          <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-muted/60 text-foreground">
-            ON HAND
+          <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300">
+            {totalStockUnits} UNITS
           </span>
         </div>
         <div className="mt-2 flex items-baseline gap-2">
-          <span className="font-serif text-2xl font-bold tracking-tight text-foreground">
-            {totalStockUnits}
+          <span className="font-mono text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+            {totalGoldGrams.toFixed(2)}g
           </span>
-          <span className="text-xs text-muted-foreground">Available Units</span>
+          <span className="text-xs text-muted-foreground">Pure Au</span>
         </div>
       </div>
 
@@ -72,8 +77,8 @@ export function ProductAdminMetrics({ products = [] }) {
           <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground">
             Inventory Value
           </span>
-          <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300">
-            AU · ESTIMATE
+          <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded border border-border bg-muted/60 text-foreground">
+            LIVE SARAFA
           </span>
         </div>
         <div className="mt-2 truncate">
@@ -85,4 +90,3 @@ export function ProductAdminMetrics({ products = [] }) {
     </div>
   );
 }
-

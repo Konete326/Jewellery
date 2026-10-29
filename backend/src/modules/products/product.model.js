@@ -7,6 +7,11 @@ const productSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
+    sku: {
+      type: String,
+      trim: true,
+      default: ''
+    },
     slug: {
       type: String,
       required: true,
@@ -19,24 +24,39 @@ const productSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
-    metal: {
+    purity: {
       type: String,
-      trim: true,
-      default: '22K Gold'
+      enum: ['24K', '22K', '21K', '18K'],
+      default: '22K'
     },
-    hallmark: {
-      type: String,
-      trim: true,
-      default: 'AU · 916.6'
+    grossWeight: {
+      type: Number,
+      default: 0,
+      min: 0
     },
-    weight: {
-      type: String,
-      trim: true,
-      default: ''
+    netWeight: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+    makingCharges: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    wastagePercent: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    stoneCharges: {
+      type: Number,
+      default: 0,
+      min: 0
     },
     price: {
       type: Number,
-      required: true,
+      default: 0,
       min: 0
     },
     stock: {
@@ -44,13 +64,14 @@ const productSchema = new mongoose.Schema(
       default: 1,
       min: 0
     },
+    availability: {
+      type: String,
+      enum: ['In Stock', 'Made to Order', 'Out of Stock'],
+      default: 'In Stock'
+    },
     isPublished: {
       type: Boolean,
       default: true
-    },
-    isFeatured: {
-      type: Boolean,
-      default: false
     },
     description: {
       type: String,

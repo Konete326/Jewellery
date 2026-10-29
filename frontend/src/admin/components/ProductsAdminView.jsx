@@ -22,6 +22,7 @@ export function ProductsAdminView() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [availabilityFilter, setAvailabilityFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -120,16 +121,18 @@ export function ProductsAdminView() {
       if (statusFilter === 'Published' && !prod.isPublished) return false;
       if (statusFilter === 'Hidden' && prod.isPublished) return false;
       if (selectedCategory !== 'All' && prod.category !== selectedCategory) return false;
+      if (availabilityFilter !== 'All' && prod.availability !== availabilityFilter) return false;
 
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase().trim();
       const title = (prod.title || '').toLowerCase();
+      const sku = (prod.sku || '').toLowerCase();
       const cat = (prod.category || '').toLowerCase();
-      const metal = (prod.metal || '').toLowerCase();
-      const hallmark = (prod.hallmark || '').toLowerCase();
-      return title.includes(q) || cat.includes(q) || metal.includes(q) || hallmark.includes(q);
+      const purity = (prod.purity || '').toLowerCase();
+      const avail = (prod.availability || '').toLowerCase();
+      return title.includes(q) || sku.includes(q) || cat.includes(q) || purity.includes(q) || avail.includes(q);
     });
-  }, [products, statusFilter, selectedCategory, searchQuery]);
+  }, [products, statusFilter, selectedCategory, availabilityFilter, searchQuery]);
 
   const publishedCount = products.filter((p) => p.isPublished).length;
   const hiddenCount = products.length - publishedCount;
@@ -144,14 +147,14 @@ export function ProductsAdminView() {
             </span>
             <span className="text-muted-foreground/40">•</span>
             <span className="text-[10px] font-mono tracking-wider text-muted-foreground">
-              Certified Masterpieces
+              Dynamic Gold Calculation
             </span>
           </div>
           <h2 className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-foreground">
             Products Management
           </h2>
           <p className="text-xs text-muted-foreground">
-            Add, edit, manage images, publish or hide jewellery pieces and sync live with atelier categories
+            Manage jewellery pieces, weights, making & stone charges with real-time Sarafa bullion rate pricing
           </p>
         </div>
 
@@ -186,7 +189,7 @@ export function ProductsAdminView() {
             <Search className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search products by title, metal standard, or category..."
+              placeholder="Search by title, SKU code, category, or purity..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-1.5 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
@@ -203,6 +206,17 @@ export function ProductsAdminView() {
               {categoriesList.map((cat) => (
                 <option key={cat} value={cat}>{cat}</option>
               ))}
+            </select>
+
+            <select
+              value={availabilityFilter}
+              onChange={(e) => setAvailabilityFilter(e.target.value)}
+              className="h-8 px-2.5 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 cursor-pointer"
+            >
+              <option value="All">All Statuses</option>
+              <option value="In Stock">In Stock</option>
+              <option value="Made to Order">Made to Order</option>
+              <option value="Out of Stock">Out of Stock</option>
             </select>
 
             <div className="flex items-center gap-1 p-0.5 rounded-lg bg-muted border border-border shrink-0">
@@ -238,9 +252,9 @@ export function ProductsAdminView() {
             <ShoppingBag className="size-8 text-muted-foreground/40 mb-2" />
             <h4 className="text-sm font-medium text-foreground">No products found</h4>
             <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-              {searchQuery || selectedCategory !== 'All' || statusFilter !== 'All'
-                ? 'Try adjusting your search criteria or category filter.'
-                : 'No products cataloged yet. Click "+ Add Product" to publish your first piece.'}
+              {searchQuery || selectedCategory !== 'All' || statusFilter !== 'All' || availabilityFilter !== 'All'
+                ? 'Try adjusting your search criteria or filter selections.'
+                : 'No jewellery products registered yet. Click "+ Add Product" to publish your first piece.'}
             </p>
           </div>
         ) : (
@@ -285,4 +299,3 @@ export function ProductsAdminView() {
     </div>
   );
 }
-
