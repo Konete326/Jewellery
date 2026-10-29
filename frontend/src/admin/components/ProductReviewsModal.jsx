@@ -4,12 +4,14 @@ import { galleryApi } from '@/api/galleryApi';
 import { LumaSpin } from '@/components/ui/luma-spin';
 import { Button } from '@/components/ui/button';
 import { PatronMonogram } from '@/components/ui/PatronMonogram';
+import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { toast } from 'sonner';
 
 export function ProductReviewsModal({ isOpen, onClose, item, onReviewUpdated }) {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
+  const [reviewToDelete, setReviewToDelete] = useState(null);
 
   const pieceId = item?._id || item?.id;
 
@@ -39,8 +41,9 @@ export function ProductReviewsModal({ isOpen, onClose, item, onReviewUpdated }) 
 
   if (!isOpen || !item) return null;
 
-  const handleDeleteReview = async (reviewId) => {
-    if (!reviewId || !pieceId) return;
+  const handleConfirmDelete = async () => {
+    if (!reviewToDelete || !pieceId) return;
+    const reviewId = reviewToDelete._id;
     setDeletingId(reviewId);
     try {
       await galleryApi.deleteReview(pieceId, reviewId);
@@ -50,6 +53,7 @@ export function ProductReviewsModal({ isOpen, onClose, item, onReviewUpdated }) 
       if (onReviewUpdated) {
         onReviewUpdated(pieceId, updated);
       }
+      setReviewToDelete(null);
     } catch {
       toast.error('Failed to delete review');
     } finally {
@@ -76,12 +80,13 @@ export function ProductReviewsModal({ isOpen, onClose, item, onReviewUpdated }) 
   };
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
-      onClick={onClose}
-    >
+    <>
+      <div
+        role="dialog"
+        aria-modal="true"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
+        onClick={onClose}
+      >
       <div
         className="relative w-full max-w-2xl bg-card border border-border/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
@@ -231,13 +236,13 @@ export function ProductReviewsModal({ isOpen, onClose, item, onReviewUpdated }) 
 
                     <button
                       type="button"
-                      disabled={isDeleting}
-                      onClick={() => handleDeleteReview(rev._id)}
+                      disabled={Boolean(deletingId)}
+                      onClick={() => setReviewToDelete(rev)}
                       className="inline-flex items-center gap-1 text-[11px] text-rose-500 hover:text-rose-600 px-2 py-1 rounded hover:bg-rose-500/10 transition-colors cursor-pointer disabled:opacity-50"
                       title="Delete this appraisal"
                     >
                       <Trash2 className="size-3" />
-                      <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
+                      <span>Delete</span>
                     </button>
                   </div>
                 </div>
@@ -259,5 +264,16 @@ export function ProductReviewsModal({ isOpen, onClose, item, onReviewUpdated }) 
         </div>
       </div>
     </div>
-  );
-}
+
+        <ConfirmDeleteModal
+          isOpen={Boolean(reviewToDelete)}
+          onClose={() => setReviewToDelete(null)}
+          onConfirm={handleConfirmDelete}
+          title={reviewToDelete ? `Appraisal by ${reviewToDelete.userName || 'Valued Patron'}` : ''}
+          itemType="appraisal"
+          loading={Boolean(deletingId)}
+          zIndex="z-[60]"
+        />
+      </>
+    );
+  }

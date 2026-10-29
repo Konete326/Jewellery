@@ -1,11 +1,11 @@
 import React from 'react';
 import { X, AlertTriangle } from 'lucide-react';
 
-export function ConfirmDeleteModal({ isOpen, onClose, onConfirm, title, itemType = 'piece', loading }) {
+export function ConfirmDeleteModal({ isOpen, onClose, onConfirm, title, itemType = 'piece', loading, zIndex = 'z-50' }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className={`fixed inset-0 ${zIndex} flex items-center justify-center p-4`}>
       <button
         type="button"
         aria-label="Close dialog overlay"
