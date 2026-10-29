@@ -14,11 +14,12 @@ export const SORT_OPTIONS = [
 export function ShopCollectionsFilter({
   selectedCategory = 'all',
   onSelectCategory,
+  categories = JEWELLERY_CATEGORIES,
   countsByCategory = {},
   totalCount = 0,
   className
 }) {
-  const allCategories = ['all', ...JEWELLERY_CATEGORIES];
+  const allCategories = ['all', ...(categories && categories.length > 0 ? categories : JEWELLERY_CATEGORIES)];
 
   return (
     <nav className={cn('w-full', className)}>

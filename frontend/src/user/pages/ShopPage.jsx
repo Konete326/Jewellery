@@ -10,6 +10,8 @@ import { ShopThreeItemGrid } from '../components/shop/ShopThreeItemGrid';
 import { ShopCollectionsFilter, ShopSortFilter } from '../components/shop/ShopFilterSidebar';
 import { ShopSearchHeader } from '../components/shop/ShopSearchHeader';
 import { galleryApi } from '@/api/galleryApi';
+import { fetchCategories } from '@/api/categoryApi';
+import { JEWELLERY_CATEGORIES } from '@/constants/categories';
 import { updatePageSEO } from '@/utils/seo';
 import { broadcastCartUpdate, subscribeToTabSync } from '@/utils/tabSync';
 import { LumaSpin } from '@/components/ui/luma-spin';
@@ -31,6 +33,7 @@ export function ShopPage() {
   });
 
   const [galleryItems, setGalleryItems] = useState([]);
+  const [categoriesList, setCategoriesList] = useState(JEWELLERY_CATEGORIES);
   const [loading, setLoading] = useState(true);
 
   const initialCategory = routeCategory
@@ -78,12 +81,21 @@ export function ShopPage() {
     const loadAllMasterpieces = async () => {
       setLoading(true);
       try {
-        const res = await galleryApi.getAll({ limit: 120 });
+        const [galleryRes, catRes] = await Promise.allSettled([
+          galleryApi.getAll({ limit: 120 }),
+          fetchCategories({ isActive: true })
+        ]);
         if (!isMounted) return;
-        if (res?.data && Array.isArray(res.data)) {
-          setGalleryItems(res.data);
+        if (galleryRes.status === 'fulfilled' && galleryRes.value?.data && Array.isArray(galleryRes.value.data)) {
+          setGalleryItems(galleryRes.value.data);
         } else {
           setGalleryItems([]);
+        }
+        if (catRes.status === 'fulfilled' && catRes.value?.data && Array.isArray(catRes.value.data)) {
+          const names = catRes.value.data.map((c) => c.name);
+          if (names.length > 0) {
+            setCategoriesList(names);
+          }
         }
       } catch {
         if (isMounted) setGalleryItems([]);
@@ -92,7 +104,21 @@ export function ShopPage() {
       }
     };
 
+    const loadCategories = async () => {
+      try {
+        const res = await fetchCategories({ isActive: true });
+        const list = res?.data;
+        if (Array.isArray(list) && list.length > 0) {
+          const names = list.map((c) => c.name).filter(Boolean);
+          if (names.length > 0) {
+            setCategoriesList(names);
+          }
+        }
+      } catch {}
+    };
+
     loadAllMasterpieces();
+    loadCategories();
     return () => {
       isMounted = false;
     };
@@ -230,6 +256,7 @@ export function ShopPage() {
             <ShopCollectionsFilter
               selectedCategory={selectedCategory}
               onSelectCategory={handleSelectCategory}
+              categories={categoriesList}
               countsByCategory={countsByCategory}
               totalCount={galleryItems.length}
             />
