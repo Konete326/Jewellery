@@ -60,12 +60,24 @@ export const STORE_INFO = {
     get number() {
       return getActiveProfile()?.whatsapp || getActiveProfile()?.phone || '+92 333 3213613';
     },
+    get clean() {
+      return (
+        getActiveProfile()?.whatsappClean ||
+        (getActiveProfile()?.whatsapp || getActiveProfile()?.phone || '923333213613').replace(/\D/g, '')
+      );
+    },
     get url() {
-      const num = (getActiveProfile()?.whatsapp || getActiveProfile()?.phone || '923333213613').replace(/\D/g, '');
+      const num = (
+        getActiveProfile()?.whatsappClean ||
+        (getActiveProfile()?.whatsapp || getActiveProfile()?.phone || '923333213613').replace(/\D/g, '')
+      );
       return `https://api.whatsapp.com/send?phone=${num}`;
     },
     inquiryUrl: (message) => {
-      const num = (getActiveProfile()?.whatsapp || getActiveProfile()?.phone || '923333213613').replace(/\D/g, '');
+      const num = (
+        getActiveProfile()?.whatsappClean ||
+        (getActiveProfile()?.whatsapp || getActiveProfile()?.phone || '923333213613').replace(/\D/g, '')
+      );
       const encoded = encodeURIComponent(
         message || 'Hello Khalil & Sons, I would like to inquire about fine jewellery.'
       );

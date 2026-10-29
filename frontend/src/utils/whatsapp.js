@@ -2,7 +2,7 @@ import { STORE_INFO } from '@/constants/storeInfo';
 import { getAuthUser } from '@/lib/auth';
 
 export function getWhatsAppUrl(message = '', phone) {
-  const targetPhone = phone || STORE_INFO?.phone?.mobileRaw || '923333213613';
+  const targetPhone = phone || STORE_INFO?.whatsapp?.clean || STORE_INFO?.phone?.mobileRaw || '923333213613';
   const cleanPhone = String(targetPhone).replace(/[^0-9]/g, '');
   const encodedText = encodeURIComponent(message || 'Hello Khalil & Sons Jewellers, I would like to inquire about fine jewellery.');
   

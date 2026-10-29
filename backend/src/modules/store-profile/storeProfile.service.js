@@ -18,6 +18,10 @@ export const storeProfileService = {
       payload.phone = payload.phone.trim();
     }
     if (payload.whatsapp) {
+      const cleanDigits = String(payload.whatsapp).replace(/[^0-9]/g, '');
+      payload.whatsappClean = cleanDigits.startsWith('0')
+        ? `92${cleanDigits.slice(1)}`
+        : cleanDigits;
       payload.whatsapp = payload.whatsapp.trim();
     }
 

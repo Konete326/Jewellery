@@ -33,6 +33,11 @@ const storeProfileSchema = new mongoose.Schema(
       default: '+92 333 3213613',
       trim: true
     },
+    whatsappClean: {
+      type: String,
+      default: '923333213613',
+      trim: true
+    },
     address: {
       type: String,
       default: 'Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road, Saddar, Karachi, 74400, Pakistan',

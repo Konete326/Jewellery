@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Gem, ShieldCheck, Truck } from 'lucide-react';
+import { ArrowLeft, Gem } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
@@ -141,7 +141,7 @@ export function GalleryDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f9f9f9] flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <LumaSpin size={28} />
       </div>
     );
@@ -149,7 +149,7 @@ export function GalleryDetailPage() {
 
   if (notFound || !piece) {
     return (
-      <div className="min-h-screen bg-[#f9f9f9] text-[#2d3435] flex flex-col justify-between">
+      <div className="min-h-screen bg-background text-foreground flex flex-col justify-between">
         <Navbar
           onOpenSearch={() => setIsSearchOpen(true)}
           onOpenCart={() => setIsCartOpen(true)}
@@ -158,7 +158,7 @@ export function GalleryDetailPage() {
         <div className="max-w-md mx-auto text-center px-6 py-24">
           <Gem className="size-10 text-neutral-600 dark:text-neutral-400 mx-auto mb-4" />
           <h2 className="font-headline text-3xl font-light mb-3">Piece Not Found</h2>
-          <p className="text-sm text-[#5a6061] leading-relaxed mb-6 font-light">
+          <p className="text-sm text-muted-foreground leading-relaxed mb-6 font-light">
             The requested jewellery masterpiece is no longer in our active exhibition or has been updated in the atelier.
           </p>
           <LuxuryButton onClick={() => navigate('/gallery')} variant="dark">
@@ -171,7 +171,7 @@ export function GalleryDetailPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#f9f9f9] text-[#2d3435]">
+    <div className="relative min-h-screen bg-background text-foreground">
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
@@ -212,15 +212,15 @@ export function GalleryDetailPage() {
           onOpenAppointment={() => setIsAppointmentModalOpen(true)}
         />
 
-        <div className="w-full pt-10 pb-6 border-t border-neutral-200/80">
+        <div className="w-full pt-10 pb-6 border-t border-border/60">
           {similarSlides.length > 0 && (
             <div className="w-full mb-10">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-4">
                 <div>
-                  <span className="text-xs uppercase tracking-[0.25em] text-[#5f5e5e] font-mono font-medium block mb-1">
+                  <span className="text-xs uppercase tracking-[0.25em] text-muted-foreground font-mono font-medium block mb-1">
                     Curated Collection • {piece.category || 'Fine Jewellery'}
                   </span>
-                  <h3 className="text-2xl sm:text-3xl font-serif font-light text-[#2d3435]">
+                  <h3 className="text-2xl sm:text-3xl font-serif font-light text-foreground">
                     Similar Masterpieces
                   </h3>
                 </div>
@@ -229,7 +229,7 @@ export function GalleryDetailPage() {
                 </span>
               </div>
 
-              <div className="w-full overflow-hidden rounded-3xl border border-neutral-200/70 bg-gradient-to-b from-[#f5f2ea]/50 via-white to-transparent shadow-xs">
+              <div className="w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-border/70 bg-card/40 shadow-xs">
                 <PolaroidLineCarousel
                   slides={similarSlides}
                   height="440px"
@@ -243,44 +243,6 @@ export function GalleryDetailPage() {
               </div>
             </div>
           )}
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
-              <div className="p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700">
-                <Gem className="size-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-[#2d3435]">Handmade Quality</h4>
-                <p className="text-xs text-[#5a6061] font-light mt-1 leading-relaxed">
-                  Each piece is handcrafted by master jewelers at Khalil & Sons, Karachi and comes with a certificate of authenticity.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
-              <div className="p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700">
-                <ShieldCheck className="size-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-[#2d3435]">Lifetime Guarantee</h4>
-                <p className="text-xs text-[#5a6061] font-light mt-1 leading-relaxed">
-                  Free lifetime cleaning, gold polishing, and inspection for your jewellery.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 p-6 rounded-2xl bg-white border border-neutral-200/70 shadow-xs">
-              <div className="p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700">
-                <Truck className="size-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-[#2d3435]">Secure Insured Shipping</h4>
-                <p className="text-xs text-[#5a6061] font-light mt-1 leading-relaxed">
-                  Safe and fully insured worldwide delivery in our signature luxury gift box.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
 
         <GalleryReviewsSection
