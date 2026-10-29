@@ -19,6 +19,7 @@ import {
 import { PaymentAccountCard } from './PaymentAccountCard';
 import { PaymentAccountModal } from './PaymentAccountModal';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
+import { ConfirmAccountStatusModal } from './ConfirmAccountStatusModal';
 import { LumaSpin } from '@/components/ui/luma-spin';
 
 export function PaymentAccountsAdminView() {
@@ -35,6 +36,9 @@ export function PaymentAccountsAdminView() {
   const [deletingAccount, setDeletingAccount] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [actionLoadingId, setActionLoadingId] = useState(null);
+
+  const [statusConfirmAccount, setStatusConfirmAccount] = useState(null);
+  const [statusActionLoading, setStatusActionLoading] = useState(false);
 
   const loadAccounts = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -158,6 +162,14 @@ export function PaymentAccountsAdminView() {
     } finally {
       setActionLoadingId(null);
     }
+  };
+
+  const handleConfirmStatusChange = async () => {
+    if (!statusConfirmAccount) return;
+    setStatusActionLoading(true);
+    await handleToggleStatus(statusConfirmAccount);
+    setStatusActionLoading(false);
+    setStatusConfirmAccount(null);
   };
 
   const handleDeleteConfirm = async () => {
@@ -415,7 +427,7 @@ export function PaymentAccountsAdminView() {
               onEdit={handleOpenEdit}
               onDelete={(acc) => setDeletingAccount(acc)}
               onSetDefault={handleSetDefault}
-              onToggleStatus={handleToggleStatus}
+              onToggleStatus={(acc) => setStatusConfirmAccount(acc)}
               actionLoading={actionLoadingId === account._id}
             />
           ))}
@@ -439,8 +451,16 @@ export function PaymentAccountsAdminView() {
         onClose={() => setDeletingAccount(null)}
         onConfirm={handleDeleteConfirm}
         title={deletingAccount ? `${deletingAccount.bankName} (${deletingAccount.accountNumber || deletingAccount.iban})` : ''}
-        itemType="account"
+        itemType="payment account"
         loading={deleteLoading}
+      />
+
+      <ConfirmAccountStatusModal
+        isOpen={Boolean(statusConfirmAccount)}
+        onClose={() => setStatusConfirmAccount(null)}
+        onConfirm={handleConfirmStatusChange}
+        account={statusConfirmAccount}
+        loading={statusActionLoading}
       />
     </div>
   );
