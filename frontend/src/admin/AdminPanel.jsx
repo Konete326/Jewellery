@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { AppShell } from '@/components/app-shell'
 import { DashboardOverview } from './components/DashboardOverview'
+import { OrdersAdminView } from './components/OrdersAdminView'
 import { GalleryAdminView } from './components/GalleryAdminView'
 import { CategoriesAdminView } from './components/CategoriesAdminView'
 import { ProductsAdminView } from './components/ProductsAdminView'
@@ -55,6 +56,8 @@ export function AdminPanel() {
 
   const renderContent = () => {
     switch (activeTab) {
+      case 'orders':
+        return <OrdersAdminView />
       case 'inquiries':
         return <InquiriesAdminView />
       case 'gallery':

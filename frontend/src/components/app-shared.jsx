@@ -1,5 +1,6 @@
 import {
   LayoutGridIcon,
+  PackageCheckIcon,
   ImageIcon,
   LayersIcon,
   ShoppingBagIcon,
@@ -20,6 +21,12 @@ export const navGroups = [
         path: "/admin",
         key: "dashboard",
         icon: <LayoutGridIcon className="size-4" />
+      },
+      {
+        title: "Orders",
+        path: "/admin/orders",
+        key: "orders",
+        icon: <PackageCheckIcon className="size-4" />
       },
       {
         title: "Gallery",

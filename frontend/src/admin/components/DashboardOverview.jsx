@@ -4,25 +4,29 @@ import { AtelierInquiries } from './AtelierInquiries'
 import { RecentGalleryShowcase } from './RecentGalleryShowcase'
 import { RecentClientele } from './RecentClientele'
 import { AdminReviewsList } from './AdminReviewsList'
+import { RecentOrdersCard } from './RecentOrdersCard'
 import { ArrowRight, RefreshCw } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { galleryApi } from '@/api/galleryApi'
 import { fetchInquiries } from '@/api/inquiryApi'
 import { usersApi } from '@/api/users.api'
+import { fetchOrders } from '@/api/orderApi'
 
 export function DashboardOverview() {
   const [galleryItems, setGalleryItems] = useState([])
   const [inquiries, setInquiries] = useState([])
+  const [orders, setOrders] = useState([])
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
 
   const loadDashboardData = async () => {
     setLoading(true)
     try {
-      const [galleryRes, inqRes, usersRes] = await Promise.allSettled([
+      const [galleryRes, inqRes, usersRes, ordersRes] = await Promise.allSettled([
         galleryApi.getAll(),
         fetchInquiries(),
-        usersApi.getAll()
+        usersApi.getAll(),
+        fetchOrders({ limit: 10 })
       ])
 
       if (galleryRes.status === 'fulfilled' && galleryRes.value?.data) {
@@ -34,9 +38,13 @@ export function DashboardOverview() {
       if (usersRes.status === 'fulfilled' && usersRes.value?.data) {
         setUsers(usersRes.value.data)
       }
+      if (ordersRes.status === 'fulfilled' && ordersRes.value?.data?.items) {
+        setOrders(ordersRes.value.data.items)
+      }
     } catch {
       setGalleryItems([])
       setInquiries([])
+      setOrders([])
       setUsers([])
     } finally {
       setLoading(false)
@@ -79,14 +87,16 @@ export function DashboardOverview() {
       </div>
 
       <AdminMetrics
-        galleryItems={galleryItems}
+        products={galleryItems}
         inquiries={inquiries}
+        orders={orders}
         users={users}
         loading={loading}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
+          <RecentOrdersCard orders={orders} loading={loading} />
           <AtelierInquiries
             inquiries={inquiries}
             loading={loading}

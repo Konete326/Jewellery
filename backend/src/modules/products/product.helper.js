@@ -20,3 +20,4 @@ export function generateProductSlug(title, sku) {
   const base = sku || title || 'product';
   return base.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
 }
+

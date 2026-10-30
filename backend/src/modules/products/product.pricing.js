@@ -21,3 +21,4 @@ export function calculateProductPricing(product, currentRate) {
     minAdvanceToLock
   };
 }
+
