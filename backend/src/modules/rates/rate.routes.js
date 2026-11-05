@@ -1,17 +1,18 @@
 import { Router } from 'express';
 import { rateController } from './rate.controller.js';
 import { rateBroadcastController } from './rate.broadcast.controller.js';
+import { verifyAuth, requireAdmin } from '../../middlewares/auth.js';
 
 const router = Router();
 
 router.get('/', rateController.getRates);
-router.post('/sync', rateController.syncRates);
-router.put('/override', rateController.updateOverride);
 router.get('/history', rateController.getHistory);
-router.delete('/history/:id', rateController.deleteHistory);
-router.get('/scheduler', rateController.getScheduler);
-router.post('/scheduler/trigger', rateController.triggerScheduler);
-router.get('/broadcast/stats', rateBroadcastController.getStats);
-router.post('/broadcast/send', rateBroadcastController.sendBroadcast);
+router.post('/sync', verifyAuth, requireAdmin, rateController.syncRates);
+router.put('/override', verifyAuth, requireAdmin, rateController.updateOverride);
+router.delete('/history/:id', verifyAuth, requireAdmin, rateController.deleteHistory);
+router.get('/scheduler', verifyAuth, requireAdmin, rateController.getScheduler);
+router.post('/scheduler/trigger', verifyAuth, requireAdmin, rateController.triggerScheduler);
+router.get('/broadcast/stats', verifyAuth, requireAdmin, rateBroadcastController.getStats);
+router.post('/broadcast/send', verifyAuth, requireAdmin, rateBroadcastController.sendBroadcast);
 
 export default router;

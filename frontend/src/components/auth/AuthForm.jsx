@@ -51,7 +51,7 @@ export function AuthForm() {
           : "/";
       navigate(destination, { replace: true });
     } catch (err) {
-      setError(err.message || "Authentication failed. Please verify credentials.");
+      setError(err.message || "Sign in failed. Please check your email and password.");
     } finally {
       setLoading(false);
     }

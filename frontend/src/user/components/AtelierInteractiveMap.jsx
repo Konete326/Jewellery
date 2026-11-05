@@ -11,7 +11,7 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
     try {
       navigator.clipboard.writeText(STORE_INFO.address.full);
       setCopied(true);
-      toast.success('Boutique address copied to clipboard');
+      toast.success('Showroom address copied to clipboard');
       setTimeout(() => setCopied(false), 2500);
     } catch {
       toast.error('Unable to copy address');
@@ -28,7 +28,7 @@ export function AtelierInteractiveMap({ onOpenAppointment }) {
               <span>Historic Jewellery Quarter</span>
             </div>
             <h3 className="text-2xl sm:text-3xl font-serif font-light text-foreground tracking-tight">
-              Visit Our Saddar Atelier & Showroom
+              Visit Our Saddar Showroom
             </h3>
             <p className="text-xs sm:text-sm text-muted-foreground font-light mt-1">
               Located in Murshid Sunaar Tower near Regal Chowk, Saddar, Karachi.

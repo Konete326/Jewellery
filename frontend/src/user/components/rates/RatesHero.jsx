@@ -50,15 +50,15 @@ export function RatesHero({ rates, onRefresh, isRefreshing }) {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full lg:w-auto">
           <motion.button
             type="button"
             onClick={onRefresh}
             disabled={isRefreshing}
-            whileHover={{ scale: 1.03 }}
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.96 }}
             transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border/80 bg-background hover:bg-amber-500/10 hover:border-amber-500/40 text-xs uppercase tracking-wider font-medium text-foreground hover:text-amber-900 dark:hover:text-amber-300 transition-colors cursor-pointer disabled:opacity-50 select-none shadow-2xs"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-border/80 bg-background hover:bg-amber-500/10 hover:border-amber-500/40 text-xs uppercase tracking-wider font-medium text-foreground hover:text-amber-900 dark:hover:text-amber-300 transition-colors cursor-pointer disabled:opacity-50 select-none shadow-2xs w-full sm:w-auto"
             title="Refresh rates"
           >
             <motion.span
@@ -74,8 +74,9 @@ export function RatesHero({ rates, onRefresh, isRefreshing }) {
           <LuxuryButton
             type="button"
             variant="gold"
+            size="sm"
             onClick={() => generateRateBulletinPdf(rates)}
-            className="justify-center"
+            className="w-full sm:w-auto justify-center"
           >
             <Download size={14} className="text-amber-300" />
             Download PDF

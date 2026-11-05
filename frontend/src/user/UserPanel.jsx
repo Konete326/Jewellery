@@ -9,20 +9,14 @@ import { SearchModal } from './components/SearchModal'
 import { CartDrawer } from './components/CartDrawer'
 import { BespokeAppointmentModal } from './components/BespokeAppointmentModal'
 import { updatePageSEO, getLocalBusinessSchema } from '@/utils/seo'
-import { broadcastCartUpdate, subscribeToTabSync } from '@/utils/tabSync'
+import { broadcastCartUpdate, subscribeToTabSync, getCartStorageKey } from '@/utils/tabSync'
+import { getLocalCart, saveLocalCart } from '@/utils/cartStorage'
 
 export function UserPanel() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false)
-  const [cartItems, setCartItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem('khalil_cart')
-      return saved ? JSON.parse(saved) : []
-    } catch {
-      return []
-    }
-  })
+  const [cartItems, setCartItems] = useState(() => getLocalCart())
 
   useEffect(() => {
     updatePageSEO({
@@ -31,17 +25,27 @@ export function UserPanel() {
   }, [])
 
   useEffect(() => {
-    try {
-      localStorage.setItem('khalil_cart', JSON.stringify(cartItems))
-      const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0)
-      broadcastCartUpdate(count, cartItems)
-    } catch {}
+    saveLocalCart(cartItems)
+    const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0)
+    broadcastCartUpdate(count, cartItems)
   }, [cartItems])
+
+  useEffect(() => {
+    const handleAuthChange = (e) => {
+      const nextUser = e?.detail ?? null
+      setCartItems(getLocalCart(nextUser))
+    }
+    window.addEventListener('khalil_auth_change', handleAuthChange)
+    return () => window.removeEventListener('khalil_auth_change', handleAuthChange)
+  }, [])
 
   useEffect(() => {
     const unsubscribe = subscribeToTabSync((data) => {
       if (data?.type === 'CART_UPDATE' && Array.isArray(data.items)) {
-        setCartItems(data.items)
+        const currentKey = getCartStorageKey()
+        if (!data.cartKey || data.cartKey === currentKey) {
+          setCartItems(data.items)
+        }
       }
     })
     return unsubscribe
@@ -67,6 +71,14 @@ export function UserPanel() {
 
   const handleRemove = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id))
+  }
+
+  const handleUpdateQuantity = (id, qty) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: Math.max(1, qty) } : item
+      )
+    )
   }
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0)
@@ -102,6 +114,8 @@ export function UserPanel() {
         onIncrement={handleIncrement}
         onDecrement={handleDecrement}
         onRemove={handleRemove}
+        onUpdateQuantity={handleUpdateQuantity}
+        onClearCart={() => setCartItems([])}
       />
     </div>
   )

@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+export const supplierIdSchema = z
+  .string()
+  .regex(/^[0-9a-fA-F]{24}$/, 'Invalid supplier ID format')
+  .nullable()
+  .optional();
+
 export const createProductSchema = z.object({
   body: z.object({
     title: z.string().min(2).max(150),
@@ -10,13 +16,16 @@ export const createProductSchema = z.object({
     stock: z.number().int().nonnegative().default(1),
     isFeatured: z.boolean().optional().default(false),
     description: z.string().min(10),
-    images: z.array(z.string().url()).optional().default([])
+    images: z.array(z.string().url()).optional().default([]),
+    supplierId: supplierIdSchema
   })
 });
 
 export const queryProductSchema = z.object({
   query: z.object({
     category: z.string().optional(),
+    availability: z.string().optional(),
+    supplierId: supplierIdSchema,
     metal: z.string().optional(),
     limit: z.coerce.number().positive().max(100).optional().default(20),
     page: z.coerce.number().positive().optional().default(1)

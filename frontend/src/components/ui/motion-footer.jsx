@@ -157,7 +157,7 @@ const MarqueeItem = () => (
   <div className="flex items-center space-x-10 px-6">
     <span>Fine Gold Jewellery & Goldsmithing</span> <span className="text-amber-500">✦</span>
     <span>Certified 22K (.916) Pure Gold</span> <span className="text-amber-500">✦</span>
-    <span>Bespoke Bridal Heirlooms</span> <span className="text-amber-500">✦</span>
+    <span>Custom Bridal Jewellery</span> <span className="text-amber-500">✦</span>
     <span>Murshid Sunaar Tower, Saddar, Karachi</span> <span className="text-amber-500">✦</span>
     <span>Master Goldsmithing Since 1992</span> <span className="text-amber-500">✦</span>
   </div>
@@ -238,7 +238,7 @@ export function CinematicFooter() {
       
       <div
         ref={wrapperRef}
-        className="relative w-full h-auto md:h-screen md:[clip-path:polygon(0%_0,100%_0%,100%_100%,0_100%)]"
+        className="relative w-full overflow-x-hidden h-auto md:h-screen md:[clip-path:polygon(0%_0,100%_0%,100%_100%,0_100%)]"
       >
         <footer className="relative md:fixed md:bottom-0 md:left-0 flex min-h-screen md:h-screen w-full flex-col justify-between overflow-visible md:overflow-hidden bg-background text-foreground pt-8 md:pt-0 pb-6 md:pb-0">
           <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[80px] pointer-events-none z-0" />
@@ -269,7 +269,7 @@ export function CinematicFooter() {
               The Art of <span className="serif-italic">Handcrafted</span> Gold
             </h2>
             <p className="text-xs md:text-base text-muted-foreground max-w-lg mb-6 md:mb-8 leading-relaxed font-light">
-              Master goldsmithing since 1992 in Saddar, Karachi. Crafting certified 22K and 24K gold bridal jewelry, solitaires, and polki heirlooms.
+              Fine gold jewellery since 1992 in Saddar, Karachi. Certified 22K and 24K gold bridal sets, rings, and polki jewellery.
             </p>
 
             <div ref={linksRef} className="flex flex-col items-center gap-5 w-full">
@@ -280,7 +280,7 @@ export function CinematicFooter() {
                   variant="gold"
                 >
                   <Gem size={14} className="text-amber-200 inline-block" />
-                  Explore Gallery
+                  Browse Gallery
                 </LuxuryButton>
                 
                 <LuxuryButton
@@ -332,7 +332,15 @@ export function CinematicFooter() {
                   onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
                   className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
                 >
-                  Client Reviews
+                  Customer Reviews
+                </MagneticButton>
+                <MagneticButton
+                  as={Link}
+                  to="/track-order"
+                  onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' })}
+                  className="border border-border/80 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xs text-foreground px-4 py-2 text-xs tracking-widest uppercase hover:bg-foreground hover:text-background transition-colors font-medium cursor-pointer shadow-2xs"
+                >
+                  Track Order
                 </MagneticButton>
                 <MagneticButton
                   as={Link}

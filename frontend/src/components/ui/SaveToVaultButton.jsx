@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { isPieceSavedInVault, toggleVaultPiece } from '@/lib/wishlist';
+import { getAuthUser, getAuthToken } from '@/lib/auth';
 import { toast } from 'sonner';
 
 export function SaveToVaultButton({
@@ -10,14 +11,27 @@ export function SaveToVaultButton({
   showText = false
 }) {
   const pieceId = piece ? String(piece._id || piece.id || '') : '';
-  const [saved, setSaved] = useState(isPieceSavedInVault(pieceId));
+  const [saved, setSaved] = useState(() => (getAuthUser() && getAuthToken() ? isPieceSavedInVault(pieceId) : false));
   const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
     if (!pieceId) return;
-    setSaved(isPieceSavedInVault(pieceId));
+
+    const syncState = () => {
+      const user = getAuthUser();
+      const token = getAuthToken();
+      setSaved(user && token ? isPieceSavedInVault(pieceId) : false);
+    };
+
+    syncState();
 
     const handleVaultChange = (e) => {
+      const user = getAuthUser();
+      const token = getAuthToken();
+      if (!user || !token) {
+        setSaved(false);
+        return;
+      }
       const ids = e.detail?.ids;
       if (Array.isArray(ids)) {
         setSaved(ids.includes(pieceId));
@@ -26,8 +40,17 @@ export function SaveToVaultButton({
       }
     };
 
+    const handleAuthChange = () => {
+      syncState();
+    };
+
     window.addEventListener('khalil_vault_change', handleVaultChange);
-    return () => window.removeEventListener('khalil_vault_change', handleVaultChange);
+    window.addEventListener('khalil_auth_change', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('khalil_vault_change', handleVaultChange);
+      window.removeEventListener('khalil_auth_change', handleAuthChange);
+    };
   }, [pieceId]);
 
   if (!piece) return null;
@@ -35,19 +58,39 @@ export function SaveToVaultButton({
   const handleToggle = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    const user = getAuthUser();
+    const token = getAuthToken();
+    if (!user || !token) {
+      toast.info('Sign in to save items', {
+        description: 'Sign in to save jewellery pieces to your wishlist.'
+      });
+      window.dispatchEvent(new CustomEvent('open_google_onetap'));
+      return;
+    }
+
     setAnimating(true);
     setTimeout(() => setAnimating(false), 300);
 
     const res = await toggleVaultPiece(piece);
+    if (res.requiresAuth) {
+      setSaved(false);
+      toast.info('Sign in to save items', {
+        description: 'Sign in to save jewellery pieces to your wishlist.'
+      });
+      window.dispatchEvent(new CustomEvent('open_google_onetap'));
+      return;
+    }
+
     setSaved(res.saved);
 
     if (res.saved) {
-      toast.success('Saved to Atelier Vault', {
-        description: `"${piece.title || 'Masterpiece'}" preserved in your collection.`
+      toast.success('Saved to Wishlist', {
+        description: `"${piece.title || 'Jewellery'}" saved to your list.`
       });
     } else {
-      toast.info('Removed from Vault', {
-        description: `"${piece.title || 'Masterpiece'}" removed.`
+      toast.info('Removed from Wishlist', {
+        description: `"${piece.title || 'Jewellery'}" removed.`
       });
     }
   };
@@ -57,7 +100,7 @@ export function SaveToVaultButton({
       <button
         type="button"
         onClick={handleToggle}
-        aria-label={saved ? 'Remove from Atelier Vault' : 'Save to Atelier Vault'}
+        aria-label={saved ? 'Remove from wishlist' : 'Save to wishlist'}
         className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer ${
           saved
             ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/30'
@@ -69,7 +112,7 @@ export function SaveToVaultButton({
             saved ? 'fill-rose-500 text-rose-500' : 'text-current'
           } ${animating ? 'scale-125' : ''}`}
         />
-        <span>{saved ? 'Saved in Vault' : 'Save to Vault'}</span>
+        <span>{saved ? 'Saved' : 'Save to Wishlist'}</span>
       </button>
     );
   }
@@ -78,7 +121,7 @@ export function SaveToVaultButton({
     <button
       type="button"
       onClick={handleToggle}
-      aria-label={saved ? 'Remove from Atelier Vault' : 'Save to Atelier Vault'}
+      aria-label={saved ? 'Remove from wishlist' : 'Save to wishlist'}
       className={`size-9 rounded-full flex items-center justify-center transition-all cursor-pointer backdrop-blur-md shadow-xs ${
         saved
           ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/40 hover:bg-rose-500/25'

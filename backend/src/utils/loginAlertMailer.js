@@ -3,8 +3,8 @@ import nodemailer from 'nodemailer';
 const createTransporter = () => {
   const host = process.env.SMTP_HOST || 'smtp.gmail.com';
   const port = Number(process.env.SMTP_PORT) || 465;
-  const user = process.env.SMTP_USER || 'khalilandsonsjewellers@gmail.com';
-  const pass = process.env.SMTP_PASS || 'fogdwvnovnrtbolo';
+  const user = process.env.SMTP_USER || '';
+  const pass = process.env.SMTP_PASS || '';
 
   return nodemailer.createTransport({
     host,
@@ -65,7 +65,7 @@ export const sendLoginAlertEmail = async ({ to, userName, role, ip = 'Unknown' }
 
         <div style="border-top: 1px solid #f5f5f4; padding-top: 16px; margin-top: 14px;">
           <p style="font-size: 12px; line-height: 1.5; color: #78716c; margin: 0;">
-            If you signed into your account, no further action is required. If you did not initiate this sign-in, please reach out to our Karachi boutique immediately at <a href="mailto:info@khalilandsonsjewellers.com" style="color: #b45309; text-decoration: none;">info@khalilandsonsjewellers.com</a> or phone <a href="tel:+923142004245" style="color: #b45309; text-decoration: none;">+92 314 2004245</a>.
+            If you signed into your account, no further action is required. If you did not initiate this sign-in, please reach out to our Karachi outlet immediately at <a href="mailto:info@khalilandsonsjewellers.com" style="color: #b45309; text-decoration: none;">info@khalilandsonsjewellers.com</a> or phone <a href="tel:+923142004245" style="color: #b45309; text-decoration: none;">+92 314 2004245</a>.
           </p>
         </div>
       </div>

@@ -1,32 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Upload, Trash2 } from 'lucide-react';
+import { X, Trash2, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-const CORE_CATEGORY_PRESETS = [
-  { name: 'Gold Rings', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Fine artisan-crafted gold rings with authentic hallmark purity.' },
-  { name: 'Gold Chains', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Classic and modern solid gold chain links crafted for daily grace.' },
-  { name: 'Gold Bangles', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Traditional and contemporary handcrafted gold bangles.' },
-  { name: 'Gold Bracelets', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Exquisite flexible and structured gold bracelets with secure clasps.' },
-  { name: 'Gold Earrings', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Elegantly proportioned gold earrings from daily studs to chandelier drops.' },
-  { name: 'Gold Necklaces', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Statement gold necklaces reflecting heritage filigree and modern luxury.' },
-  { name: 'Gold Sets', metalStandard: '22K Gold', hallmark: 'AU · 916.6', description: 'Complete bridal and ceremonial coordinated gold jewelry sets.' },
-  { name: 'Gold Coins / Bars', metalStandard: '24K Pure Gold', hallmark: 'AU · 999.0', description: 'Investment grade 24K pure gold bullion coins and minted bars.' }
-];
-
-const PRESET_STANDARDS = [
-  '22K Gold',
-  '24K Pure Gold',
-  '18K / 21K Gold',
-  '22K Gold & Polki',
-  'Bespoke Alloys'
-];
-
-const PRESET_HALLMARKS = [
-  'AU · 916.6',
-  'AU · 999.0',
-  'AU · 750.0',
-  'AU · 875.0'
-];
 
 export function CategoryModal({
   isOpen,
@@ -36,11 +10,7 @@ export function CategoryModal({
   loading = false
 }) {
   const [name, setName] = useState('');
-  const [slug, setSlug] = useState('');
-  const [metalStandard, setMetalStandard] = useState('22K Gold');
-  const [hallmark, setHallmark] = useState('AU · 916.6');
   const [description, setDescription] = useState('');
-  const [displayOrder, setDisplayOrder] = useState(0);
   const [isActive, setIsActive] = useState(true);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
@@ -50,20 +20,12 @@ export function CategoryModal({
   useEffect(() => {
     if (initialData) {
       setName(initialData.name || '');
-      setSlug(initialData.slug || '');
-      setMetalStandard(initialData.metalStandard || '22K Gold');
-      setHallmark(initialData.hallmark || 'AU · 916.6');
       setDescription(initialData.description || '');
-      setDisplayOrder(initialData.displayOrder ?? 0);
       setIsActive(initialData.isActive !== false);
       setPreviewUrl(initialData.imageUrl || '');
     } else {
       setName('');
-      setSlug('');
-      setMetalStandard('22K Gold');
-      setHallmark('AU · 916.6');
       setDescription('');
-      setDisplayOrder(0);
       setIsActive(true);
       setPreviewUrl('');
     }
@@ -72,23 +34,6 @@ export function CategoryModal({
   }, [initialData, isOpen]);
 
   if (!isOpen) return null;
-
-  const handleNameChange = (val) => {
-    setName(val);
-    if (!initialData || !initialData.slug) {
-      setSlug(val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
-    }
-  };
-
-  const applyPreset = (preset) => {
-    setName(preset.name);
-    setSlug(preset.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
-    setMetalStandard(preset.metalStandard);
-    setHallmark(preset.hallmark);
-    if (!description) {
-      setDescription(preset.description);
-    }
-  };
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -113,22 +58,25 @@ export function CategoryModal({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name.trim()) {
-      setError('Category title is required');
+    const trimmedName = name.trim();
+    if (!trimmedName) {
+      setError('Category name is required');
       return;
     }
+
+    const slug = (initialData?.slug || trimmedName).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     const formData = new FormData();
-    formData.append('name', name.trim());
-    formData.append('slug', slug.trim() || name.toLowerCase().replace(/[^a-z0-9]+/g, '-'));
-    formData.append('metalStandard', metalStandard.trim());
-    formData.append('hallmark', hallmark.trim());
+    formData.append('name', trimmedName);
+    formData.append('slug', slug);
     formData.append('description', description.trim());
-    formData.append('displayOrder', Number(displayOrder) || 0);
+    formData.append('metalStandard', initialData?.metalStandard || '22K Gold');
+    formData.append('hallmark', initialData?.hallmark || 'AU · 916.6');
+    formData.append('displayOrder', initialData?.displayOrder ?? 0);
     formData.append('isActive', isActive);
 
     if (selectedFile) {
       formData.append('image', selectedFile);
-    } else if (initialData?.imageUrl) {
+    } else if (initialData?.imageUrl && previewUrl) {
       formData.append('imageUrl', previewUrl);
     }
 
@@ -136,16 +84,16 @@ export function CategoryModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in overflow-y-auto">
-      <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-xl space-y-4 my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-xl space-y-4">
         <div className="flex items-center justify-between pb-3 border-b border-border">
           <div>
-            <span className="text-[10px] uppercase font-mono tracking-widest text-amber-800 dark:text-amber-400 font-semibold block">
-              Atelier Architecture
-            </span>
             <h3 className="font-serif text-lg font-semibold text-foreground">
-              {initialData ? 'Edit Category' : 'Create New Category'}
+              {initialData ? 'Edit Category' : 'Add Category'}
             </h3>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Organize your jewellery catalog and collections.
+            </p>
           </div>
           <button
             type="button"
@@ -157,99 +105,33 @@ export function CategoryModal({
         </div>
 
         {error && (
-          <div className="p-3 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs">
+          <div className="p-2.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {!initialData && (
-            <div className="space-y-1.5 p-3 rounded-xl border border-amber-500/20 bg-amber-500/5">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-amber-900 dark:text-amber-300 font-semibold block">
-                Standard Category Presets
-              </span>
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {CORE_CATEGORY_PRESETS.map((preset) => (
-                  <button
-                    key={preset.name}
-                    type="button"
-                    onClick={() => applyPreset(preset)}
-                    className={`px-2.5 py-1 rounded-md text-[11px] font-medium border transition-colors cursor-pointer ${
-                      name === preset.name
-                        ? 'border-amber-500 bg-amber-500/20 text-amber-950 dark:text-amber-200 font-semibold'
-                        : 'border-border/80 bg-background/80 hover:bg-background text-foreground/80 hover:text-foreground'
-                    }`}
-                  >
-                    {preset.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
+        <form onSubmit={handleSubmit} className="space-y-3.5">
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-foreground">
-              Category Title <span className="text-rose-500">*</span>
+              Category Name <span className="text-rose-500">*</span>
             </label>
             <input
               type="text"
               required
-              placeholder="e.g. Gold Rings, Gold Chains, Gold Sets"
+              autoFocus
+              placeholder="e.g. Rings, Chains, Bangles, Bridal Sets"
               value={name}
-              onChange={(e) => handleNameChange(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                if (error) setError('');
+              }}
               className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-foreground">
-                Metal Standard
-              </label>
-              <select
-                value={metalStandard}
-                onChange={(e) => setMetalStandard(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
-              >
-                {PRESET_STANDARDS.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-foreground">
-                Assay Hallmark Stamp
-              </label>
-              <select
-                value={hallmark}
-                onChange={(e) => setHallmark(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 font-mono"
-              >
-                {PRESET_HALLMARKS.map((h) => (
-                  <option key={h} value={h}>{h}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-foreground">
-              Description (Optional)
-            </label>
-            <textarea
-              rows={2}
-              placeholder="Brief description of this jewellery collection..."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 resize-none"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground flex items-center justify-between">
-              <span>Showcase Image (Optional)</span>
-              <span className="text-[10px] text-muted-foreground font-mono">Cloudinary Powered</span>
+              Showcase Image (Optional)
             </label>
 
             {previewUrl ? (
@@ -259,22 +141,22 @@ export function CategoryModal({
                   alt="Category preview"
                   className="size-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={() => fileInputRef.current?.click()}
-                    className="h-8 text-xs bg-background/90 cursor-pointer"
+                    className="h-7 text-xs bg-background/90 cursor-pointer"
                   >
-                    Change Image
+                    Change
                   </Button>
                   <Button
                     type="button"
                     variant="destructive"
                     size="sm"
                     onClick={handleRemoveImage}
-                    className="h-8 text-xs cursor-pointer"
+                    className="h-7 text-xs cursor-pointer"
                   >
                     <Trash2 className="size-3.5" />
                   </Button>
@@ -283,17 +165,19 @@ export function CategoryModal({
             ) : (
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full border-2 border-dashed border-border hover:border-foreground/40 rounded-xl p-4 sm:p-5 flex flex-col items-center justify-center gap-1.5 text-center cursor-pointer transition-colors bg-muted/20"
+                className="w-full border border-dashed border-border hover:border-foreground/40 rounded-xl p-3.5 flex items-center justify-center gap-2.5 text-center cursor-pointer transition-colors bg-muted/20"
               >
-                <div className="p-2 rounded-lg border border-border bg-card text-muted-foreground">
-                  <Upload className="size-4" />
+                <div className="p-1.5 rounded-md border border-border bg-card text-muted-foreground">
+                  <ImageIcon className="size-4" />
                 </div>
-                <span className="text-xs font-medium text-foreground">
-                  Click to select an image from your computer
-                </span>
-                <span className="text-[10px] text-muted-foreground">
-                  PNG, JPG, WEBP up to 10MB • Uploads to Cloudinary
-                </span>
+                <div className="text-left">
+                  <span className="text-xs font-medium text-foreground block">
+                    Upload category image
+                  </span>
+                  <span className="text-[10px] text-muted-foreground block">
+                    PNG, JPG or WEBP (Optional)
+                  </span>
+                </div>
               </div>
             )}
 
@@ -306,32 +190,30 @@ export function CategoryModal({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3 items-center">
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-foreground">
-                Display Order
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={displayOrder}
-                onChange={(e) => setDisplayOrder(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
-              />
-            </div>
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-foreground">
+              Description (Optional)
+            </label>
+            <textarea
+              rows={2}
+              placeholder="Brief note about this jewellery collection..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 resize-none"
+            />
+          </div>
 
-            <div className="flex items-center gap-2.5 pt-4">
-              <input
-                type="checkbox"
-                id="cat-active-check"
-                checked={isActive}
-                onChange={(e) => setIsActive(e.target.checked)}
-                className="size-4 rounded border-border text-foreground focus:ring-foreground cursor-pointer"
-              />
-              <label htmlFor="cat-active-check" className="text-xs font-medium text-foreground cursor-pointer select-none">
-                Active on Storefront
-              </label>
-            </div>
+          <div className="flex items-center justify-between pt-1 pb-1">
+            <label htmlFor="cat-active-check" className="text-xs font-medium text-foreground cursor-pointer select-none">
+              Active on Storefront
+            </label>
+            <input
+              type="checkbox"
+              id="cat-active-check"
+              checked={isActive}
+              onChange={(e) => setIsActive(e.target.checked)}
+              className="size-4 rounded border-border text-foreground focus:ring-foreground cursor-pointer"
+            />
           </div>
 
           <div className="flex items-center justify-end gap-2 pt-3 border-t border-border">
@@ -351,7 +233,7 @@ export function CategoryModal({
               disabled={loading}
               className="bg-foreground text-background hover:bg-neutral-800 cursor-pointer"
             >
-              {loading ? 'Saving...' : initialData ? 'Update Category' : 'Create Category'}
+              {loading ? 'Saving...' : initialData ? 'Update Category' : 'Save Category'}
             </Button>
           </div>
         </form>

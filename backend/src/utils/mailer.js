@@ -1,10 +1,10 @@
 import nodemailer from 'nodemailer';
 
-const createTransporter = () => {
+export const createTransporter = () => {
   const host = process.env.SMTP_HOST || 'smtp.gmail.com';
   const port = Number(process.env.SMTP_PORT) || 465;
-  const user = process.env.SMTP_USER || 'khalilandsonsjewellers@gmail.com';
-  const pass = process.env.SMTP_PASS || 'fogdwvnovnrtbolo';
+  const user = process.env.SMTP_USER || '';
+  const pass = process.env.SMTP_PASS || '';
 
   return nodemailer.createTransport({
     host,
@@ -62,7 +62,7 @@ export const sendInquiryReplyEmail = async ({ to, customerName, subject, message
 
         <div style="border-top: 1px solid #f5f5f4; padding-top: 18px; margin-top: 22px;">
           <p style="font-size: 12px; line-height: 1.5; color: #78716c; margin: 0;">
-            For urgent consultations or appointment bookings at our boutique, contact us directly at <a href="mailto:khalilandsonsjewellers@gmail.com" style="color: #b45309; text-decoration: none; font-weight: 500;">khalilandsonsjewellers@gmail.com</a> or call <a href="tel:+923142004245" style="color: #b45309; text-decoration: none; font-weight: 500;">+92 314 2004245</a>.
+            For urgent consultations or appointment bookings at our outlet, contact us directly at <a href="mailto:khalilandsonsjewellers@gmail.com" style="color: #b45309; text-decoration: none; font-weight: 500;">khalilandsonsjewellers@gmail.com</a> or call <a href="tel:+923142004245" style="color: #b45309; text-decoration: none; font-weight: 500;">+92 314 2004245</a>.
           </p>
         </div>
       </div>

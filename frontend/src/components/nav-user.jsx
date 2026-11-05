@@ -66,37 +66,37 @@ export function NavUser() {
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem onClick={() => navigate('/admin/profile')} className="cursor-pointer">
+					<DropdownMenuItem onSelect={() => navigate('/admin/profile')} className="cursor-pointer">
 						<UserIcon />
 						Profile
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => navigate('/admin/inquiries')} className="cursor-pointer">
+					<DropdownMenuItem onSelect={() => navigate('/admin/inquiries')} className="cursor-pointer">
 						<BellIcon />
 						Notifications
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => navigate('/admin/rates')} className="cursor-pointer">
+					<DropdownMenuItem onSelect={() => navigate('/admin/rates')} className="cursor-pointer">
 						<CommandIcon />
 						Gold Rates
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem onClick={() => navigate('/contact')} className="cursor-pointer">
+					<DropdownMenuItem onSelect={() => navigate('/contact')} className="cursor-pointer">
 						<LifeBuoyIcon />
 						Atelier Support
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => navigate('/gallery')} className="cursor-pointer">
+					<DropdownMenuItem onSelect={() => navigate('/gallery')} className="cursor-pointer">
 						<BookOpenIcon />
 						Live Catalog
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => navigate('/admin/accounts')} className="cursor-pointer">
+					<DropdownMenuItem onSelect={() => navigate('/admin/accounts')} className="cursor-pointer">
 						<CreditCardIcon />
 						Bank Accounts
 					</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>
-					<DropdownMenuItem variant="destructive" onClick={handleLogout} className="cursor-pointer">
+					<DropdownMenuItem variant="destructive" onSelect={handleLogout} className="cursor-pointer">
 						<LogOutIcon />
 						Log out
 					</DropdownMenuItem>

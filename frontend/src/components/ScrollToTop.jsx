@@ -5,8 +5,13 @@ export function ScrollToTop() {
   const { pathname, search, hash } = useLocation();
 
   useEffect(() => {
-    if (hash && typeof window !== 'undefined') {
-      window.history.replaceState(null, '', pathname + (search || ''));
+    if (hash) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
     }
     window.scrollTo({
       top: 0,

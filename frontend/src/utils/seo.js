@@ -42,16 +42,51 @@ function setCanonical(url) {
   link.setAttribute('href', url);
 }
 
-function setJsonLd(schemaData) {
+function getStoreScript() {
+  if (typeof document === 'undefined') return null;
+  let script = document.getElementById('store-json-ld');
+  if (!script) {
+    const legacy = document.getElementById('seo-json-ld');
+    if (legacy) {
+      legacy.id = 'store-json-ld';
+      script = legacy;
+    }
+  }
+  return script;
+}
+
+function setStoreJsonLd(schemaData) {
   if (typeof document === 'undefined' || !schemaData) return;
-  let script = document.getElementById('seo-json-ld');
+  let script = getStoreScript();
   if (!script) {
     script = document.createElement('script');
-    script.id = 'seo-json-ld';
+    script.id = 'store-json-ld';
     script.type = 'application/ld+json';
     document.head.appendChild(script);
   }
   script.textContent = JSON.stringify(schemaData);
+}
+
+function setProductJsonLd(schemaData) {
+  if (typeof document === 'undefined') return;
+  let script = document.getElementById('product-json-ld');
+  if (!schemaData) {
+    if (script) script.remove();
+    return;
+  }
+  if (!script) {
+    script = document.createElement('script');
+    script.id = 'product-json-ld';
+    script.type = 'application/ld+json';
+    document.head.appendChild(script);
+  }
+  script.textContent = JSON.stringify(schemaData);
+}
+
+export function removeProductJsonLd() {
+  if (typeof document === 'undefined') return;
+  const script = document.getElementById('product-json-ld');
+  if (script) script.remove();
 }
 
 export function updatePageSEO({
@@ -65,7 +100,9 @@ export function updatePageSEO({
 } = {}) {
   if (typeof document === 'undefined') return;
 
-  const fullTitle = title ? `${title} | Khalil & Sons Jewellers` : DEFAULT_TITLE;
+  const fullTitle = title
+    ? (title.includes('Khalil & Sons') ? title : `${title} | Khalil & Sons Jewellers`)
+    : DEFAULT_TITLE;
   const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : BASE_URL);
   const fullImage = image?.startsWith('http') ? image : `${BASE_URL}${image || '/og-image.jpg'}`;
 
@@ -91,7 +128,14 @@ export function updatePageSEO({
   setMetaTag('meta[name="twitter:image"]', 'content', fullImage);
 
   if (schema) {
-    setJsonLd(schema);
+    if (schema['@type'] === 'Product') {
+      setProductJsonLd(schema);
+    } else if (schema['@type'] === 'JewelryStore') {
+      setStoreJsonLd(schema);
+      setProductJsonLd(null);
+    }
+  } else if (type !== 'product') {
+    setProductJsonLd(null);
   }
 }
 
@@ -149,16 +193,32 @@ export function getLocalBusinessSchema() {
   };
 }
 
+export function resolveSchemaAvailability(record) {
+  const status = String(record?.availability || '').trim().toLowerCase();
+  const rawStock = record?.stock ?? record?.stockQuantity ?? record?.inventoryQuantity;
+  const numStock = (rawStock !== undefined && rawStock !== null && rawStock !== '') ? Number(rawStock) : null;
+  const hasValidStock = typeof numStock === 'number' && Number.isFinite(numStock);
+
+  if (status === 'out of stock' || (hasValidStock && numStock <= 0)) {
+    return 'https://schema.org/OutOfStock';
+  }
+  if (status === 'made to order') {
+    return 'https://schema.org/BackOrder';
+  }
+  if ((hasValidStock && numStock > 0) || status === 'in stock') {
+    return 'https://schema.org/InStock';
+  }
+  return null;
+}
+
 export function getProductSchema(piece) {
   if (!piece) return null;
-  const rating = Number(piece.averageRating || piece.rating || 5);
-  const reviewCount = Math.max(1, piece.reviewCount || (piece.reviews?.length) || 1);
   const rawImg = piece.imageUrl?.startsWith('http')
     ? piece.imageUrl
     : `${BASE_URL}${piece.imageUrl || piece.src || '/assets/logo.png'}`;
   const imgUrl = optimizeCloudinaryUrl(rawImg);
 
-  return {
+  const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: piece.title || 'Fine Gold Jewellery',
@@ -169,14 +229,18 @@ export function getProductSchema(piece) {
     brand: {
       '@type': 'Brand',
       name: 'Khalil & Sons Jewellers'
-    },
-    offers: {
+    }
+  };
+
+  const rawPrice = piece.calculatedPrice ?? piece.numericPrice ?? piece.price;
+  const numPrice = typeof rawPrice === 'string' ? parseFloat(rawPrice.replace(/[^0-9.]/g, '')) : Number(rawPrice);
+  if (Number.isFinite(numPrice) && numPrice > 0) {
+    const availability = resolveSchemaAvailability(piece);
+    const offer = {
       '@type': 'Offer',
       url: `${BASE_URL}/gallery/${piece._id || piece.id}`,
       priceCurrency: 'PKR',
-      price: '0.00',
-      priceValidUntil: '2030-12-31',
-      availability: 'https://schema.org/InStock',
+      price: numPrice.toFixed(2),
       itemCondition: 'https://schema.org/NewCondition',
       availableAtOrFrom: {
         '@type': 'JewelryStore',
@@ -198,11 +262,22 @@ export function getProductSchema(piece) {
         name: 'Khalil & Sons Jewellers',
         telephone: '+922135670868'
       }
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: rating.toFixed(1),
-      reviewCount: reviewCount
+    };
+    if (availability) {
+      offer.availability = availability;
     }
-  };
+    schema.offers = offer;
+  }
+
+  const realReviewCount = Number(piece.reviewCount || (Array.isArray(piece.reviews) ? piece.reviews.length : 0)) || 0;
+  const realRating = Number(piece.averageRating || piece.rating) || 0;
+  if (realReviewCount > 0 && realRating > 0 && Number.isFinite(realRating)) {
+    schema.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: Math.min(5, Math.max(1, realRating)).toFixed(1),
+      reviewCount: realReviewCount
+    };
+  }
+
+  return schema;
 }

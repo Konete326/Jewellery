@@ -7,22 +7,22 @@ export function RatesKnowledgeGuide() {
     {
       karat: '24K Gold (999 Purity)',
       title: 'Pure Bullion Standard',
-      description: 'Contains 99.9% pure elemental gold. Because pure 24K gold is inherently malleable and soft, it is cast into investment bullion biscuits, bars, and commemorative coins rather than wearable prong-set bridal jewellery.'
+      description: 'Contains 99.9% pure elemental gold. Because pure 24K gold is soft, it is used for investment gold bars, biscuits, and coins rather than everyday wearable jewellery.'
     },
     {
       karat: '22K Gold (916 Purity)',
-      title: 'Artisanal Bridal Standard',
-      description: 'Contains 91.67% pure gold alloyed with 8.33% silver and copper. This exact alloy ratio grants supreme ductility and tensile strength for hand-forged Mughal filigree, solid kadas, and wedding necklaces.'
+      title: 'Traditional Bridal Gold',
+      description: 'Contains 91.67% pure gold alloyed with silver and copper for durability. This is the preferred standard for traditional bridal sets, bangles, and wedding necklaces.'
     },
     {
       karat: '21K Gold (875 Purity)',
-      title: 'Heritage South Asian Alloy',
-      description: 'Contains 87.5% gold. Popular across vintage Karachi and Middle Eastern jewel markets for traditional churyan and antique polish designs that endure generation after generation.'
+      title: 'Traditional 21K Gold',
+      description: 'Contains 87.5% gold. Popular across Karachi and Middle Eastern markets for long-lasting daily jewellery and traditional bangles.'
     },
     {
       karat: '18K Gold (750 Purity)',
-      title: 'Diamond & Solitaire Mounts',
-      description: 'Contains 75.0% pure gold. Provides maximum structural hardness necessary to hold natural brilliant-cut diamonds, baguettes, and fine precious gemstones securely without loose prongs.'
+      title: 'Diamond & Gemstone Jewellery',
+      description: 'Contains 75.0% pure gold. Provides the extra strength needed to hold diamonds and precious gemstones securely.'
     }
   ];
 
@@ -31,13 +31,13 @@ export function RatesKnowledgeGuide() {
       <div className="rounded-3xl border border-border/80 bg-card p-6 sm:p-10 shadow-xs">
         <div className="text-center max-w-2xl mx-auto space-y-2 mb-10">
           <span className="text-xs uppercase tracking-[0.25em] text-amber-800 dark:text-amber-400 font-mono font-medium">
-            Artisan Purity Guide
+            Gold Purity Guide
           </span>
           <h2 className="text-2xl sm:text-3xl font-serif font-light text-foreground tracking-tight">
             Understanding Gold Karats & Hallmark Purity
           </h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-light leading-relaxed">
-            Every piece crafted at Khalil & Sons is verified with laser assay hallmarking, ensuring collectors receive exact certified purity with full lifetime buy-back integrity.
+            Every piece crafted at Khalil & Sons is verified with assay hallmarking, ensuring customers receive exact certified purity with clear buy-back policies.
           </p>
         </div>
 
@@ -70,13 +70,13 @@ export function RatesKnowledgeGuide() {
         <div className="flex items-start gap-4">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-widest text-amber-800 dark:text-amber-300 font-semibold block mb-1">
-              Atelier Assaying Bench
+              Purity Testing & Advice
             </span>
             <h3 className="text-lg font-serif font-medium text-foreground tracking-tight mb-1">
-              Visit the Saddar Boutique for Live In-Store Appraisals
+              Visit Our Saddar Showroom for Purity Testing
             </h3>
             <p className="text-xs text-muted-foreground font-light max-w-xl">
-              Inspect physical 22K and 24K gold bullion pieces, verify hallmarks with our digital spectrometers, and discuss bespoke wedding jewellery at our flagship showroom in Murshid Sunaar Tower.
+              See our 22K and 24K gold jewellery in person, verify purity marks, and discuss custom wedding designs at our showroom in Murshid Sunaar Tower, Saddar.
             </p>
           </div>
         </div>
@@ -85,7 +85,7 @@ export function RatesKnowledgeGuide() {
           href={STORE_INFO.social.googleMapsDirections}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-foreground text-background hover:opacity-90 text-xs uppercase tracking-wider font-semibold shrink-0 transition-opacity"
+          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-foreground text-background hover:opacity-90 text-xs uppercase tracking-wider font-semibold shrink-0 transition-opacity w-full sm:w-auto text-center"
         >
           <MapPin className="size-3.5" />
           <span>Get Showroom Directions</span>

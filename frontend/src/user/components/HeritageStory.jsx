@@ -51,7 +51,7 @@ export function HeritageStory() {
               Founded in 1992 by Mr. Khalil Ahmed in Murshid Bazaar, Saddar, Karachi, Khalil & Sons Jewellers preserves authentic artisanal goldsmithing and bridal jewelry across generations.
             </p>
             <p>
-              We specialize in certified 22K (.916), 21K (.875) and 18K (.750) fine gold, hand-set natural diamonds, Polki heirlooms, and custom bridal jewelry crafted with care for families who value lasting quality and certified purity.
+              We specialize in certified 22K (.916), 21K (.875) and 18K (.750) fine gold, hand-set natural diamonds, Polki jewellery, and custom bridal sets crafted with care for families who value lasting quality and certified purity.
             </p>
           </div>
           <div className="pt-4">
@@ -59,7 +59,7 @@ export function HeritageStory() {
               to="/about"
               className="inline-flex items-center gap-2 text-[#2d3435] tracking-widest uppercase text-xs border-b border-neutral-400 pb-1 hover:border-black hover:text-amber-800 transition-colors"
             >
-              <span>Discover Our Story & Workshop</span>
+              <span>Read Our Story</span>
               <span>&rarr;</span>
             </Link>
           </div>

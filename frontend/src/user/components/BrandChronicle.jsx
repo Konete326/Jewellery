@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { LuxuryButton } from './LuxuryButton'
 
 const WEEKLY_SCHEDULE = [
-  { days: 'Monday – Thursday', hours: '2:00 PM – 9:00 PM', note: 'Regular Boutique Hours', status: 'Open' },
+  { days: 'Monday – Thursday', hours: '2:00 PM – 9:00 PM', note: 'Regular Outlet Hours', status: 'Open' },
   { days: 'Friday', hours: '3:30 PM – 9:30 PM', note: 'Opens After Jummah Prayers', status: 'Open' },
   { days: 'Saturday', hours: '2:00 PM – 9:00 PM', note: 'Weekend Consultations', status: 'Open' },
   { days: 'Sunday', hours: 'Closed', note: 'Weekly Rest Day', status: 'Closed' }
@@ -18,21 +18,21 @@ const ERAS = [
     year: '1992',
     title: 'The Handcrafted Workshop',
     location: 'Murshid Bazaar, Saddar',
-    description: 'Founded by master craftsman Mr. Khalil Ahmed. Built on traditional Mughal filigree wirework, hand-forged gold bangles (kadas), and bespoke bridal churyan for Karachi families.',
+    description: 'Founded by master craftsman Mr. Khalil Ahmed. Built on traditional filigree wirework, hand-forged gold bangles (kadas), and bridal sets for Karachi families.',
     highlight: 'Master Goldsmith Foundations'
   },
   {
     year: '2010',
-    title: 'Sarafa Bullion & Purity Vault',
+    title: 'Sarafa Hallmarks & Purity Standards',
     location: 'Murshid Sunaar Tower',
-    description: 'Pioneered stringent purity testing in Saddar Sarafa. Guaranteeing certified 22K (.916), 21K (.875) and 18K (.750) fine gold with unmatched honesty and lifetime trust.',
+    description: 'Pioneered verified purity testing in Saddar Sarafa. Guaranteeing certified 22K (.916), 21K (.875) and 18K (.750) fine gold with complete honesty and lifetime trust.',
     highlight: 'Certified Hallmark Standard'
   },
   {
     year: 'Modern Era',
-    title: 'Generational 3D CAD Atelier',
+    title: 'Modern Custom Design',
     location: 'Flagship Showroom #2',
-    description: 'The sons joined the atelier, bringing high-precision 3D computer-aided design together with ancestral hand-carving. Clients preview photorealistic 3D models before molten gold casting.',
+    description: 'The next generation joined the team, introducing 3D digital design alongside traditional hand-carving. Customers can preview 3D models before gold casting.',
     highlight: 'Heritage Meets Innovation'
   }
 ]
@@ -55,7 +55,7 @@ const PILLARS = [
   },
   {
     icon: <MapPin className="size-5 text-amber-700 dark:text-amber-400" />,
-    title: 'Single Authentic Boutique',
+    title: 'Single Authentic Outlet',
     description: 'We operate exclusively from Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road, Saddar, Karachi. No duplicate branches.'
   }
 ]
@@ -63,7 +63,7 @@ const PILLARS = [
 export function BrandChronicle({ onOpenAppointment }) {
   const storeStatus = getStoreStatus()
   const whatsappUrl = getPersonalizedWhatsAppInquiry({
-    customMessage: 'I would like to learn more about your brand history and bespoke bridal jewelry.'
+    customMessage: 'I would like to learn more about your jewellery and custom bridal sets.'
   })
 
   return (
@@ -76,7 +76,7 @@ export function BrandChronicle({ onOpenAppointment }) {
           The Journey of Khalil & Sons
         </h2>
         <p className="text-sm sm:text-base text-muted-foreground font-light leading-relaxed">
-          From a humble artisanal bench in Murshid Bazaar to one of Karachi’s most respected family-owned jewelry ateliers. Discover the milestones that shaped our heritage.
+          From a humble workshop in Murshid Bazaar to one of Karachi’s most respected family-owned jewellery showrooms. Discover the milestones that shaped our story.
         </p>
       </div>
 
@@ -160,10 +160,10 @@ export function BrandChronicle({ onOpenAppointment }) {
               </span>
             </div>
             <h3 className="text-2xl sm:text-3xl font-serif font-light text-foreground">
-              Boutique Visiting Hours & Atelier Schedule
+              Outlet Visiting Hours & Atelier Schedule
             </h3>
             <p className="text-xs sm:text-sm text-muted-foreground font-light max-w-xl leading-relaxed">
-              Located at {STORE_INFO.address.full}. We welcome walk-in visitors and private bespoke bridal consultations during our boutique hours.
+              Located at {STORE_INFO.address.full}. We welcome walk-in visitors and private bespoke bridal consultations during our outlet hours.
             </p>
           </div>
 

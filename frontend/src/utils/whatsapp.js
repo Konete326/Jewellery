@@ -45,13 +45,14 @@ export function getPersonalizedWhatsAppInquiry({ piece, customMessage } = {}) {
       ? rawImg
       : `https://khalilandsonsjewellers.com${rawImg}`;
 
-    const text = `${greeting}\n\nI would like to inquire about this jewellery piece:\n\n💎 *${title}*\n🏷️ Category: ${category}\n🔖 Ref Code: ${refCode}\n🔗 Product Link: ${productUrl}\n📷 Photo: ${photoUrl}\n\nPlease share price estimate, gold purity, and appointment availability at your Saddar boutique.`;
+    const sizeLine = piece.selectedSize ? `\n📏 Selected Size: ${piece.selectedSize}` : '';
+    const text = `${greeting}\n\nI would like to inquire about this jewellery piece:\n\n💎 *${title}*${sizeLine}\n🏷️ Category: ${category}\n🔖 Ref Code: ${refCode}\n🔗 Product Link: ${productUrl}\n📷 Photo: ${photoUrl}\n\nPlease share price estimate, gold purity, and appointment availability at your Saddar outlet.`;
     return getWhatsAppUrl(text);
   }
 
   const baseText =
     customMessage ||
-    'I would like to inquire about bespoke bridal jewellery, gold rates, and booking a private appointment at your Saddar boutique.';
+    'I would like to inquire about bespoke bridal jewellery, gold rates, and booking a private appointment at your Saddar outlet.';
   const text = `${greeting}\n\n${baseText}`;
   return getWhatsAppUrl(text);
 }

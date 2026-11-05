@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Portal } from "@/components/portal";
 import { productLinks } from "@/components/nav-links";
 import { getAuthUser, logoutUser } from "@/lib/auth";
-import { XIcon, MenuIcon, ShieldCheck, LogOut, Download } from "lucide-react";
-import { UserIcon } from "@/components/icons";
+import { XIcon, MenuIcon, ShieldCheck, LogOut, Download, MapPin, Truck } from "lucide-react";
+import { UserIcon, SearchIcon, HeartIcon } from "@/components/icons";
 
-export function MobileNav() {
+export function MobileNav({ onOpenSearch, onOpenVault, vaultCount = 0 }) {
 	const [open, setOpen] = React.useState(false);
 	const [user, setUser] = React.useState(() => getAuthUser());
 	const [isInstalled, setIsInstalled] = React.useState(() => {
@@ -45,7 +45,7 @@ export function MobileNav() {
 	const isAdmin = user && (user.role === "admin" || user.isAdmin === true);
 
 	return (
-		<div className="md:hidden">
+		<div className="lg:hidden">
 			<Button
 				aria-controls="mobile-menu"
 				aria-expanded={open}
@@ -99,6 +99,38 @@ export function MobileNav() {
 							</div>
 
 							<div className="p-4 space-y-4">
+								<div className="grid grid-cols-2 gap-2 pb-1">
+									<button
+										type="button"
+										onClick={() => {
+											setOpen(false);
+											if (onOpenSearch) onOpenSearch();
+											else window.dispatchEvent(new CustomEvent("khalil_open_search"));
+										}}
+										className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl border border-border/80 bg-muted/30 hover:bg-muted text-xs font-mono text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+									>
+										<SearchIcon size={14} className="shrink-0" />
+										<span>Search</span>
+									</button>
+									<button
+										type="button"
+										onClick={() => {
+											setOpen(false);
+											if (onOpenVault) onOpenVault();
+											else window.dispatchEvent(new CustomEvent("khalil_open_vault"));
+										}}
+										className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl border border-border/80 bg-muted/30 hover:bg-muted text-xs font-mono text-muted-foreground hover:text-foreground transition-colors cursor-pointer relative"
+									>
+										<HeartIcon size={14} className="shrink-0 text-rose-500" />
+										<span>Wishlist</span>
+										{vaultCount > 0 && (
+											<span className="bg-rose-600 text-white text-[9px] px-1.5 py-0.2 rounded-full font-mono">
+												{vaultCount}
+											</span>
+										)}
+									</button>
+								</div>
+
 								<div className="space-y-1">
 									<Link
 										to="/"
@@ -109,42 +141,58 @@ export function MobileNav() {
 										<span className="text-muted-foreground text-xs font-mono">01</span>
 									</Link>
 									<Link
+										to="/shop"
+										onClick={() => setOpen(false)}
+										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
+									>
+										<span>All Jewellery Shop</span>
+										<span className="text-muted-foreground text-xs font-mono">02</span>
+									</Link>
+									<Link
 										to="/rates"
 										onClick={() => setOpen(false)}
 										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
 									>
-										<span>Sarafa Market Rates</span>
-										<span className="text-muted-foreground text-xs font-mono">02</span>
+										<span>Live Gold Rates</span>
+										<span className="text-muted-foreground text-xs font-mono">03</span>
 									</Link>
 									<Link
 										to="/gallery"
 										onClick={() => setOpen(false)}
 										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
 									>
-										<span>Haute Joaillerie Gallery</span>
-										<span className="text-muted-foreground text-xs font-mono">03</span>
+										<span>Jewellery Gallery</span>
+										<span className="text-muted-foreground text-xs font-mono">04</span>
 									</Link>
 									<Link
 										to="/about"
 										onClick={() => setOpen(false)}
 										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
 									>
-										<span>Atelier Heritage (1992)</span>
-										<span className="text-muted-foreground text-xs font-mono">04</span>
+										<span>About Us (Since 1992)</span>
+										<span className="text-muted-foreground text-xs font-mono">05</span>
 									</Link>
 									<Link
 										to="/contact"
 										onClick={() => setOpen(false)}
 										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
 									>
-										<span>Contact & Boutique</span>
-										<span className="text-muted-foreground text-xs font-mono">05</span>
+										<span>Contact & Showroom</span>
+										<span className="text-muted-foreground text-xs font-mono">06</span>
+									</Link>
+									<Link
+										to="/track-order"
+										onClick={() => setOpen(false)}
+										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
+									>
+										<span>Track Your Order</span>
+										<span className="text-muted-foreground text-xs font-mono">07</span>
 									</Link>
 								</div>
 
 								<div className="pt-3 border-t border-border/60">
 									<span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block mb-2 px-1">
-										Featured Masterpieces
+										Featured Collections
 									</span>
 									<div className="space-y-1">
 										{productLinks.map((link) => (
@@ -175,6 +223,18 @@ export function MobileNav() {
 											<span className="text-[10px] text-muted-foreground truncate font-mono">{user.email}</span>
 										</div>
 									</div>
+									<Button asChild variant="outline" className="w-full border-border text-foreground hover:bg-muted text-xs h-9 cursor-pointer" onClick={() => setOpen(false)}>
+										<Link to="/track-order" className="flex items-center justify-center gap-1.5">
+											<Truck className="size-3.5 text-amber-600 dark:text-amber-400" />
+											<span>Track Active Order</span>
+										</Link>
+									</Button>
+									<Button asChild variant="outline" className="w-full border-border text-foreground hover:bg-muted text-xs h-9 cursor-pointer" onClick={() => setOpen(false)}>
+										<Link to="/account" className="flex items-center justify-center gap-1.5">
+											<MapPin className="size-3.5 text-amber-600 dark:text-amber-400" />
+											<span>Saved Addresses</span>
+										</Link>
+									</Button>
 									{isAdmin && (
 										<Button asChild className="w-full bg-foreground text-background hover:bg-neutral-800 text-xs h-9 cursor-pointer" onClick={() => setOpen(false)}>
 											<Link to="/admin" className="flex items-center justify-center gap-1.5">

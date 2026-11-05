@@ -13,7 +13,7 @@ export function ShopThreeItemGrid({ items = [], onAddToCart }) {
           <ShopTile
             piece={firstItem}
             priority={true}
-            position="center"
+            position="bottom"
             onAddToCart={onAddToCart}
             className="h-full min-h-[360px] md:min-h-full"
           />

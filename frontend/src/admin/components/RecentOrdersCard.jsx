@@ -108,3 +108,4 @@ export function RecentOrdersCard({ orders = [], loading = false }) {
     </div>
   )
 }
+

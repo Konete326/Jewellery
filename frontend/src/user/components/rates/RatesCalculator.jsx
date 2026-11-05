@@ -23,7 +23,7 @@ export function RatesCalculator({ rates }) {
   }, [metal, karat, gold, silver]);
 
   const grams = useMemo(() => {
-    const val = Number(weight) || 0;
+    const val = Math.max(0, Number(weight) || 0);
     if (unit === 'tola') return val * TOLA_IN_GRAMS;
     if (unit === 'gram') return val;
     if (unit === 'masha') return (val / 12) * TOLA_IN_GRAMS;

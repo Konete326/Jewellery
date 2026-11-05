@@ -3,7 +3,9 @@ import { ENDPOINTS } from './endpoints.js';
 
 export const fetchProducts = async (params = {}) => {
   const query = new URLSearchParams();
-  if (params.category && params.category !== 'all') query.set('category', params.category);
+  if (params.category && params.category !== 'all' && params.category !== 'All') query.set('category', params.category);
+  if (params.supplierId && params.supplierId !== 'all' && params.supplierId !== 'All') query.set('supplierId', params.supplierId);
+  if (params.availability && params.availability !== 'all' && params.availability !== 'All') query.set('availability', params.availability);
   if (params.isPublished !== undefined) query.set('isPublished', params.isPublished);
   if (params.search) query.set('search', params.search);
   if (params.page) query.set('page', params.page);

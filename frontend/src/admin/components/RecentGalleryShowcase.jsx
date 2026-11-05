@@ -42,7 +42,7 @@ export function RecentGalleryShowcase({ galleryItems = [], loading = false }) {
           </div>
           <h4 className="text-sm font-medium text-foreground">Gallery is empty</h4>
           <p className="text-xs text-muted-foreground mt-1 max-w-xs">
-            No jewelry pieces currently published to the boutique gallery.
+            No jewelry pieces currently published to the outlet gallery.
           </p>
           <Link
             to="/admin/gallery"

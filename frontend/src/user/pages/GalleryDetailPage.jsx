@@ -12,11 +12,13 @@ import { MasterpieceReviewModal } from '../components/MasterpieceReviewModal';
 import { MasterpieceInquiryModal } from '../components/MasterpieceInquiryModal';
 import { BespokeAppointmentModal } from '../components/BespokeAppointmentModal';
 import { galleryApi } from '@/api/galleryApi';
+import { fetchProductById } from '@/api/productApi';
 import { PolaroidLineCarousel } from '@/components/ui/polaroid-line-carousel';
-import { updatePageSEO, getProductSchema } from '@/utils/seo';
+import { updatePageSEO, getProductSchema, removeProductJsonLd } from '@/utils/seo';
 import { LuxuryButton } from '../components/LuxuryButton';
 import { LumaSpin } from '@/components/ui/luma-spin';
-import { broadcastCartUpdate, subscribeToTabSync } from '@/utils/tabSync';
+import { broadcastCartUpdate, subscribeToTabSync, getCartStorageKey } from '@/utils/tabSync';
+import { getLocalCart, saveLocalCart } from '@/utils/cartStorage';
 import { getEstimatedPiecePrice, sanitizeQuantity } from '@/utils/pricing';
 import { toast } from 'sonner';
 
@@ -26,14 +28,7 @@ export function GalleryDetailPage() {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem('khalil_cart');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [cartItems, setCartItems] = useState(() => getLocalCart());
 
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -44,86 +39,138 @@ export function GalleryDetailPage() {
   const [similarSlides, setSimilarSlides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [apiError, setApiError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
+    const controller = new AbortController();
 
     const loadPiece = async () => {
       setLoading(true);
       setNotFound(false);
+      setApiError(false);
+
+      let itemData = null;
+      let isGenuineGalleryNotFound = false;
+
       try {
-        const res = await galleryApi.getAll();
-        if (!isMounted) return;
-
-        const allItems = Array.isArray(res?.data) ? res.data : [];
-        const dbItem = allItems.find(
-          (item) => String(item._id) === String(id) || String(item.id) === String(id)
-        );
-
-        if (dbItem) {
-          const itemPayload = {
-            _id: dbItem._id,
-            id: dbItem._id,
-            title: dbItem.title,
-            category: dbItem.category || 'Bridal Sets',
-            description: dbItem.description,
-            imageUrl: dbItem.imageUrl,
-            averageRating: dbItem.averageRating || 0,
-            reviewCount: dbItem.reviewCount || 0,
-            reviews: dbItem.reviews || []
-          };
-
-          setPiece(itemPayload);
-          setReviewsList(itemPayload.reviews);
-
-          updatePageSEO({
-            title: itemPayload.title,
-            description: itemPayload.description || `Discover ${itemPayload.title} - handcrafted certified 22K, 21K and 18K gold jewellery by Khalil & Sons Jewellers, Murshid Sunaar Tower, Saddar, Karachi.`,
-            keywords: `${itemPayload.title}, ${itemPayload.category || 'Bridal Sets'}, gold jewellery Karachi, certified 22K 21K 18K gold, Pakistani jewellery, Khalil & Sons`,
-            image: itemPayload.imageUrl,
-            type: 'product',
-            schema: getProductSchema(itemPayload)
-          });
-
-          const currentCat = (itemPayload.category || 'Bridal Sets').trim().toLowerCase();
-          const currentId = String(itemPayload._id || itemPayload.id);
-
-          const otherItems = allItems.filter(
-            (it) => String(it._id || it.id) !== currentId && (it.imageUrl || it.src)
-          );
-
-          const sameCategory = otherItems.filter(
-            (it) => it.category && it.category.trim().toLowerCase() === currentCat
-          );
-          const diffCategory = otherItems.filter(
-            (it) => !it.category || it.category.trim().toLowerCase() !== currentCat
-          );
-
-          const combined = [...sameCategory, ...diffCategory].slice(0, 8);
-          const formattedSlides = combined.map((item) => ({
-            id: item._id || item.id,
-            image: item.imageUrl || item.src,
-            title: item.title,
-            caption: item.category || '22K Gold Masterpiece',
-            category: item.category || 'Fine Jewellery',
-            alt: item.title
-          }));
-
-          setSimilarSlides(formattedSlides);
+        const res = await galleryApi.getById(id, { signal: controller.signal });
+        if (!isMounted || controller.signal.aborted) return;
+        if (res && res.data) {
+          itemData = res.data;
+        }
+      } catch (err) {
+        if (!isMounted || controller.signal.aborted) return;
+        if (err?.status === 404) {
+          isGenuineGalleryNotFound = true;
         } else {
-          setPiece(null);
-          setNotFound(true);
-        }
-      } catch {
-        if (isMounted) {
-          setPiece(null);
-          setNotFound(true);
-        }
-      } finally {
-        if (isMounted) {
+          setApiError(true);
           setLoading(false);
+          return;
         }
       }
+
+      if (!itemData && isGenuineGalleryNotFound) {
+        try {
+          const prodRes = await fetchProductById(id);
+          if (!isMounted || controller.signal.aborted) return;
+          if (prodRes && prodRes.data) {
+            const p = prodRes.data;
+            itemData = {
+              _id: p._id,
+              id: p._id,
+              title: p.name || p.title,
+              category: p.category || 'Bridal Sets',
+              description: p.description || '',
+              imageUrl: p.imageUrl || (Array.isArray(p.images) && p.images[0]) || '/assets/products/choker-ruby-01.jpg',
+              images: Array.isArray(p.images) ? p.images : [],
+              purity: p.purity || '22K',
+              grossWeight: p.grossWeight,
+              netWeight: p.netWeight,
+              makingCharges: p.makingCharges,
+              stoneCharges: p.stoneCharges,
+              wastage: p.wastage,
+              calculatedPrice: p.calculatedPrice,
+              stock: (p.stock !== undefined && p.stock !== null) ? p.stock : (p.stockQuantity ?? p.inventoryQuantity ?? null),
+              stockQuantity: p.stockQuantity ?? p.stock ?? p.inventoryQuantity ?? null,
+              availability: p.availability || null,
+              averageRating: Number(p.averageRating) || 0,
+              reviewCount: Number(p.reviewCount) || (Array.isArray(p.reviews) ? p.reviews.length : 0),
+              reviews: Array.isArray(p.reviews) ? p.reviews : []
+            };
+          }
+        } catch (err) {
+          if (!isMounted || controller.signal.aborted) return;
+          if (err?.status !== 404) {
+            setApiError(true);
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
+      if (!isMounted || controller.signal.aborted) return;
+
+      if (!itemData) {
+        setPiece(null);
+        setNotFound(true);
+        setLoading(false);
+        return;
+      }
+
+      const itemPayload = {
+        _id: itemData._id,
+        id: itemData._id,
+        title: itemData.title || itemData.name || 'Fine Jewellery Piece',
+        category: itemData.category || 'Bridal Sets',
+        description: itemData.description || '',
+        imageUrl: itemData.imageUrl || (Array.isArray(itemData.images) && itemData.images[0]) || '/assets/products/choker-ruby-01.jpg',
+        images: Array.isArray(itemData.images) ? itemData.images : [],
+        purity: itemData.purity || '22K',
+        grossWeight: itemData.grossWeight,
+        netWeight: itemData.netWeight,
+        makingCharges: itemData.makingCharges,
+        stoneCharges: itemData.stoneCharges,
+        wastage: itemData.wastage,
+        calculatedPrice: itemData.calculatedPrice,
+        stock: (itemData.stock !== undefined && itemData.stock !== null) ? itemData.stock : (itemData.stockQuantity ?? itemData.inventoryQuantity ?? null),
+        stockQuantity: itemData.stockQuantity ?? itemData.stock ?? itemData.inventoryQuantity ?? null,
+        availability: itemData.availability || null,
+        averageRating: Number(itemData.averageRating) || 0,
+        reviewCount: Number(itemData.reviewCount) || (Array.isArray(itemData.reviews) ? itemData.reviews.length : 0),
+        reviews: Array.isArray(itemData.reviews) ? itemData.reviews : []
+      };
+
+      setPiece(itemPayload);
+      setReviewsList(itemPayload.reviews);
+      setLoading(false);
+
+      updatePageSEO({
+        title: itemPayload.title,
+        description: itemPayload.description || `Discover ${itemPayload.title} - handcrafted certified 22K, 21K and 18K gold jewellery by Khalil & Sons Jewellers, Murshid Sunaar Tower, Saddar, Karachi.`,
+        keywords: `${itemPayload.title}, ${itemPayload.category || 'Bridal Sets'}, gold jewellery Karachi, certified 22K 21K 18K gold, Pakistani jewellery, Khalil & Sons`,
+        image: itemPayload.imageUrl,
+        type: 'product',
+        schema: getProductSchema(itemPayload)
+      });
+
+      try {
+        const similarRes = await galleryApi.getAll({ limit: 8, page: 1 });
+        if (!isMounted || controller.signal.aborted) return;
+        const list = Array.isArray(similarRes?.data) ? similarRes.data : (Array.isArray(similarRes) ? similarRes : []);
+        const currentId = String(itemPayload._id || itemPayload.id);
+        const filtered = list.filter((it) => String(it._id || it.id) !== currentId && (it.imageUrl || it.src));
+        const formattedSlides = filtered.map((item) => ({
+          id: item._id || item.id,
+          image: item.imageUrl || item.src,
+          title: item.title,
+          caption: item.category || '22K Gold Masterpiece',
+          category: item.category || 'Fine Jewellery',
+          alt: item.title
+        }));
+        setSimilarSlides(formattedSlides);
+      } catch {}
     };
 
     loadPiece();
@@ -131,17 +178,20 @@ export function GalleryDetailPage() {
 
     return () => {
       isMounted = false;
+      controller.abort();
+      removeProductJsonLd();
     };
-  }, [id]);
+  }, [id, retryCount]);
 
   const handleReviewSubmitted = (newReview) => {
     setReviewsList((prev) => [newReview, ...prev]);
     setPiece((prev) => {
       if (!prev) return prev;
       const updatedReviews = [newReview, ...(prev.reviews || [])];
+      const validReviews = updatedReviews.filter((r) => Number(r.rating) > 0);
       const newCount = updatedReviews.length;
-      const totalScore = updatedReviews.reduce((sum, r) => sum + Number(r.rating || 5), 0);
-      const newAverage = Number((totalScore / newCount).toFixed(1));
+      const totalScore = validReviews.reduce((sum, r) => sum + Number(r.rating), 0);
+      const newAverage = validReviews.length > 0 ? Number((totalScore / validReviews.length).toFixed(1)) : 0;
       return {
         ...prev,
         reviews: updatedReviews,
@@ -152,50 +202,78 @@ export function GalleryDetailPage() {
   };
 
   useEffect(() => {
-    try {
-      localStorage.setItem('khalil_cart', JSON.stringify(cartItems));
-      const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
-      broadcastCartUpdate(count, cartItems);
-    } catch {}
+    saveLocalCart(cartItems);
+    const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+    broadcastCartUpdate(count, cartItems);
   }, [cartItems]);
+
+  useEffect(() => {
+    const handleAuthChange = (e) => {
+      const nextUser = e?.detail ?? null;
+      setCartItems(getLocalCart(nextUser));
+    };
+    window.addEventListener('khalil_auth_change', handleAuthChange);
+    return () => window.removeEventListener('khalil_auth_change', handleAuthChange);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = subscribeToTabSync((data) => {
       if (data?.type === 'CART_UPDATE' && Array.isArray(data.items)) {
-        setCartItems(data.items);
+        const currentKey = getCartStorageKey();
+        if (!data.cartKey || data.cartKey === currentKey) {
+          setCartItems(data.items);
+        }
       }
     });
     return unsubscribe;
   }, []);
 
-  const handleAddToCart = (itemToAdd = piece) => {
+  const handleAddToCart = (itemToAdd = piece, size = null) => {
     if (!itemToAdd) return;
     const pieceId = itemToAdd._id || itemToAdd.id;
+    const cleanSize = size ? String(size).trim() : '';
+    const cartItemId = cleanSize ? `${pieceId}-${cleanSize}` : String(pieceId);
     const pricing = getEstimatedPiecePrice(itemToAdd);
+    const purityVal = itemToAdd.purity || pricing.purity || '';
+    const images = Array.isArray(itemToAdd.images) ? itemToAdd.images : [];
+    const imageSrc = itemToAdd.imageUrl || itemToAdd.src || images[0] || '/assets/products/choker-ruby-01.jpg';
 
     setCartItems((prev) => {
-      const existing = prev.find((item) => String(item.id) === String(pieceId));
+      const existing = prev.find((item) => String(item.id) === String(cartItemId));
       if (existing) {
         return prev.map((item) =>
-          String(item.id) === String(pieceId) ? { ...item, quantity: (Number(item.quantity) || 1) + 1 } : item
+          String(item.id) === String(cartItemId) ? { ...item, quantity: (Number(item.quantity) || 1) + 1 } : item
         );
       }
       return [
         ...prev,
         {
-          id: pieceId,
-          name: itemToAdd.title || 'Fine Jewellery Piece',
+          id: cartItemId,
+          productId: String(pieceId),
+          name: itemToAdd.title || itemToAdd.name || 'Fine Jewellery Piece',
+          title: itemToAdd.title || itemToAdd.name || 'Fine Jewellery Piece',
           category: itemToAdd.category || 'Fine Jewellery',
-          image: itemToAdd.imageUrl || itemToAdd.src || '/assets/products/choker-ruby-01.jpg',
+          image: imageSrc,
+          imageUrl: imageSrc,
           numericPrice: pricing.numericPrice,
           price: pricing.formattedPrice,
           quantity: 1,
-          material: pricing.purity
+          material: purityVal,
+          purity: purityVal,
+          isEstimated: Boolean(pricing.isEstimated),
+          hasConfirmedPrice: Boolean(pricing.hasConfirmedPrice),
+          pricingSource: pricing.pricingSource || 'estimate',
+          calculatedPrice: itemToAdd.calculatedPrice || undefined,
+          netWeight: itemToAdd.netWeight || undefined,
+          grossWeight: itemToAdd.grossWeight || undefined,
+          makingCharges: itemToAdd.makingCharges || undefined,
+          size: cleanSize || undefined
         }
       ];
     });
 
-    toast.success(`${itemToAdd.title || 'Masterpiece'} added to your bag`, {
+    const sizeMsg = cleanSize ? ` (Size: ${cleanSize})` : '';
+    toast.success(`${itemToAdd.title || 'Masterpiece'}${sizeMsg} added to your bag`, {
       action: {
         label: 'View Bag',
         onClick: () => setIsCartOpen(true)
@@ -248,6 +326,34 @@ export function GalleryDetailPage() {
     );
   }
 
+  if (apiError) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex flex-col justify-between">
+        <Navbar
+          onOpenSearch={() => setIsSearchOpen(true)}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={0}
+        />
+        <div className="max-w-md mx-auto text-center px-6 py-24">
+          <Gem className="size-10 text-neutral-600 dark:text-neutral-400 mx-auto mb-4" />
+          <h2 className="font-headline text-3xl font-light mb-3">Unable to Load Item</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed mb-6 font-light">
+            Could not connect to our jewellery catalog. Please check your connection and try again.
+          </p>
+          <div className="flex items-center justify-center gap-3">
+            <LuxuryButton onClick={() => setRetryCount((prev) => prev + 1)} variant="dark">
+              Try Again
+            </LuxuryButton>
+            <LuxuryButton onClick={() => navigate('/gallery')} variant="outline">
+              Return to Gallery
+            </LuxuryButton>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   if (notFound || !piece) {
     return (
       <div className="min-h-screen bg-background text-foreground flex flex-col justify-between">
@@ -258,9 +364,9 @@ export function GalleryDetailPage() {
         />
         <div className="max-w-md mx-auto text-center px-6 py-24">
           <Gem className="size-10 text-neutral-600 dark:text-neutral-400 mx-auto mb-4" />
-          <h2 className="font-headline text-3xl font-light mb-3">Piece Not Found</h2>
+          <h2 className="font-headline text-3xl font-light mb-3">Item Not Found</h2>
           <p className="text-sm text-muted-foreground leading-relaxed mb-6 font-light">
-            The requested jewellery masterpiece is no longer in our active exhibition or has been updated in the atelier.
+            This jewellery item is currently unavailable or has been removed from our catalog.
           </p>
           <LuxuryButton onClick={() => navigate('/gallery')} variant="dark">
             Return to Gallery
@@ -301,7 +407,7 @@ export function GalleryDetailPage() {
             className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors cursor-pointer group py-1"
           >
             <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-1" />
-            <span>Back to Collection</span>
+            <span>Back to Gallery</span>
           </button>
         </div>
 
@@ -323,11 +429,11 @@ export function GalleryDetailPage() {
                     Curated Collection • {piece.category || 'Fine Jewellery'}
                   </span>
                   <h3 className="text-2xl sm:text-3xl font-serif font-light text-foreground">
-                    Similar Masterpieces
+                    Similar Jewellery
                   </h3>
                 </div>
                 <span className="text-xs text-muted-foreground font-mono">
-                  Drag line or click to inspect
+                  Swipe or click to view
                 </span>
               </div>
 

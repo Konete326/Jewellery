@@ -106,7 +106,7 @@ export function AtelierContactForm({ onSuccess }) {
       });
 
       toast.success('Inquiry Submitted', {
-        description: `Confirmation email dispatched to ${formData.email.trim()}`
+        description: `Confirmation email sent to ${formData.email.trim()}`
       });
       onSuccess?.(payload);
     } catch (err) {
@@ -138,7 +138,7 @@ export function AtelierContactForm({ onSuccess }) {
         <div className="space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-border/70">
             <span className="font-mono text-[9px] uppercase tracking-widest text-amber-900/90 dark:text-amber-200 border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 rounded-full font-medium">
-              AU · INQUIRY DISPATCHED
+              AU · INQUIRY RECEIVED
             </span>
             <span className="text-xs text-muted-foreground font-mono">
               Just now
@@ -150,7 +150,7 @@ export function AtelierContactForm({ onSuccess }) {
               Inquiry Confirmed
             </h3>
             <p className="text-xs text-muted-foreground font-light leading-relaxed">
-              Your inquiry has been safely received by the master jewelers at Khalil & Sons.
+              Your inquiry has been received by our team at Khalil & Sons.
             </p>
           </div>
 
@@ -172,7 +172,7 @@ export function AtelierContactForm({ onSuccess }) {
               {submittedConfirmation.refCode}
             </div>
             <div className="text-xs text-muted-foreground leading-relaxed pt-1 border-t border-amber-500/20">
-              Confirmation dispatched to{' '}
+              Confirmation sent to{' '}
               <strong className="text-foreground font-medium underline underline-offset-2">
                 {submittedConfirmation.email}
               </strong>
@@ -181,7 +181,7 @@ export function AtelierContactForm({ onSuccess }) {
 
           <div className="p-3.5 rounded-xl bg-muted/40 border border-border/70 text-xs text-muted-foreground space-y-1 leading-relaxed">
             <div className="font-medium text-foreground">Estimated Response Time:</div>
-            <div>Our atelier concierge typically reviews inquiries and replies within 2–4 business hours.</div>
+            <div>Our team typically reviews inquiries and replies within 2–4 business hours.</div>
           </div>
         </div>
 

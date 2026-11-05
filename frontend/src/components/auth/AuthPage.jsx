@@ -30,8 +30,8 @@ export function AuthPage() {
     try {
       setGoogleLoading(true);
       const authedUser = await loginWithGoogle();
-      toast.success(`Welcome, ${authedUser.name || "Collector"}!`, {
-        description: "Authenticated securely via Google"
+      toast.success(`Welcome, ${authedUser.name || "Customer"}!`, {
+        description: "Signed in securely via Google"
       });
       const destination =
         authedUser.role === "admin" || isRedirectedFromAdmin
@@ -96,7 +96,7 @@ export function AuthPage() {
               <div className="p-3 rounded-lg bg-muted/60 text-xs flex items-center justify-between">
                 <span className="text-muted-foreground">Account Status</span>
                 <span className="font-medium text-foreground capitalize">
-                  {isAdmin ? "Administrator" : "Client Account"}
+                  {isAdmin ? "Administrator" : "Customer Account"}
                 </span>
               </div>
 

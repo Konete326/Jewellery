@@ -1,9 +1,9 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { ENV } from './env.js';
 
-const cloudName = process.env.CLOUDINARY_CLOUD_NAME || ENV.CLOUDINARY_CLOUD_NAME || 'dsr2z1tyu';
-const apiKey = process.env.CLOUDINARY_API_KEY || ENV.CLOUDINARY_API_KEY || '294349748696292';
-const apiSecret = process.env.CLOUDINARY_API_SECRET || ENV.CLOUDINARY_API_SECRET || 'jX1MP864n72pQvUEJIVbC9_DNoc';
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME || ENV.CLOUDINARY_CLOUD_NAME || '';
+const apiKey = process.env.CLOUDINARY_API_KEY || ENV.CLOUDINARY_API_KEY || '';
+const apiSecret = process.env.CLOUDINARY_API_SECRET || ENV.CLOUDINARY_API_SECRET || '';
 
 cloudinary.config({
   cloud_name: cloudName,
@@ -12,13 +12,14 @@ cloudinary.config({
 });
 
 export const uploadToCloudinary = (fileBuffer, folder = 'khalil_gallery') => {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME || ENV.CLOUDINARY_CLOUD_NAME || 'dsr2z1tyu',
-    api_key: process.env.CLOUDINARY_API_KEY || ENV.CLOUDINARY_API_KEY || '294349748696292',
-    api_secret: process.env.CLOUDINARY_API_SECRET || ENV.CLOUDINARY_API_SECRET || 'jX1MP864n72pQvUEJIVbC9_DNoc'
-  });
-
   return new Promise((resolve, reject) => {
+    if (!cloudName || !apiKey || !apiSecret) {
+      return resolve({
+        secure_url: '/assets/products/choker-ruby-01.jpg',
+        public_id: `khalil_mock_${Date.now()}`
+      });
+    }
+
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         folder,
@@ -37,11 +38,11 @@ export const uploadToCloudinary = (fileBuffer, folder = 'khalil_gallery') => {
 };
 
 export const deleteFromCloudinary = async (publicId) => {
-  if (!publicId) return;
+  if (!publicId || !cloudName) return;
   try {
     await cloudinary.uploader.destroy(publicId);
   } catch (error) {
-    console.error('Failed to delete asset from Cloudinary:', error);
+    console.error('Failed to delete asset from Cloudinary:', error.message);
   }
 };
 

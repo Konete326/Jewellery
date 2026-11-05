@@ -9,7 +9,8 @@ import {
   StarIcon,
   TrendingUpIcon,
   LandmarkIcon,
-  UserCheckIcon
+  UserCheckIcon,
+  Building2Icon
 } from "lucide-react";
 
 export const navGroups = [
@@ -69,6 +70,12 @@ export const navGroups = [
         path: "/admin/accounts",
         key: "accounts",
         icon: <LandmarkIcon className="size-4" />
+      },
+      {
+        title: "Suppliers",
+        path: "/admin/suppliers",
+        key: "suppliers",
+        icon: <Building2Icon className="size-4" />
       },
       {
         title: "Users",

@@ -123,20 +123,11 @@ export function CategoriesAdminView() {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] uppercase font-mono tracking-widest text-amber-800 dark:text-amber-400 font-semibold">
-              Atelier Architecture
-            </span>
-            <span className="text-muted-foreground/40">•</span>
-            <span className="text-[10px] font-mono tracking-wider text-muted-foreground">
-              AU · 916.6 Standards
-            </span>
-          </div>
           <h2 className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-foreground">
             Categories Management
           </h2>
-          <p className="text-xs text-muted-foreground">
-            Curate jewellery collections, bullion categories, assay standards, and storefront classifications
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Manage your jewellery categories (Rings, Chains, Bridal, Bangles, etc.)
           </p>
         </div>
 
@@ -171,7 +162,7 @@ export function CategoriesAdminView() {
             <Search className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search by collection title, metal standard, or hallmark..."
+              placeholder="Search categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-4 py-1.5 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"

@@ -120,7 +120,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                 AU · APPOINTMENT RESERVED
               </span>
               <span className="text-xs text-muted-foreground font-mono">
-                Atelier Concierge
+                Showroom Team
               </span>
             </div>
 
@@ -151,7 +151,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                 {bookingConfirmation.refCode}
               </div>
               <div className="text-xs text-muted-foreground pt-1 border-t border-amber-500/20">
-                Official confirmation dispatched to{' '}
+                Confirmation sent to{' '}
                 <strong className="text-foreground font-medium underline underline-offset-2">
                   {bookingConfirmation.email}
                 </strong>
@@ -194,7 +194,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                 className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl bg-foreground hover:bg-neutral-800 text-background text-xs font-medium transition-colors shadow-xs"
               >
                 <MessageSquare className="size-3.5 text-amber-300" />
-                WhatsApp Atelier
+                WhatsApp Showroom
               </a>
             </div>
           </div>

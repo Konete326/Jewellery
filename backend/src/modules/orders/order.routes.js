@@ -5,18 +5,35 @@ import {
   getOrderByNumber,
   createOrder,
   updateOrder,
+  recordOrderCollection,
   deleteOrder
 } from './order.controller.js';
+import {
+  recordPayment,
+  approvePayment,
+  rejectPayment,
+  getOrderPayments,
+  getOrderReceipts
+} from './payment.controller.js';
 import { validateRequest } from '../../middlewares/validateRequest.js';
-import { createOrderSchema } from './order.validation.js';
+import { createOrderSchema, updateOrderSchema } from './order.validation.js';
+import { verifyAuth, requireAdmin, optionalAuth } from '../../middlewares/auth.js';
+import { orderLimiter, trackingLimiter } from '../../middlewares/rateLimiter.js';
 
 const router = Router();
 
-router.get('/', getOrders);
-router.get('/number/:orderNumber', getOrderByNumber);
-router.get('/:id', getOrderById);
-router.post('/', validateRequest(createOrderSchema), createOrder);
-router.patch('/:id', updateOrder);
-router.delete('/:id', deleteOrder);
+router.get('/', verifyAuth, requireAdmin, getOrders);
+router.get('/number/:orderNumber', trackingLimiter, optionalAuth, getOrderByNumber);
+router.get('/:id', verifyAuth, getOrderById);
+router.post('/', orderLimiter, optionalAuth, validateRequest(createOrderSchema), createOrder);
+router.patch('/:id/collect', verifyAuth, requireAdmin, recordOrderCollection);
+router.patch('/:id', verifyAuth, requireAdmin, validateRequest(updateOrderSchema), updateOrder);
+router.delete('/:id', verifyAuth, requireAdmin, deleteOrder);
+
+router.post('/:id/payments', orderLimiter, optionalAuth, recordPayment);
+router.get('/:id/payments', verifyAuth, getOrderPayments);
+router.patch('/:id/payments/:paymentId/approve', verifyAuth, requireAdmin, approvePayment);
+router.patch('/:id/payments/:paymentId/reject', verifyAuth, requireAdmin, rejectPayment);
+router.get('/:id/receipts', verifyAuth, getOrderReceipts);
 
 export default router;

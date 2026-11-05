@@ -1,11 +1,8 @@
-import { Gallery } from '../gallery/gallery.model.js';
-import { BASE_URL, escapeXml, optimizeCloudinaryUrl } from './seo.utils.js';
+import { loadFeedProducts } from './feedProducts.service.js';
+import { BASE_URL, escapeXml } from './seo.utils.js';
 
 export async function generateGoogleMerchantXml() {
-  const items = await Gallery.find({ isActive: true })
-    .select('_id title description category imageUrl updatedAt')
-    .sort({ order: 1, updatedAt: -1 })
-    .lean();
+  const items = await loadFeedProducts();
 
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">\n';
@@ -15,19 +12,12 @@ export async function generateGoogleMerchantXml() {
   xml += `    <description>${escapeXml('Certified 22K/24K gold bespoke bridal jewellery and heirlooms handcrafted in Karachi since 1992.')}</description>\n`;
 
   for (const item of items) {
-    const id = item._id.toString();
-    const sku = `KS-${id.slice(-6).toUpperCase()}`;
-    const title = escapeXml(item.title || 'Fine Gold Jewellery');
-    const desc = escapeXml(
-      item.description ||
-        `Handcrafted bespoke ${item.category || 'jewellery'} piece by Khalil & Sons Jewellers, Karachi.`
-    );
-    const link = `${BASE_URL}/gallery/${id}`;
-    const rawImg = item.imageUrl?.startsWith('http')
-      ? item.imageUrl
-      : `${BASE_URL}${item.imageUrl}`;
-    const imgUrl = escapeXml(optimizeCloudinaryUrl(rawImg));
-    const cat = escapeXml(item.category || 'Bridal Sets');
+    const sku = escapeXml(item.sku);
+    const title = escapeXml(item.title);
+    const desc = escapeXml(item.description);
+    const link = escapeXml(item.link);
+    const imgUrl = escapeXml(item.imageUrl);
+    const cat = escapeXml(item.category);
 
     xml += '    <item>\n';
     xml += `      <g:id>${sku}</g:id>\n`;
@@ -37,8 +27,8 @@ export async function generateGoogleMerchantXml() {
     xml += `      <g:mobile_link>${link}</g:mobile_link>\n`;
     xml += `      <g:image_link>${imgUrl}</g:image_link>\n`;
     xml += '      <g:condition>new</g:condition>\n';
-    xml += '      <g:availability>in_stock</g:availability>\n';
-    xml += '      <g:price>0.00 PKR</g:price>\n';
+    xml += `      <g:availability>${item.availability}</g:availability>\n`;
+    xml += `      <g:price>${item.priceString}</g:price>\n`;
     xml += `      <g:brand>${escapeXml('Khalil & Sons Jewellers')}</g:brand>\n`;
     xml += '      <g:google_product_category>188</g:google_product_category>\n';
     xml += `      <g:product_type>${escapeXml(`Apparel & Accessories > Jewelry > ${cat}`)}</g:product_type>\n`;

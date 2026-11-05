@@ -23,15 +23,28 @@ export const AppProvider = ({ children }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const addToCart = (product) => {
+  const addToCart = (product, size = null) => {
+    const effectiveSize = size || product.size || undefined;
+    const cartItemId = effectiveSize
+      ? `${product.id || product._id}-${effectiveSize}`
+      : (product.id || product._id);
+
     setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const existing = prev.find((item) => String(item.id) === String(cartItemId));
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          String(item.id) === String(cartItemId) ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [
+        ...prev,
+        {
+          ...product,
+          id: cartItemId,
+          size: effectiveSize,
+          quantity: 1
+        }
+      ];
     });
     showAlert('Added to Bag', `${product.title} has been added to your shopping bag.`, 'success');
   };

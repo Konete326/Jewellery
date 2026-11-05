@@ -4,12 +4,25 @@ import { toast } from 'sonner';
 
 const DEFAULT_TIMEOUT_MS = 12000;
 
+const getStoredToken = () => {
+  try {
+    return localStorage.getItem('auth_token') || '';
+  } catch {
+    return '';
+  }
+};
+
 export async function apiClient(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
   const headers = { ...options.headers };
 
   if (!(options.body instanceof FormData)) {
     headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+  }
+
+  const token = options.token || getStoredToken();
+  if (token && !headers['Authorization']) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const timeoutMs = options.timeout !== undefined ? options.timeout : DEFAULT_TIMEOUT_MS;
@@ -51,6 +64,18 @@ export async function apiClient(endpoint, options = {}) {
     }));
 
     if (!response.ok) {
+      if (response.status === 401) {
+        const currentToken = getStoredToken();
+        if (token && currentToken && token === currentToken) {
+          localStorage.removeItem('auth_token');
+          localStorage.removeItem('auth_user');
+          localStorage.removeItem('khalil_atelier_vault');
+          localStorage.removeItem('khalil_atelier_vault_items');
+          window.dispatchEvent(new CustomEvent('khalil_auth_change', { detail: null }));
+          window.dispatchEvent(new CustomEvent('khalil_vault_change', { detail: { count: 0, ids: [] } }));
+        }
+      }
+
       const error = new Error(result.message || 'Network request failed');
       error.status = response.status;
       error.details = result.errors;

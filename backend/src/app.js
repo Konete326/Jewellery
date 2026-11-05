@@ -5,8 +5,10 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { corsOptions } from './config/cors.js';
+import { ENV, parseTrustProxy } from './config/env.js';
 import apiRouter from './routes/index.js';
 import seoRouter from './modules/seo/seo.routes.js';
+import { renderPublicPageHtml } from './modules/seo/publicPages.service.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 
@@ -16,11 +18,14 @@ const publicDir = path.resolve(__dirname, '../public');
 
 const app = express();
 
+app.set('trust proxy', parseTrustProxy(ENV.TRUST_PROXY));
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+app.use('/api/v1', apiRouter);
 app.use('/api', apiRouter);
 app.use('/', seoRouter);
 
@@ -45,6 +50,12 @@ if (fs.existsSync(publicDir)) {
   }));
   app.use((req, res, next) => {
     if (req.method === 'GET' && !req.path.startsWith('/api')) {
+      const pageHtml = renderPublicPageHtml(publicDir, req.path);
+      if (pageHtml) {
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600');
+        return res.status(200).send(pageHtml);
+      }
       return res.sendFile(path.join(publicDir, 'index.html'));
     }
     next();

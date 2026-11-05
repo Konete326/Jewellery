@@ -20,7 +20,7 @@ export function FeaturedMasterpieces() {
 
         const apiItems = Array.isArray(res?.data) ? res.data : []
         const validItems = apiItems.filter((item) => item.imageUrl || item.src)
-        const badges = ['Featured Piece', 'Limited Edition', 'Atelier Heritage', 'Masterwork']
+        const badges = ['Featured', 'Popular', 'Signature Design', 'Handmade']
 
         const mapped = validItems.slice(0, 6).map((item, idx) => {
           const rawRating = Number(item.averageRating || item.rating)
@@ -68,7 +68,7 @@ export function FeaturedMasterpieces() {
             onClick={() => navigate('/gallery')}
             className="text-[#5a6061] hover:text-[#2d3435] text-xs tracking-widest uppercase inline-flex items-center gap-1.5 transition-colors cursor-pointer group"
           >
-            <span>View All Gallery Pieces</span>
+            <span>View All Pieces</span>
             <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
           </button>
         </div>
@@ -87,13 +87,13 @@ export function FeaturedMasterpieces() {
           <div className="rounded-2xl border border-neutral-300/80 bg-white p-12 text-center max-w-xl mx-auto shadow-sm">
             <Gem className="size-8 text-neutral-600 mx-auto mb-4" />
             <h3 className="font-headline text-2xl text-[#2d3435] mb-2 font-normal">
-              New Masterpieces in Crafting
+              New Designs Coming Soon
             </h3>
             <p className="text-sm text-[#5a6061] leading-relaxed mb-6 font-light">
-              Our master goldsmiths are curating the latest bridal collection. New exhibits added via the atelier will appear here.
+              Our goldsmiths are crafting new bridal designs. They will appear here once ready.
             </p>
             <LuxuryButton onClick={() => navigate('/gallery')} variant="gold">
-              Explore Atelier Gallery
+              Browse Gallery
             </LuxuryButton>
           </div>
         ) : (
@@ -122,11 +122,17 @@ export function FeaturedMasterpieces() {
                         e.currentTarget.src = '/images/image-01.jpg'
                       }}
                     />
-                    {piece.badge && (
-                      <span className="absolute top-6 right-6 bg-[#e4e9ea] px-3 py-1 text-[10px] tracking-widest uppercase font-medium rounded-sm">
-                        {piece.badge}
+                    <div className="absolute top-6 right-6 flex flex-col items-end gap-1.5 z-10">
+                      {piece.badge && (
+                        <span className="bg-[#e4e9ea] px-3 py-1 text-[10px] tracking-widest uppercase font-medium rounded-sm">
+                          {piece.badge}
+                        </span>
+                      )}
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono font-medium tracking-wide uppercase bg-white/90 text-amber-900 border border-amber-500/30 shadow-2xs backdrop-blur-xs">
+                        <span className="size-1 rounded-full bg-emerald-500 animate-pulse" />
+                        Live Gold Rate Price
                       </span>
-                    )}
+                    </div>
                     <div className="absolute bottom-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <LuxuryButton
                         onClick={(e) => {
@@ -137,7 +143,7 @@ export function FeaturedMasterpieces() {
                         variant="gold"
                       >
                         <Eye className="size-3.5 text-amber-200" />
-                        <span>View Piece</span>
+                        <span>View Details</span>
                       </LuxuryButton>
                     </div>
                   </div>
@@ -159,10 +165,10 @@ export function FeaturedMasterpieces() {
                   </p>
                   <div className="flex items-center justify-between pt-2 border-t border-neutral-200/50">
                     <span className="text-[10px] uppercase font-mono tracking-widest text-[#5a6061]">
-                      Khalil & Sons Masterpiece
+                      Khalil & Sons Fine Jewellery
                     </span>
                     <span className="text-xs font-mono uppercase tracking-wider text-amber-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                      <span>View Piece</span>
+                      <span>View Details</span>
                       <ArrowRight className="size-3" />
                     </span>
                   </div>

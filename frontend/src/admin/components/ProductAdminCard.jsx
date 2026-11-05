@@ -14,7 +14,8 @@ export function ProductAdminCard({
   onEdit,
   onDelete,
   onTogglePublish,
-  actionLoading = false
+  actionLoading = false,
+  suppliersMap = {}
 }) {
   const [imgError, setImgError] = useState(false);
 
@@ -32,6 +33,13 @@ export function ProductAdminCard({
   const wastagePercent = Number(product.wastagePercent) || 0;
   const displayPrice = Number(product.price) || Number(product.calculatedPrice) || 0;
   const minAdvanceToLock = Number(product.minAdvanceToLock) || 0;
+
+  const rawSupplier = product.supplier
+    || (product.supplierId && typeof product.supplierId === 'object' ? product.supplierId : null)
+    || (suppliersMap && product.supplierId ? suppliersMap[product.supplierId] : null);
+  const supplierName = rawSupplier?.name || product.supplierName || null;
+  const supplierCity = rawSupplier?.city || null;
+  const supplierStatus = rawSupplier?.status || null;
 
   const formatPKR = (amount) => {
     return new Intl.NumberFormat('en-PK', {
@@ -127,8 +135,9 @@ export function ProductAdminCard({
               <span className="font-mono text-base font-bold text-foreground">
                 {formatPKR(displayPrice)}
               </span>
-              <span className="text-[10px] font-mono text-muted-foreground">
-                Live Sarafa Linked
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono font-medium border border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300">
+                <span className="size-1 rounded-full bg-emerald-500 animate-pulse" />
+                Dynamic Live Gold Price
               </span>
             </div>
           </div>
@@ -156,6 +165,25 @@ export function ProductAdminCard({
               <span className="text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400">
                 {formatPKR(minAdvanceToLock)}
               </span>
+            </div>
+          )}
+
+          {supplierName && (
+            <div className="p-2 rounded-lg border border-border/70 bg-muted/20 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="text-[9px] uppercase tracking-wider font-mono text-muted-foreground font-semibold shrink-0">
+                  Sourcing:
+                </span>
+                <span className="text-xs font-mono font-medium text-foreground truncate">
+                  {supplierName}
+                  {supplierCity ? ` (${supplierCity})` : ''}
+                </span>
+              </div>
+              {supplierStatus === 'archived' && (
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-neutral-800 text-neutral-400 border border-neutral-700 shrink-0">
+                  Archived
+                </span>
+              )}
             </div>
           )}
 

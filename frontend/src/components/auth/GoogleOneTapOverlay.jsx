@@ -66,8 +66,8 @@ export function GoogleOneTapOverlay() {
     try {
       setLoading(true);
       const signedInUser = await loginWithGoogle();
-      toast.success(`Welcome, ${signedInUser.name || 'Valued Collector'}!`, {
-        description: 'Instant 1-Tap Google Sign-In Successful'
+      toast.success(`Welcome, ${signedInUser.name || 'Customer'}!`, {
+        description: 'Google Sign-In Successful'
       });
       setVisible(false);
     } catch (err) {
@@ -102,7 +102,7 @@ export function GoogleOneTapOverlay() {
                 KHALIL & SONS
               </span>
               <span className="text-[10px] text-muted-foreground block -mt-0.5">
-                Atelier Karachi • Est. 1992
+                Saddar, Karachi • Est. 1992
               </span>
             </div>
           </div>
@@ -124,7 +124,7 @@ export function GoogleOneTapOverlay() {
             </h3>
           </div>
           <p className="text-[11px] text-muted-foreground leading-relaxed">
-            1-Click authentication to rate masterpieces, preserve bridal favorites, and receive concierge appraisals.
+            Sign in quickly to save your favorite jewellery, write reviews, and track your orders.
           </p>
         </div>
 

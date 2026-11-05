@@ -111,7 +111,7 @@ export function SearchModal({ isOpen, onClose }) {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search handcrafted jewellery, bridal sets, or boutique pages..."
+              placeholder="Search jewellery, bridal sets, or pages..."
               className="w-full bg-transparent text-base sm:text-lg font-light placeholder:text-muted-foreground/60 outline-none"
             />
           </form>
@@ -141,7 +141,7 @@ export function SearchModal({ isOpen, onClose }) {
             { id: 'bridal', label: 'Bridal Sets' },
             { id: 'bangles', label: 'Bangles & Kadas' },
             { id: 'rings', label: 'Solitaire Rings' },
-            { id: 'pages', label: 'Boutique Pages' }
+            { id: 'pages', label: 'Pages' }
           ].map((cat) => (
             <button
               key={cat.id}
@@ -165,7 +165,7 @@ export function SearchModal({ isOpen, onClose }) {
                 {matchingPieces.length > 0 && (
                   <div className="space-y-3">
                     <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground block">
-                      Masterpieces & Heirlooms ({matchingPieces.length})
+                      Jewellery Designs ({matchingPieces.length})
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {matchingPieces.map((piece) => {
@@ -183,7 +183,7 @@ export function SearchModal({ isOpen, onClose }) {
                             />
                             <div className="min-w-0 flex-1">
                               <span className="text-[10px] font-mono uppercase tracking-wider text-amber-800 dark:text-amber-300 block truncate">
-                                {piece.category || '22K Gold Piece'}
+                                {piece.category || '22K Gold Jewellery'}
                               </span>
                               <h4 className="text-sm font-medium text-foreground truncate group-hover:text-amber-800 dark:group-hover:text-amber-300 transition-colors">
                                 {piece.title}
@@ -205,7 +205,7 @@ export function SearchModal({ isOpen, onClose }) {
                 {matchingPages.length > 0 && (
                   <div className="space-y-3 pt-2">
                     <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground block">
-                      Boutique Pages & Services ({matchingPages.length})
+                      Pages & Services ({matchingPages.length})
                     </span>
                     <div className="divide-y divide-border/60 rounded-2xl border border-border/80 bg-card overflow-hidden">
                       {matchingPages.map((page) => (
@@ -243,7 +243,7 @@ export function SearchModal({ isOpen, onClose }) {
               <div className="text-center py-12 space-y-3">
                 <Gem className="size-10 text-muted-foreground/40 mx-auto" />
                 <h3 className="font-serif text-lg font-light text-foreground">
-                  No masterpieces or pages matching &ldquo;{searchTerm}&rdquo;
+                  No items or pages matching &ldquo;{searchTerm}&rdquo;
                 </h3>
                 <p className="text-xs text-muted-foreground font-light max-w-sm mx-auto">
                   Try searching with keywords like &ldquo;Bridal&rdquo;, &ldquo;Bangles&rdquo;, &ldquo;Kundan&rdquo;, &ldquo;Solitaire&rdquo;, &ldquo;Rates&rdquo;, or &ldquo;Saddar&rdquo;.
@@ -253,7 +253,7 @@ export function SearchModal({ isOpen, onClose }) {
           ) : (
             <div className="space-y-4 py-2">
               <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground block">
-                Popular Atelier Searches
+                Popular Searches
               </span>
               <div className="flex flex-wrap gap-2">
                 {[
@@ -279,7 +279,7 @@ export function SearchModal({ isOpen, onClose }) {
 
               <div className="pt-4 border-t border-border/60">
                 <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground block mb-2">
-                  Featured Boutique Destinations
+                  Quick Links
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   {BOUTIQUE_PAGES.slice(0, 4).map((p) => (

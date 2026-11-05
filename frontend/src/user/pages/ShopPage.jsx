@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
@@ -7,71 +7,80 @@ import { CartDrawer } from '../components/CartDrawer';
 import { ShopGrid } from '../components/shop/ShopGrid';
 import { ShopTile } from '../components/shop/ShopTile';
 import { ShopThreeItemGrid } from '../components/shop/ShopThreeItemGrid';
-import { ShopCollectionsFilter, ShopSortFilter } from '../components/shop/ShopFilterSidebar';
+import { ShopCollectionsFilter, ShopSortFilter, MobileFilterTrigger, MobileFilterDrawer } from '../components/shop/ShopFilterSidebar';
 import { ShopSearchHeader } from '../components/shop/ShopSearchHeader';
 import { galleryApi } from '@/api/galleryApi';
+import { fetchProducts } from '@/api/productApi';
 import { fetchCategories } from '@/api/categoryApi';
-import { JEWELLERY_CATEGORIES } from '@/constants/categories';
+import { JEWELLERY_CATEGORIES, normalizeCategory, getCategorySlug, resolveCategoryMeta } from '@/constants/categories';
 import { updatePageSEO } from '@/utils/seo';
-import { broadcastCartUpdate, subscribeToTabSync } from '@/utils/tabSync';
-import { getEstimatedPiecePrice, sanitizeQuantity } from '@/utils/pricing';
+import { broadcastCartUpdate, subscribeToTabSync, getCartStorageKey } from '@/utils/tabSync';
+import { getLocalCart, saveLocalCart } from '@/utils/cartStorage';
+import { getEstimatedPiecePrice, formatPKR, sanitizeQuantity } from '@/utils/pricing';
 import { toast } from 'sonner';
 import { LumaSpin } from '@/components/ui/luma-spin';
 import { Gem } from 'lucide-react';
+import { getJewellerySizingType } from '@/utils/jewellerySizing';
 
 export function ShopPage() {
+  const navigate = useNavigate();
   const { category: routeCategory } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem('khalil_cart');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [cartItems, setCartItems] = useState(() => getLocalCart());
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [categoriesList, setCategoriesList] = useState(JEWELLERY_CATEGORIES);
   const [loading, setLoading] = useState(true);
 
-  const initialCategory = routeCategory
-    ? routeCategory.replace(/-/g, ' ')
-    : searchParams.get('category') || 'all';
-
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-  const [selectedSort, setSelectedSort] = useState(searchParams.get('sort') || 'featured');
+  const selectedCategory = routeCategory
+    ? normalizeCategory(routeCategory)
+    : (searchParams.get('category') ? normalizeCategory(searchParams.get('category')) : 'all');
+  const selectedSort = searchParams.get('sort') || 'featured';
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   useEffect(() => {
-    if (routeCategory) {
-      setSelectedCategory(routeCategory.replace(/-/g, ' '));
+    const meta = resolveCategoryMeta(routeCategory);
+    if (meta) {
+      updatePageSEO({
+        title: meta.title,
+        description: meta.description,
+        url: meta.canonicalUrl
+      });
+    } else {
+      updatePageSEO({
+        title: 'Haute Joaillerie & Bridal Collections • Khalil & Sons Jewellers',
+        description: 'Explore the complete Khalil & Sons outlet catalog. Certified 22K & 24K hallmarked gold bridal sets, polki necklaces, solitaires, kadas, and artisanal bullion in Saddar, Karachi.',
+        url: 'https://khalilandsonsjewellers.com/shop'
+      });
     }
   }, [routeCategory]);
 
   useEffect(() => {
-    updatePageSEO({
-      title: 'Haute Joaillerie & Bridal Collections • Khalil & Sons Jewellers',
-      description: 'Explore the complete Khalil & Sons boutique catalog. Certified 22K & 24K hallmarked gold bridal sets, polki necklaces, solitaires, kadas, and artisanal bullion in Saddar, Karachi.',
-      keywords: 'jewellery shop Karachi, buy 22k gold bridal jewellery, certified gold Karachi, Khalil & Sons online catalog'
-    });
-  }, []);
+    saveLocalCart(cartItems);
+    const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+    broadcastCartUpdate(count, cartItems);
+  }, [cartItems]);
 
   useEffect(() => {
-    try {
-      localStorage.setItem('khalil_cart', JSON.stringify(cartItems));
-      const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
-      broadcastCartUpdate(count, cartItems);
-    } catch {}
-  }, [cartItems]);
+    const handleAuthChange = (e) => {
+      const nextUser = e?.detail ?? null;
+      setCartItems(getLocalCart(nextUser));
+    };
+    window.addEventListener('khalil_auth_change', handleAuthChange);
+    return () => window.removeEventListener('khalil_auth_change', handleAuthChange);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = subscribeToTabSync((data) => {
       if (data?.type === 'CART_UPDATE' && Array.isArray(data.items)) {
-        setCartItems(data.items);
+        const currentKey = getCartStorageKey();
+        if (!data.cartKey || data.cartKey === currentKey) {
+          setCartItems(data.items);
+        }
       }
     });
     return unsubscribe;
@@ -83,16 +92,24 @@ export function ShopPage() {
     const loadAllMasterpieces = async () => {
       setLoading(true);
       try {
-        const [galleryRes, catRes] = await Promise.allSettled([
+        const [prodRes, galleryRes, catRes] = await Promise.allSettled([
+          fetchProducts({ limit: 120, isPublished: true }),
           galleryApi.getAll({ limit: 120 }),
           fetchCategories({ isActive: true })
         ]);
         if (!isMounted) return;
-        if (galleryRes.status === 'fulfilled' && galleryRes.value?.data && Array.isArray(galleryRes.value.data)) {
-          setGalleryItems(galleryRes.value.data);
-        } else {
-          setGalleryItems([]);
+        const allItems = [];
+        if (prodRes.status === 'fulfilled' && prodRes.value?.data?.items && Array.isArray(prodRes.value.data.items)) {
+          allItems.push(...prodRes.value.data.items);
         }
+        if (galleryRes.status === 'fulfilled' && galleryRes.value?.data && Array.isArray(galleryRes.value.data)) {
+          galleryRes.value.data.forEach((g) => {
+            if (!allItems.some((item) => String(item._id || item.id) === String(g._id || g.id))) {
+              allItems.push(g);
+            }
+          });
+        }
+        setGalleryItems(allItems);
         if (catRes.status === 'fulfilled' && catRes.value?.data && Array.isArray(catRes.value.data)) {
           const names = catRes.value.data.map((c) => c.name);
           if (names.length > 0) {
@@ -129,8 +146,8 @@ export function ShopPage() {
   const countsByCategory = useMemo(() => {
     const counts = {};
     galleryItems.forEach((item) => {
-      const cat = item.category?.trim();
-      if (cat) {
+      const cat = normalizeCategory(item.category || '');
+      if (cat && cat !== 'all') {
         counts[cat] = (counts[cat] || 0) + 1;
       }
     });
@@ -141,10 +158,16 @@ export function ShopPage() {
     let list = [...galleryItems];
 
     if (selectedCategory && selectedCategory.toLowerCase() !== 'all') {
-      const target = selectedCategory.trim().toLowerCase();
+      const target = normalizeCategory(selectedCategory).toLowerCase();
       list = list.filter((item) => {
         const itemCat = (item.category || '').trim().toLowerCase();
-        return itemCat === target || itemCat.includes(target) || target.includes(itemCat);
+        const normItemCat = normalizeCategory(itemCat).toLowerCase();
+        return (
+          itemCat === target ||
+          normItemCat === target ||
+          itemCat.includes(target) ||
+          target.includes(itemCat)
+        );
       });
     }
 
@@ -184,18 +207,25 @@ export function ShopPage() {
   }, [galleryItems]);
 
   const handleSelectCategory = (cat) => {
-    setSelectedCategory(cat);
+    const normalized = normalizeCategory(cat);
+    if (routeCategory || (typeof window !== 'undefined' && window.location.pathname.startsWith('/collections'))) {
+      if (normalized === 'all') {
+        navigate('/shop');
+      } else {
+        navigate(`/collections/${getCategorySlug(normalized)}`);
+      }
+      return;
+    }
     const newParams = new URLSearchParams(searchParams);
-    if (cat === 'all') {
+    if (normalized === 'all') {
       newParams.delete('category');
     } else {
-      newParams.set('category', cat);
+      newParams.set('category', normalized);
     }
     setSearchParams(newParams);
   };
 
   const handleSelectSort = (sortSlug) => {
-    setSelectedSort(sortSlug);
     const newParams = new URLSearchParams(searchParams);
     if (sortSlug === 'featured') {
       newParams.delete('sort');
@@ -217,16 +247,30 @@ export function ShopPage() {
   };
 
   const handleResetAll = () => {
-    setSelectedCategory('all');
-    setSelectedSort('featured');
     setSearchQuery('');
-    setSearchParams(new URLSearchParams());
+    if (routeCategory) {
+      navigate('/shop');
+    } else {
+      setSearchParams(new URLSearchParams());
+    }
   };
 
   const handleAddToCart = (piece) => {
     if (!piece) return;
     const pieceId = piece._id || piece.id;
+    const sizingType = getJewellerySizingType(piece);
+    if (sizingType) {
+      toast.info(`Please select your bespoke ${sizingType} size`, {
+        description: 'Opening piece details for accurate measurement...'
+      });
+      navigate(`/gallery/${pieceId}`);
+      return;
+    }
+
     const pricing = getEstimatedPiecePrice(piece);
+    const purityVal = piece.purity || pricing.purity || '';
+    const images = Array.isArray(piece.images) ? piece.images : [];
+    const imageSrc = piece.imageUrl || piece.src || images[0] || '/assets/products/choker-ruby-01.jpg';
 
     setCartItems((prev) => {
       const existing = prev.find((item) => String(item.id) === String(pieceId));
@@ -239,13 +283,25 @@ export function ShopPage() {
         ...prev,
         {
           id: pieceId,
+          productId: String(pieceId),
           name: piece.title || 'Fine Jewellery Piece',
+          title: piece.title || 'Fine Jewellery Piece',
           category: piece.category || 'Fine Jewellery',
-          image: piece.imageUrl || piece.src || '/assets/products/choker-ruby-01.jpg',
+          image: imageSrc,
+          imageUrl: imageSrc,
           numericPrice: pricing.numericPrice,
           price: pricing.formattedPrice,
           quantity: 1,
-          material: pricing.purity
+          material: purityVal,
+          purity: purityVal,
+          isEstimated: Boolean(pricing.isEstimated),
+          hasConfirmedPrice: Boolean(pricing.hasConfirmedPrice),
+          pricingSource: pricing.pricingSource || 'estimate',
+          calculatedPrice: piece.calculatedPrice || undefined,
+          netWeight: piece.netWeight || undefined,
+          grossWeight: piece.grossWeight || undefined,
+          makingCharges: piece.makingCharges || undefined,
+          size: undefined
         }
       ];
     });
@@ -327,7 +383,7 @@ export function ShopPage() {
         />
 
         <div className="flex flex-col gap-8 md:flex-row items-start">
-          <div className="order-first w-full flex-none md:max-w-[200px] md:sticky md:top-24">
+          <div className="hidden md:block order-first w-full flex-none md:max-w-[200px] md:sticky md:top-24">
             <ShopCollectionsFilter
               selectedCategory={selectedCategory}
               onSelectCategory={handleSelectCategory}
@@ -338,6 +394,12 @@ export function ShopPage() {
           </div>
 
           <div className="order-last min-h-[50vh] w-full md:order-none flex-1">
+            <MobileFilterTrigger
+              onClick={() => setIsMobileFilterOpen(true)}
+              selectedCategory={selectedCategory}
+              selectedSort={selectedSort}
+            />
+
             {loading ? (
               <div className="py-24 flex items-center justify-center">
                 <LumaSpin variant="amber" size={28} />
@@ -360,7 +422,7 @@ export function ShopPage() {
                 </button>
               </div>
             ) : (
-              <ShopGrid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
+              <ShopGrid className="grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-2.5 sm:gap-6">
                 {filteredItems.map((piece) => (
                   <ShopGrid.Item key={piece._id || piece.id}>
                     <ShopTile
@@ -373,7 +435,7 @@ export function ShopPage() {
             )}
           </div>
 
-          <div className="order-none flex-none md:order-last md:w-[160px] md:sticky md:top-24">
+          <div className="hidden md:block order-none flex-none md:order-last md:w-[160px] md:sticky md:top-24">
             <ShopSortFilter
               selectedSort={selectedSort}
               onSelectSort={handleSelectSort}
@@ -383,6 +445,19 @@ export function ShopPage() {
       </main>
 
       <Footer />
+
+      <MobileFilterDrawer
+        isOpen={isMobileFilterOpen}
+        onClose={() => setIsMobileFilterOpen(false)}
+        selectedCategory={selectedCategory}
+        onSelectCategory={handleSelectCategory}
+        categories={categoriesList}
+        countsByCategory={countsByCategory}
+        totalCount={filteredItems.length}
+        selectedSort={selectedSort}
+        onSelectSort={handleSelectSort}
+        onResetAll={handleResetAll}
+      />
 
       <SearchModal
         isOpen={isSearchOpen}

@@ -16,7 +16,7 @@ export function AtelierMapEmbed() {
                 <MapPin className="size-4" />
               </span>
               <h3 className="text-xl sm:text-2xl font-serif font-light text-foreground tracking-tight">
-                Boutique Location & Directions
+                Outlet Location & Directions
               </h3>
             </div>
             <p className="text-xs text-muted-foreground font-light leading-relaxed">

@@ -5,9 +5,14 @@ import { sendSuccess, sendError } from '../../utils/apiResponse.js';
 export class WishlistController {
   async getWishlist(req, res, next) {
     try {
-      const { email } = req.params;
+      const email = req.params.email?.toLowerCase().trim();
       if (!email) return sendError(res, 400, 'User email is required');
-      const user = await User.findOne({ email: email.toLowerCase().trim() });
+
+      if (req.user.role !== 'admin' && req.user.email.toLowerCase().trim() !== email) {
+        return sendError(res, 403, 'Forbidden: You can only access your own vault wishlist');
+      }
+
+      const user = await User.findOne({ email });
       if (!user) return sendSuccess(res, 200, 'Wishlist empty', { ids: [], items: [] });
 
       const ids = user.wishlist || [];
@@ -23,10 +28,10 @@ export class WishlistController {
 
   async toggleWishlist(req, res, next) {
     try {
-      const { email, pieceId } = req.body;
-      if (!email || !pieceId) return sendError(res, 400, 'Email and pieceId are required');
+      const { pieceId } = req.body;
+      if (!pieceId) return sendError(res, 400, 'pieceId is required');
 
-      let user = await User.findOne({ email: email.toLowerCase().trim() });
+      const user = await User.findById(req.user._id);
       if (!user) return sendError(res, 404, 'User account not found');
 
       const pieceIdStr = String(pieceId);
@@ -50,10 +55,8 @@ export class WishlistController {
 
   async syncWishlist(req, res, next) {
     try {
-      const { email, pieceIds = [] } = req.body;
-      if (!email) return sendError(res, 400, 'User email is required');
-
-      let user = await User.findOne({ email: email.toLowerCase().trim() });
+      const { pieceIds = [] } = req.body;
+      const user = await User.findById(req.user._id);
       if (!user) return sendError(res, 404, 'User account not found');
 
       const existingSet = new Set(user.wishlist || []);

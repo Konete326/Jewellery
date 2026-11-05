@@ -17,7 +17,7 @@ const FOUNDER_SLIDES = [
   },
   {
     src: '/assets/about/brand-poster.jpg',
-    title: 'Fine Jewellery Boutique',
+    title: 'Fine Jewellery Outlet',
     subtitle: 'Murshid Sunaar Tower, Saddar, Karachi'
   },
   {

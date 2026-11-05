@@ -18,6 +18,7 @@ import {
   Images,
   Calendar,
   MapPin,
+  Truck,
 } from "lucide-react";
 import { UserIcon, HeartIcon } from "@/components/icons";
 import { logoutUser } from "@/lib/auth";
@@ -91,7 +92,7 @@ export function UserAccountMenu({ user, onOpenVault, vaultCount = 0 }) {
             </div>
             <div className="flex flex-col min-w-0">
               <span className="text-xs font-semibold text-foreground truncate">
-                {user.name || "Collector"}
+                {user.name || "Customer"}
               </span>
               <span className="text-[10px] text-muted-foreground truncate">
                 {user.email}
@@ -102,7 +103,7 @@ export function UserAccountMenu({ user, onOpenVault, vaultCount = 0 }) {
                     ? "bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30"
                     : "bg-muted text-muted-foreground"
                 }`}>
-                  {isAdmin ? "Administrator" : "Client Account"}
+                  {isAdmin ? "Administrator" : "Customer Account"}
                 </span>
               </div>
             </div>
@@ -114,24 +115,33 @@ export function UserAccountMenu({ user, onOpenVault, vaultCount = 0 }) {
         {isAdmin && (
           <>
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild className="p-2 rounded-lg cursor-pointer font-medium text-xs focus:bg-amber-500/10 focus:text-amber-800 dark:focus:text-amber-300">
-                <Link to="/admin" className="flex items-center gap-2.5 w-full">
+              <DropdownMenuItem
+                onSelect={() => navigate("/admin")}
+                className="p-2 rounded-lg cursor-pointer font-medium text-xs focus:bg-amber-500/10 focus:text-amber-800 dark:focus:text-amber-300"
+              >
+                <div className="flex items-center gap-2.5 w-full">
                   <ShieldCheck className="size-4 text-amber-600 dark:text-amber-400" />
                   <span className="flex-1">Admin Portal</span>
                   <span className="text-[10px] font-mono text-amber-700 dark:text-amber-400">→</span>
-                </Link>
+                </div>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="p-2 rounded-lg cursor-pointer text-xs">
-                <Link to="/admin/inquiries" className="flex items-center gap-2.5 w-full">
+              <DropdownMenuItem
+                onSelect={() => navigate("/admin/inquiries")}
+                className="p-2 rounded-lg cursor-pointer text-xs"
+              >
+                <div className="flex items-center gap-2.5 w-full">
                   <Mail className="size-4 text-muted-foreground" />
                   <span>Client Inquiries</span>
-                </Link>
+                </div>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="p-2 rounded-lg cursor-pointer text-xs">
-                <Link to="/admin/gallery" className="flex items-center gap-2.5 w-full">
+              <DropdownMenuItem
+                onSelect={() => navigate("/admin/gallery")}
+                className="p-2 rounded-lg cursor-pointer text-xs"
+              >
+                <div className="flex items-center gap-2.5 w-full">
                   <Images className="size-4 text-muted-foreground" />
                   <span>Manage Gallery</span>
-                </Link>
+                </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator className="my-1.5" />
@@ -139,14 +149,32 @@ export function UserAccountMenu({ user, onOpenVault, vaultCount = 0 }) {
         )}
 
         <DropdownMenuGroup>
+          <DropdownMenuItem
+            onSelect={() => navigate("/track-order")}
+            className="p-2 rounded-lg cursor-pointer text-xs font-medium focus:bg-muted"
+          >
+            <div className="flex items-center gap-2.5 w-full">
+              <Truck className="size-4 text-amber-600 dark:text-amber-400" />
+              <span>Track Order</span>
+            </div>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => navigate("/account")}
+            className="p-2 rounded-lg cursor-pointer text-xs font-medium focus:bg-muted"
+          >
+            <div className="flex items-center gap-2.5 w-full">
+              <MapPin className="size-4 text-amber-600 dark:text-amber-400" />
+              <span>Saved Addresses</span>
+            </div>
+          </DropdownMenuItem>
           {onOpenVault && (
             <DropdownMenuItem
-              onClick={onOpenVault}
+              onSelect={onOpenVault}
               className="p-2 rounded-lg cursor-pointer text-xs flex items-center justify-between"
             >
               <div className="flex items-center gap-2.5">
                 <HeartIcon size={16} className="text-rose-500 shrink-0" />
-                <span>Saved Heirlooms</span>
+                <span>Saved Items</span>
               </div>
               {vaultCount > 0 && (
                 <span className="bg-rose-500/10 text-rose-600 dark:text-rose-400 font-mono text-[10px] px-1.5 py-0.5 rounded-full font-semibold">
@@ -155,17 +183,23 @@ export function UserAccountMenu({ user, onOpenVault, vaultCount = 0 }) {
               )}
             </DropdownMenuItem>
           )}
-          <DropdownMenuItem asChild className="p-2 rounded-lg cursor-pointer text-xs">
-            <Link to="/contact" className="flex items-center gap-2.5 w-full">
+          <DropdownMenuItem
+            onSelect={() => navigate("/contact")}
+            className="p-2 rounded-lg cursor-pointer text-xs"
+          >
+            <div className="flex items-center gap-2.5 w-full">
               <Calendar className="size-4 text-neutral-600 dark:text-neutral-400" />
-              <span>Bespoke Appointment</span>
-            </Link>
+              <span>Book Showroom Visit</span>
+            </div>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild className="p-2 rounded-lg cursor-pointer text-xs">
-            <Link to="/contact" className="flex items-center gap-2.5 w-full">
+          <DropdownMenuItem
+            onSelect={() => navigate("/contact")}
+            className="p-2 rounded-lg cursor-pointer text-xs"
+          >
+            <div className="flex items-center gap-2.5 w-full">
               <MapPin className="size-4 text-muted-foreground" />
-              <span>Boutique Directions</span>
-            </Link>
+              <span>Showroom Location</span>
+            </div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 

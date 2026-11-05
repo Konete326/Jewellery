@@ -17,7 +17,7 @@ const NOTES = [
   },
   {
     category: 'Karachi Atelier',
-    title: 'Historic Boutique',
+    title: 'Historic Outlet',
     text: 'Shop #2, Murshid Sunaar Tower, Saddar',
     tag: 'Serving Generations Since 1992'
   },

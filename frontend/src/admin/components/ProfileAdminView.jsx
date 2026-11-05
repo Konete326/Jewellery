@@ -113,7 +113,7 @@ export function ProfileAdminView() {
       setHasChanges(false);
       toast.success('Atelier Profile Synchronized', {
         description:
-          'Contact channels, emails, and boutique details updated live across all storefront pages.'
+          'Contact channels, emails, and outlet details updated live across all storefront pages.'
       });
     } catch (err) {
       toast.error('Failed to update profile', {
@@ -155,7 +155,7 @@ export function ProfileAdminView() {
             )}
           </div>
           <p className="text-[11px] text-muted-foreground font-mono">
-            Manage boutique credentials, contact routing, and assay guarantee policy
+            Manage outlet credentials, contact routing, and assay guarantee policy
           </p>
         </div>
 

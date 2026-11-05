@@ -5,10 +5,14 @@ import { Footer } from '@/user/components/Footer';
 import { ratesApi } from '@/api/ratesApi';
 import {
   RatesHero,
-  RatesTableSection
+  RatesCardsGrid,
+  RatesTableSection,
+  RatesCalculator,
+  RatesKnowledgeGuide
 } from '@/user/components/rates';
 import { updatePageSEO } from '@/utils/seo';
 import { broadcastRatesUpdate } from '@/utils/tabSync';
+import { toast } from 'sonner';
 
 const CACHE_KEY = 'khalil_sarafa_rates_cache';
 
@@ -60,8 +64,14 @@ export default function RatesPage() {
           localStorage.setItem(CACHE_KEY, JSON.stringify(res.data));
         } catch {}
         broadcastRatesUpdate(res.data);
+        if (!silent) {
+          toast.success('Market rates refreshed successfully');
+        }
       }
     } catch {
+      if (!silent) {
+        toast.error('Unable to refresh market rates. Displaying verified benchmark.');
+      }
     } finally {
       setIsRefreshing(false);
     }
@@ -119,7 +129,13 @@ export default function RatesPage() {
           isRefreshing={isRefreshing}
         />
 
+        <RatesCardsGrid rates={rates} />
+
         <RatesTableSection rates={rates} />
+
+        <RatesCalculator rates={rates} />
+
+        <RatesKnowledgeGuide />
       </main>
 
       <Footer />

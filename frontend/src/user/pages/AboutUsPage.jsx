@@ -10,28 +10,29 @@ import { BrandChronicle } from '@/user/components/BrandChronicle'
 import { AtelierInteractiveMap } from '@/user/components/AtelierInteractiveMap'
 import FAQSection from '@/components/ui/faq1'
 import { updatePageSEO } from '@/utils/seo'
-import { broadcastCartUpdate, subscribeToTabSync } from '@/utils/tabSync'
+import { broadcastCartUpdate, subscribeToTabSync, getCartStorageKey } from '@/utils/tabSync'
+import { getLocalCart, saveLocalCart } from '@/utils/cartStorage'
 
 const aboutFaqs = [
   {
-    question: "Where is the Khalil & Sons atelier located?",
-    answer: "Our flagship atelier and showroom is situated at Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road, Saddar, Karachi. We have welcomed collector families here since 1992."
+    question: "Where is the Khalil & Sons showroom located?",
+    answer: "Our showroom and workshop is located at Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road, Saddar, Karachi. We have welcomed families here since 1992."
   },
   {
-    question: "What hallmark certification accompanies your gold jewellery?",
-    answer: "Every gold creation is rigorously tested and certified for 22K (.916), 21K (.875) or 18K (.750) hallmark purity, stamped with our authentic atelier hallmark and issued with a physical purity certificate."
+    question: "What hallmark certification comes with your gold jewellery?",
+    answer: "Every gold piece is tested and certified for 22K (.916), 21K (.875), or 18K (.750) purity, stamped with our authentic hallmark and provided with a purity certificate."
   },
   {
-    question: "How long does a bespoke bridal heirloom commission take?",
-    answer: "A bespoke bridal set typically requires 3 to 5 weeks from initial design sketching and wax moulding to final stone setting and gold polishing."
+    question: "How long does a custom bridal set take to make?",
+    answer: "A custom bridal set typically takes 3 to 5 weeks from initial design to casting, stone setting, and final polish."
   },
   {
-    question: "Can I visit the workshop to discuss an heirloom remodel?",
-    answer: "Yes, we welcome private consultations for remodelling antique jewellery or creating new heirlooms using your own gold or sourced gemstones."
+    question: "Can I visit the showroom to discuss custom jewellery or redesigns?",
+    answer: "Yes, we welcome in-person visits to discuss custom jewellery, redesigning existing gold pieces, or crafting new designs with your chosen gemstones."
   },
   {
-    question: "Do you deliver securely across Pakistan and internationally?",
-    answer: "Yes, all heirloom deliveries are fully insured and packaged in security-sealed vaults dispatched directly to your designated address."
+    question: "How do I receive my completed jewellery order?",
+    answer: "All completed orders are collected in person from our Saddar, Karachi showroom, where you can inspect your jewellery, verify the hallmark, and ensure a perfect fit."
   }
 ];
 
@@ -40,14 +41,7 @@ export function AboutUsPage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isAppointmentOpen, setIsAppointmentOpen] = useState(false)
-  const [cartItems, setCartItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem('khalil_cart')
-      return saved ? JSON.parse(saved) : []
-    } catch {
-      return []
-    }
-  })
+  const [cartItems, setCartItems] = useState(() => getLocalCart())
 
   useEffect(() => {
     updatePageSEO({
@@ -58,17 +52,27 @@ export function AboutUsPage() {
   }, [])
 
   useEffect(() => {
-    try {
-      localStorage.setItem('khalil_cart', JSON.stringify(cartItems))
-      const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0)
-      broadcastCartUpdate(count, cartItems)
-    } catch {}
+    saveLocalCart(cartItems)
+    const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0)
+    broadcastCartUpdate(count, cartItems)
   }, [cartItems])
+
+  useEffect(() => {
+    const handleAuthChange = (e) => {
+      const nextUser = e?.detail ?? null
+      setCartItems(getLocalCart(nextUser))
+    }
+    window.addEventListener('khalil_auth_change', handleAuthChange)
+    return () => window.removeEventListener('khalil_auth_change', handleAuthChange)
+  }, [])
 
   useEffect(() => {
     const unsubscribe = subscribeToTabSync((data) => {
       if (data?.type === 'CART_UPDATE' && Array.isArray(data.items)) {
-        setCartItems(data.items)
+        const currentKey = getCartStorageKey()
+        if (!data.cartKey || data.cartKey === currentKey) {
+          setCartItems(data.items)
+        }
       }
     })
     return unsubscribe
@@ -102,8 +106,8 @@ export function AboutUsPage() {
           <FAQSection
             faqs={aboutFaqs}
             category="Heritage & Craftsmanship"
-            title="Atelier Heritage & Standards"
-            subtitle="Essential details regarding our three-decade legacy in Saddar Karachi, gold hallmark purity, and bespoke appointments."
+            title="Our Heritage & Standards"
+            subtitle="Essential details about our three-decade history in Saddar, Karachi, gold hallmark purity, and custom orders."
           />
         </div>
         <div className="px-4 sm:px-8 lg:px-12 xl:px-16 pb-16">
@@ -136,6 +140,12 @@ export function AboutUsPage() {
           )
         }
         onRemove={(id) => setCartItems((prev) => prev.filter((item) => item.id !== id))}
+        onUpdateQuantity={(id, qty) =>
+          setCartItems((prev) =>
+            prev.map((item) => (item.id === id ? { ...item, quantity: Math.max(1, qty) } : item))
+          )
+        }
+        onClearCart={() => setCartItems([])}
       />
     </div>
   )

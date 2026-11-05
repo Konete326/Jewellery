@@ -42,7 +42,7 @@ export function AuthGalleryShowcase() {
   const [pieces, setPieces] = useState([]);
   const [currentPiece, setCurrentPiece] = useState({
     imageUrl: "/images/banner.jpg",
-    title: "Khalil & Sons Master Goldsmithing"
+    title: "Khalil & Sons Fine Jewellery"
   });
 
   const [prevImage, setPrevImage] = useState(null);
@@ -132,7 +132,7 @@ export function AuthGalleryShowcase() {
           <img
             key={currentPiece.imageUrl}
             src={currentPiece.imageUrl}
-            alt={currentPiece.title || "Khalil & Sons Masterpiece"}
+            alt={currentPiece.title || "Khalil & Sons Jewellery"}
             className="absolute inset-0 size-full object-cover transition-opacity duration-1000 opacity-100 scale-105 animate-in fade-in zoom-in-100"
           />
         )}

@@ -12,6 +12,7 @@ import { ReviewsAdminView } from './components/ReviewsAdminView'
 import { RatesAdminView } from './components/RatesAdminView'
 import { PaymentAccountsAdminView } from './components/PaymentAccountsAdminView'
 import { ProfileAdminView } from './components/ProfileAdminView'
+import { SuppliersAdminView } from './components/suppliers/SuppliersAdminView'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { toast } from 'sonner'
 
@@ -76,6 +77,9 @@ export function AdminPanel() {
       case 'payments':
       case 'payment-accounts':
         return <PaymentAccountsAdminView />
+      case 'suppliers':
+      case 'supplier':
+        return <SuppliersAdminView />
       case 'customers':
       case 'users':
         return <UsersAdminView />

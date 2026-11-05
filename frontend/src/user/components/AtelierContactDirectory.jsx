@@ -1,12 +1,12 @@
 import React from 'react';
-import { Mail, MapPin, Phone, Calendar, MessageCircle, Navigation, Landmark } from 'lucide-react';
+import { Mail, MapPin, Phone, Calendar, MessageCircle, Navigation } from 'lucide-react';
 import { GlobeWireframe } from '@/components/ui/contact-with-globe';
 import { STORE_INFO } from '@/constants/storeInfo';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
 import { LuxuryButton } from './LuxuryButton';
 import { StoreStatusBadge } from '@/components/StoreStatusBadge';
 
-export function AtelierContactDirectory({ onOpenAppointment, onOpenBankAccounts }) {
+export function AtelierContactDirectory({ onOpenAppointment }) {
   const whatsappUrl = getPersonalizedWhatsAppInquiry();
 
   return (
@@ -14,10 +14,10 @@ export function AtelierContactDirectory({ onOpenAppointment, onOpenBankAccounts 
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-0.5">
           <h2 className="text-xl sm:text-2xl font-serif font-light text-foreground tracking-tight">
-            Atelier Directory
+            Contact Directory
           </h2>
           <p className="text-xs text-muted-foreground font-light leading-relaxed">
-            Direct concierge channels for our Saddar Karachi boutique.
+            Direct phone, email, and location details for our Saddar, Karachi showroom.
           </p>
         </div>
         <StoreStatusBadge variant="pill" className="shrink-0" />
@@ -27,7 +27,7 @@ export function AtelierContactDirectory({ onOpenAppointment, onOpenBankAccounts 
         <div className="absolute top-2 left-2.5 z-10 flex items-center gap-2">
           <span className="size-1.5 rounded-full bg-amber-600 animate-pulse" />
           <span className="text-[10px] uppercase font-mono tracking-widest text-muted-foreground">
-            Saddar Karachi Concierge
+            Saddar, Karachi Showroom
           </span>
         </div>
         <GlobeWireframe
@@ -112,17 +112,6 @@ export function AtelierContactDirectory({ onOpenAppointment, onOpenBankAccounts 
             <Navigation className="size-3.5" />
             <span>Maps & Directions &rarr;</span>
           </a>
-
-          {onOpenBankAccounts && (
-            <button
-              type="button"
-              onClick={onOpenBankAccounts}
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-amber-900 hover:underline cursor-pointer font-medium"
-            >
-              <Landmark className="size-3.5 text-amber-700" />
-              <span>Bank Accounts &rarr;</span>
-            </button>
-          )}
         </div>
 
         {onOpenAppointment && (

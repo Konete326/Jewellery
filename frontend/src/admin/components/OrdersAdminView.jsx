@@ -67,11 +67,14 @@ export function OrdersAdminView() {
   const handleSaveOrder = async (id, updatedData) => {
     setModalLoading(true);
     try {
-      await updateOrder(id, updatedData);
+      const res = await updateOrder(id, updatedData);
       toast.success('Order updated successfully', {
-        description: `Order ${inspectingOrder?.orderNumber} status and payments saved.`
+        description: `Order ${inspectingOrder?.orderNumber} status and details updated.`
       });
-      setInspectingOrder(null);
+      const freshOrder = res?.data || res;
+      if (freshOrder && freshOrder._id) {
+        setInspectingOrder(freshOrder);
+      }
       await loadOrders(true);
     } catch (err) {
       toast.error('Failed to update order', {
@@ -174,7 +177,7 @@ export function OrdersAdminView() {
                   : 'bg-card border-border/80 text-muted-foreground hover:bg-muted hover:text-foreground'
               }`}
             >
-              <span>{tab}</span>
+              <span>{tab === 'Ready' ? 'Ready for Pickup' : tab === 'Delivered' ? 'Collected' : tab}</span>
               <span
                 className={`text-[10px] px-1.5 py-0.2 rounded-full font-sans ${
                   isActive
@@ -241,6 +244,7 @@ export function OrdersAdminView() {
         onSave={handleSaveOrder}
         order={inspectingOrder}
         loading={modalLoading}
+        onRefreshParent={() => loadOrders(true)}
       />
 
       <OrderDeleteModal

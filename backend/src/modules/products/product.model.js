@@ -81,11 +81,18 @@ const productSchema = new mongoose.Schema(
     images: {
       type: [String],
       default: []
+    },
+    supplierId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Supplier',
+      default: null
     }
   },
   {
     timestamps: true
   }
 );
+
+productSchema.index({ supplierId: 1 });
 
 export const Product = mongoose.models.Product || mongoose.model('Product', productSchema);

@@ -35,7 +35,7 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
       <button
         type="button"
         onClick={handleNavigateToHours}
-        title="Boutique Hours: Click for full schedule"
+        title="Outlet Hours: Click for full schedule"
         className={cn(
           'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono tracking-wider border shadow-2xs select-none transition-all duration-200 cursor-pointer',
           isOpen
@@ -103,7 +103,7 @@ export function StoreStatusBadge({ variant = 'compact', className }) {
     <button
       type="button"
       onClick={handleNavigateToHours}
-      title="Boutique Hours: Click for full schedule"
+      title="Outlet Hours: Click for full schedule"
       className={cn(
         'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono tracking-wider border select-none transition-all duration-200 cursor-pointer',
         isOpen

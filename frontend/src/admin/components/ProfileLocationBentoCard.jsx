@@ -29,7 +29,7 @@ export function ProfileLocationBentoCard({
               Showroom Location & Hours
             </h3>
             <p className="text-[10px] text-muted-foreground font-mono">
-              Physical boutique address and salon timings
+              Physical outlet address and salon timings
             </p>
           </div>
 

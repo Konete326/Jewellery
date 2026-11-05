@@ -1,5 +1,53 @@
 import mongoose from 'mongoose';
 
+const addressSchema = new mongoose.Schema(
+  {
+    label: {
+      type: String,
+      trim: true,
+      default: 'Home'
+    },
+    recipientName: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    phone: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    addressLine: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    area: {
+      type: String,
+      trim: true,
+      default: ''
+    },
+    city: {
+      type: String,
+      trim: true,
+      default: 'Karachi'
+    },
+    postalCode: {
+      type: String,
+      trim: true,
+      default: ''
+    },
+    isDefault: {
+      type: Boolean,
+      default: false
+    }
+  },
+  {
+    _id: true,
+    timestamps: true
+  }
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -20,7 +68,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['customer', 'admin'],
+      enum: ['customer', 'staff', 'admin'],
       default: 'customer'
     },
     authProvider: {
@@ -50,6 +98,10 @@ const userSchema = new mongoose.Schema(
     },
     wishlist: {
       type: [String],
+      default: []
+    },
+    addresses: {
+      type: [addressSchema],
       default: []
     }
   },

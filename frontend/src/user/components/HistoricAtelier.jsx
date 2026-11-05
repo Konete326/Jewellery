@@ -67,10 +67,10 @@ export function HistoricAtelier({ onBookClick }) {
             inkColor="#2d3435"
             className="font-headline text-4xl md:text-6xl text-[#2d3435] mb-8 leading-tight font-normal"
           >
-            Visit Our Boutique in Karachi
+            Visit Our Outlet in Karachi
           </InkHeadline>
           <p className="text-[#5a6061] text-base md:text-lg mb-10 max-w-lg leading-relaxed font-light">
-            Located in Murshid Sunaar Tower on Dr. Daud Pota Road in Saddar, Karachi, our boutique welcomes you to experience certified 22K, 21K and 18K fine gold jewellery, custom bridal heirlooms, and bespoke design consultations.
+            Located in Murshid Sunaar Tower on Dr. Daud Pota Road in Saddar, Karachi, our outlet welcomes you to see our certified 22K, 21K, and 18K fine gold jewellery, custom bridal sets, and design services in person.
           </p>
           <div className="space-y-6 border-l border-neutral-300 pl-6 mb-10">
             <div>
@@ -122,7 +122,7 @@ export function HistoricAtelier({ onBookClick }) {
             className="group cursor-pointer bg-[#ebeeef] overflow-hidden shadow-2xl rounded-2xl relative aspect-[4/5] sm:aspect-square border border-neutral-300/70"
           >
             <img
-              alt={piece?.title || 'Khalil & Sons Jewellery Atelier'}
+              alt={piece?.title || 'Khalil & Sons Showroom'}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               src={piece?.imageUrl || piece?.src || '/images/image-03.jpg'}
               onError={(e) => {
@@ -134,10 +134,10 @@ export function HistoricAtelier({ onBookClick }) {
             <div className="absolute bottom-5 left-5 right-5 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-between">
               <div>
                 <span className="text-[10px] uppercase font-mono tracking-widest text-amber-300 block">
-                  Featured Gallery Masterpiece
+                  Featured Design
                 </span>
                 <span className="text-sm font-serif font-light text-white truncate block">
-                  {piece?.title || 'Explore Atelier Gallery'}
+                  {piece?.title || 'Browse Gallery'}
                 </span>
               </div>
               <div className="size-8 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center text-white">
@@ -163,7 +163,7 @@ export function HistoricAtelier({ onBookClick }) {
             ) : (
               <div className="flex flex-col gap-1">
                 <span className="text-xs font-serif font-medium text-[#2d3435] line-clamp-2 leading-snug">
-                  {piece?.title || 'Certified 22K Gold Boutique'}
+                  {piece?.title || 'Certified 22K Gold Outlet'}
                 </span>
                 <div className="flex gap-1 text-amber-500 mt-1">
                   {[...Array(5)].map((_, i) => (

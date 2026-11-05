@@ -5,7 +5,7 @@ import { STORE_INFO } from '@/constants/storeInfo'
 
 export function Hero({ onExploreClick }) {
   return (
-    <section className="relative h-[850px] md:h-[920px] flex items-center px-6 md:px-20 overflow-hidden">
+    <section className="relative min-h-[560px] sm:min-h-[640px] md:min-h-[720px] lg:h-[90vh] py-16 sm:py-24 md:py-32 flex items-center px-4 sm:px-8 md:px-20 overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
           alt="Close up of artisan hands working on gold jewelry"
@@ -22,8 +22,8 @@ export function Hero({ onExploreClick }) {
         />
         <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-amber-500/15 blur-[120px] rounded-full pointer-events-none" />
       </div>
-      <div className="relative z-10 max-w-3xl pt-20">
-        <span className="tracking-[0.2em] uppercase text-xs text-white/90 mb-4 block font-medium font-mono">
+      <div className="relative z-10 max-w-3xl pt-8 sm:pt-14 md:pt-20">
+        <span className="tracking-[0.2em] uppercase text-[10px] sm:text-xs text-white/90 mb-3 sm:mb-4 block font-medium font-mono">
           Est. {STORE_INFO.established} • Saddar, Karachi
         </span>
         <InkHeadline
@@ -33,12 +33,12 @@ export function Hero({ onExploreClick }) {
           duration={1600}
           stagger={220}
           inkColor="#ffffff"
-          className="font-headline text-5xl md:text-8xl text-white leading-[1.08] mb-8 tracking-tight font-light"
+          className="font-headline text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl text-white leading-[1.12] sm:leading-[1.08] mb-5 sm:mb-8 tracking-tight font-light"
         >
-          The Art of Handcrafted Gold
+          You dream, we made it come true.
         </InkHeadline>
-        <p className="text-white/85 text-lg md:text-xl max-w-lg mb-10 leading-relaxed font-light">
-          Master goldsmithing since 1992 in Saddar, Karachi. Crafting certified 22K, 21K and 18K gold bridal jewelry, solitaires, and polki heirlooms.
+        <p className="text-white/85 text-sm sm:text-base md:text-xl max-w-lg mb-6 sm:mb-10 leading-relaxed font-light">
+          Fine gold jewellery since 1992 in Saddar, Karachi. Certified 22K, 21K, and 18K gold bridal sets, rings, and polki jewellery.
         </p>
         <div>
           <LuxuryButton onClick={onExploreClick} variant="gold">

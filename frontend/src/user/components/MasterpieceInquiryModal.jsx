@@ -195,7 +195,7 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
 
           <div className="flex flex-col gap-1">
             <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
-              Custom Inquiry Notes
+              Your Message
             </label>
             <textarea
               rows={3}
@@ -208,7 +208,7 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
           <div className="flex items-center justify-between pt-2 border-t border-border">
             <span className="text-[11px] text-muted-foreground flex items-center gap-1">
               <ShieldCheck className="size-3.5 text-amber-700" />
-              Direct Atelier Dispatch
+              Direct Showroom Response
             </span>
             <div className="flex items-center gap-2">
               <Button
@@ -230,7 +230,7 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
                 {submitting ? (
                   <>
                     <Loader2 className="size-3.5 animate-spin text-amber-500" />
-                    <span>Transmitting...</span>
+                    <span>Sending...</span>
                   </>
                 ) : (
                   <>

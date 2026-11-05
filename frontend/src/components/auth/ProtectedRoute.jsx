@@ -1,21 +1,12 @@
 import { Navigate, useLocation } from "react-router-dom";
+import { getAuthUser, getAuthToken } from "@/lib/auth";
 
-export function ProtectedRoute({ children, requiredRole = "admin" }) {
+export function ProtectedRoute({ children, requiredRole = null }) {
   const location = useLocation();
+  const user = getAuthUser();
+  const token = getAuthToken();
 
-  const getAuthenticatedUser = () => {
-    try {
-      const stored = localStorage.getItem("auth_user");
-      if (!stored) return null;
-      return JSON.parse(stored);
-    } catch {
-      return null;
-    }
-  };
-
-  const user = getAuthenticatedUser();
-
-  if (!user || user.role !== requiredRole) {
+  if (!user || !token || (requiredRole && user.role !== requiredRole)) {
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 

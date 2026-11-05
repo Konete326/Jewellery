@@ -25,8 +25,13 @@ export const fetchOrderById = async (id) => {
   return apiClient(ENDPOINTS.ORDER_BY_ID(id));
 };
 
-export const fetchOrderByNumber = async (orderNumber) => {
-  return apiClient(ENDPOINTS.ORDER_BY_NUMBER(orderNumber));
+export const fetchOrderByNumber = async (orderNumber, phone = '') => {
+  const cleanNumber = String(orderNumber || '').trim();
+  const options = {};
+  if (phone) {
+    options.headers = { 'x-order-phone': String(phone).trim() };
+  }
+  return apiClient(ENDPOINTS.ORDER_BY_NUMBER(cleanNumber), options);
 };
 
 export const updateOrder = async (id, data) => {
@@ -36,8 +41,43 @@ export const updateOrder = async (id, data) => {
   });
 };
 
+export const recordOrderCollection = async (id, collectionData = {}) => {
+  return apiClient(ENDPOINTS.ORDER_COLLECT(id), {
+    method: 'PATCH',
+    body: JSON.stringify(collectionData)
+  });
+};
+
 export const deleteOrder = async (id) => {
   return apiClient(ENDPOINTS.ORDER_BY_ID(id), {
     method: 'DELETE'
   });
+};
+
+export const recordOrderPayment = async (orderId, paymentData) => {
+  return apiClient(ENDPOINTS.ORDER_PAYMENTS(orderId), {
+    method: 'POST',
+    body: JSON.stringify(paymentData)
+  });
+};
+
+export const fetchOrderPayments = async (orderId) => {
+  return apiClient(ENDPOINTS.ORDER_PAYMENTS(orderId));
+};
+
+export const approveOrderPayment = async (orderId, paymentId) => {
+  return apiClient(ENDPOINTS.ORDER_PAYMENT_APPROVE(orderId, paymentId), {
+    method: 'PATCH'
+  });
+};
+
+export const rejectOrderPayment = async (orderId, paymentId, reason) => {
+  return apiClient(ENDPOINTS.ORDER_PAYMENT_REJECT(orderId, paymentId), {
+    method: 'PATCH',
+    body: JSON.stringify({ reason })
+  });
+};
+
+export const fetchOrderReceipts = async (orderId) => {
+  return apiClient(ENDPOINTS.ORDER_RECEIPTS(orderId));
 };

@@ -10,6 +10,11 @@ export const ENDPOINTS = {
   ORDERS: '/orders',
   ORDER_BY_ID: (id) => `/orders/${id}`,
   ORDER_BY_NUMBER: (orderNumber) => `/orders/number/${orderNumber}`,
+  ORDER_COLLECT: (id) => `/orders/${id}/collect`,
+  ORDER_PAYMENTS: (id) => `/orders/${id}/payments`,
+  ORDER_PAYMENT_APPROVE: (id, paymentId) => `/orders/${id}/payments/${paymentId}/approve`,
+  ORDER_PAYMENT_REJECT: (id, paymentId) => `/orders/${id}/payments/${paymentId}/reject`,
+  ORDER_RECEIPTS: (id) => `/orders/${id}/receipts`,
   GALLERY: '/gallery',
   GALLERY_BY_ID: (id) => `/gallery/${id}`,
   GALLERY_REVIEWS: (id) => `/gallery/${id}/reviews`,
@@ -20,6 +25,9 @@ export const ENDPOINTS = {
   USERS_GOOGLE_AUTH: '/users/google-auth',
   USERS_REGISTER: '/users/register',
   USERS_LOGIN: '/users/login',
+  USERS_ME: '/users/me',
+  USERS_ADDRESSES: '/users/me/addresses',
+  USER_ADDRESS_BY_ID: (id) => `/users/me/addresses/${id}`,
   USERS_ROLE: (id) => `/users/${id}/role`,
   USERS_STATUS: (id) => `/users/${id}/status`,
   USERS_ACTIVITIES: (id) => `/users/${id}/activities`,
@@ -41,5 +49,9 @@ export const ENDPOINTS = {
   PAYMENT_ACCOUNT_BY_ID: (id) => `/payment-accounts/${id}`,
   CATEGORIES: '/categories',
   CATEGORY_BY_ID: (id) => `/categories/${id}`,
-  CATEGORY_TOGGLE_STATUS: (id) => `/categories/${id}/toggle-status`
+  CATEGORY_TOGGLE_STATUS: (id) => `/categories/${id}/toggle-status`,
+  SUPPLIERS: '/suppliers',
+  SUPPLIER_BY_ID: (id) => `/suppliers/${id}`,
+  SUPPLIER_ARCHIVE: (id) => `/suppliers/${id}/archive`,
+  SUPPLIER_RESTORE: (id) => `/suppliers/${id}/restore`
 };

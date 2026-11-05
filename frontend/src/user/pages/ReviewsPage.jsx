@@ -11,6 +11,8 @@ import { NeuralNoise } from '@/components/ui/neural-noise';
 import FAQSection from '@/components/ui/faq1';
 import { galleryApi } from '@/api/galleryApi';
 import { updatePageSEO } from '@/utils/seo';
+import { broadcastCartUpdate, subscribeToTabSync, getCartStorageKey } from '@/utils/tabSync';
+import { getLocalCart, saveLocalCart } from '@/utils/cartStorage';
 
 const fallbackAvatars = [
   'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
@@ -22,24 +24,24 @@ const fallbackAvatars = [
 
 const reviewsFaqs = [
   {
-    question: "How are client reviews and ratings verified?",
-    answer: "Every review and appraisal is cross-referenced with boutique order ledgers and physical Certificates of Authenticity to ensure genuine patron feedback."
+    question: "How are customer reviews verified?",
+    answer: "Every review is cross-referenced with order records and certificates to ensure genuine customer feedback."
   },
   {
-    question: "Can I leave an appraisal for an heirloom purchased years ago?",
-    answer: "Yes. Patrons who acquired pieces from our Saddar salon can submit an appraisal anytime by selecting 'Add Appraisal' and citing their piece reference or description."
+    question: "Can I leave a review for jewellery purchased in the past?",
+    answer: "Yes. Customers who purchased from our Saddar showroom can submit a review anytime by selecting 'Write a review' on any item page."
   },
   {
-    question: "Where can I read independent Google Maps reviews?",
-    answer: "Our official Google Maps listing features verified 5.0-star customer evaluations with direct photographs of our Saddar salon and jewellery collections."
+    question: "Where can I read Google Maps reviews?",
+    answer: "Our Google Maps listing features verified 5-star customer reviews and photos of our showroom in Saddar, Karachi."
   },
   {
-    question: "Are bridal photos shared with privacy protection?",
-    answer: "Yes, client photographs are published strictly with written consent. Any personal identifying details are respectfully protected."
+    question: "Are wedding and bridal photos shared with privacy protection?",
+    answer: "Yes, customer photos are published only with written consent, respecting your privacy."
   },
   {
-    question: "Can I update or edit my appraisal after submission?",
-    answer: "Yes. If you wish to update your feedback or add wedding photos, you can contact our concierge via WhatsApp with your original inquiry details."
+    question: "Can I update or edit my review after submission?",
+    answer: "Yes. If you wish to update your feedback or photos, please message our team on WhatsApp."
   }
 ];
 
@@ -49,27 +51,52 @@ export function ReviewsPage() {
   const [reviews, setReviews] = useState([]);
   const [reviewingPiece, setReviewingPiece] = useState(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [cartItems, setCartItems] = useState(() => getLocalCart());
+
+  useEffect(() => {
+    saveLocalCart(cartItems);
+    const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+    broadcastCartUpdate(count, cartItems);
+  }, [cartItems]);
+
+  useEffect(() => {
+    const handleAuthChange = (e) => {
+      const nextUser = e?.detail ?? null;
+      setCartItems(getLocalCart(nextUser));
+    };
+    window.addEventListener('khalil_auth_change', handleAuthChange);
+    return () => window.removeEventListener('khalil_auth_change', handleAuthChange);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToTabSync((data) => {
+      if (data?.type === 'CART_UPDATE' && Array.isArray(data.items)) {
+        const currentKey = getCartStorageKey();
+        if (!data.cartKey || data.cartKey === currentKey) {
+          setCartItems(data.items);
+        }
+      }
+    });
+    return unsubscribe;
+  }, []);
+
+  const totalCartCount = cartItems.reduce((acc, item) => acc + (Number(item.quantity) || 1), 0);
 
   useEffect(() => {
     updatePageSEO({
-      title: 'Client Reviews & Masterpiece Appraisals | Khalil & Sons Jewellers',
-      description: 'Read authentic client evaluations and certified gold appraisals for bridal sets, bangles, and diamond jewelry from Khalil & Sons, Saddar, Karachi.',
+      title: 'Customer Reviews & Ratings | Khalil & Sons Jewellers',
+      description: 'Read authentic customer reviews and ratings for bridal sets, bangles, and gold jewellery from Khalil & Sons in Saddar, Karachi.',
       keywords: 'Khalil & Sons reviews, customer testimonials gold jewelry, bridal jewelry appraisals Karachi'
     });
   }, []);
 
   const loadReviews = async () => {
     try {
-      const res = await galleryApi.getAllReviews();
+      const res = await galleryApi.getRecentReviews(50);
       const list = res?.data || (Array.isArray(res) ? res : []);
       setReviews(list);
     } catch {
-      try {
-        const fallback = await galleryApi.getRecentReviews(30);
-        setReviews(fallback?.data || []);
-      } catch {
-        setReviews([]);
-      }
+      setReviews([]);
     }
   };
 
@@ -84,7 +111,7 @@ export function ReviewsPage() {
         {
           quote: "The bridal choker crafted by Khalil & Sons has the most exquisite 22K gold craftsmanship. Truly a family heirloom for generations.",
           name: "Ayesha Malik",
-          designation: "5★ Appraisal • Karachi",
+          designation: "5★ Rating • Karachi",
           src: fallbackAvatars[0],
           productTitle: "Royal Heritage Nizam Kundan Choker",
           productImage: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=400&q=80"
@@ -92,7 +119,7 @@ export function ReviewsPage() {
         {
           quote: "Their transparency with gold hallmarks and certificate of authenticity gives unmatched peace of mind. Exceptional boutique service in Saddar.",
           name: "Dr. Farhan Siddiqui",
-          designation: "5★ Appraisal • Diamond Collector",
+          designation: "5★ Rating • Karachi",
           src: fallbackAvatars[1],
           productTitle: "Artisanal Solitaire Diamond Band",
           productImage: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80"
@@ -100,7 +127,7 @@ export function ReviewsPage() {
         {
           quote: "Our customized bridal bangles were delivered well ahead of the wedding date. The delicate meenakari detailing is mesmerizing.",
           name: "Zainab Raza",
-          designation: "5★ Appraisal • Bridal Patron",
+          designation: "5★ Rating • Karachi",
           src: fallbackAvatars[2],
           productTitle: "Mughal Polki Heritage Bangles",
           productImage: "https://images.unsplash.com/photo-1611591475878-a400f9152b12?auto=format&fit=crop&w=400&q=80"
@@ -109,9 +136,9 @@ export function ReviewsPage() {
     }
 
     return reviews.slice(0, 10).map((r, idx) => ({
-      quote: r.comment || "Exceptional gold purity and immaculate bespoke craftsmanship.",
-      name: r.userName || "Verified Patron",
-      designation: `${r.rating || 5}★ Appraisal • ${r.masterpieceCategory || 'Heritage Jewelry'}`,
+      quote: r.comment || "Exceptional gold purity and immaculate craftsmanship.",
+      name: r.userName || "Verified Customer",
+      designation: `${r.rating || 5}★ Rating • ${r.masterpieceCategory || 'Fine Jewellery'}`,
       src: r.masterpieceImage || fallbackAvatars[idx % fallbackAvatars.length],
       productTitle: r.masterpieceTitle || "Handcrafted Jewellery",
       productImage: r.masterpieceImage,
@@ -123,10 +150,10 @@ export function ReviewsPage() {
   const marqueeTestimonials = useMemo(() => {
     const dynamicItems = (reviews || []).map((r, idx) => ({
       id: r._id || `dynamic-${idx}`,
-      name: r.userName || "Verified Patron",
-      role: `${r.rating || 5}★ Appraisal • ${r.masterpieceCategory || 'Heritage Piece'}`,
+      name: r.userName || "Verified Customer",
+      role: `${r.rating || 5}★ Rating • ${r.masterpieceCategory || 'Fine Jewellery'}`,
       image: r.masterpieceImage || fallbackAvatars[idx % fallbackAvatars.length],
-      quote: r.comment || "Timeless heirloom craftsmanship crafted with certified authenticity.",
+      quote: r.comment || "Handcrafted jewellery made with certified gold purity.",
       productTitle: r.masterpieceTitle || "Handcrafted Jewellery",
       productImage: r.masterpieceImage,
       productId: r.masterpieceId
@@ -160,7 +187,7 @@ export function ReviewsPage() {
       <Navbar
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
-        cartCount={0}
+        cartCount={totalCartCount}
       />
 
       <section className="relative z-10 pt-28 pb-12 px-4 sm:px-8 lg:px-12 xl:px-16 w-full">
@@ -171,7 +198,7 @@ export function ReviewsPage() {
               alt="Khalil & Sons"
               className="size-4 object-contain"
             />
-            <span>Patron Evaluations</span>
+            <span>Customer Reviews</span>
           </div>
           <InkHeadline
             as="h1"
@@ -182,10 +209,10 @@ export function ReviewsPage() {
             inkColor="#2d3435"
             className="font-headline text-3xl sm:text-5xl lg:text-6xl font-light text-[#2d3435] leading-tight mb-4"
           >
-            Client Reviews & Appraisals
+            Customer Reviews
           </InkHeadline>
           <p className="text-sm sm:text-base text-[#5a6061] font-light max-w-xl mx-auto leading-relaxed">
-            Discover firsthand reflections of trust, gold certification, and bridal artistry from patrons who wear Khalil & Sons creations.
+            Read real reviews from customers who chose Khalil & Sons for their bridal and fine jewellery.
           </p>
         </div>
 
@@ -208,17 +235,17 @@ export function ReviewsPage() {
       <section className="w-full relative z-10">
         <TestimonialSection2
           testimonials={marqueeTestimonials}
-          title="The Wall of Patron Trust"
-          subtitle="Click on any client capsule to explore their full testimonial and the exact jewellery piece reviewed."
+          title="What Our Customers Say"
+          subtitle="Read real reviews from verified customers on our handcrafted jewellery."
         />
       </section>
 
       <section className="relative z-10 py-12 md:py-16 px-4 sm:px-8 lg:px-12 xl:px-16 w-full">
         <FAQSection
           faqs={reviewsFaqs}
-          category="Client Reviews & Feedback"
-          title="Review & Appraisal Standards"
-          subtitle="Transparent answers regarding how we collect, verify, and exhibit authentic client evaluations and heirloom appraisals."
+          category="Customer Reviews"
+          title="Reviews & Verification FAQs"
+          subtitle="Common questions about how we collect and verify customer reviews."
           containerClassName="w-full max-w-none px-0"
         />
       </section>
@@ -233,7 +260,26 @@ export function ReviewsPage() {
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
-        items={[]}
+        items={cartItems}
+        onIncrement={(id) =>
+          setCartItems((prev) =>
+            prev.map((item) => (item.id === id ? { ...item, quantity: (Number(item.quantity) || 1) + 1 } : item))
+          )
+        }
+        onDecrement={(id) =>
+          setCartItems((prev) =>
+            prev
+              .map((item) => (item.id === id ? { ...item, quantity: (Number(item.quantity) || 1) - 1 } : item))
+              .filter((item) => item.quantity > 0)
+          )
+        }
+        onRemove={(id) => setCartItems((prev) => prev.filter((item) => item.id !== id))}
+        onUpdateQuantity={(id, qty) =>
+          setCartItems((prev) =>
+            prev.map((item) => (item.id === id ? { ...item, quantity: Math.max(1, qty) } : item))
+          )
+        }
+        onClearCart={() => setCartItems([])}
       />
 
       <MasterpieceReviewModal

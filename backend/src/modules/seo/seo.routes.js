@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { seoController } from './seo.controller.js';
+import { handleGalleryPreview } from './galleryPreview.controller.js';
 
 const router = Router();
 
@@ -9,6 +10,7 @@ router.get('/feed/google-shopping.xml', seoController.getMerchantFeed);
 router.get('/feed/local-inventory.xml', seoController.getLocalInventoryFeed);
 router.get('/feed/google-business-products.csv', seoController.getGoogleBusinessCsv);
 router.get('/google-merchant-feed.xml', seoController.getMerchantFeed);
+router.get('/gallery/:id', handleGalleryPreview);
 router.get('/google:token.html', (req, res) => {
   const token = `google${req.params.token}.html`;
   res.setHeader('Content-Type', 'text/html');

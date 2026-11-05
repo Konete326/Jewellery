@@ -1,67 +1,80 @@
-import { Diamond, Gem, Crown, Compass, BookOpen, ShieldCheck, Landmark, Calendar, Clock } from "lucide-react";
+import React from "react";
+import { Sparkles, Crown, Gem, BookOpen, ShieldCheck, Landmark, Search, Calendar, Star, Compass, Phone } from "lucide-react";
 
-export const productLinks = [
+export const collectionLinks = [
+  {
+    label: "Bridal Sets",
+    href: "/collections/Bridal-Sets",
+    description: "Complete 22K gold wedding and bridal sets",
+    icon: <Crown className="size-4 text-amber-700 dark:text-amber-400" />
+  },
   {
     label: "Gold Rings",
-    href: "/gallery",
-    description: "18K handmade gold with real diamonds",
-    icon: <Diamond className="size-4" />
+    href: "/collections/Rings",
+    description: "Solitaires, engagement rings and gold bands",
+    icon: <Gem className="size-4 text-amber-700 dark:text-amber-400" />
   },
   {
-    label: "Pearl Jewellery",
-    href: "/gallery",
-    description: "Natural pearls crafted on gold wire",
-    icon: <Gem className="size-4" />
+    label: "Gold Bangles & Kadas",
+    href: "/collections/Bangles",
+    description: "Solid gold bangles and traditional kadas",
+    icon: <Sparkles className="size-4 text-amber-700 dark:text-amber-400" />
   },
   {
-    label: "Gold Bangles",
-    href: "/gallery",
-    description: "Solid 22K pure gold handcrafted bangles",
-    icon: <Crown className="size-4" />
-  },
-  {
-    label: "Custom Design",
+    label: "Custom Made Jewellery",
     href: "/contact",
-    description: "Personal designs made just for you",
-    icon: <Compass className="size-4" />
+    description: "Order custom designs made by master goldsmiths",
+    icon: <Compass className="size-4 text-amber-700 dark:text-amber-400" />
   }
 ];
 
-export const companyLinks = [
+export const maisonLinks = [
   {
-    label: "About Us",
+    label: "Our Story & Heritage",
     href: "/about",
-    description: "Our story, heritage & master jewelers since 1992",
-    icon: <BookOpen className="size-4" />
+    description: "Master gold jewelers in Karachi since 1992",
+    icon: <BookOpen className="size-4 text-amber-700 dark:text-amber-400" />
   },
   {
-    label: "Pure Gold Quality",
+    label: "Gold Purity & Hallmarks",
     href: "/about",
-    description: "Certified pure gold and conflict-free stones",
-    icon: <ShieldCheck className="size-4" />
+    description: "Certified 24K and 22K pure gold guarantee",
+    icon: <ShieldCheck className="size-4 text-amber-700 dark:text-amber-400" />
   },
   {
-    label: "Karachi Boutique",
+    label: "Customer Reviews",
+    href: "/reviews",
+    description: "Read reviews from our verified clients",
+    icon: <Star className="size-4 text-amber-700 dark:text-amber-400" />
+  },
+  {
+    label: "Visit Our Showroom",
     href: "/contact",
-    description: "Our showroom and boutique in Saddar, Karachi",
-    icon: <Landmark className="size-4" />
+    description: "Saddar Flagship Showroom, Karachi",
+    icon: <Landmark className="size-4 text-amber-700 dark:text-amber-400" />
   }
 ];
 
-export const companyLinks2 = [
+export const clientCareLinks = [
   {
-    label: "Our Story & Vision",
-    href: "/about",
-    icon: <BookOpen className="size-3.5" />
+    label: "Track Your Order",
+    href: "/track-order",
+    description: "Check your order status and showroom pickup readiness",
+    icon: <Search className="size-4 text-amber-700 dark:text-amber-400" />
   },
   {
-    label: "Book Appointment",
+    label: "Book an Appointment",
     href: "/contact",
-    icon: <Calendar className="size-3.5" />
+    description: "Schedule a showroom visit with our jeweller",
+    icon: <Calendar className="size-4 text-amber-700 dark:text-amber-400" />
   },
   {
-    label: "Atelier Archives",
-    href: "/about",
-    icon: <Clock className="size-3.5" />
+    label: "Contact & Support",
+    href: "/contact",
+    description: "Get in touch by phone, WhatsApp or visit our shop",
+    icon: <Phone className="size-4 text-amber-700 dark:text-amber-400" />
   }
 ];
+
+export const productLinks = collectionLinks;
+export const companyLinks = maisonLinks;

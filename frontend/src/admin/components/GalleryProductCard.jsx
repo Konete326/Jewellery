@@ -27,10 +27,14 @@ export function GalleryProductCard({ item, onEdit, onDelete, onInspectReviews })
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         
-        <div className="absolute top-2.5 left-2.5 z-10">
+        <div className="absolute top-2.5 left-2.5 z-10 flex flex-col items-start gap-1">
           <Badge variant="secondary" className="font-mono text-[10px] uppercase tracking-wider backdrop-blur-md bg-background/90 shadow-xs">
             {item.category || 'Bridal Sets'}
           </Badge>
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono font-medium tracking-wide uppercase bg-black/80 text-amber-300 border border-amber-500/30 backdrop-blur-xs">
+            <span className="size-1 rounded-full bg-emerald-400 animate-pulse" />
+            Dynamic Live Gold Price
+          </span>
         </div>
 
         <button

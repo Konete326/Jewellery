@@ -4,63 +4,63 @@ export const BOUTIQUE_PAGES = [
     title: 'Live Gold & Silver Rates',
     path: '/rates',
     description: 'Current Karachi Sarafa Market benchmark rates for 24K, 22K, 21K, 18K gold and silver.',
-    category: 'Market Benchmark',
+    category: 'Rates',
     keywords: ['gold', 'silver', 'rates', 'price', 'sarafa', 'karachi', 'tola', 'gram', '24k', '22k', 'chandi', 'calculator', 'bullion']
   },
   {
     id: 'page-gallery',
-    title: 'Atelier Masterpiece Gallery',
+    title: 'Jewellery Gallery',
     path: '/gallery',
-    description: 'Curated collection of handcrafted 22K bridal sets, gold kadas, and jadau polki heirlooms.',
-    category: 'Collection',
+    description: 'Handcrafted 22K bridal sets, gold bangles, and polki jewellery.',
+    category: 'Gallery',
     keywords: ['gallery', 'collection', 'masterpiece', 'jewellery', 'jewelry', 'bridal', 'necklace', 'choker', 'bangles', 'kadas', 'rings']
   },
   {
     id: 'page-reviews',
-    title: 'Client Reviews & Appraisals',
+    title: 'Customer Reviews',
     path: '/reviews',
-    description: 'Verified appraisals and reflections from patrons who commissioned Khalil & Sons heirlooms.',
-    category: 'Heritage Trust',
+    description: 'Real reviews and ratings from verified Khalil & Sons customers.',
+    category: 'Reviews',
     keywords: ['reviews', 'testimonials', 'appraisals', 'feedback', 'ratings', 'customer', 'google', 'stars']
   },
   {
     id: 'page-about',
-    title: 'Brand Heritage & Goldsmithing Legacy',
+    title: 'Our Heritage & Story',
     path: '/about',
-    description: 'Over three decades of master goldsmithing since 1992 in Murshid Bazaar, Saddar, Karachi.',
-    category: 'Heritage',
+    description: 'Over three decades of fine gold jewellery crafting since 1992 in Saddar, Karachi.',
+    category: 'About',
     keywords: ['about', 'story', 'history', 'legacy', 'heritage', 'craftsmanship', 'saddar', 'murshid', 'khalil', 'artisan']
   },
   {
     id: 'page-contact',
-    title: 'Boutique Contact & Showroom Visit',
+    title: 'Contact Showroom',
     path: '/contact',
-    description: 'Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road, Saddar, Karachi. Phone and driving directions.',
-    category: 'Concierge',
-    keywords: ['contact', 'visit', 'showroom', 'address', 'directions', 'phone', 'whatsapp', 'timing', 'hours', 'location', 'saddar']
+    description: 'Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road, Saddar, Karachi. Phone and showroom directions.',
+    category: 'Contact',
+    keywords: ['contact', 'visit', 'showroom', 'outlet', 'address', 'directions', 'phone', 'whatsapp', 'timing', 'hours', 'location', 'saddar']
   },
   {
     id: 'page-auth',
-    title: 'Patron Account & Atelier Vault',
+    title: 'Account & Saved Items',
     path: '/auth',
-    description: 'Sign in to access saved bridal heirlooms, inquiry history, and personalized appraisals.',
+    description: 'Sign in to view saved jewellery items, order tracking, and account details.',
     category: 'Account',
     keywords: ['account', 'login', 'signin', 'signup', 'register', 'vault', 'wishlist', 'profile']
   },
   {
     id: 'page-bespoke',
-    title: 'Bespoke 3D CAD Commissioning',
+    title: 'Custom Jewellery Design',
     path: '/#atelier',
-    description: 'Preview photorealistic 3D computer-aided designs before molten 22K gold casting.',
-    category: 'Artisan Service',
+    description: 'Preview 3D designs before crafting your custom gold jewellery.',
+    category: 'Custom Design',
     keywords: ['bespoke', 'custom', 'cad', '3d', 'commission', 'design', 'casting', 'appointment']
   },
   {
     id: 'page-heritage',
-    title: 'Certified Purity & Hallmark Guarantee',
+    title: 'Gold Purity & Hallmarks',
     path: '/#heritage',
-    description: 'Guaranteed 22K (.916) and 24K pure gold with verified assay hallmarks and buy-back transparency.',
-    category: 'Hallmark',
+    description: 'Guaranteed 22K (.916) and 24K pure gold with verified assay hallmarks and fair buy-back policies.',
+    category: 'Purity',
     keywords: ['purity', 'hallmark', 'certificate', 'quality', '22k', '24k', 'guarantee', 'buyback', 'assay']
   }
 ];

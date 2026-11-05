@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { X, Heart, Trash2, ShieldCheck, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GoogleIcon } from '@/components/google-icon';
-import { getAuthUser, loginWithGoogle } from '@/lib/auth';
+import { getAuthUser, getAuthToken, loginWithGoogle, isDifferentAccount, getActiveAccountKey } from '@/lib/auth';
 import { getLocalVaultIds, getLocalVaultItems, toggleVaultPiece, fetchVaultFullItems } from '@/lib/wishlist';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
 import { STORE_INFO } from '@/constants/storeInfo';
@@ -12,10 +12,16 @@ import { toast } from 'sonner';
 export function AtelierVaultDrawer({ isOpen, onClose }) {
   const [items, setItems] = useState(() => getLocalVaultItems());
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(getAuthUser());
+  const [user, setUser] = useState(() => (getAuthToken() ? getAuthUser() : null));
   const [googleLoading, setGoogleLoading] = useState(false);
+  const userRef = useRef(user);
+
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   const loadItems = async (isBackground = false) => {
+    const initialAccountKey = getActiveAccountKey();
     const cached = getLocalVaultItems();
     const localIds = getLocalVaultIds();
     const needsFetch = cached.length === 0 && localIds.length > 0;
@@ -30,24 +36,42 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
 
     try {
       const fullList = await fetchVaultFullItems();
+      if (getActiveAccountKey() !== initialAccountKey) {
+        return;
+      }
       if (fullList && fullList.length) {
         setItems(fullList);
-      } else if (localIds.length === 0) {
+      } else if (getLocalVaultIds().length === 0) {
         setItems([]);
       }
     } catch {
+      if (getActiveAccountKey() !== initialAccountKey) return;
       if (!cached.length) setItems([]);
     } finally {
-      setLoading(false);
+      if (getActiveAccountKey() === initialAccountKey) {
+        setLoading(false);
+      }
     }
   };
 
   useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
     if (isOpen) {
-      setUser(getAuthUser());
+      const activeUser = getAuthToken() ? getAuthUser() : null;
+      setUser(activeUser);
       const cached = getLocalVaultItems();
       if (cached.length > 0) {
         setItems(cached);
+      } else {
+        setItems([]);
       }
       loadItems(cached.length > 0);
     }
@@ -60,7 +84,12 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
       if (isOpen) loadItems(true);
     };
     const handleAuthChange = (e) => {
-      setUser(e.detail || getAuthUser());
+      const activeUser = getAuthToken() ? (e.detail || getAuthUser()) : null;
+      const prevUser = userRef.current;
+      setUser(activeUser);
+      if (!activeUser || isDifferentAccount(prevUser, activeUser)) {
+        setItems([]);
+      }
       if (isOpen) loadItems(true);
     };
 
@@ -84,8 +113,8 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
       setGoogleLoading(true);
       const signedIn = await loginWithGoogle();
       setUser(signedIn);
-      toast.success(`Vault linked to ${signedIn.name}`, {
-        description: 'Your saved pieces are now preserved on Google'
+      toast.success(`Account linked to ${signedIn.name}`, {
+        description: 'Your saved items are now linked to your Google account'
       });
       loadItems(false);
     } catch (err) {
@@ -103,7 +132,7 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
     const lines = items.map(
       (p, i) => `${i + 1}. *${p.title}* (${p.category || 'Jewellery'}) - KS-${String(p._id || p.id).slice(-6).toUpperCase()}`
     );
-    const msg = `Hello Khalil & Sons, ${userName}. I would like to inquire about my saved Atelier Vault pieces:\n\n${lines.join('\n')}\n\nPlease share price estimates, gold purity, and viewing appointments.`;
+    const msg = `Hello Khalil & Sons, ${userName}. I would like to inquire about my saved jewellery pieces:\n\n${lines.join('\n')}\n\nPlease share price estimates, gold purity, and showroom viewing availability.`;
     window.open(STORE_INFO.whatsapp.inquiryUrl(msg), '_blank', 'noopener,noreferrer');
   };
 
@@ -125,10 +154,10 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
             </div>
             <div>
               <h3 className="font-serif text-lg font-semibold text-foreground">
-                Atelier Vault
+                Saved Jewellery
               </h3>
               <p className="text-[11px] text-muted-foreground -mt-0.5">
-                {items.length} saved {items.length === 1 ? 'heirloom' : 'heirlooms'}
+                {items.length} saved {items.length === 1 ? 'item' : 'items'}
               </p>
             </div>
           </div>
@@ -146,7 +175,7 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
             <div className="flex items-center gap-2 min-w-0">
               <ShieldCheck className="size-4 text-neutral-600 dark:text-neutral-400 shrink-0" />
               <span className="text-foreground truncate text-[11px]">
-                Sync vault with Google to access across devices
+                Sign in to save and view your favorite items
               </span>
             </div>
             <Button
@@ -157,7 +186,7 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
               className="h-7 text-[11px] px-2.5 shrink-0 cursor-pointer"
             >
               <GoogleIcon className="size-3 mr-1.5" />
-              <span>{googleLoading ? 'Linking...' : 'Link'}</span>
+              <span>{googleLoading ? 'Signing In...' : 'Sign In'}</span>
             </Button>
           </div>
         )}
@@ -166,7 +195,7 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
           <div className="px-5 py-2.5 bg-muted/40 border-b border-border/60 flex items-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="size-3.5 text-emerald-600" />
             <span className="truncate text-[11px]">
-              Vault linked to <strong>{user.name}</strong> ({user.email})
+              Account: <strong>{user.name}</strong> ({user.email})
             </span>
           </div>
         )}
@@ -175,7 +204,7 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
           {loading && items.length === 0 && (
             <div className="py-16 text-center text-xs text-muted-foreground flex flex-col items-center justify-center gap-2">
               <div className="size-5 rounded-full border-2 border-foreground/20 border-t-foreground animate-spin" />
-              <span>Opening vault...</span>
+              <span>Loading saved items...</span>
             </div>
           )}
 
@@ -186,26 +215,42 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
               </div>
               <div>
                 <h4 className="font-serif text-base font-medium text-foreground">
-                  Your Vault is Empty
+                  {user ? 'Your Saved List is Empty' : 'Sign In Required'}
                 </h4>
                 <p className="text-xs text-muted-foreground max-w-xs mt-1 leading-relaxed">
-                  Save your favorite bridal necklaces, polki sets, and gold bangles to compare and inquire privately.
+                  {user
+                    ? 'Save your favorite bridal sets, necklaces, and bangles to view or ask about anytime.'
+                    : 'Sign in with your Google account to save and view items on any device.'}
                 </p>
               </div>
-              <Button
-                asChild
-                size="sm"
-                onClick={onClose}
-                className="mt-2 bg-foreground text-background text-xs uppercase tracking-widest"
-              >
-                <Link to="/gallery">Explore Collections</Link>
-              </Button>
+              {user ? (
+                <Button
+                  asChild
+                  size="sm"
+                  onClick={onClose}
+                  className="mt-2 bg-foreground text-background text-xs uppercase tracking-widest cursor-pointer"
+                >
+                  <Link to="/gallery">Browse Jewellery</Link>
+                </Button>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={handleGoogleConnect}
+                  disabled={googleLoading}
+                  className="mt-2 bg-foreground text-background text-xs uppercase tracking-widest flex items-center gap-2 cursor-pointer"
+                >
+                  <GoogleIcon className="size-3.5" />
+                  <span>{googleLoading ? 'Signing In...' : 'Sign In with Google'}</span>
+                </Button>
+              )}
             </div>
           )}
 
           {items.map((piece) => {
             const waUrl = getPersonalizedWhatsAppInquiry({ piece });
             const pieceId = piece._id || piece.id;
+            const pieceImgs = Array.isArray(piece.images) ? piece.images : (piece.image ? [piece.image] : []);
+            const imageSrc = piece.imageUrl || piece.src || pieceImgs[0] || '/assets/products/choker-ruby-01.jpg';
 
             return (
               <div key={pieceId} className="pt-4 first:pt-0 flex items-center gap-3.5 group">
@@ -215,9 +260,13 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
                   className="shrink-0 relative overflow-hidden rounded-xl size-18 border border-border bg-muted/30"
                 >
                   <img
-                    src={piece.imageUrl || piece.src}
+                    src={imageSrc}
                     alt={piece.title}
                     className="size-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/assets/products/choker-ruby-01.jpg';
+                    }}
                   />
                 </Link>
 
@@ -250,7 +299,7 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
                     <button
                       type="button"
                       onClick={() => handleRemove(piece)}
-                      aria-label="Remove piece from vault"
+                      aria-label="Remove item from saved list"
                       className="p-1 rounded-md text-muted-foreground hover:text-rose-600 hover:bg-rose-500/10 transition-colors cursor-pointer"
                     >
                       <Trash2 className="size-3.5" />
@@ -272,7 +321,7 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
               <span>Inquire All ({items.length}) on WhatsApp</span>
             </Button>
             <div className="flex items-center justify-between text-[11px] text-muted-foreground px-1">
-              <span>Personalized inquiry with goldsmith team</span>
+              <span>Ask our showroom team directly</span>
               <button onClick={onClose} className="hover:text-foreground transition-colors cursor-pointer">
                 Close
               </button>

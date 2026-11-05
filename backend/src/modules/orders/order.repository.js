@@ -25,7 +25,7 @@ export class OrderRepository {
   }
 
   async update(id, data) {
-    return Order.findByIdAndUpdate(id, data, { new: true, runValidators: true }).lean();
+    return Order.findByIdAndUpdate(id, data, { returnDocument: 'after', runValidators: true }).lean();
   }
 
   async delete(id) {

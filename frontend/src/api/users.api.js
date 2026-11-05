@@ -23,6 +23,46 @@ export const usersApi = {
     });
   },
 
+  async getMe() {
+    return await apiClient(ENDPOINTS.USERS_ME, {
+      method: 'GET'
+    });
+  },
+
+  async getAddresses(options = {}) {
+    return await apiClient(ENDPOINTS.USERS_ADDRESSES, {
+      method: 'GET',
+      ...options
+    });
+  },
+
+  async addAddress(payload) {
+    return await apiClient(ENDPOINTS.USERS_ADDRESSES, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+  },
+
+  async updateAddress(addressId, payload) {
+    return await apiClient(ENDPOINTS.USER_ADDRESS_BY_ID(addressId), {
+      method: 'PATCH',
+      body: JSON.stringify(payload)
+    });
+  },
+
+  async deleteAddress(addressId) {
+    return await apiClient(ENDPOINTS.USER_ADDRESS_BY_ID(addressId), {
+      method: 'DELETE'
+    });
+  },
+
+  async setDefaultAddress(addressId) {
+    return await apiClient(ENDPOINTS.USER_ADDRESS_BY_ID(addressId), {
+      method: 'PATCH',
+      body: JSON.stringify({ isDefault: true })
+    });
+  },
+
   async getAll() {
     return await apiClient(ENDPOINTS.USERS, {
       method: 'GET'

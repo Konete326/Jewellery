@@ -10,7 +10,8 @@ import InkHeadline from '@/components/ui/ink-headline';
 import { GalleryPagination } from '../components/GalleryPagination';
 import { galleryApi } from '@/api/galleryApi';
 import { updatePageSEO } from '@/utils/seo';
-import { broadcastCartUpdate, subscribeToTabSync } from '@/utils/tabSync';
+import { broadcastCartUpdate, subscribeToTabSync, getCartStorageKey } from '@/utils/tabSync';
+import { getLocalCart, saveLocalCart } from '@/utils/cartStorage';
 import { Gem } from 'lucide-react';
 
 const PAGE_SIZE = 9;
@@ -19,14 +20,7 @@ export function GalleryPage() {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem('khalil_cart');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [cartItems, setCartItems] = useState(() => getLocalCart());
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [page, setPage] = useState(1);
@@ -44,17 +38,27 @@ export function GalleryPage() {
   }, []);
 
   useEffect(() => {
-    try {
-      localStorage.setItem('khalil_cart', JSON.stringify(cartItems));
-      const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
-      broadcastCartUpdate(count, cartItems);
-    } catch {}
+    saveLocalCart(cartItems);
+    const count = cartItems.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+    broadcastCartUpdate(count, cartItems);
   }, [cartItems]);
+
+  useEffect(() => {
+    const handleAuthChange = (e) => {
+      const nextUser = e?.detail ?? null;
+      setCartItems(getLocalCart(nextUser));
+    };
+    window.addEventListener('khalil_auth_change', handleAuthChange);
+    return () => window.removeEventListener('khalil_auth_change', handleAuthChange);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = subscribeToTabSync((data) => {
       if (data?.type === 'CART_UPDATE' && Array.isArray(data.items)) {
-        setCartItems(data.items);
+        const currentKey = getCartStorageKey();
+        if (!data.cartKey || data.cartKey === currentKey) {
+          setCartItems(data.items);
+        }
       }
     });
     return unsubscribe;
@@ -147,10 +151,10 @@ export function GalleryPage() {
               inkColor="#2d3435"
               className="font-headline text-3xl sm:text-4xl md:text-5xl text-[#2d3435] leading-tight font-light mb-2.5"
             >
-              Haute Joaillerie & Bridal Gallery
+              Bridal & Fine Jewellery Gallery
             </InkHeadline>
             <p className="text-[#5a6061] text-xs sm:text-sm leading-relaxed font-light max-w-md mx-auto">
-              Explore our handcrafted gold and diamond jewellery collection, created with fine craftsmanship and authentic quality.
+              Browse our handcrafted gold and diamond jewellery collection, made with certified quality and care.
             </p>
           </div>
         </section>
@@ -195,10 +199,10 @@ export function GalleryPage() {
               <div className="rounded-2xl border border-neutral-300/80 bg-white p-12 text-center max-w-md mx-auto shadow-sm">
                 <Gem className="size-8 text-neutral-600 mx-auto mb-4" />
                 <h3 className="font-headline text-2xl text-[#2d3435] mb-2 font-normal">
-                  Catalog Updating
+                  Gallery Updating
                 </h3>
                 <p className="text-sm text-[#5a6061] leading-relaxed font-light">
-                  Our master goldsmiths are adding pieces to the online showcase. Pieces published from the Admin Panel will appear here.
+                  New jewellery pieces are being photographed and added. Please check back soon.
                 </p>
               </div>
             ) : (
@@ -242,6 +246,8 @@ export function GalleryPage() {
         onIncrement={(id) => setCartItems((p) => p.map((i) => (i.id === id ? { ...i, quantity: i.quantity + 1 } : i)))}
         onDecrement={(id) => setCartItems((p) => p.map((i) => (i.id === id ? { ...i, quantity: i.quantity - 1 } : i)).filter((i) => i.quantity > 0))}
         onRemove={(id) => setCartItems((p) => p.filter((i) => i.id !== id))}
+        onUpdateQuantity={(id, qty) => setCartItems((p) => p.map((i) => (i.id === id ? { ...i, quantity: Math.max(1, qty) } : i)))}
+        onClearCart={() => setCartItems([])}
       />
     </div>
   );

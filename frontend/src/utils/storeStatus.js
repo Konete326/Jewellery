@@ -100,6 +100,6 @@ export function getStoreStatus(customDate = null) {
     isOpen: false,
     badgeText: 'Closed',
     detailText: 'Saddar, Karachi',
-    scheduleText: 'Boutique Hours'
+    scheduleText: 'Outlet Hours'
   };
 }

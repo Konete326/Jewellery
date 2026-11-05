@@ -131,7 +131,7 @@ export function MasterpieceReviewModal({ isOpen, onClose, piece, onReviewSubmitt
             <div>
               <h4 className="text-sm font-medium text-foreground">Sign In to Rate</h4>
               <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                Connect your account in 1 tap to leave a verified rating for this masterpiece.
+                Sign in to leave a review for this jewellery piece.
               </p>
             </div>
             <Button

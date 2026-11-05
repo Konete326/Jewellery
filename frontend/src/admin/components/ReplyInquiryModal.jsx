@@ -18,7 +18,7 @@ export function ReplyInquiryModal({ isOpen, onClose, inquiry, onReplied = () => 
     {
       label: 'Consultation',
       subject: `Atelier Consultation: ${inquiry?.jewelryType || 'Fine Jewelry Inquiry'}`,
-      text: `Dear ${clientName},\n\nThank you for reaching out to Khalil & Sons Jewellers. We have received your inquiry regarding our handcrafted fine jewelry collections.\n\nWe would be delighted to assist you with customized designs, current bullion rates, or private viewings at our boutique.\n\nWarm regards,\nAtelier Director\nKhalil & Sons Jewellers\nMurshid Sunaar Tower, Saddar, Karachi\nTel: +92 314 2004245`
+      text: `Dear ${clientName},\n\nThank you for reaching out to Khalil & Sons Jewellers. We have received your inquiry regarding our handcrafted fine jewelry collections.\n\nWe would be delighted to assist you with customized designs, current bullion rates, or private viewings at our outlet.\n\nWarm regards,\nAtelier Director\nKhalil & Sons Jewellers\nMurshid Sunaar Tower, Saddar, Karachi\nTel: +92 314 2004245`
     },
     {
       label: 'Bespoke Commission',

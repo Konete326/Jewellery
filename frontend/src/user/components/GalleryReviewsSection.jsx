@@ -61,7 +61,7 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
     let isMounted = true;
     const fetchAtelierReviews = async () => {
       try {
-        const res = await galleryApi.getAllReviews();
+        const res = await galleryApi.getRecentReviews(20);
         const list = res?.data || (Array.isArray(res) ? res : []);
         if (isMounted) {
           setAtelierReviews(list.length > 0 ? list : fallbackAppraisals);
@@ -113,7 +113,7 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
       rating: Number(rev.rating) || 5,
       comment: rev.comment || 'Exquisite 22K certified gold craftsmanship from Khalil & Sons.',
       userName: rev.userName || 'Verified Patron',
-      userEmail: rev.userEmail || 'Certified Boutique Client',
+      userEmail: rev.userEmail || 'Certified Outlet Client',
       masterpieceTitle: (effectiveTab === 'piece' ? piece?.title : (rev.masterpieceTitle || piece?.title)) || 'Masterpiece',
       masterpieceCategory: (effectiveTab === 'piece' ? piece?.category : (rev.masterpieceCategory || piece?.category)) || 'Fine Jewellery',
       masterpieceImage: (effectiveTab === 'piece' ? (piece?.imageUrl || piece?.src) : (rev.masterpieceImage || piece?.imageUrl || piece?.src)) || '/assets/products/choker-ruby-01.jpg',
@@ -239,7 +239,7 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
           <div className="flex items-center gap-2.5 text-neutral-800">
             <CheckCircle2 className="size-4 text-amber-700 shrink-0" />
             <span>
-              This premier atelier creation is awaiting its first dedicated appraisal. Enjoy certified reviews from our boutique patrons below.
+              This premier atelier creation is awaiting its first dedicated appraisal. Enjoy certified reviews from our outlet patrons below.
             </span>
           </div>
           <button

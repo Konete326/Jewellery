@@ -43,11 +43,11 @@ export function OrdersMetrics({ orders = [] }) {
       badgeClass: 'border-neutral-400/30 bg-muted/60 text-foreground'
     },
     {
-      label: 'Ready & Delivered',
+      label: 'Ready & Collected',
       value: readyOrDelivered,
-      sub: 'Completed fulfillment',
+      sub: 'Showroom pickup fulfillment',
       icon: CheckCircle2,
-      badgeText: 'DISPATCHED',
+      badgeText: 'PICKUP READY',
       badgeClass: 'border-emerald-500/25 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300'
     },
     {

@@ -1,32 +1,26 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
-export function LinkItem({
-	label,
-	description,
-	icon,
-	className,
-	href,
-	...props
-}) {
+export const LinkItem = React.forwardRef(function LinkItem(
+	{ label, description, icon, className, href, onClick, ...props },
+	ref
+) {
 	const isInternal = Boolean(href && href.startsWith("/"));
 
 	const content = (
 		<>
-			<div
-				className={cn(
-					"flex aspect-square size-8 items-center justify-center rounded-lg border border-border/70 bg-muted/30 text-foreground shrink-0 transition-colors group-hover:bg-muted group-hover:text-foreground",
-					"[&_svg:not([class*='size-'])]:size-3.5"
-				)}
-			>
-				{icon}
-			</div>
+			{icon && (
+				<div className="shrink-0 text-amber-700 dark:text-amber-400 mt-0.5">
+					{icon}
+				</div>
+			)}
 			<div className="flex flex-col items-start justify-center min-w-0">
-				<span className="font-medium text-xs text-foreground tracking-wide group-hover:text-foreground transition-colors">
+				<span className="font-medium text-xs text-foreground tracking-wide group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">
 					{label}
 				</span>
 				{description && (
-					<span className="line-clamp-1 text-muted-foreground text-[10px] font-light leading-snug">
+					<span className="line-clamp-1 text-muted-foreground text-[11px] font-light leading-snug">
 						{description}
 					</span>
 				)}
@@ -35,14 +29,16 @@ export function LinkItem({
 	);
 
 	const linkClasses = cn(
-		"group flex items-center gap-2.5 p-2 rounded-lg transition-colors hover:bg-muted/50 border border-transparent hover:border-border/40",
+		"group flex items-start gap-3 p-2.5 rounded-lg transition-colors hover:bg-muted/40 border border-transparent hover:border-border/60",
 		className
 	);
 
 	if (isInternal) {
 		return (
 			<Link
+				ref={ref}
 				to={href}
+				onClick={onClick}
 				className={linkClasses}
 				{...props}
 			>
@@ -53,11 +49,13 @@ export function LinkItem({
 
 	return (
 		<a
+			ref={ref}
 			href={href}
+			onClick={onClick}
 			className={linkClasses}
 			{...props}
 		>
 			{content}
 		</a>
 	);
-}
+});

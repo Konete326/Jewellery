@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Star, MessageCircle, Calendar, ZoomIn, Mail, ShoppingBag } from 'lucide-react';
 import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
 import { cn } from '@/lib/utils';
+import { getJewellerySizingType } from '@/utils/jewellerySizing';
+import { JewellerySizeSelector } from './sizing/JewellerySizeSelector';
+import { JewelleryMeasurementGuideModal } from './sizing/JewelleryMeasurementGuideModal';
+import { toast } from 'sonner';
 
 export function GalleryMasterpieceHero({
   piece,
@@ -12,6 +16,12 @@ export function GalleryMasterpieceHero({
   onOpenAppointment,
   onAddToCart
 }) {
+  const sizingType = getJewellerySizingType(piece);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [sizeError, setSizeError] = useState(false);
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const [guideTab, setGuideTab] = useState(() => sizingType || 'ring');
+
   if (!piece) return null;
 
   const title = piece.title || 'Fine Jewellery Piece';
@@ -21,7 +31,36 @@ export function GalleryMasterpieceHero({
   const reviewCount = piece.reviewCount || (piece.reviews?.length) || 0;
   const refCode = `KS-${String(piece._id || piece.id || '001').slice(-6).toUpperCase()}`;
 
-  const whatsappUrl = getPersonalizedWhatsAppInquiry({ piece });
+  const whatsappUrl = getPersonalizedWhatsAppInquiry({
+    piece: {
+      ...piece,
+      selectedSize: selectedSize || undefined
+    }
+  });
+
+  const handleSelectSize = (size) => {
+    setSelectedSize(size);
+    setSizeError(false);
+  };
+
+  const handleOpenGuide = (tab) => {
+    setGuideTab(tab || sizingType || 'ring');
+    setIsGuideOpen(true);
+  };
+
+  const handleAddToCartClick = () => {
+    if (sizingType && !selectedSize) {
+      setSizeError(true);
+      toast.error(`Please select a ${sizingType} size`, {
+        description: 'Choose your desired fit or consult our Measurement Guide.'
+      });
+      return;
+    }
+    setSizeError(false);
+    if (onAddToCart) {
+      onAddToCart(piece, selectedSize);
+    }
+  };
 
   return (
     <section className="w-full py-4 md:py-8">
@@ -58,14 +97,14 @@ export function GalleryMasterpieceHero({
               className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background/90 text-foreground backdrop-blur-md border border-border/70 text-xs font-mono uppercase tracking-wider hover:bg-background transition-colors cursor-pointer shadow-xs"
             >
               <ZoomIn className="size-3 text-muted-foreground" />
-              <span>Inspect Piece</span>
+              <span>View Full Image</span>
             </button>
           </div>
         </div>
 
         <div className="lg:col-span-6 xl:col-span-5 flex flex-col justify-center">
           <div className="flex items-center justify-between gap-3 text-xs font-mono uppercase tracking-wider text-muted-foreground pb-2.5 border-b border-border/60">
-            <span>{piece.category || 'Bridal Heirlooms'}</span>
+            <span>{piece.category || 'Bridal Jewellery'}</span>
             <span className="text-foreground/80">Ref: {refCode}</span>
           </div>
 
@@ -95,7 +134,7 @@ export function GalleryMasterpieceHero({
                 </div>
                 <span className="font-mono text-foreground font-medium">{rating.toFixed(1)}</span>
                 <span className="underline underline-offset-4">
-                  ({reviewCount} Verified {reviewCount === 1 ? 'Appraisal' : 'Appraisals'})
+                  ({reviewCount} Verified {reviewCount === 1 ? 'Review' : 'Reviews'})
                 </span>
               </button>
             ) : (
@@ -105,23 +144,29 @@ export function GalleryMasterpieceHero({
                 className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               >
                 <span className="text-amber-500 font-mono">✦</span>
-                <span className="underline underline-offset-4">Awaiting First Appraisal • Submit Review</span>
+                <span className="underline underline-offset-4">No reviews yet • Write a review</span>
               </button>
             )}
           </div>
 
-          <div className="mt-5 p-4 rounded-xl border border-border/80 bg-card/60 flex items-center justify-between gap-4">
+          <div className="mt-5 p-4 rounded-xl border border-border/80 bg-card/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block">
-                Valuation & Rate
+                Pricing
               </span>
               <span className="font-serif text-xl sm:text-2xl font-light text-foreground">
-                Karachi Sarafa Rate Linked
+                Based on Karachi Gold Market Rate
               </span>
             </div>
-            <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground px-2.5 py-1 rounded-md border border-border/60 bg-muted/40 shrink-0">
-              Made to Order
-            </span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-mono uppercase tracking-wider border border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300 shrink-0">
+                <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Live Gold Rate Price
+              </span>
+              <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground px-2.5 py-1 rounded-md border border-border/60 bg-muted/40 shrink-0">
+                Made to Order
+              </span>
+            </div>
           </div>
 
           <p className="mt-4 text-sm sm:text-base text-muted-foreground font-light leading-relaxed">
@@ -134,29 +179,38 @@ export function GalleryMasterpieceHero({
               <span className="font-medium text-foreground">22K (916.6) & 21K Certified</span>
             </div>
             <div className="bg-card p-3 flex flex-col gap-0.5">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Artisanal Origin</span>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Made In</span>
               <span className="font-medium text-foreground">Murshid Sunaar Tower, Saddar</span>
             </div>
             <div className="bg-card p-3 flex flex-col gap-0.5">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Goldsmithing</span>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Crafting</span>
               <span className="font-medium text-foreground">Handmade to Exact Sizing</span>
             </div>
             <div className="bg-card p-3 flex flex-col gap-0.5">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Boutique Care</span>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Store Service</span>
               <span className="font-medium text-foreground">Lifetime Polish & Inspection</span>
             </div>
           </div>
 
+          {sizingType && (
+            <JewellerySizeSelector
+              sizingType={sizingType}
+              selectedSize={selectedSize}
+              onSelectSize={handleSelectSize}
+              onOpenGuide={handleOpenGuide}
+              hasError={sizeError}
+            />
+          )}
+
           <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <button
               type="button"
-              onClick={() => onAddToCart && onAddToCart(piece)}
+              onClick={handleAddToCartClick}
               className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wider font-medium transition-all shadow-xs cursor-pointer"
             >
               <ShoppingBag className="size-4" />
               <span>Add to Atelier Bag</span>
             </button>
-
             <a
               href={whatsappUrl}
               target="_blank"
@@ -164,7 +218,7 @@ export function GalleryMasterpieceHero({
               className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl border border-border bg-card hover:bg-muted text-foreground text-xs uppercase tracking-wider font-medium transition-all cursor-pointer"
             >
               <MessageCircle className="size-4" />
-              <span>WhatsApp Inquire</span>
+              <span>Inquire on WhatsApp</span>
             </a>
           </div>
 
@@ -175,7 +229,7 @@ export function GalleryMasterpieceHero({
               className="inline-flex items-center gap-1 hover:text-foreground transition-colors cursor-pointer underline underline-offset-2"
             >
               <Calendar className="size-3" />
-              <span>Book Showroom Viewing in Saddar</span>
+              <span>Book Showroom Visit</span>
             </button>
 
             <button
@@ -184,11 +238,17 @@ export function GalleryMasterpieceHero({
               className="inline-flex items-center gap-1 hover:text-foreground transition-colors cursor-pointer underline underline-offset-2"
             >
               <Mail className="size-3" />
-              <span>Send Online Inquiry</span>
+              <span>Send Inquiry</span>
             </button>
           </div>
         </div>
       </div>
+
+      <JewelleryMeasurementGuideModal
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+        initialTab={guideTab}
+      />
     </section>
   );
 }

@@ -31,7 +31,7 @@ export function ProfileIdentityBentoCard({
         <div className="flex items-center justify-between gap-3 pb-2 mb-3 border-b border-border/60">
           <div>
             <h3 className="text-xs font-semibold text-foreground tracking-tight">
-              Boutique Identity
+              Outlet Identity
             </h3>
             <p className="text-[10px] text-muted-foreground font-mono">
               Official salon branding & hallmark credentials
@@ -76,7 +76,7 @@ export function ProfileIdentityBentoCard({
           <div>
             <div className="flex items-center justify-between mb-0.5">
               <label className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-                Boutique Trade Name
+                Outlet Trade Name
               </label>
               <span className="text-[9px] font-mono text-muted-foreground">
                 {(formData.name || '').length}/60

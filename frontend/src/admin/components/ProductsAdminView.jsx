@@ -15,13 +15,19 @@ import {
   deleteProduct
 } from '@/api/productApi';
 import { fetchCategories } from '@/api/categoryApi';
+import { fetchSuppliers } from '@/api/supplierApi';
 
 export function ProductsAdminView() {
   const [products, setProducts] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
+  const [suppliersList, setSuppliersList] = useState([]);
+  const [suppliersMap, setSuppliersMap] = useState({});
+  const [suppliersLoading, setSuppliersLoading] = useState(false);
+  const [suppliersError, setSuppliersError] = useState('');
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedSupplier, setSelectedSupplier] = useState('All');
   const [availabilityFilter, setAvailabilityFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
 
@@ -31,12 +37,18 @@ export function ProductsAdminView() {
   const [modalLoading, setModalLoading] = useState(false);
   const [actionLoadingId, setActionLoadingId] = useState(null);
 
-  const loadData = async () => {
+  const loadData = async (supplierIdToUse = selectedSupplier) => {
     setLoading(true);
+    setSuppliersLoading(true);
     try {
-      const [prodRes, catRes] = await Promise.allSettled([
-        fetchProducts({ limit: 100 }),
-        fetchCategories({ isActive: true })
+      const prodParams = { limit: 100 };
+      if (supplierIdToUse && supplierIdToUse !== 'All') {
+        prodParams.supplierId = supplierIdToUse;
+      }
+      const [prodRes, catRes, suppRes] = await Promise.allSettled([
+        fetchProducts(prodParams),
+        fetchCategories({ isActive: true }),
+        fetchSuppliers({ status: 'all', limit: 100 }, { silent: true })
       ]);
       if (prodRes.status === 'fulfilled') {
         const list = prodRes.value?.data?.items || prodRes.value?.data || [];
@@ -48,11 +60,26 @@ export function ProductsAdminView() {
         const catList = catRes.value?.data || [];
         setCategoriesList(Array.isArray(catList) ? catList.map((c) => c.name) : []);
       }
+      if (suppRes.status === 'fulfilled') {
+        const suppList = suppRes.value?.data?.items || suppRes.value?.data || [];
+        if (Array.isArray(suppList)) {
+          setSuppliersList(suppList);
+          const map = {};
+          suppList.forEach((s) => {
+            if (s._id) map[s._id] = s;
+          });
+          setSuppliersMap(map);
+          setSuppliersError('');
+        }
+      } else {
+        setSuppliersError('Failed to load suppliers');
+      }
     } catch {
       toast.error('Unable to load products inventory');
       setProducts([]);
     } finally {
       setLoading(false);
+      setSuppliersLoading(false);
     }
   };
 
@@ -60,13 +87,32 @@ export function ProductsAdminView() {
     loadData();
   }, []);
 
+  const handleSupplierChange = async (newSupplierId) => {
+    setSelectedSupplier(newSupplierId);
+    setLoading(true);
+    try {
+      const params = { limit: 100 };
+      if (newSupplierId && newSupplierId !== 'All') {
+        params.supplierId = newSupplierId;
+      }
+      const res = await fetchProducts(params);
+      const list = res.data?.items || res.data || [];
+      setProducts(Array.isArray(list) ? list : []);
+    } catch {
+      toast.error('Unable to filter products by supplier');
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreate = async (formData) => {
     setModalLoading(true);
     try {
       await createProduct(formData);
       toast.success('Product created successfully');
       setIsAddModalOpen(false);
-      await loadData();
+      await loadData(selectedSupplier);
     } catch (err) {
       toast.error(err.message || 'Failed to create product');
     } finally {
@@ -81,7 +127,7 @@ export function ProductsAdminView() {
       await updateProduct(editingProduct._id, formData);
       toast.success('Product updated successfully');
       setEditingProduct(null);
-      await loadData();
+      await loadData(selectedSupplier);
     } catch (err) {
       toast.error(err.message || 'Failed to update product');
     } finally {
@@ -94,7 +140,7 @@ export function ProductsAdminView() {
     try {
       await toggleProductPublish(prod._id);
       toast.success(`Product "${prod.title}" is now ${prod.isPublished ? 'hidden' : 'published'}`);
-      await loadData();
+      await loadData(selectedSupplier);
     } catch (err) {
       toast.error(err.message || 'Failed to update product status');
     } finally {
@@ -108,7 +154,7 @@ export function ProductsAdminView() {
       await deleteProduct(prod._id);
       toast.success(`Product "${prod.title}" deleted successfully`);
       setDeletingProduct(null);
-      await loadData();
+      await loadData(selectedSupplier);
     } catch (err) {
       toast.error(err.message || 'Failed to delete product');
     } finally {
@@ -122,6 +168,10 @@ export function ProductsAdminView() {
       if (statusFilter === 'Hidden' && prod.isPublished) return false;
       if (selectedCategory !== 'All' && prod.category !== selectedCategory) return false;
       if (availabilityFilter !== 'All' && prod.availability !== availabilityFilter) return false;
+      if (selectedSupplier !== 'All') {
+        const prodSuppId = prod.supplier?._id || (prod.supplierId && typeof prod.supplierId === 'object' ? prod.supplierId._id : prod.supplierId);
+        if (String(prodSuppId) !== String(selectedSupplier)) return false;
+      }
 
       if (!searchQuery.trim()) return true;
       const q = searchQuery.toLowerCase().trim();
@@ -130,9 +180,20 @@ export function ProductsAdminView() {
       const cat = (prod.category || '').toLowerCase();
       const purity = (prod.purity || '').toLowerCase();
       const avail = (prod.availability || '').toLowerCase();
-      return title.includes(q) || sku.includes(q) || cat.includes(q) || purity.includes(q) || avail.includes(q);
+      const suppObj = prod.supplier || (prod.supplierId && typeof prod.supplierId === 'object' ? prod.supplierId : null) || (suppliersMap && prod.supplierId ? suppliersMap[prod.supplierId] : null);
+      const suppName = (suppObj?.name || prod.supplierName || '').toLowerCase();
+      const suppCity = (suppObj?.city || '').toLowerCase();
+      return (
+        title.includes(q) ||
+        sku.includes(q) ||
+        cat.includes(q) ||
+        purity.includes(q) ||
+        avail.includes(q) ||
+        suppName.includes(q) ||
+        suppCity.includes(q)
+      );
     });
-  }, [products, statusFilter, selectedCategory, availabilityFilter, searchQuery]);
+  }, [products, statusFilter, selectedCategory, availabilityFilter, selectedSupplier, searchQuery, suppliersMap]);
 
   const publishedCount = products.filter((p) => p.isPublished).length;
   const hiddenCount = products.length - publishedCount;
@@ -162,7 +223,7 @@ export function ProductsAdminView() {
           <Button
             variant="outline"
             size="sm"
-            onClick={loadData}
+            onClick={() => loadData(selectedSupplier)}
             disabled={loading}
             className="h-8 text-xs gap-1.5 cursor-pointer"
           >
@@ -205,6 +266,29 @@ export function ProductsAdminView() {
               <option value="All">All Categories</option>
               {categoriesList.map((cat) => (
                 <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+
+            <select
+              value={selectedSupplier}
+              onChange={(e) => handleSupplierChange(e.target.value)}
+              disabled={loading}
+              className="h-8 px-2.5 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 cursor-pointer max-w-[210px] truncate"
+              title="Filter by Sourcing Partner"
+            >
+              <option value="All">
+                {suppliersLoading
+                  ? 'Loading suppliers...'
+                  : suppliersError
+                  ? 'All Suppliers (Failed to load)'
+                  : 'All Suppliers'}
+              </option>
+              {suppliersList.map((supp) => (
+                <option key={supp._id} value={supp._id}>
+                  {supp.name}
+                  {supp.city ? ` (${supp.city})` : ''}
+                  {supp.status === 'archived' ? ' [Archived]' : ''}
+                </option>
               ))}
             </select>
 
@@ -252,7 +336,7 @@ export function ProductsAdminView() {
             <ShoppingBag className="size-8 text-muted-foreground/40 mb-2" />
             <h4 className="text-sm font-medium text-foreground">No products found</h4>
             <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-              {searchQuery || selectedCategory !== 'All' || statusFilter !== 'All' || availabilityFilter !== 'All'
+              {searchQuery || selectedCategory !== 'All' || selectedSupplier !== 'All' || statusFilter !== 'All' || availabilityFilter !== 'All'
                 ? 'Try adjusting your search criteria or filter selections.'
                 : 'No jewellery products registered yet. Click "+ Add Product" to publish your first piece.'}
             </p>
@@ -267,6 +351,7 @@ export function ProductsAdminView() {
                 onDelete={(p) => setDeletingProduct(p)}
                 onTogglePublish={handleTogglePublish}
                 actionLoading={actionLoadingId === prod._id}
+                suppliersMap={suppliersMap}
               />
             ))}
           </div>
@@ -279,6 +364,7 @@ export function ProductsAdminView() {
         onSave={handleCreate}
         initialData={null}
         loading={modalLoading}
+        existingProducts={products}
       />
 
       <ProductModal
@@ -287,6 +373,7 @@ export function ProductsAdminView() {
         onSave={handleUpdate}
         initialData={editingProduct}
         loading={modalLoading}
+        existingProducts={products}
       />
 
       <ProductDeleteModal
