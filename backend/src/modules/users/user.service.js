@@ -46,14 +46,15 @@ export class UserService {
   }
 
   async registerLocalUser({ name, email, password, ip = 'Unknown' }) {
-    if (!name || !email || !password) throw new Error('Name, email, and password are required');
+    if (!email || !password) throw new Error('Email and password are required');
     const normalizedEmail = email.toLowerCase().trim();
     const existing = await userRepository.findByEmail(normalizedEmail);
     if (existing) throw new Error('An account with this email already exists');
 
+    const fallbackName = name?.trim() || normalizedEmail.split('@')[0] || 'Valued Patron';
     const role = isAdminEmail(normalizedEmail) ? 'admin' : 'customer';
     const user = await userRepository.create({
-      name: name.trim(),
+      name: fallbackName,
       email: normalizedEmail,
       password: hashPassword(password),
       authProvider: 'local',

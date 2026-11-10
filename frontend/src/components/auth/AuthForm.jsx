@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AtSignIcon, KeyRoundIcon, UserIcon, ShieldAlert, Loader2, Eye, EyeOff } from "lucide-react";
+import { AtSignIcon, KeyRoundIcon, ShieldAlert, Loader2, Eye, EyeOff } from "lucide-react";
 import { loginWithEmail, registerWithEmail } from "@/lib/auth";
 import { toast } from "sonner";
 
@@ -13,7 +13,6 @@ export function AuthForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -26,23 +25,18 @@ export function AuthForm() {
       return;
     }
 
-    if (isSignUp && !name.trim()) {
-      setError("Please provide your full name.");
-      return;
-    }
-
     try {
       setLoading(true);
       let user;
       if (isSignUp) {
-        user = await registerWithEmail(name.trim(), email.trim(), password);
+        user = await registerWithEmail(email.trim(), password);
         toast.success("Account Created", {
-          description: `Welcome to Khalil & Sons, ${user.name}`
+          description: `Welcome to Khalil & Sons, ${user.name || user.email}`
         });
       } else {
         user = await loginWithEmail(email.trim(), password);
         toast.success("Welcome Back", {
-          description: `Signed in as ${user.name}`
+          description: `Signed in as ${user.name || user.email}`
         });
       }
 
@@ -52,7 +46,7 @@ export function AuthForm() {
           : "/";
       navigate(destination, { replace: true });
     } catch (err) {
-      setError(err.message || "Sign in failed. Please check your email and password.");
+      setError(err.message || "Authentication failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
@@ -64,21 +58,6 @@ export function AuthForm() {
         <div className="flex items-center gap-2 p-3 text-xs rounded-lg border border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400">
           <ShieldAlert className="size-4 shrink-0" />
           <span>{error}</span>
-        </div>
-      )}
-
-      {isSignUp && (
-        <div className="relative">
-          <Input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Your full name"
-            type="text"
-            className="pl-9 h-11"
-            required={isSignUp}
-            disabled={loading}
-          />
-          <UserIcon className="absolute left-3 top-3.5 size-4 text-muted-foreground pointer-events-none" />
         </div>
       )}
 

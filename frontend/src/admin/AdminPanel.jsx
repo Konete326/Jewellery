@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AppShell } from '@/components/app-shell'
 import { DashboardOverview } from './components/DashboardOverview'
 import { OrdersAdminView } from './components/OrdersAdminView'
@@ -15,14 +15,54 @@ import { ProfileAdminView } from './components/ProfileAdminView'
 import { SuppliersAdminView } from './components/suppliers/SuppliersAdminView'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { updatePageSEO } from '@/utils/seo'
+import { getAuthUser, logoutUser } from '@/lib/auth'
+import { usersApi } from '@/api/users.api'
+import { LumaSpin } from '@/components/ui/luma-spin'
 import { toast } from 'sonner'
 
 export function AdminPanel() {
   const location = useLocation()
+  const navigate = useNavigate()
   const searchParams = new URLSearchParams(location.search)
   const queryTab = searchParams.get('tab')
   const pathTab = location.pathname.replace(/^\/admin\/?/, '').split('/')[0]
   const activeTab = queryTab || pathTab || 'dashboard'
+  const [isVerifyingAdmin, setIsVerifyingAdmin] = useState(true)
+
+  useEffect(() => {
+    let isMounted = true
+    const verifyLiveAdmin = async () => {
+      const cached = getAuthUser()
+      if (!cached || cached.role !== 'admin') {
+        logoutUser()
+        navigate('/auth', { replace: true, state: { from: location } })
+        return
+      }
+
+      try {
+        const res = await usersApi.getMe()
+        const profile = res?.data || res
+        if (!profile || profile.role !== 'admin' || profile.isActive === false) {
+          toast.error('Access Denied: Administrator verification failed.')
+          logoutUser()
+          navigate('/auth', { replace: true, state: { from: location } })
+          return
+        }
+        if (isMounted) setIsVerifyingAdmin(false)
+      } catch (err) {
+        if (err?.status === 401 || err?.status === 403) {
+          toast.error('Session expired or administrative privileges revoked.')
+          logoutUser()
+          navigate('/auth', { replace: true, state: { from: location } })
+          return
+        }
+        if (isMounted) setIsVerifyingAdmin(false)
+      }
+    }
+
+    verifyLiveAdmin()
+    return () => { isMounted = false }
+  }, [location.pathname])
 
   useEffect(() => {
     updatePageSEO({
@@ -96,6 +136,17 @@ export function AdminPanel() {
       default:
         return <DashboardOverview />
     }
+  }
+
+  if (isVerifyingAdmin) {
+    return (
+      <div className="min-h-screen w-full flex flex-col items-center justify-center bg-background gap-3">
+        <LumaSpin className="size-8 text-foreground" />
+        <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          Verifying Atelier Administrator Privileges...
+        </span>
+      </div>
+    );
   }
 
   return (

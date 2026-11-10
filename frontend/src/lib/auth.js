@@ -128,8 +128,11 @@ export async function loginWithEmail(email, password) {
   return user;
 }
 
-export async function registerWithEmail(name, email, password) {
-  const response = await usersApi.register({ name, email, password });
+export async function registerWithEmail(emailOrName, emailOrPassword, maybePassword) {
+  const payload = maybePassword !== undefined
+    ? { name: emailOrName, email: emailOrPassword, password: maybePassword }
+    : { email: emailOrName, password: emailOrPassword };
+  const response = await usersApi.register(payload);
   const data = response?.data || response;
   const user = data.user || data;
   const token = data.token || '';
