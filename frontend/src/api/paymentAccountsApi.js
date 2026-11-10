@@ -28,3 +28,7 @@ export const deletePaymentAccount = async (id) => {
     method: 'DELETE'
   });
 };
+
+export const fetchBankLedger = async (id) => {
+  return apiClient(`${ENDPOINTS.PAYMENT_ACCOUNTS}/${id}/ledger`);
+};

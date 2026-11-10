@@ -40,9 +40,9 @@ export function AuthPage() {
         description: "Signed in securely via Google"
       });
       const destination =
-        authedUser.role === "admin" || isRedirectedFromAdmin
-          ? location.state?.from?.pathname || "/admin"
-          : "/";
+        location.state?.from?.pathname ||
+        location.state?.from ||
+        (authedUser.role === "admin" || isRedirectedFromAdmin ? "/admin" : "/");
       navigate(destination, { replace: true });
     } catch (error) {
       if (error?.code !== "auth/popup-closed-by-user") {

@@ -28,6 +28,14 @@ export const createOrderSchema = z.object({
     totalAmount: z.number().nonnegative(),
     advancePaid: z.number().nonnegative().optional(),
     customerNote: z.string().optional(),
+    paymentMode: z.enum(['Bank Transfer', 'Showroom Payment']).optional(),
+    initialPayment: z.object({
+      bankAccountId: z.string().optional(),
+      amount: z.number().nonnegative().optional(),
+      paymentReference: z.string().optional(),
+      paymentType: z.string().optional(),
+      notes: z.string().optional()
+    }).optional(),
     paymentDetails: z.object({
       method: z.string().optional(),
       transactionRef: z.string().optional(),

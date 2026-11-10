@@ -41,9 +41,9 @@ export function AuthForm() {
       }
 
       const destination =
-        user.role === "admin"
-          ? location.state?.from?.pathname || "/admin"
-          : "/";
+        location.state?.from?.pathname ||
+        location.state?.from ||
+        (user.role === "admin" ? "/admin" : "/");
       navigate(destination, { replace: true });
     } catch (err) {
       setError(err.message || "Authentication failed. Please check your credentials.");

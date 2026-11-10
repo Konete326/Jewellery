@@ -1,4 +1,5 @@
 import { getAuthUser } from '@/lib/auth';
+import { broadcastCartUpdate } from '@/utils/tabSync';
 
 export function getCartStorageKey(user = getAuthUser()) {
   if (!user) return 'khalil_cart_guest';
@@ -57,5 +58,46 @@ export function clearLocalCart(user = getAuthUser()) {
 export function getLocalCartCount(user = getAuthUser()) {
   const items = getLocalCart(user);
   return items.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+}
+
+export function mergeGuestCartIntoUserCart(user) {
+  if (!user) return;
+  try {
+    const guestKey = 'khalil_cart_guest';
+    const guestRaw = localStorage.getItem(guestKey) || localStorage.getItem('khalil_cart');
+    if (!guestRaw) return;
+    const guestItems = JSON.parse(guestRaw);
+    if (!Array.isArray(guestItems) || guestItems.length === 0) return;
+
+    const userKey = getCartStorageKey(user);
+    const userRaw = localStorage.getItem(userKey);
+    let userItems = [];
+    if (userRaw) {
+      try {
+        const parsed = JSON.parse(userRaw);
+        if (Array.isArray(parsed)) userItems = parsed;
+      } catch {}
+    }
+
+    const merged = [...userItems];
+    for (const gItem of guestItems) {
+      const gId = String(gItem.id || gItem._id);
+      const gSize = String(gItem.size || '');
+      const existing = merged.find(
+        (u) => String(u.id || u._id) === gId && String(u.size || '') === gSize
+      );
+      if (existing) {
+        existing.quantity = (Number(existing.quantity) || 1) + (Number(gItem.quantity) || 1);
+      } else {
+        merged.push({ ...gItem });
+      }
+    }
+
+    localStorage.setItem(userKey, JSON.stringify(merged));
+    localStorage.removeItem(guestKey);
+    localStorage.removeItem('khalil_cart');
+    const totalCount = merged.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+    broadcastCartUpdate(totalCount, merged);
+  } catch {}
 }
 

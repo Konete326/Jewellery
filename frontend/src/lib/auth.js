@@ -2,6 +2,7 @@ import { auth, googleProvider, signInWithPopup } from './firebase.js';
 import { usersApi } from '@/api/users.api.js';
 import { syncVaultWithDatabase, clearLocalVault } from './wishlist.js';
 import { broadcastAuthUpdate } from '@/utils/tabSync.js';
+import { mergeGuestCartIntoUserCart } from '@/utils/cartStorage.js';
 
 export function isDifferentAccount(currentUser, incomingUser) {
   if (!currentUser || !incomingUser) return false;
@@ -74,6 +75,7 @@ export function setAuthUser(user, token) {
     if (token) {
       setAuthToken(token);
     }
+    mergeGuestCartIntoUserCart(user);
     broadcastAuthUpdate(user);
     syncVaultWithDatabase({ isolated: isSwitchingAccount }).catch(() => {});
   } else {

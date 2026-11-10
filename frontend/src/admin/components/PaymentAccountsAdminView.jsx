@@ -20,6 +20,7 @@ import { PaymentAccountCard } from './PaymentAccountCard';
 import { PaymentAccountModal } from './PaymentAccountModal';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { ConfirmAccountStatusModal } from './ConfirmAccountStatusModal';
+import { BankAccountLedgerModal } from './BankAccountLedgerModal';
 import { LumaSpin } from '@/components/ui/luma-spin';
 
 export function PaymentAccountsAdminView() {
@@ -39,6 +40,7 @@ export function PaymentAccountsAdminView() {
 
   const [statusConfirmAccount, setStatusConfirmAccount] = useState(null);
   const [statusActionLoading, setStatusActionLoading] = useState(false);
+  const [viewingLedgerAccount, setViewingLedgerAccount] = useState(null);
 
   const loadAccounts = async (silent = false) => {
     if (!silent) setLoading(true);
@@ -428,11 +430,18 @@ export function PaymentAccountsAdminView() {
               onDelete={(acc) => setDeletingAccount(acc)}
               onSetDefault={handleSetDefault}
               onToggleStatus={(acc) => setStatusConfirmAccount(acc)}
+              onViewLedger={(acc) => setViewingLedgerAccount(acc)}
               actionLoading={actionLoadingId === account._id}
             />
           ))}
         </div>
       )}
+
+      <BankAccountLedgerModal
+        isOpen={Boolean(viewingLedgerAccount)}
+        onClose={() => setViewingLedgerAccount(null)}
+        account={viewingLedgerAccount}
+      />
 
       <PaymentAccountModal
         isOpen={isModalOpen}

@@ -1,10 +1,7 @@
 import { createTransporter } from '../../utils/mailer.js';
 import { Order } from './order.model.js';
-import {
-  renderPaymentApprovedHtml,
-  renderPaymentRejectedHtml,
-  renderOrderStatusHtml
-} from './order.mail.templates.js';
+import { renderPaymentApprovedHtml, renderPaymentRejectedHtml, renderOrderStatusHtml } from './order.mail.templates.js';
+import { renderOrderPlacedCustomerHtml, renderOrderPlacedAdminHtml } from './order.placed.templates.js';
 
 let customTransporter = null;
 export function setTestTransporter(transporter) {
@@ -21,58 +18,48 @@ async function recordAndSendNotification(order, { event, key, subject, html }) {
   const recipient = (order.customer?.email || orderDoc.customer?.email || '').trim();
 
   if (!recipient) {
-    const alreadySkipped = orderDoc.notificationLog.some(
-      (n) => n.idempotencyKey === key && n.status === 'skipped'
-    );
+    const alreadySkipped = orderDoc.notificationLog.some((n) => n.idempotencyKey === key && n.status === 'skipped');
     if (!alreadySkipped) {
-      orderDoc.notificationLog.push({
-        event,
-        recipient: '',
-        status: 'skipped',
-        reason: 'missing_recipient',
-        sentAt: new Date(),
-        idempotencyKey: key
-      });
+      orderDoc.notificationLog.push({ event, recipient: '', status: 'skipped', reason: 'missing_recipient', sentAt: new Date(), idempotencyKey: key });
       await orderDoc.save().catch(() => null);
     }
     return { delivered: false, reason: 'missing_recipient', status: 'skipped' };
   }
 
-  const alreadySent = orderDoc.notificationLog.some(
-    (n) => n.idempotencyKey === key && n.status === 'sent'
-  );
-  if (alreadySent) {
-    return { delivered: false, duplicate: true };
-  }
+  const alreadySent = orderDoc.notificationLog.some((n) => n.idempotencyKey === key && n.status === 'sent');
+  if (alreadySent) return { delivered: false, duplicate: true };
 
   const from = process.env.SMTP_FROM || 'Khalil & Sons Jewellers <khalilandsonsjewellers@gmail.com>';
   try {
     const transporter = getTransporter();
     const result = await transporter.sendMail({ from, to: recipient, subject, html });
-
-    orderDoc.notificationLog.push({
-      event,
-      recipient,
-      status: 'sent',
-      reason: '',
-      sentAt: new Date(),
-      idempotencyKey: key
-    });
+    orderDoc.notificationLog.push({ event, recipient, status: 'sent', reason: '', sentAt: new Date(), idempotencyKey: key });
     await orderDoc.save();
-
     return { delivered: true, messageId: result?.messageId || 'sent', status: 'sent' };
   } catch (err) {
-    orderDoc.notificationLog.push({
-      event,
-      recipient,
-      status: 'failed',
-      reason: 'smtp_error',
-      sentAt: new Date(),
-      idempotencyKey: key
-    });
+    orderDoc.notificationLog.push({ event, recipient, status: 'failed', reason: 'smtp_error', sentAt: new Date(), idempotencyKey: key });
     await orderDoc.save().catch(() => null);
-
     return { delivered: false, error: err.message, status: 'failed', reason: 'smtp_error' };
+  }
+}
+
+export async function sendCustomerOrderPlacedEmail({ order, payment }) {
+  const key = `order_${order._id}_placed`;
+  const subject = `Order Received — ${order.orderNumber}`;
+  const html = renderOrderPlacedCustomerHtml({ order, payment });
+  return recordAndSendNotification(order, { event: 'order_placed', key, subject, html });
+}
+
+export async function sendAdminNewOrderEmail({ order, payment }) {
+  const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_USER || 'khalilandsonsjewellers@gmail.com';
+  const from = process.env.SMTP_FROM || 'Khalil & Sons Jewellers <khalilandsonsjewellers@gmail.com>';
+  const subject = `New Order Placed: ${order.orderNumber} - ${order.customer?.name || 'Patron'}`;
+  const html = renderOrderPlacedAdminHtml({ order, payment });
+  try {
+    const transporter = getTransporter();
+    return await transporter.sendMail({ from, to: adminEmail, subject, html });
+  } catch {
+    return { delivered: false };
   }
 }
 

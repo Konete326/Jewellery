@@ -1,3 +1,12 @@
+export function normalizeOrderItem(item) {
+  let size = typeof item?.size === 'string' ? item.size.trim() : '';
+  if (!size && typeof item?.title === 'string') {
+    const match = item.title.match(/\[Size:\s*([^\]]+)\]/i);
+    if (match && match[1]) size = match[1].trim();
+  }
+  return { ...item, size };
+}
+
 export function sanitizeCustomerOrder(order) {
   if (!order) return null;
   const raw = typeof order.toObject === 'function' ? order.toObject() : { ...order };

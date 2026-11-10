@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Copy, Check, Pencil, Trash2, Star, CheckCircle, XCircle, Zap } from 'lucide-react';
+import { Copy, Check, Pencil, Trash2, Star, CheckCircle, XCircle, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { BankLogo } from '@/components/BankLogo';
 import { toast } from 'sonner';
@@ -10,6 +10,7 @@ export function PaymentAccountCard({
   onDelete,
   onSetDefault,
   onToggleStatus,
+  onViewLedger,
   actionLoading
 }) {
   const [copiedField, setCopiedField] = useState(null);
@@ -199,6 +200,20 @@ export function PaymentAccountCard({
         </div>
 
         <div className="flex items-center gap-1.5">
+          {onViewLedger && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={actionLoading}
+              onClick={() => onViewLedger(account)}
+              className="h-7 px-2.5 text-[11px] font-mono cursor-pointer"
+            >
+              <BookOpen className="size-3 mr-1" />
+              Ledger
+            </Button>
+          )}
+
           <Button
             type="button"
             variant="outline"

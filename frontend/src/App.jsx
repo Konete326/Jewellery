@@ -8,6 +8,7 @@ import RatesPage from '@/user/pages/RatesPage'
 import { AboutUsPage } from '@/user/pages/AboutUsPage'
 import { ContactPage } from '@/user/pages/ContactPage'
 import { AccountPage } from '@/user/pages/AccountPage'
+import { CheckoutPage } from '@/user/pages/CheckoutPage'
 import { TrackOrderPage } from '@/user/pages/TrackOrderPage'
 import { NotFoundPage } from '@/user/pages/NotFoundPage'
 import { AdminPanel } from '@/admin/AdminPanel'
@@ -56,6 +57,14 @@ export default function App() {
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/login" element={<AuthPage />} />
           <Route path="/signup" element={<AuthPage />} />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/account"
             element={
