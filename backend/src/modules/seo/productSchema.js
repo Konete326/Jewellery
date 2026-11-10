@@ -26,12 +26,13 @@ export function resolveSchemaAvailability(record) {
   return null;
 }
 
-export function buildProductJsonLd(record, canonicalUrl, imageUrl) {
+export function buildProductJsonLd(record, canonicalUrl, imageUrlOrImages) {
+  const images = Array.isArray(imageUrlOrImages) ? imageUrlOrImages : [imageUrlOrImages];
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: record.title || 'Fine Gold Jewellery',
-    image: [imageUrl],
+    image: images,
     description: record.description || `Mastercrafted certified ${record.purity} gold jewellery by Khalil & Sons, Karachi.`,
     sku: `KS-${String(record.id).slice(-6).toUpperCase()}`,
     category: record.category || 'Bridal Sets',

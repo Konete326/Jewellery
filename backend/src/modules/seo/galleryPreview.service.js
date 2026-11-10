@@ -44,7 +44,8 @@ export async function resolvePublicRecord(id) {
     if (Number(product.price) > 0) price = Number(product.price);
   }
 
-  const rawImage = (Array.isArray(product.images) && product.images[0]) || product.imageUrl || '/og-image.jpg';
+  const productImages = Array.isArray(product.images) && product.images.length > 0 ? product.images : [product.imageUrl || '/og-image.jpg'];
+  const rawImage = productImages[0];
 
   return {
     recordType: 'product',
@@ -53,6 +54,7 @@ export async function resolvePublicRecord(id) {
     description: product.description || '',
     category: product.category || 'Fine Jewellery',
     image: rawImage,
+    images: productImages,
     purity: product.purity || '22K',
     price,
     availability: product.availability || null,
@@ -82,7 +84,10 @@ export async function getPreviewMetadata(id) {
 
   const rawImageUrl = resolveAbsoluteImageUrl(record.image);
   const escapedImageUrl = escapeHtml(rawImageUrl);
-  const jsonLd = buildProductJsonLd(record, canonicalUrl, rawImageUrl);
+  const allImages = Array.isArray(record.images) && record.images.length > 0
+    ? record.images.map(resolveAbsoluteImageUrl)
+    : [rawImageUrl];
+  const jsonLd = buildProductJsonLd(record, canonicalUrl, allImages);
 
   return {
     id: record.id,
@@ -94,6 +99,7 @@ export async function getPreviewMetadata(id) {
     escapedCanonicalUrl,
     imageUrl: rawImageUrl,
     escapedImageUrl,
+    images: allImages,
     ogType: record.price !== null ? 'product' : 'article',
     price: record.price,
     jsonLd

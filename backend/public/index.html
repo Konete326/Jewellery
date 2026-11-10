@@ -13,7 +13,8 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Khalil & Sons" />
+    <meta name="application-name" content="Khalil & Sons Jewellers" />
+    <meta name="apple-mobile-web-app-title" content="Khalil & Sons Jewellers" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Khalil & Sons Jewellers | Master Goldsmithing & Bridal Jewellery Karachi</title>
     <meta name="description" content="Khalil & Sons Jewellers — Master goldsmiths since 1992 in Murshid Sunaar Tower, Saddar, Karachi. Specializing in certified 22K, 21K and 18K gold, bespoke bridal jewellery heirlooms, uncut Polki diamonds, and lifetime hallmark guarantee." />
@@ -58,58 +59,96 @@
     <script type="application/ld+json" id="store-json-ld">
     {
       "@context": "https://schema.org",
-      "@type": "JewelryStore",
-      "name": "Khalil & Sons Jewellers",
-      "image": "https://khalilandsonsjewellers.com/assets/logo.png",
-      "@id": "https://khalilandsonsjewellers.com/#store",
-      "url": "https://khalilandsonsjewellers.com",
-      "telephone": "+922135670868",
-      "priceRange": "$$$$",
-      "currenciesAccepted": "PKR, USD",
-      "paymentAccepted": "Cash, Credit Card, Bank Transfer",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road",
-        "addressLocality": "Saddar, Karachi",
-        "addressRegion": "Sindh",
-        "postalCode": "74400",
-        "addressCountry": "PK"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 24.8595126,
-        "longitude": 67.0252029
-      },
-      "hasMap": "https://maps.app.goo.gl/49w2MCbeJfqTc8hT7",
-      "openingHoursSpecification": [
+      "@graph": [
         {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
-          "opens": "14:00",
-          "closes": "21:00"
+          "@type": "WebSite",
+          "@id": "https://khalilandsonsjewellers.com/#website",
+          "url": "https://khalilandsonsjewellers.com",
+          "name": "Khalil & Sons Jewellers",
+          "alternateName": ["Khalil and Sons", "Khalil & Sons", "Khalil & Sons Luxury Jewellers"],
+          "description": "Exquisite 21K, 22K & 24K pure gold, bridal sets, polki, and heirloom jewellery handcrafted in Karachi since 1992.",
+          "publisher": { "@id": "https://khalilandsonsjewellers.com/#store" },
+          "inLanguage": "en-PK"
         },
         {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": "Friday",
-          "opens": "15:30",
-          "closes": "21:30"
+          "@type": "JewelryStore",
+          "@id": "https://khalilandsonsjewellers.com/#store",
+          "name": "Khalil & Sons Jewellers",
+          "alternateName": "Khalil & Sons",
+          "image": [
+            "https://khalilandsonsjewellers.com/assets/logo.png",
+            "https://khalilandsonsjewellers.com/og-image.jpg"
+          ],
+          "logo": "https://khalilandsonsjewellers.com/assets/logo.png",
+          "url": "https://khalilandsonsjewellers.com",
+          "telephone": "+922135670868",
+          "priceRange": "$$$$",
+          "currenciesAccepted": "PKR, USD",
+          "paymentAccepted": "Cash, Credit Card, Bank Transfer",
+          "foundingDate": "1992",
+          "founder": {
+            "@type": "Person",
+            "name": "Muhammad Khalil"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road",
+            "addressLocality": "Saddar, Karachi",
+            "addressRegion": "Sindh",
+            "postalCode": "74400",
+            "addressCountry": "PK"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 24.8595126,
+            "longitude": 67.0252029
+          },
+          "hasMap": "https://maps.app.goo.gl/49w2MCbeJfqTc8hT7",
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+              "opens": "14:00",
+              "closes": "21:00"
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": "Friday",
+              "opens": "15:30",
+              "closes": "21:30"
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": "Saturday",
+              "opens": "14:00",
+              "closes": "21:00"
+            }
+          ],
+          "sameAs": [
+            "https://maps.app.goo.gl/49w2MCbeJfqTc8hT7",
+            "https://www.instagram.com/khalilandsons/",
+            "https://www.facebook.com/thekhalilandsons/"
+          ]
         },
         {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": "Saturday",
-          "opens": "14:00",
-          "closes": "21:00"
+          "@type": "SiteNavigationElement",
+          "@id": "https://khalilandsonsjewellers.com/#navigation",
+          "name": "Main Navigation",
+          "hasPart": [
+            { "@type": "WebPage", "name": "Shop Pure Gold Jewellery", "url": "https://khalilandsonsjewellers.com/shop" },
+            { "@type": "WebPage", "name": "Living Archive & Bespoke Gallery", "url": "https://khalilandsonsjewellers.com/gallery" },
+            { "@type": "WebPage", "name": "Live Daily Gold Rates", "url": "https://khalilandsonsjewellers.com/rates" },
+            { "@type": "WebPage", "name": "Client Appraisals & Reviews", "url": "https://khalilandsonsjewellers.com/reviews" },
+            { "@type": "WebPage", "name": "Heritage & Goldsmithing Legacy", "url": "https://khalilandsonsjewellers.com/about" },
+            { "@type": "WebPage", "name": "Showroom Consultation & Contact", "url": "https://khalilandsonsjewellers.com/contact" },
+            { "@type": "WebPage", "name": "Track Atelier Order", "url": "https://khalilandsonsjewellers.com/track-order" }
+          ]
         }
-      ],
-      "sameAs": [
-        "https://maps.app.goo.gl/49w2MCbeJfqTc8hT7",
-        "https://www.instagram.com/khalilandsons/",
-        "https://www.facebook.com/thekhalilandsons/"
       ]
     }
     </script>
-    <script type="module" crossorigin src="/assets/index-B7VKLM4I.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-IDG4Hzrv.css">
+    <script type="module" crossorigin src="/assets/index-ChDsDkdW.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DpGJtxx9.css">
   </head>
   <body class="bg-[#f9f9f9] text-[#2d3435] antialiased" style="font-family:'Work Sans',sans-serif;">
     <div id="root"></div>

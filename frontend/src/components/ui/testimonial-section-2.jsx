@@ -215,7 +215,7 @@ export function TestimonialSection2({
                         </span>
                       </div>
                     </div>
-                    {selected.productId && (
+                    {selected.productId && !selected.isArchived ? (
                       <Link
                         to={`/gallery/${selected.productId}`}
                         className="inline-flex items-center gap-1 text-[11px] text-amber-400 hover:text-amber-300 font-medium shrink-0 ml-2"
@@ -223,6 +223,10 @@ export function TestimonialSection2({
                         <span>View Piece</span>
                         <ExternalLink size={12} />
                       </Link>
+                    ) : (
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 bg-white/10 px-2 py-0.5 rounded shrink-0 ml-2">
+                        Archived Piece
+                      </span>
                     )}
                   </div>
                 )}

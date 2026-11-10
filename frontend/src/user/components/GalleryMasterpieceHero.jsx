@@ -381,7 +381,7 @@ export function GalleryMasterpieceHero({
               </a>
               <button
                 type="button"
-                onClick={onOpenInquiry}
+                onClick={() => onOpenInquiry && onOpenInquiry(activeImageUrl, activeImageIndex)}
                 className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl border border-border bg-card hover:bg-muted text-foreground text-xs uppercase tracking-wider font-medium transition-all cursor-pointer"
               >
                 <Mail className="size-4" />
@@ -403,7 +403,7 @@ export function GalleryMasterpieceHero({
             {isProduct ? (
               <button
                 type="button"
-                onClick={onOpenInquiry}
+                onClick={() => onOpenInquiry && onOpenInquiry(activeImageUrl, activeImageIndex)}
                 className="inline-flex items-center gap-1 hover:text-foreground transition-colors cursor-pointer underline underline-offset-2"
               >
                 <Mail className="size-3" />

@@ -2,28 +2,14 @@ import { BASE_URL, optimizeCloudinaryUrl } from './seo.utils.js';
 import { serializeJsonLd } from './productSchema.js';
 
 export function escapeHtml(str = '') {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 export function resolveAbsoluteImageUrl(rawImage) {
-  if (!rawImage || typeof rawImage !== 'string') {
-    return `${BASE_URL}/og-image.jpg`;
-  }
-  const trimmed = rawImage.trim();
-  if (!trimmed) {
-    return `${BASE_URL}/og-image.jpg`;
-  }
-  const optimized = optimizeCloudinaryUrl(trimmed);
-  if (/^https?:\/\//i.test(optimized)) {
-    return optimized;
-  }
-  const cleanPath = optimized.startsWith('/') ? optimized : `/${optimized}`;
-  return `${BASE_URL}${cleanPath}`;
+  if (!rawImage || typeof rawImage !== 'string' || !rawImage.trim()) return `${BASE_URL}/og-image.jpg`;
+  const optimized = optimizeCloudinaryUrl(rawImage.trim());
+  if (/^https?:\/\//i.test(optimized)) return optimized;
+  return `${BASE_URL}${optimized.startsWith('/') ? optimized : `/${optimized}`}`;
 }
 
 export function injectOpenGraphMeta(html, meta) {
@@ -45,6 +31,14 @@ export function injectOpenGraphMeta(html, meta) {
   updated = updated.replace(/<meta name="twitter:description" content=".*?"\s*\/?>/i, `<meta name="twitter:description" content="${meta.escapedDescription}" />`);
   updated = updated.replace(/<meta name="twitter:image" content=".*?"\s*\/?>/i, `<meta name="twitter:image" content="${imgUrl}" />`);
 
+  if (Array.isArray(meta.images) && meta.images.length > 1) {
+    const additionalOg = meta.images.slice(1).map((img) => {
+      const esc = escapeHtml(img);
+      return `<meta property="og:image" content="${esc}" />\n    <meta property="og:image:secure_url" content="${esc}" />`;
+    }).join('\n    ');
+    updated = updated.replace(/<\/head>/i, `    ${additionalOg}\n  </head>`);
+  }
+
   if (meta.price !== null && meta.price !== undefined) {
     const priceTags = [
       `<meta property="product:price:amount" content="${Math.round(meta.price)}" />`,
@@ -55,9 +49,22 @@ export function injectOpenGraphMeta(html, meta) {
     updated = updated.replace(/<\/head>/i, `    ${priceTags}\n  </head>`);
   }
 
+  if (meta.pageGraphJsonLd) {
+    const graphScript = `<script type="application/ld+json" id="store-json-ld">${serializeJsonLd(meta.pageGraphJsonLd)}</script>`;
+    if (updated.includes('id="store-json-ld"')) {
+      updated = updated.replace(/<script type="application\/ld\+json" id="store-json-ld">[\s\S]*?<\/script>/i, graphScript);
+    } else {
+      updated = updated.replace(/<\/head>/i, `    ${graphScript}\n  </head>`);
+    }
+  }
+
   if (meta.jsonLd) {
     const jsonTag = `<script type="application/ld+json" id="product-json-ld">${serializeJsonLd(meta.jsonLd)}</script>`;
     updated = updated.replace(/<\/head>/i, `    ${jsonTag}\n  </head>`);
+  }
+
+  if (meta.ssrNavHtml && !updated.includes('aria-label="Main Navigation"')) {
+    updated = updated.replace(/<div id="root">/i, `${meta.ssrNavHtml}\n    <div id="root">`);
   }
 
   return updated;

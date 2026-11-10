@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Send, Loader2, Gem, ShieldCheck } from 'lucide-react';
+import { X, Send, Loader2, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GoogleIcon } from '@/components/google-icon';
 import { submitInquiry } from '@/api/inquiryApi';
@@ -7,7 +7,7 @@ import { normalizePhoneToE164 } from '@/utils/phone';
 import { getAuthUser, loginWithGoogle } from '@/lib/auth';
 import { toast } from 'sonner';
 
-export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
+export function MasterpieceInquiryModal({ isOpen, onClose, piece, activeImageUrl, activeImageIndex = 0 }) {
   const [user, setUser] = useState(getAuthUser());
   const [customerName, setCustomerName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
@@ -30,6 +30,9 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
   }, [isOpen]);
 
   if (!isOpen || !piece) return null;
+
+  const selectedImage = activeImageUrl || piece?.imageUrl || piece?.src || (Array.isArray(piece?.images) && piece.images[0]) || '/assets/products/choker-ruby-01.jpg';
+  const totalAngles = Array.isArray(piece?.images) ? piece.images.length : 1;
 
   const handleGoogleAutofill = async () => {
     try {
@@ -59,12 +62,15 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
 
     setSubmitting(true);
     try {
+      const angleInfo = totalAngles > 1 ? `\n[Selected View: Photo ${Number(activeImageIndex) + 1} of ${totalAngles}]` : '';
+      const photoInfo = selectedImage ? `\n[Selected Photo: ${selectedImage}]` : '';
+
       await submitInquiry({
         customerName: customerName.trim(),
         email: email.trim(),
         phone: normalizePhoneToE164(phone.trim()),
         subject: `Inquiry: ${piece.title}`,
-        message: `${message.trim()}\n\n[Reference ID: ${piece._id || piece.id}]`,
+        message: `${message.trim()}\n\n[Reference ID: ${piece._id || piece.id}]${angleInfo}${photoInfo}`,
         jewelryType: piece.category || 'Bridal Sets',
         preferredMetal: '22K Gold',
         estimatedBudget: 'Consultation'
@@ -90,8 +96,8 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
       >
         <div className="flex items-start justify-between border-b border-border pb-3">
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-700 dark:text-amber-400 shrink-0">
-              <Gem className="size-5" />
+            <div className="px-2.5 py-1 rounded bg-black/85 text-amber-300 font-mono text-[10px] tracking-widest border border-amber-500/30 uppercase shrink-0">
+              AU · 916.6
             </div>
             <div>
               <span className="text-[10px] uppercase font-mono tracking-widest text-amber-700 dark:text-amber-400 font-medium">
@@ -111,11 +117,18 @@ export function MasterpieceInquiryModal({ isOpen, onClose, piece }) {
         </div>
 
         <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/40 border border-border/80">
-          <img
-            src={piece.imageUrl || piece.src}
-            alt={piece.title}
-            className="size-14 rounded-lg object-cover border border-border"
-          />
+          <div className="relative size-14 shrink-0 rounded-lg overflow-hidden border border-border bg-muted/20">
+            <img
+              src={selectedImage}
+              alt={piece.title}
+              className="size-full object-cover"
+            />
+            {totalAngles > 1 && (
+              <span className="absolute bottom-0.5 right-0.5 px-1 py-0.2 rounded bg-black/80 text-amber-300 font-mono text-[8px] border border-amber-500/30">
+                {Number(activeImageIndex) + 1}/{totalAngles}
+              </span>
+            )}
+          </div>
           <div className="min-w-0 flex-1">
             <h4 className="font-serif text-sm font-medium text-foreground line-clamp-1">
               {piece.title}

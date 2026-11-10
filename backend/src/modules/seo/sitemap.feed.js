@@ -21,7 +21,14 @@ export async function generateSitemapXml() {
     { path: '/rates', priority: '0.8', changefreq: 'daily' },
     { path: '/reviews', priority: '0.8', changefreq: 'weekly' },
     { path: '/about', priority: '0.7', changefreq: 'monthly' },
-    { path: '/contact', priority: '0.7', changefreq: 'monthly' }
+    { path: '/contact', priority: '0.7', changefreq: 'monthly' },
+    { path: '/track-order', priority: '0.6', changefreq: 'monthly' },
+    { path: '/collections/Bridal-Sets', priority: '0.8', changefreq: 'weekly' },
+    { path: '/collections/Necklaces', priority: '0.8', changefreq: 'weekly' },
+    { path: '/collections/Earrings', priority: '0.8', changefreq: 'weekly' },
+    { path: '/collections/Bangles', priority: '0.8', changefreq: 'weekly' },
+    { path: '/collections/Rings', priority: '0.8', changefreq: 'weekly' },
+    { path: '/collections/Chains', priority: '0.8', changefreq: 'weekly' }
   ];
 
   const now = new Date().toISOString().split('T')[0];
@@ -40,27 +47,28 @@ export async function generateSitemapXml() {
 
   const seenIds = new Set();
 
-  const appendItem = (id, title, rawImg, updatedAt) => {
+  const appendItem = (id, title, rawImages, updatedAt) => {
     const idStr = String(id);
     if (!idStr || seenIds.has(idStr)) return;
     seenIds.add(idStr);
 
-    const itemDate = updatedAt
-      ? new Date(updatedAt).toISOString().split('T')[0]
-      : now;
-    const imgUrl = rawImg ? resolveImageUrl(rawImg) : '';
+    const itemDate = updatedAt ? new Date(updatedAt).toISOString().split('T')[0] : now;
     const safeTitle = escapeXml(title || 'Fine Gold Jewellery');
+    const imageList = Array.isArray(rawImages) ? rawImages : (rawImages ? [rawImages] : []);
 
     xml += '  <url>\n';
     xml += `    <loc>${BASE_URL}/gallery/${idStr}</loc>\n`;
     xml += `    <lastmod>${itemDate}</lastmod>\n`;
     xml += '    <changefreq>weekly</changefreq>\n';
     xml += '    <priority>0.7</priority>\n';
-    if (imgUrl) {
-      xml += '    <image:image>\n';
-      xml += `      <image:loc>${escapeXml(imgUrl)}</image:loc>\n`;
-      xml += `      <image:title>${safeTitle}</image:title>\n`;
-      xml += '    </image:image>\n';
+    for (const rawImg of imageList) {
+      const imgUrl = rawImg ? resolveImageUrl(rawImg) : '';
+      if (imgUrl) {
+        xml += '    <image:image>\n';
+        xml += `      <image:loc>${escapeXml(imgUrl)}</image:loc>\n`;
+        xml += `      <image:title>${safeTitle}</image:title>\n`;
+        xml += '    </image:image>\n';
+      }
     }
     xml += '  </url>\n';
   };
@@ -70,8 +78,7 @@ export async function generateSitemapXml() {
   }
 
   for (const p of productItems) {
-    const pImg = (Array.isArray(p.images) && p.images[0]) || '';
-    appendItem(p._id, p.title, pImg, p.updatedAt);
+    appendItem(p._id, p.title, p.images, p.updatedAt);
   }
 
   xml += '</urlset>';

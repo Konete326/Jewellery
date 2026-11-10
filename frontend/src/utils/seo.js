@@ -96,7 +96,8 @@ export function updatePageSEO({
   image = DEFAULT_IMAGE,
   url,
   type = 'website',
-  schema
+  schema,
+  noIndex = false
 } = {}) {
   if (typeof document === 'undefined') return;
 
@@ -108,6 +109,7 @@ export function updatePageSEO({
 
   document.title = fullTitle;
 
+  setMetaTag('meta[name="robots"]', 'content', noIndex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
   setMetaTag('meta[name="description"]', 'content', description);
   setMetaTag('meta[name="keywords"]', 'content', keywords);
   setCanonical(currentUrl);
@@ -130,7 +132,7 @@ export function updatePageSEO({
   if (schema) {
     if (schema['@type'] === 'Product') {
       setProductJsonLd(schema);
-    } else if (schema['@type'] === 'JewelryStore') {
+    } else if (schema['@type'] === 'JewelryStore' || schema['@graph']) {
       setStoreJsonLd(schema);
       setProductJsonLd(null);
     }
@@ -142,54 +144,108 @@ export function updatePageSEO({
 export function getLocalBusinessSchema() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'JewelryStore',
-    name: 'Khalil & Sons Jewellers',
-    image: `${BASE_URL}/assets/logo.png`,
-    '@id': `${BASE_URL}/#store`,
-    url: BASE_URL,
-    telephone: '+922135670868',
-    priceRange: '$$$$',
-    currenciesAccepted: 'PKR, USD',
-    paymentAccepted: 'Cash, Credit Card, Bank Transfer',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road',
-      addressLocality: 'Saddar, Karachi',
-      addressRegion: 'Sindh',
-      postalCode: '74400',
-      addressCountry: 'PK'
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 24.8595126,
-      longitude: 67.0252029
-    },
-    hasMap: 'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7',
-    openingHoursSpecification: [
+    '@graph': [
       {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'],
-        opens: '14:00',
-        closes: '21:00'
+        '@type': 'WebSite',
+        '@id': `${BASE_URL}/#website`,
+        url: BASE_URL,
+        name: 'Khalil & Sons Jewellers',
+        alternateName: ['Khalil and Sons', 'Khalil & Sons', 'Khalil & Sons Luxury Jewellers'],
+        description: 'Exquisite 21K, 22K & 24K pure gold, bridal sets, polki, and heirloom jewellery handcrafted in Karachi since 1992.',
+        publisher: { '@id': `${BASE_URL}/#store` },
+        inLanguage: 'en-PK'
       },
       {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'Friday',
-        opens: '15:30',
-        closes: '21:30'
+        '@type': 'JewelryStore',
+        '@id': `${BASE_URL}/#store`,
+        name: 'Khalil & Sons Jewellers',
+        alternateName: 'Khalil & Sons',
+        image: [
+          `${BASE_URL}/assets/logo.png`,
+          `${BASE_URL}/og-image.jpg`
+        ],
+        logo: `${BASE_URL}/assets/logo.png`,
+        url: BASE_URL,
+        telephone: '+922135670868',
+        priceRange: '$$$$',
+        currenciesAccepted: 'PKR, USD',
+        paymentAccepted: 'Cash, Credit Card, Bank Transfer',
+        foundingDate: '1992',
+        founder: {
+          '@type': 'Person',
+          name: 'Muhammad Khalil'
+        },
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road',
+          addressLocality: 'Saddar, Karachi',
+          addressRegion: 'Sindh',
+          postalCode: '74400',
+          addressCountry: 'PK'
+        },
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: 24.8595126,
+          longitude: 67.0252029
+        },
+        hasMap: 'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7',
+        openingHoursSpecification: [
+          {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+            opens: '14:00',
+            closes: '21:00'
+          },
+          {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: 'Friday',
+            opens: '15:30',
+            closes: '21:30'
+          },
+          {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: 'Saturday',
+            opens: '14:00',
+            closes: '21:00'
+          }
+        ],
+        sameAs: [
+          'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7',
+          'https://www.instagram.com/khalilandsons/',
+          'https://www.facebook.com/thekhalilandsons/'
+        ]
       },
       {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: 'Saturday',
-        opens: '14:00',
-        closes: '21:00'
+        '@type': 'SiteNavigationElement',
+        '@id': `${BASE_URL}/#navigation`,
+        name: 'Main Navigation',
+        hasPart: [
+          { '@type': 'WebPage', 'name': 'Shop Pure Gold Jewellery', 'url': `${BASE_URL}/shop` },
+          { '@type': 'WebPage', 'name': 'Living Archive & Bespoke Gallery', 'url': `${BASE_URL}/gallery` },
+          { '@type': 'WebPage', 'name': 'Live Daily Gold Rates', 'url': `${BASE_URL}/rates` },
+          { '@type': 'WebPage', 'name': 'Client Appraisals & Reviews', 'url': `${BASE_URL}/reviews` },
+          { '@type': 'WebPage', 'name': 'Heritage & Goldsmithing Legacy', 'url': `${BASE_URL}/about` },
+          { '@type': 'WebPage', 'name': 'Showroom Consultation & Contact', 'url': `${BASE_URL}/contact` },
+          { '@type': 'WebPage', 'name': 'Track Atelier Order', 'url': `${BASE_URL}/track-order` }
+        ]
       }
-    ],
-    sameAs: [
-      'https://maps.app.goo.gl/49w2MCbeJfqTc8hT7',
-      'https://www.instagram.com/khalilandsons/',
-      'https://www.facebook.com/thekhalilandsons/'
     ]
+  };
+}
+
+export function getFAQSchema(faqs = []) {
+  if (!Array.isArray(faqs) || faqs.length === 0) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question || faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer || faq.a
+      }
+    }))
   };
 }
 
@@ -213,16 +269,20 @@ export function resolveSchemaAvailability(record) {
 
 export function getProductSchema(piece) {
   if (!piece) return null;
-  const rawImg = piece.imageUrl?.startsWith('http')
-    ? piece.imageUrl
-    : `${BASE_URL}${piece.imageUrl || piece.src || '/assets/logo.png'}`;
-  const imgUrl = optimizeCloudinaryUrl(rawImg);
+  const imageSources = Array.isArray(piece.images) && piece.images.length > 0
+    ? piece.images
+    : [piece.imageUrl || piece.src || '/assets/logo.png'];
+
+  const allImages = imageSources.map((raw) => {
+    const full = raw.startsWith('http') ? raw : `${BASE_URL}${raw.startsWith('/') ? raw : `/${raw}`}`;
+    return optimizeCloudinaryUrl(full);
+  });
 
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: piece.title || 'Fine Gold Jewellery',
-    image: [imgUrl],
+    image: allImages,
     description: piece.description || 'Mastercrafted certified 22K gold jewellery by Khalil & Sons, Karachi.',
     sku: `KS-${String(piece._id || piece.id || '001').slice(-6).toUpperCase()}`,
     category: piece.category || 'Bridal Sets',

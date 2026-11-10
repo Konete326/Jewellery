@@ -114,7 +114,8 @@ export function ReviewsPage() {
           designation: "5★ Rating • Karachi",
           src: fallbackAvatars[0],
           productTitle: "Royal Heritage Nizam Kundan Choker",
-          productImage: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=400&q=80"
+          productImage: "/assets/products/choker-ruby-01.jpg",
+          isArchived: true
         },
         {
           quote: "Their transparency with gold hallmarks and certificate of authenticity gives unmatched peace of mind. Exceptional boutique service in Saddar.",
@@ -122,7 +123,8 @@ export function ReviewsPage() {
           designation: "5★ Rating • Karachi",
           src: fallbackAvatars[1],
           productTitle: "Artisanal Solitaire Diamond Band",
-          productImage: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80"
+          productImage: "/assets/products/kada-polki-01.jpg",
+          isArchived: true
         },
         {
           quote: "Our customized bridal bangles were delivered well ahead of the wedding date. The delicate meenakari detailing is mesmerizing.",
@@ -130,7 +132,8 @@ export function ReviewsPage() {
           designation: "5★ Rating • Karachi",
           src: fallbackAvatars[2],
           productTitle: "Mughal Polki Heritage Bangles",
-          productImage: "https://images.unsplash.com/photo-1611591475878-a400f9152b12?auto=format&fit=crop&w=400&q=80"
+          productImage: "/assets/products/guluband-01.jpg",
+          isArchived: true
         }
       ];
     }
@@ -143,6 +146,7 @@ export function ReviewsPage() {
       productTitle: r.masterpieceTitle || "Handcrafted Jewellery",
       productImage: r.masterpieceImage,
       productId: r.masterpieceId,
+      isArchived: Boolean(r.isArchived) || !r.masterpieceId,
       rating: r.rating || 5
     }));
   }, [reviews]);
@@ -156,7 +160,8 @@ export function ReviewsPage() {
       quote: r.comment || "Handcrafted jewellery made with certified gold purity.",
       productTitle: r.masterpieceTitle || "Handcrafted Jewellery",
       productImage: r.masterpieceImage,
-      productId: r.masterpieceId
+      productId: r.masterpieceId,
+      isArchived: Boolean(r.isArchived) || !r.masterpieceId
     }));
 
     if (dynamicItems.length >= 9) {

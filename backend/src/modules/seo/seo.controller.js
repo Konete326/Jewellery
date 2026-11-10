@@ -20,6 +20,7 @@ export class SeoController {
       'User-agent: *',
       'Allow: /',
       'Disallow: /admin',
+      'Disallow: /auth',
       'Disallow: /api/',
       '',
       `Sitemap: ${BASE_URL}/sitemap.xml`

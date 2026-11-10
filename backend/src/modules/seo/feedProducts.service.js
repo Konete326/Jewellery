@@ -31,6 +31,9 @@ export async function loadFeedProducts() {
     const sku = (product.sku && product.sku.trim()) || `KS-${id.slice(-6).toUpperCase()}`;
     const rawImg = (Array.isArray(product.images) && product.images[0]) || '';
     const imageUrl = resolveImageUrl(rawImg);
+    const additionalImages = Array.isArray(product.images) && product.images.length > 1
+      ? product.images.slice(1).map(resolveImageUrl).filter(Boolean)
+      : [];
 
     pricedProducts.push({
       id,
@@ -43,6 +46,7 @@ export async function loadFeedProducts() {
       formattedDecimal: `${numericPrice}.00`,
       availability,
       imageUrl,
+      additionalImages,
       link: `${BASE_URL}/gallery/${id}`,
       updatedAt: product.updatedAt ? new Date(product.updatedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
     });

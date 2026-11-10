@@ -3,7 +3,7 @@ import { Product } from '../products/product.model.js';
 export class ReviewService {
   async getAllReviews() {
     const productItems = await Product.find({ 'reviews.0': { $exists: true } })
-      .select('title images category reviews')
+      .select('title images category isPublished reviews')
       .lean();
 
     const allReviews = [];
@@ -15,7 +15,8 @@ export class ReviewService {
           masterpieceId: item._id,
           masterpieceTitle: item.title,
           masterpieceImage: img,
-          masterpieceCategory: item.category
+          masterpieceCategory: item.category,
+          isArchived: item.isPublished === false
         });
       }
     }

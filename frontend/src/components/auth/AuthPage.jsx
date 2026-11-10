@@ -7,6 +7,7 @@ import { AuthGalleryShowcase } from "./AuthGalleryShowcase";
 import { AuthForm } from "./AuthForm";
 import { ChevronLeftIcon, ShieldAlert, Loader2, ShieldCheck, LogOut, ArrowRight } from "lucide-react";
 import { loginWithGoogle, getAuthUser, logoutUser } from "@/lib/auth";
+import { updatePageSEO } from "@/utils/seo";
 import { toast } from "sonner";
 
 export function AuthPage() {
@@ -17,6 +18,11 @@ export function AuthPage() {
   const isRedirectedFromAdmin = location.state?.from?.pathname === "/admin";
 
   useEffect(() => {
+    updatePageSEO({
+      title: 'Sign In & Register | Khalil & Sons Jewellers',
+      noIndex: true
+    });
+
     const syncAuth = () => setUser(getAuthUser());
     window.addEventListener("khalil_auth_change", syncAuth);
     window.addEventListener("storage", syncAuth);

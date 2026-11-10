@@ -52,8 +52,8 @@ export class GalleryRepository {
   }
 
   async getRecentReviews(limit = 15) {
-    const productItems = await Product.find({ 'reviews.0': { $exists: true } })
-      .select('title images category reviews')
+    const productItems = await Product.find({ isPublished: true, 'reviews.0': { $exists: true } })
+      .select('title images category isPublished reviews')
       .lean();
     const allReviews = [];
     for (const item of productItems) {
@@ -64,7 +64,8 @@ export class GalleryRepository {
           masterpieceId: item._id,
           masterpieceTitle: item.title,
           masterpieceCategory: item.category,
-          masterpieceImage: img
+          masterpieceImage: img,
+          isArchived: false
         });
       }
     }

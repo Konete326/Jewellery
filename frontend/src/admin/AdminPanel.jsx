@@ -14,6 +14,7 @@ import { PaymentAccountsAdminView } from './components/PaymentAccountsAdminView'
 import { ProfileAdminView } from './components/ProfileAdminView'
 import { SuppliersAdminView } from './components/suppliers/SuppliersAdminView'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { updatePageSEO } from '@/utils/seo'
 import { toast } from 'sonner'
 
 export function AdminPanel() {
@@ -24,6 +25,11 @@ export function AdminPanel() {
   const activeTab = queryTab || pathTab || 'dashboard'
 
   useEffect(() => {
+    updatePageSEO({
+      title: 'Admin Atelier Management | Khalil & Sons Jewellers',
+      noIndex: true
+    });
+
     const handleReviewEvent = (e) => {
       const data = e.detail;
       if (data) {

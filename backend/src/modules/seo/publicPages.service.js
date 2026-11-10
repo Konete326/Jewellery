@@ -3,6 +3,7 @@ import fs from 'fs';
 import { BASE_URL } from './seo.utils.js';
 import { injectOpenGraphMeta, escapeHtml } from './galleryPreview.utils.js';
 import { resolveCategoryMeta } from './categoryMeta.js';
+import { buildPublicPageGraph, SSR_NAVIGATION_HTML } from './seoStructuredData.js';
 
 const PUBLIC_PAGES_META = {
   '/': {
@@ -107,7 +108,9 @@ export function renderPublicPageHtml(publicDir, rawPath = '/') {
     imageUrl: `${BASE_URL}/og-image.jpg`,
     escapedImageUrl: `${BASE_URL}/og-image.jpg`,
     ogType: 'website',
-    price: null
+    price: null,
+    pageGraphJsonLd: buildPublicPageGraph(cleanPath, pageMeta),
+    ssrNavHtml: SSR_NAVIGATION_HTML
   };
 
   return injectOpenGraphMeta(baseHtml, metaPayload);

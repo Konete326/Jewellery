@@ -26,6 +26,11 @@ export async function generateGoogleMerchantXml() {
     xml += `      <g:link>${link}</g:link>\n`;
     xml += `      <g:mobile_link>${link}</g:mobile_link>\n`;
     xml += `      <g:image_link>${imgUrl}</g:image_link>\n`;
+    if (Array.isArray(item.additionalImages)) {
+      for (const addImg of item.additionalImages) {
+        xml += `      <g:additional_image_link>${escapeXml(addImg)}</g:additional_image_link>\n`;
+      }
+    }
     xml += '      <g:condition>new</g:condition>\n';
     xml += `      <g:availability>${item.availability}</g:availability>\n`;
     xml += `      <g:price>${item.priceString}</g:price>\n`;

@@ -34,6 +34,8 @@ export function GalleryDetailPage() {
   const [lightboxImage, setLightboxImage] = useState(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
+  const [inquiryImage, setInquiryImage] = useState(null);
+  const [inquiryImageIndex, setInquiryImageIndex] = useState(0);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
   const [piece, setPiece] = useState(null);
   const [reviewsList, setReviewsList] = useState([]);
@@ -455,7 +457,11 @@ export function GalleryDetailPage() {
             setIsLightboxOpen(true);
           }}
           onOpenReview={() => setIsReviewModalOpen(true)}
-          onOpenInquiry={() => setIsInquiryModalOpen(true)}
+          onOpenInquiry={(imgUrl, imgIdx) => {
+            setInquiryImage(imgUrl || piece.imageUrl || piece.src);
+            setInquiryImageIndex(typeof imgIdx === 'number' ? imgIdx : 0);
+            setIsInquiryModalOpen(true);
+          }}
           onOpenAppointment={() => setIsAppointmentModalOpen(true)}
           onAddToCart={handleAddToCart}
         />
@@ -526,8 +532,13 @@ export function GalleryDetailPage() {
 
       <MasterpieceInquiryModal
         isOpen={isInquiryModalOpen}
-        onClose={() => setIsInquiryModalOpen(false)}
+        onClose={() => {
+          setIsInquiryModalOpen(false);
+          setInquiryImage(null);
+        }}
         piece={piece}
+        activeImageUrl={inquiryImage}
+        activeImageIndex={inquiryImageIndex}
       />
 
       <BespokeAppointmentModal

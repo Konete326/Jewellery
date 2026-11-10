@@ -10,6 +10,7 @@ import { TrackOrderStatusTimeline } from '@/user/components/tracking/TrackOrderS
 import { TrackOrderItemsCard } from '@/user/components/tracking/TrackOrderItemsCard';
 import { TrackOrderSummaryCard } from '@/user/components/tracking/TrackOrderSummaryCard';
 import { TrackOrderErrorCard } from '@/user/components/tracking/TrackOrderErrorCard';
+import { updatePageSEO } from '@/utils/seo';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -61,6 +62,12 @@ export function TrackOrderPage() {
   };
 
   useEffect(() => {
+    updatePageSEO({
+      title: 'Track Atelier Order Status | Khalil & Sons Jewellers',
+      description: 'Track the real-time artisan crafting and delivery status of your bespoke bridal jewellery order from Khalil & Sons Jewellers, Karachi.',
+      url: 'https://khalilandsonsjewellers.com/track-order'
+    });
+
     if (location.state?.initialOrderNumber && location.state?.initialPhone) {
       executeTrack(location.state.initialOrderNumber, location.state.initialPhone);
     }

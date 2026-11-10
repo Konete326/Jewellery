@@ -26,7 +26,7 @@ const fallbackAppraisals = [
     createdAt: '2026-10-12T14:15:00.000Z',
     masterpieceTitle: 'Artisanal Solitaire Diamond Band',
     masterpieceCategory: 'Rings',
-    masterpieceImage: '/assets/products/bangles-mughal-01.jpg'
+    masterpieceImage: '/assets/products/kada-polki-01.jpg'
   },
   {
     _id: 'seed-appraisal-3',
@@ -37,7 +37,7 @@ const fallbackAppraisals = [
     createdAt: '2026-10-04T12:00:00.000Z',
     masterpieceTitle: 'Mughal Polki Heritage Bangles',
     masterpieceCategory: 'Bangles',
-    masterpieceImage: '/assets/products/earrings-jhumka-01.jpg'
+    masterpieceImage: '/assets/products/jhumka-01.jpg'
   },
   {
     _id: 'seed-appraisal-4',
@@ -48,7 +48,7 @@ const fallbackAppraisals = [
     createdAt: '2026-09-28T16:45:00.000Z',
     masterpieceTitle: 'Royal Polki Jhumkas',
     masterpieceCategory: 'Earrings',
-    masterpieceImage: '/assets/products/necklace-emerald-01.jpg'
+    masterpieceImage: '/assets/products/guluband-01.jpg'
   }
 ];
 
