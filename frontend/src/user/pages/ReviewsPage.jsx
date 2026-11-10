@@ -10,7 +10,7 @@ import TestimonialSection2, { defaultTestimonials } from '@/components/ui/testim
 import { NeuralNoise } from '@/components/ui/neural-noise';
 import FAQSection from '@/components/ui/faq1';
 import { galleryApi } from '@/api/galleryApi';
-import { updatePageSEO } from '@/utils/seo';
+import { updatePageSEO, getFAQSchema } from '@/utils/seo';
 import { broadcastCartUpdate, subscribeToTabSync, getCartStorageKey } from '@/utils/tabSync';
 import { getLocalCart, saveLocalCart } from '@/utils/cartStorage';
 
@@ -86,7 +86,9 @@ export function ReviewsPage() {
     updatePageSEO({
       title: 'Customer Reviews & Ratings | Khalil & Sons Jewellers',
       description: 'Read authentic customer reviews and ratings for bridal sets, bangles, and gold jewellery from Khalil & Sons in Saddar, Karachi.',
-      keywords: 'Khalil & Sons reviews, customer testimonials gold jewelry, bridal jewelry appraisals Karachi'
+      keywords: 'Khalil & Sons reviews, customer testimonials gold jewelry, bridal jewelry appraisals Karachi',
+      url: 'https://khalilandsonsjewellers.com/reviews',
+      schema: getFAQSchema(reviewsFaqs)
     });
   }, []);
 

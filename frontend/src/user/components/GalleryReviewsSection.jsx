@@ -126,7 +126,7 @@ export function GalleryReviewsSection({ piece, reviews = [], onOpenReviewModal }
     const target = hasPieceReviews ? pieceReviews : displayedList;
     if (!target.length) return '5.0';
     const sum = target.reduce((acc, r) => acc + (Number(r.rating) || 5), 0);
-    return (sum / target.length).toFixed(1);
+    return Number((sum / target.length).toFixed(1)).toFixed(1);
   }, [hasPieceReviews, pieceReviews, displayedList]);
 
   return (

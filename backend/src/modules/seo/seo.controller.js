@@ -21,6 +21,10 @@ export class SeoController {
       'Allow: /',
       'Disallow: /admin',
       'Disallow: /auth',
+      'Disallow: /login',
+      'Disallow: /signup',
+      'Disallow: /account',
+      'Disallow: /profile',
       'Disallow: /api/',
       '',
       `Sitemap: ${BASE_URL}/sitemap.xml`

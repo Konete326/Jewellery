@@ -84,7 +84,8 @@ export default function RatesPage() {
     updatePageSEO({
       title: 'Live Gold & Silver Rates Karachi | Khalil & Sons Jewellers',
       description: 'Check today live 24K, 22K, 21K, and 18K gold and pure silver rates in Karachi Sarafa Market. Certified hallmark pricing by Khalil & Sons Jewellers, Saddar.',
-      keywords: 'gold rates karachi, today gold price pakistan, 22k gold rate tola, 24k gold price, silver rate pakistan, sarafa market karachi, khalil and sons'
+      keywords: 'gold rates karachi, today gold price pakistan, 22k gold rate tola, 24k gold price, silver rate pakistan, sarafa market karachi, khalil and sons',
+      url: 'https://khalilandsonsjewellers.com/rates'
     });
 
     const handleRatesChange = (e) => {

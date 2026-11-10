@@ -24,11 +24,13 @@ export async function generateSitemapXml() {
     { path: '/contact', priority: '0.7', changefreq: 'monthly' },
     { path: '/track-order', priority: '0.6', changefreq: 'monthly' },
     { path: '/collections/Bridal-Sets', priority: '0.8', changefreq: 'weekly' },
-    { path: '/collections/Necklaces', priority: '0.8', changefreq: 'weekly' },
-    { path: '/collections/Earrings', priority: '0.8', changefreq: 'weekly' },
-    { path: '/collections/Bangles', priority: '0.8', changefreq: 'weekly' },
     { path: '/collections/Rings', priority: '0.8', changefreq: 'weekly' },
-    { path: '/collections/Chains', priority: '0.8', changefreq: 'weekly' }
+    { path: '/collections/Bangles', priority: '0.8', changefreq: 'weekly' },
+    { path: '/collections/gold-chains', priority: '0.8', changefreq: 'weekly' },
+    { path: '/collections/gold-bracelets', priority: '0.8', changefreq: 'weekly' },
+    { path: '/collections/gold-earrings', priority: '0.8', changefreq: 'weekly' },
+    { path: '/collections/gold-necklaces', priority: '0.8', changefreq: 'weekly' },
+    { path: '/collections/gold-coins-bars', priority: '0.8', changefreq: 'weekly' }
   ];
 
   const now = new Date().toISOString().split('T')[0];

@@ -22,6 +22,10 @@ import { getLocalCart, saveLocalCart } from '@/utils/cartStorage';
 import { getEstimatedPiecePrice, sanitizeQuantity } from '@/utils/pricing';
 import { toast } from 'sonner';
 
+function sanitizeRating(totalScore, count) {
+  return count > 0 ? Number((totalScore / count).toFixed(1)) : 0;
+}
+
 export function GalleryDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -74,6 +78,11 @@ export function GalleryDetailPage() {
           if (!isMounted || controller.signal.aborted) return;
           const p = prodRes?.data || prodRes?.item || prodRes;
           if (p && (p._id || p.id)) {
+            const pReviews = Array.isArray(p.reviews) ? p.reviews : [];
+            const pValidReviews = pReviews.filter((r) => Number(r.rating) > 0);
+            const pTotalScore = pValidReviews.reduce((sum, r) => sum + Number(r.rating), 0);
+            const pCalculatedAverage = sanitizeRating(pTotalScore, pValidReviews.length);
+
             itemData = {
               _id: p._id || p.id,
               id: p._id || p.id,
@@ -99,9 +108,9 @@ export function GalleryDetailPage() {
               stockQuantity: p.stockQuantity ?? p.stock ?? null,
               availability: p.availability || 'In Stock',
               isPublished: p.isPublished,
-              averageRating: Number(p.averageRating) || 0,
-              reviewCount: Number(p.reviewCount) || (Array.isArray(p.reviews) ? p.reviews.length : 0),
-              reviews: Array.isArray(p.reviews) ? p.reviews : []
+              averageRating: pCalculatedAverage || Number(Number(p.averageRating || 0).toFixed(1)),
+              reviewCount: Number(p.reviewCount) || pReviews.length,
+              reviews: pReviews
             };
             isProduct = true;
           }
@@ -223,7 +232,7 @@ export function GalleryDetailPage() {
       const validReviews = updatedReviews.filter((r) => Number(r.rating) > 0);
       const newCount = updatedReviews.length;
       const totalScore = validReviews.reduce((sum, r) => sum + Number(r.rating), 0);
-      const newAverage = validReviews.length > 0 ? Number((totalScore / validReviews.length).toFixed(1)) : 0;
+      const newAverage = sanitizeRating(totalScore, validReviews.length);
       return {
         ...prev,
         reviews: updatedReviews,

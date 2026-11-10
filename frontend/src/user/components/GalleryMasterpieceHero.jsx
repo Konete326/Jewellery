@@ -40,7 +40,7 @@ export function GalleryMasterpieceHero({
     setIsMainImageLoaded(false);
   }, [activeImageUrl]);
 
-  const rating = Number(piece.averageRating || piece.rating || 0);
+  const rating = Number(Number(piece.averageRating || piece.rating || 0).toFixed(1));
   const reviewCount = piece.reviewCount || (piece.reviews?.length) || 0;
   const purity = piece.purity || '22K';
   const hallmark = purity === '24K' ? 'AU · 999.0' : purity === '18K' ? 'AU · 750.0' : purity === '21K' ? 'AU · 875.0' : 'AU · 916.6';
@@ -203,7 +203,7 @@ export function GalleryMasterpieceHero({
                         key={i}
                         className={cn(
                           "size-3.5",
-                          i < Math.floor(rating)
+                          i < Math.round(rating)
                             ? "fill-foreground text-foreground"
                             : "text-muted-foreground/30"
                         )}

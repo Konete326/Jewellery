@@ -23,7 +23,8 @@ export function ContactPage() {
     updatePageSEO({
       title: 'Contact Showroom | Saddar Karachi',
       description: 'Contact Khalil & Sons Jewellers at Shop #2, Murshid Sunaar Tower, Dr. Daud Pota Road, Saddar, Karachi. Call +92 21 35670868 or WhatsApp +92 333 3213613 for private consultation.',
-      keywords: 'contact Khalil & Sons, jewellery shop Saddar Karachi, Murshid Sunaar Tower location, goldsmith Karachi phone'
+      keywords: 'contact Khalil & Sons, jewellery shop Saddar Karachi, Murshid Sunaar Tower location, goldsmith Karachi phone',
+      url: 'https://khalilandsonsjewellers.com/contact'
     });
   }, []);
 

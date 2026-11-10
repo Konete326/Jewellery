@@ -9,7 +9,7 @@ import AboutUs from '@/components/shadcn-studio/blocks/about-us-page-30/about-us
 import { BrandChronicle } from '@/user/components/BrandChronicle'
 import { AtelierInteractiveMap } from '@/user/components/AtelierInteractiveMap'
 import FAQSection from '@/components/ui/faq1'
-import { updatePageSEO } from '@/utils/seo'
+import { updatePageSEO, getFAQSchema } from '@/utils/seo'
 import { broadcastCartUpdate, subscribeToTabSync, getCartStorageKey } from '@/utils/tabSync'
 import { getLocalCart, saveLocalCart } from '@/utils/cartStorage'
 
@@ -47,7 +47,9 @@ export function AboutUsPage() {
     updatePageSEO({
       title: 'Our Heritage & 3-Decade Legacy (Est. 1992)',
       description: 'The story of Khalil & Sons Jewellers. Founded in 1992 by Mr. Khalil Ahmed in Murshid Bazaar, Saddar, Karachi. Three decades of authentic Mughal filigree, certified 22K/21K/18K purity, and bespoke bridal goldsmithing.',
-      keywords: 'Khalil and Sons history, master goldsmith Karachi, 1992 jewellery Saddar, Murshid Bazaar Karachi, family jewelers Karachi'
+      keywords: 'Khalil and Sons history, master goldsmith Karachi, 1992 jewellery Saddar, Murshid Bazaar Karachi, family jewelers Karachi',
+      url: 'https://khalilandsonsjewellers.com/about',
+      schema: getFAQSchema(aboutFaqs)
     })
   }, [])
 
