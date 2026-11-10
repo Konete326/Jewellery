@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Star, Plus, Loader2, Gem } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { galleryApi } from '@/api/galleryApi';
+import { fetchProducts } from '@/api/productApi';
 
 export function AddReviewModal({ isOpen, onClose, onSave, loading = false }) {
   const [pieces, setPieces] = useState([]);
@@ -17,11 +18,28 @@ export function AddReviewModal({ isOpen, onClose, onSave, loading = false }) {
       const loadPieces = async () => {
         setLoadingPieces(true);
         try {
-          const res = await galleryApi.getAll();
-          const items = res?.data || (Array.isArray(res) ? res : []);
-          setPieces(items);
-          if (items.length > 0 && !selectedPieceId) {
-            setSelectedPieceId(items[0]._id);
+          const [galRes, prodRes] = await Promise.allSettled([
+            galleryApi.getAll(),
+            fetchProducts({ limit: 100 })
+          ]);
+          const galItems = galRes.status === 'fulfilled' ? (galRes.value?.data || (Array.isArray(galRes.value) ? galRes.value : [])) : [];
+          const prodItems = prodRes.status === 'fulfilled' ? (prodRes.value?.data?.items || prodRes.value?.data || []) : [];
+          const combined = [];
+          const seen = new Set();
+          for (const item of [...galItems, ...prodItems]) {
+            const id = String(item._id || item.id);
+            if (!seen.has(id)) {
+              seen.add(id);
+              combined.push({
+                ...item,
+                _id: id,
+                imageUrl: item.imageUrl || (Array.isArray(item.images) && item.images[0]) || ''
+              });
+            }
+          }
+          setPieces(combined);
+          if (combined.length > 0 && !selectedPieceId) {
+            setSelectedPieceId(combined[0]._id);
           }
         } catch {
           setPieces([]);
@@ -84,7 +102,7 @@ export function AddReviewModal({ isOpen, onClose, onSave, loading = false }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-xs font-medium text-foreground block mb-1.5">Select Gallery Masterpiece</label>
+            <label className="text-xs font-medium text-foreground block mb-1.5">Select Piece or Product</label>
             {loadingPieces ? (
               <div className="text-xs text-muted-foreground py-2">Loading atelier archive...</div>
             ) : (

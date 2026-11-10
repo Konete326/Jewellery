@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, ArrowRight, Gem, Compass, Star, Tag } from 'lucide-react';
 import { galleryApi } from '@/api/galleryApi';
+import { fetchProducts } from '@/api/productApi';
+import { formatPKR } from '@/utils/pricing';
 import { filterPages, BOUTIQUE_PAGES } from './search/searchData';
 
 export function SearchModal({ isOpen, onClose }) {
@@ -17,9 +19,50 @@ export function SearchModal({ isOpen, onClose }) {
     let isMounted = true;
     (async () => {
       try {
-        const res = await galleryApi.getAll({ silent: true });
-        const list = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : []);
-        if (isMounted) setPieces(list);
+        const [prodRes, galRes] = await Promise.allSettled([
+          fetchProducts({ limit: 120, isPublished: true }),
+          galleryApi.getAll({ silent: true })
+        ]);
+        if (!isMounted) return;
+        const combined = [];
+        const seenIds = new Set();
+
+        if (prodRes.status === 'fulfilled') {
+          const prodList = prodRes.value?.data?.items || prodRes.value?.data || [];
+          if (Array.isArray(prodList)) {
+            prodList.filter((p) => p.isPublished !== false).forEach((p) => {
+              const id = String(p._id || p.id);
+              if (!seenIds.has(id)) {
+                seenIds.add(id);
+                combined.push({
+                  ...p,
+                  _id: id,
+                  id,
+                  isProduct: true,
+                  imageUrl: p.imageUrl || (Array.isArray(p.images) && p.images[0]) || '/assets/products/choker-ruby-01.jpg'
+                });
+              }
+            });
+          }
+        }
+
+        if (galRes.status === 'fulfilled') {
+          const galList = Array.isArray(galRes.value?.data) ? galRes.value.data : (Array.isArray(galRes.value) ? galRes.value : []);
+          galList.forEach((g) => {
+            const id = String(g._id || g.id);
+            if (!seenIds.has(id)) {
+              seenIds.add(id);
+              combined.push({
+                ...g,
+                _id: id,
+                id,
+                isProduct: false
+              });
+            }
+          });
+        }
+
+        setPieces(combined);
       } catch {
         if (isMounted) setPieces([]);
       }
@@ -47,7 +90,9 @@ export function SearchModal({ isOpen, onClose }) {
       const matchText = (
         (p.title || '') + ' ' +
         (p.description || '') + ' ' +
-        (p.category || '')
+        (p.category || '') + ' ' +
+        (p.sku || '') + ' ' +
+        (p.purity || '')
       ).toLowerCase();
 
       const matchesQuery = matchText.includes(query);
@@ -91,7 +136,7 @@ export function SearchModal({ isOpen, onClose }) {
       handleSelectPage(matchingPages[0].path);
     } else if (query) {
       onClose();
-      navigate(`/gallery?search=${encodeURIComponent(searchTerm)}`);
+      navigate(`/shop?q=${encodeURIComponent(searchTerm)}`);
     }
   };
 
@@ -170,6 +215,8 @@ export function SearchModal({ isOpen, onClose }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {matchingPieces.map((piece) => {
                         const id = piece._id || piece.id;
+                        const numericPrice = Number(piece.calculatedPrice) || Number(piece.price) || 0;
+                        const priceDisplay = numericPrice > 0 ? formatPKR(numericPrice) : null;
                         return (
                           <div
                             key={id}
@@ -180,18 +227,44 @@ export function SearchModal({ isOpen, onClose }) {
                               src={piece.imageUrl || piece.src || '/assets/logo.png'}
                               alt={piece.title}
                               className="size-14 rounded-xl object-cover border border-border/80 shrink-0 group-hover:scale-105 transition-transform"
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = '/assets/products/choker-ruby-01.jpg';
+                              }}
                             />
                             <div className="min-w-0 flex-1">
-                              <span className="text-[10px] font-mono uppercase tracking-wider text-amber-800 dark:text-amber-300 block truncate">
-                                {piece.category || '22K Gold Jewellery'}
-                              </span>
+                              <div className="flex items-center gap-1.5 justify-between">
+                                <span className="text-[10px] font-mono uppercase tracking-wider text-amber-800 dark:text-amber-300 block truncate">
+                                  {piece.category || '22K Gold Jewellery'}
+                                </span>
+                                {piece.isProduct ? (
+                                  <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-muted text-muted-foreground border border-border/60 shrink-0">
+                                    {piece.availability || 'In Stock'}
+                                  </span>
+                                ) : (
+                                  <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20 shrink-0">
+                                    Showcase
+                                  </span>
+                                )}
+                              </div>
                               <h4 className="text-sm font-medium text-foreground truncate group-hover:text-amber-800 dark:group-hover:text-amber-300 transition-colors">
                                 {piece.title}
                               </h4>
-                              <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-0.5">
-                                <Star className="size-3 fill-amber-500 text-amber-500" />
-                                <span className="font-mono text-[11px]">{piece.averageRating ? piece.averageRating.toFixed(1) : '5.0'}</span>
-                                <span className="text-[10px] text-muted-foreground font-light">• In Stock</span>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5 flex-wrap">
+                                {piece.isProduct && priceDisplay ? (
+                                  <span className="font-mono text-[11px] font-medium text-foreground">
+                                    {priceDisplay}
+                                  </span>
+                                ) : (
+                                  <span className="text-[10px] font-mono text-muted-foreground">
+                                    Market Rate
+                                  </span>
+                                )}
+                                <span className="text-muted-foreground/40">•</span>
+                                <div className="flex items-center gap-1">
+                                  <Star className="size-3 fill-amber-500 text-amber-500" />
+                                  <span className="font-mono text-[11px]">{piece.averageRating ? piece.averageRating.toFixed(1) : '5.0'}</span>
+                                </div>
                               </div>
                             </div>
                             <ArrowRight className="size-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all mr-1" />
