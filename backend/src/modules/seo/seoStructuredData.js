@@ -1,6 +1,6 @@
-import { getPublicSiteUrl } from './publicSiteUrl.js';
+import { BASE_URL } from './seo.utils.js';
 
-const PUBLIC_BASE_URL = getPublicSiteUrl();
+const PUBLIC_BASE_URL = BASE_URL;
 
 export const SSR_NAVIGATION_HTML = `<nav class="sr-only" aria-label="Primary Site Directory"><ul><li><a href="/">Home</a></li><li><a href="/shop">Shop</a></li><li><a href="/gallery">Gallery</a></li><li><a href="/rates">Rates</a></li><li><a href="/reviews">Reviews</a></li><li><a href="/about">About</a></li><li><a href="/contact">Contact</a></li><li><a href="/track-order">Track Order</a></li><li><a href="/collections/Bridal-Sets">Bridal Sets</a></li><li><a href="/collections/gold-necklaces">Necklaces</a></li><li><a href="/collections/gold-earrings">Earrings</a></li><li><a href="/collections/Bangles">Bangles</a></li><li><a href="/collections/Rings">Rings</a></li><li><a href="/collections/gold-chains">Chains</a></li><li><a href="/collections/gold-bracelets">Bracelets</a></li><li><a href="/collections/gold-coins-bars">Bullion &amp; Coins</a></li></ul></nav>`;
 

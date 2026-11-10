@@ -54,23 +54,13 @@ export class ProductService {
       price = calculateProductPricing(data, rates).calculatedPrice || 0;
     }
     const created = await productRepository.create({
-      title: data.title?.trim(),
-      sku,
-      slug,
-      category: data.category?.trim(),
-      purity: data.purity || '22K',
-      grossWeight: Number(data.grossWeight) || 0,
-      netWeight: Number(data.netWeight) || 0,
-      makingCharges: Number(data.makingCharges) || 0,
-      wastagePercent: Number(data.wastagePercent) || 0,
-      stoneCharges: Number(data.stoneCharges) || 0,
-      price,
+      title: data.title?.trim(), sku, slug, category: data.category?.trim(), purity: data.purity || '22K',
+      grossWeight: Number(data.grossWeight) || 0, netWeight: Number(data.netWeight) || 0,
+      makingCharges: Number(data.makingCharges) || 0, wastagePercent: Number(data.wastagePercent) || 0,
+      stoneCharges: Number(data.stoneCharges) || 0, price,
       stock: data.stock !== undefined && !isNaN(Number(data.stock)) ? Number(data.stock) : 1,
-      availability: data.availability || 'In Stock',
-      isPublished: data.isPublished !== false && data.isPublished !== 'false',
-      description: (data.description || '').trim(),
-      images,
-      supplierId
+      availability: data.availability || 'In Stock', isPublished: data.isPublished !== false && data.isPublished !== 'false',
+      description: (data.description || '').trim(), images, supplierId
     });
     return calculateProductPricing(created);
   }

@@ -1,14 +1,12 @@
 import { galleryService } from './gallery.service.js';
+import { notifySearchEngines } from '../seo/indexingPing.service.js';
 
 export class GalleryController {
   async getAll(req, res, next) {
     try {
       const { page, limit, category } = req.query;
       const result = await galleryService.getAllItems({ page, limit }, { category });
-      res.status(200).json({
-        success: true,
-        ...result
-      });
+      res.status(200).json({ success: true, ...result });
     } catch (error) {
       next(error);
     }
@@ -18,13 +16,8 @@ export class GalleryController {
     try {
       const { id } = req.params;
       const item = await galleryService.getItemById(id);
-      if (!item) {
-        return res.status(404).json({ success: false, message: 'Gallery item not found' });
-      }
-      res.status(200).json({
-        success: true,
-        data: item
-      });
+      if (!item) return res.status(404).json({ success: false, message: 'Gallery item not found' });
+      res.status(200).json({ success: true, data: item });
     } catch (error) {
       next(error);
     }
@@ -40,6 +33,7 @@ export class GalleryController {
         file: req.file,
         imageUrl
       });
+      notifySearchEngines({ id: item._id || item.id, type: 'URL_UPDATED' }).catch(() => null);
       res.status(201).json({
         success: true,
         message: 'Gallery project published successfully',
@@ -55,6 +49,7 @@ export class GalleryController {
       const { id } = req.params;
       const { title, description, category, isActive } = req.body;
       const item = await galleryService.updateItem(id, { title, description, category, isActive });
+      notifySearchEngines({ id: item._id || item.id, type: 'URL_UPDATED' }).catch(() => null);
       res.status(200).json({
         success: true,
         message: 'Gallery item updated successfully',
@@ -69,6 +64,7 @@ export class GalleryController {
     try {
       const { id } = req.params;
       await galleryService.deleteItem(id);
+      notifySearchEngines({ id, type: 'URL_DELETED' }).catch(() => null);
       res.status(200).json({
         success: true,
         message: 'Gallery item deleted successfully'

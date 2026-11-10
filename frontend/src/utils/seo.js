@@ -296,12 +296,32 @@ export function getProductSchema(piece) {
   const numPrice = typeof rawPrice === 'string' ? parseFloat(rawPrice.replace(/[^0-9.]/g, '')) : Number(rawPrice);
   if (Number.isFinite(numPrice) && numPrice > 0) {
     const availability = resolveSchemaAvailability(piece);
+    const nextDay = new Date(Date.now() + 86400000).toISOString().split('T')[0];
     const offer = {
       '@type': 'Offer',
       url: `${BASE_URL}/gallery/${piece._id || piece.id}`,
       priceCurrency: 'PKR',
       price: numPrice.toFixed(2),
+      priceValidUntil: nextDay,
       itemCondition: 'https://schema.org/NewCondition',
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'PKR' },
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'PK', addressRegion: 'SD' },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 2, unitCode: 'DAY' },
+          transitTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 3, unitCode: 'DAY' }
+        }
+      },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'PK',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 7,
+        returnMethod: 'https://schema.org/ReturnInStore',
+        returnFees: 'https://schema.org/FreeReturn'
+      },
       availableAtOrFrom: {
         '@type': 'JewelryStore',
         '@id': `${BASE_URL}/#store`,

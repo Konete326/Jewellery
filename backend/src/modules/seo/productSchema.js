@@ -26,6 +26,10 @@ export function resolveSchemaAvailability(record) {
   return null;
 }
 
+export function getNextDayIsoDate() {
+  return new Date(Date.now() + 86400000).toISOString().split('T')[0];
+}
+
 export function buildProductJsonLd(record, canonicalUrl, imageUrlOrImages) {
   const images = Array.isArray(imageUrlOrImages) ? imageUrlOrImages : [imageUrlOrImages];
   const schema = {
@@ -46,8 +50,27 @@ export function buildProductJsonLd(record, canonicalUrl, imageUrlOrImages) {
       url: canonicalUrl,
       priceCurrency: 'PKR',
       price: record.price.toFixed(2),
+      priceValidUntil: getNextDayIsoDate(),
       itemCondition: 'https://schema.org/NewCondition',
-      seller: { '@type': 'JewelryStore', '@id': `${BASE_URL}/#store`, name: 'Khalil & Sons Jewellers' }
+      seller: { '@type': 'JewelryStore', '@id': `${BASE_URL}/#store`, name: 'Khalil & Sons Jewellers' },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'PKR' },
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'PK', addressRegion: 'SD' },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 2, unitCode: 'DAY' },
+          transitTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 3, unitCode: 'DAY' }
+        }
+      },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'PK',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 7,
+        returnMethod: 'https://schema.org/ReturnInStore',
+        returnFees: 'https://schema.org/FreeReturn'
+      }
     };
     if (availability) {
       offer.availability = availability;

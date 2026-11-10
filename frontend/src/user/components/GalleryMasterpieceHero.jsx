@@ -17,6 +17,7 @@ export function GalleryMasterpieceHero({
   onOpenAppointment,
   onAddToCart
 }) {
+  const pieceId = piece?._id || piece?.id;
   const sizingType = getJewellerySizingType(piece);
   const [selectedSize, setSelectedSize] = useState('');
   const [sizeError, setSizeError] = useState(false);
@@ -26,19 +27,28 @@ export function GalleryMasterpieceHero({
   const [isMainImageLoaded, setIsMainImageLoaded] = useState(false);
   const [loadedThumbs, setLoadedThumbs] = useState({});
 
-  if (!piece) return null;
+  useEffect(() => {
+    setActiveImageIndex(0);
+    setLoadedThumbs({});
+    setSelectedSize('');
+    setSizeError(false);
+    setIsMainImageLoaded(false);
+  }, [pieceId]);
 
-  const isProduct = Boolean(piece.isProduct);
-  const title = piece.title || 'Fine Jewellery Piece';
-  const description = piece.description || 'Handcrafted fine gold jewellery made with care at Khalil & Sons, Karachi.';
-  const rawImages = Array.isArray(piece.images) && piece.images.length > 0
+  const rawImages = Array.isArray(piece?.images) && piece.images.length > 0
     ? piece.images
-    : (piece.imageUrl || piece.src ? [piece.imageUrl || piece.src] : ['/assets/products/choker-ruby-01.jpg']);
+    : (piece?.imageUrl || piece?.src ? [piece.imageUrl || piece.src] : ['/assets/products/choker-ruby-01.jpg']);
   const activeImageUrl = rawImages[activeImageIndex] || rawImages[0];
 
   useEffect(() => {
     setIsMainImageLoaded(false);
   }, [activeImageUrl]);
+
+  if (!piece) return null;
+
+  const isProduct = Boolean(piece.isProduct);
+  const title = piece.title || 'Fine Jewellery Piece';
+  const description = piece.description || 'Handcrafted fine gold jewellery made with care at Khalil & Sons, Karachi.';
 
   const rating = Number(Number(piece.averageRating || piece.rating || 0).toFixed(1));
   const reviewCount = piece.reviewCount || (piece.reviews?.length) || 0;

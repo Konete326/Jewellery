@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AtSignIcon, KeyRoundIcon, UserIcon, ShieldAlert, Loader2 } from "lucide-react";
+import { AtSignIcon, KeyRoundIcon, UserIcon, ShieldAlert, Loader2, Eye, EyeOff } from "lucide-react";
 import { loginWithEmail, registerWithEmail } from "@/lib/auth";
 import { toast } from "sonner";
 
@@ -12,6 +12,7 @@ export function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -99,12 +100,21 @@ export function AuthForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
-          type="password"
-          className="pl-9 h-11"
+          type={showPassword ? "text" : "password"}
+          className="pl-9 pr-10 h-11"
           required
           disabled={loading}
         />
         <KeyRoundIcon className="absolute left-3 top-3.5 size-4 text-muted-foreground pointer-events-none" />
+        <button
+          type="button"
+          tabIndex={-1}
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-3.5 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+          aria-label={showPassword ? "Hide password" : "Show password"}
+        >
+          {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+        </button>
       </div>
 
       <Button

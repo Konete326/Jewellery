@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { seoController } from './seo.controller.js';
 import { handleGalleryPreview } from './galleryPreview.controller.js';
+import { getIndexNowKey } from './indexingPing.service.js';
 
 const router = Router();
 
@@ -15,6 +16,14 @@ router.get('/google:token.html', (req, res) => {
   const token = `google${req.params.token}.html`;
   res.setHeader('Content-Type', 'text/html');
   res.status(200).send(`google-site-verification: ${token}`);
+});
+router.get('/:key.txt', (req, res, next) => {
+  const currentKey = getIndexNowKey();
+  if (req.params.key === currentKey) {
+    res.setHeader('Content-Type', 'text/plain');
+    return res.status(200).send(currentKey);
+  }
+  next();
 });
 
 export default router;

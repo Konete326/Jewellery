@@ -1,5 +1,6 @@
 import { productService } from './product.service.js';
 import { sendSuccess, sendError } from '../../utils/apiResponse.js';
+import { notifySearchEngines } from '../seo/indexingPing.service.js';
 
 export const getProducts = async (req, res, next) => {
   try {
@@ -31,6 +32,7 @@ export const createProduct = async (req, res, next) => {
   try {
     const files = req.files || (req.file ? [req.file] : []);
     const product = await productService.createProduct(req.body, files);
+    notifySearchEngines({ id: product._id || product.id, type: 'URL_UPDATED' }).catch(() => null);
     return sendSuccess(res, 201, 'Product created successfully', product);
   } catch (error) {
     if (error.statusCode || error.status) return sendError(res, error.statusCode || error.status, error.message);
@@ -44,6 +46,7 @@ export const updateProduct = async (req, res, next) => {
     const files = req.files || (req.file ? [req.file] : []);
     const updated = await productService.updateProduct(id, req.body, files);
     if (!updated) return sendError(res, 404, 'Product not found');
+    notifySearchEngines({ id: updated._id || updated.id, type: 'URL_UPDATED' }).catch(() => null);
     return sendSuccess(res, 200, 'Product updated successfully', updated);
   } catch (error) {
     if (error.statusCode || error.status) return sendError(res, error.statusCode || error.status, error.message);
@@ -55,6 +58,7 @@ export const togglePublish = async (req, res, next) => {
   try {
     const { id } = req.params;
     const updated = await productService.togglePublish(id);
+    notifySearchEngines({ id, type: updated.isPublished ? 'URL_UPDATED' : 'URL_DELETED' }).catch(() => null);
     return sendSuccess(res, 200, `Product ${updated.isPublished ? 'published' : 'hidden'} successfully`, updated);
   } catch (error) {
     if (error.statusCode || error.status) return sendError(res, error.statusCode || error.status, error.message);
@@ -67,6 +71,7 @@ export const deleteProduct = async (req, res, next) => {
     const { id } = req.params;
     const deleted = await productService.deleteProduct(id);
     if (!deleted) return sendError(res, 404, 'Product not found');
+    notifySearchEngines({ id, type: 'URL_DELETED' }).catch(() => null);
     return sendSuccess(res, 200, 'Product deleted successfully', deleted);
   } catch (error) {
     if (error.statusCode || error.status) return sendError(res, error.statusCode || error.status, error.message);
