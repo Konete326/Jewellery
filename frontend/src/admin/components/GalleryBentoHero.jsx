@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Star, Plus, X, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Plus, X, ExternalLink, ShieldCheck, Sparkles } from 'lucide-react';
 
 export function GalleryBentoHero({ items = [], onOpenUpload, isUploadOpen = false }) {
   const totalCount = items.length;
@@ -12,12 +12,6 @@ export function GalleryBentoHero({ items = [], onOpenUpload, isUploadOpen = fals
     acc[cat] = (acc[cat] || 0) + 1;
     return acc;
   }, {});
-
-  const totalReviews = items.reduce((sum, it) => sum + (it.reviewCount || it.reviews?.length || 0), 0);
-  const ratedPieces = items.filter((it) => (it.averageRating || 0) > 0);
-  const overallAvg = ratedPieces.length > 0
-    ? (ratedPieces.reduce((sum, it) => sum + Number(it.averageRating), 0) / ratedPieces.length).toFixed(1)
-    : '5.0';
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-8">
@@ -109,25 +103,25 @@ export function GalleryBentoHero({ items = [], onOpenUpload, isUploadOpen = fals
       >
         <div className="flex items-center justify-between">
           <Badge variant="outline" className="font-mono text-[11px] uppercase tracking-wider">
-            Patron Appraisals
+            Bespoke Exhibition
           </Badge>
           <div className="flex items-center gap-1 text-amber-500 font-mono text-xs font-semibold">
-            <Star className="size-3.5 fill-amber-500 text-amber-500" />
-            <span>{overallAvg}</span>
+            <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Showroom Archive</span>
           </div>
         </div>
 
         <div className="my-4">
           <div className="flex items-baseline gap-2">
             <span className="font-mono text-3xl font-semibold text-foreground">
-              {totalReviews}
+              AU · 22K
             </span>
             <span className="text-xs text-muted-foreground uppercase font-mono tracking-wider">
-              Verified Reviews
+              Assay Certified
             </span>
           </div>
           <p className="text-[11px] text-muted-foreground mt-1 leading-relaxed">
-            Real-time client feedback and ratings attached to individual jewelry pieces.
+            Exclusive exhibition showcase for bespoke appointments, customer WhatsApp inquiries, and in-store viewings.
           </p>
         </div>
 

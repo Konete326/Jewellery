@@ -6,7 +6,6 @@ import { GalleryCarouselShowcase } from './GalleryCarouselShowcase';
 import { GalleryUploadCard } from './GalleryUploadCard';
 import { ConfirmDeleteModal } from './ConfirmDeleteModal';
 import { EditGalleryModal } from './EditGalleryModal';
-import { ProductReviewsModal } from './ProductReviewsModal';
 import { toast } from 'sonner';
 
 export function GalleryManagement() {
@@ -16,7 +15,6 @@ export function GalleryManagement() {
   const [deletingId, setDeletingId] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [itemToEdit, setItemToEdit] = useState(null);
-  const [reviewItemToInspect, setReviewItemToInspect] = useState(null);
   const [savingEdit, setSavingEdit] = useState(false);
 
   const loadGallery = async () => {
@@ -74,24 +72,6 @@ export function GalleryManagement() {
     }
   };
 
-  const handleReviewUpdated = (pieceId, updatedReviews) => {
-    setItems((prev) =>
-      prev.map((it) => {
-        if (String(it._id) === String(pieceId)) {
-          const totalScore = updatedReviews.reduce((sum, r) => sum + Number(r.rating || 5), 0);
-          const newAvg = updatedReviews.length > 0 ? Number((totalScore / updatedReviews.length).toFixed(1)) : 0;
-          return {
-            ...it,
-            reviews: updatedReviews,
-            reviewCount: updatedReviews.length,
-            averageRating: newAvg,
-          };
-        }
-        return it;
-      })
-    );
-  };
-
   const handleUploaded = () => {
     toast.success('Piece published', {
       description: 'Masterpiece is now live on the storefront slider.'
@@ -127,14 +107,6 @@ export function GalleryManagement() {
         items={items}
         onEdit={setItemToEdit}
         onDelete={setItemToDelete}
-        onInspectReviews={setReviewItemToInspect}
-      />
-
-      <ProductReviewsModal
-        isOpen={Boolean(reviewItemToInspect)}
-        onClose={() => setReviewItemToInspect(null)}
-        item={reviewItemToInspect}
-        onReviewUpdated={handleReviewUpdated}
       />
 
       <EditGalleryModal

@@ -36,13 +36,10 @@ export class GalleryRepository {
   }
 
   async addReview(id, { userName, userEmail, rating, comment }) {
-    let item = await this.findById(id);
-    if (!item && mongoose.Types.ObjectId.isValid(id)) {
-      item = await Product.findById(id);
-    }
+    const item = mongoose.Types.ObjectId.isValid(id) ? await Product.findById(id) : null;
     if (!item) {
-      const err = new Error('Jewellery piece not found');
-      err.statusCode = 404;
+      const err = new Error('Reviews are only available for purchasable shop products');
+      err.statusCode = 400;
       throw err;
     }
 
@@ -55,12 +52,11 @@ export class GalleryRepository {
   }
 
   async getRecentReviews(limit = 15) {
-    const [galleryItems, productItems] = await Promise.all([
-      Gallery.find({ 'reviews.0': { $exists: true } }).select('title imageUrl category reviews').lean(),
-      Product.find({ 'reviews.0': { $exists: true } }).select('title images category reviews').lean()
-    ]);
+    const productItems = await Product.find({ 'reviews.0': { $exists: true } })
+      .select('title images category reviews')
+      .lean();
     const allReviews = [];
-    for (const item of [...galleryItems, ...productItems]) {
+    for (const item of productItems) {
       const img = item.imageUrl || (Array.isArray(item.images) && item.images[0]) || '/assets/products/choker-ruby-01.jpg';
       for (const rev of item.reviews || []) {
         allReviews.push({

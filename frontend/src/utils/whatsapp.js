@@ -36,17 +36,24 @@ export function getPersonalizedWhatsAppInquiry({ piece, customMessage } = {}) {
     const title = piece.title || 'Fine Jewellery Piece';
     const category = piece.category || 'Bridal Jewellery';
     const id = piece._id || piece.id || '';
-    const refCode = id ? `KS-${String(id).slice(-6).toUpperCase()}` : 'KS-ATELIER';
+    const refCode = piece.sku || (id ? `KS-${String(id).slice(-6).toUpperCase()}` : 'KS-ATELIER');
     const productUrl = id
       ? `https://khalilandsonsjewellers.com/gallery/${id}`
       : 'https://khalilandsonsjewellers.com/gallery';
-    const rawImg = piece.imageUrl || piece.src || '';
+    const rawImg =
+      piece.activeImageUrl ||
+      piece.imageUrl ||
+      piece.src ||
+      (Array.isArray(piece.images) && piece.images[0]) ||
+      '';
     const photoUrl = rawImg.startsWith('http')
       ? rawImg
       : `https://khalilandsonsjewellers.com${rawImg}`;
 
     const sizeLine = piece.selectedSize ? `\n📏 Selected Size: ${piece.selectedSize}` : '';
-    const text = `${greeting}\n\nI would like to inquire about this jewellery piece:\n\n💎 *${title}*${sizeLine}\n🏷️ Category: ${category}\n🔖 Ref Code: ${refCode}\n🔗 Product Link: ${productUrl}\n📷 Photo: ${photoUrl}\n\nPlease share price estimate, gold purity, and appointment availability at your Saddar outlet.`;
+    const hasMultiplePhotos = Array.isArray(piece.images) && piece.images.length > 1 && typeof piece.activeImageIndex === 'number';
+    const angleLine = hasMultiplePhotos ? `\n🖼️ Selected Angle: Photo ${piece.activeImageIndex + 1} of ${piece.images.length}` : '';
+    const text = `${greeting}\n\nI would like to inquire about this jewellery piece:\n\n💎 *${title}*${sizeLine}\n🏷️ Category: ${category}\n🔖 Ref Code: ${refCode}\n🔗 Product Link: ${productUrl}${angleLine}\n📷 Photo: ${photoUrl}\n\nPlease share price estimate, gold purity, and appointment availability at your Saddar outlet.`;
     return getWhatsAppUrl(text);
   }
 

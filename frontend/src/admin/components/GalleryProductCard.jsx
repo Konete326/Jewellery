@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { MessageSquare, Pencil, Trash2, Star, Calendar } from 'lucide-react';
+import { Pencil, Trash2, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-export function GalleryProductCard({ item, onEdit, onDelete, onInspectReviews }) {
+export function GalleryProductCard({ item, onEdit, onDelete }) {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const reviewCount = item.reviewCount ?? item.reviews?.length ?? 0;
-  const rating = Number(item.averageRating || 0);
 
   return (
     <div className="group relative rounded-xl border border-border/80 bg-card overflow-hidden shadow-xs hover:border-foreground/40 transition-all duration-200 flex flex-col justify-between h-full">
@@ -33,26 +31,9 @@ export function GalleryProductCard({ item, onEdit, onDelete, onInspectReviews })
           </Badge>
           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono font-medium tracking-wide uppercase bg-black/80 text-amber-300 border border-amber-500/30 backdrop-blur-xs">
             <span className="size-1 rounded-full bg-emerald-400 animate-pulse" />
-            Dynamic Live Gold Price
+            Showcase Piece
           </span>
         </div>
-
-        <button
-          type="button"
-          onClick={() => onInspectReviews?.(item)}
-          className="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-background/90 backdrop-blur-md text-foreground text-xs font-mono border border-border/80 shadow-xs hover:bg-background transition-colors cursor-pointer"
-          title="Inspect verified customer reviews"
-        >
-          <MessageSquare className="size-3" />
-          <span>{reviewCount}</span>
-        </button>
-
-        {rating > 0 && (
-          <div className="absolute bottom-2.5 left-2.5 z-10 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[11px] font-mono">
-            <Star className="size-3 fill-amber-400 text-amber-400" />
-            <span>{rating.toFixed(1)}</span>
-          </div>
-        )}
       </div>
 
       <div className="p-4 flex flex-col flex-1 justify-between gap-3">
@@ -78,16 +59,6 @@ export function GalleryProductCard({ item, onEdit, onDelete, onInspectReviews })
           </span>
 
           <div className="flex items-center gap-1">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => onInspectReviews?.(item)}
-              className="size-7 text-muted-foreground hover:text-foreground cursor-pointer"
-              title="View customer appraisals"
-            >
-              <MessageSquare className="size-3.5" />
-            </Button>
             <Button
               type="button"
               variant="ghost"

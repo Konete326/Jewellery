@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Autoplay from "embla-carousel-autoplay";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Carousel,
@@ -126,13 +126,6 @@ export function Skiper54({
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
 
                     <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 z-10 flex flex-col justify-end text-left pointer-events-auto">
-                      {(item.averageRating >= 4 || item.rating >= 4) && (
-                        <div className="inline-flex items-center gap-1 mb-2 px-2.5 py-0.5 w-fit rounded-full bg-black/60 border border-amber-500/40 text-amber-300 text-[11px] font-mono backdrop-blur-xs">
-                          <Star className="size-3 fill-amber-400 text-amber-400" />
-                          <span>{(item.averageRating || item.rating).toFixed(1)}</span>
-                        </div>
-                      )}
-
                       <h3 className="font-headline text-lg sm:text-xl text-white font-medium tracking-wide line-clamp-1 group-hover/card:text-neutral-200 transition-colors">
                         {title}
                       </h3>

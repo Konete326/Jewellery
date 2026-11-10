@@ -257,14 +257,18 @@ export function SearchModal({ isOpen, onClose }) {
                                   </span>
                                 ) : (
                                   <span className="text-[10px] font-mono text-muted-foreground">
-                                    Market Rate
+                                    Showcase & Inquiry
                                   </span>
                                 )}
-                                <span className="text-muted-foreground/40">•</span>
-                                <div className="flex items-center gap-1">
-                                  <Star className="size-3 fill-amber-500 text-amber-500" />
-                                  <span className="font-mono text-[11px]">{piece.averageRating ? piece.averageRating.toFixed(1) : '5.0'}</span>
-                                </div>
+                                {piece.isProduct && (
+                                  <>
+                                    <span className="text-muted-foreground/40">•</span>
+                                    <div className="flex items-center gap-1">
+                                      <Star className="size-3 fill-amber-500 text-amber-500" />
+                                      <span className="font-mono text-[11px]">{piece.averageRating ? piece.averageRating.toFixed(1) : '5.0'}</span>
+                                    </div>
+                                  </>
+                                )}
                               </div>
                             </div>
                             <ArrowRight className="size-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all mr-1" />

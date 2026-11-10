@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star, MessageCircle, Calendar, ZoomIn, Mail, ShoppingBag } from 'lucide-react';
 import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
@@ -23,6 +23,8 @@ export function GalleryMasterpieceHero({
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [guideTab, setGuideTab] = useState(() => sizingType || 'ring');
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isMainImageLoaded, setIsMainImageLoaded] = useState(false);
+  const [loadedThumbs, setLoadedThumbs] = useState({});
 
   if (!piece) return null;
 
@@ -33,6 +35,10 @@ export function GalleryMasterpieceHero({
     ? piece.images
     : (piece.imageUrl || piece.src ? [piece.imageUrl || piece.src] : ['/assets/products/choker-ruby-01.jpg']);
   const activeImageUrl = rawImages[activeImageIndex] || rawImages[0];
+
+  useEffect(() => {
+    setIsMainImageLoaded(false);
+  }, [activeImageUrl]);
 
   const rating = Number(piece.averageRating || piece.rating || 0);
   const reviewCount = piece.reviewCount || (piece.reviews?.length) || 0;
@@ -49,6 +55,8 @@ export function GalleryMasterpieceHero({
   const whatsappUrl = getPersonalizedWhatsAppInquiry({
     piece: {
       ...piece,
+      activeImageUrl,
+      activeImageIndex,
       selectedSize: selectedSize || undefined
     }
   });
@@ -84,16 +92,32 @@ export function GalleryMasterpieceHero({
         <div className="lg:col-span-6 xl:col-span-7">
           <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-border/80 bg-muted/20 shadow-xs group">
             <div
+              className={cn(
+                "absolute inset-0 z-10 flex flex-col items-center justify-center bg-gradient-to-r from-muted/50 via-muted/80 to-muted/50 animate-pulse transition-opacity duration-500 pointer-events-none",
+                isMainImageLoaded ? "opacity-0" : "opacity-100"
+              )}
+            >
+              <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-muted-foreground/70 px-3 py-1 rounded border border-border/60 bg-background/50">
+                {hallmark}
+              </span>
+            </div>
+
+            <div
               onClick={() => onOpenLightbox && onOpenLightbox(activeImageUrl)}
               className="w-full h-full cursor-pointer select-none"
             >
               <img
                 src={activeImageUrl}
                 alt={title}
-                className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-102"
+                onLoad={() => setIsMainImageLoaded(true)}
+                className={cn(
+                  "size-full object-cover transition-all duration-700 ease-out group-hover:scale-102",
+                  isMainImageLoaded ? "opacity-100" : "opacity-0"
+                )}
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = "/assets/products/choker-ruby-01.jpg";
+                  setIsMainImageLoaded(true);
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 opacity-20 group-hover:opacity-40 transition-opacity" />
@@ -125,20 +149,28 @@ export function GalleryMasterpieceHero({
                   type="button"
                   onClick={() => setActiveImageIndex(idx)}
                   className={cn(
-                    "relative size-16 sm:size-20 shrink-0 overflow-hidden rounded-xl border transition-all cursor-pointer",
+                    "relative size-16 sm:size-20 shrink-0 overflow-hidden rounded-xl border transition-all cursor-pointer bg-muted/40",
                     activeImageIndex === idx
                       ? "border-foreground ring-1 ring-foreground"
                       : "border-border/70 opacity-70 hover:opacity-100"
                   )}
                   aria-label={`View photo ${idx + 1}`}
                 >
+                  {!loadedThumbs[idx] && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-muted/50 via-muted/80 to-muted/50 animate-pulse pointer-events-none" />
+                  )}
                   <img
                     src={img}
                     alt={`${title} view ${idx + 1}`}
-                    className="size-full object-cover"
+                    onLoad={() => setLoadedThumbs((prev) => ({ ...prev, [idx]: true }))}
+                    className={cn(
+                      "size-full object-cover transition-opacity duration-300",
+                      loadedThumbs[idx] ? "opacity-100" : "opacity-0"
+                    )}
                     onError={(e) => {
                       e.currentTarget.onerror = null;
                       e.currentTarget.src = "/assets/products/choker-ruby-01.jpg";
+                      setLoadedThumbs((prev) => ({ ...prev, [idx]: true }));
                     }}
                   />
                 </button>
@@ -157,42 +189,44 @@ export function GalleryMasterpieceHero({
             {title}
           </h1>
 
-          <div className="mt-3.5 flex items-center gap-3">
-            {reviewCount > 0 ? (
-              <button
-                type="button"
-                onClick={onOpenReview}
-                className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-              >
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={cn(
-                        "size-3.5",
-                        i < Math.floor(rating)
-                          ? "fill-foreground text-foreground"
-                          : "text-muted-foreground/30"
-                      )}
-                    />
-                  ))}
-                </div>
-                <span className="font-mono text-foreground font-medium">{rating.toFixed(1)}</span>
-                <span className="underline underline-offset-4">
-                  ({reviewCount} Verified {reviewCount === 1 ? 'Review' : 'Reviews'})
-                </span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={onOpenReview}
-                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-              >
-                <span className="text-amber-500 font-mono">✦</span>
-                <span className="underline underline-offset-4">No reviews yet • Write a review</span>
-              </button>
-            )}
-          </div>
+          {isProduct && (
+            <div className="mt-3.5 flex items-center gap-3">
+              {reviewCount > 0 ? (
+                <button
+                  type="button"
+                  onClick={onOpenReview}
+                  className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                >
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={cn(
+                          "size-3.5",
+                          i < Math.floor(rating)
+                            ? "fill-foreground text-foreground"
+                            : "text-muted-foreground/30"
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <span className="font-mono text-foreground font-medium">{rating.toFixed(1)}</span>
+                  <span className="underline underline-offset-4">
+                    ({reviewCount} Verified {reviewCount === 1 ? 'Review' : 'Reviews'})
+                  </span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={onOpenReview}
+                  className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                >
+                  <span className="text-amber-500 font-mono">✦</span>
+                  <span className="underline underline-offset-4">No reviews yet • Write a review</span>
+                </button>
+              )}
+            </div>
+          )}
 
           {isProduct ? (
             <div className="mt-5 p-4 rounded-xl border border-border/80 bg-card/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">

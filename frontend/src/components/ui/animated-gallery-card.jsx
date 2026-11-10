@@ -4,10 +4,10 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { useInView } from "framer-motion";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Star, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { SaveToVaultButton } from "@/components/ui/SaveToVaultButton";
 
-export function AnimatedGalleryCard({ alt, src, ratio, placeholder, item, rating, onClick }) {
+export function AnimatedGalleryCard({ alt, src, ratio, placeholder, item, onClick }) {
 	const ref = React.useRef(null);
 	const isInView = useInView(ref, { once: true, margin: "100px" });
 	const [isLoading, setIsLoading] = React.useState(true);
@@ -48,12 +48,6 @@ export function AnimatedGalleryCard({ alt, src, ratio, placeholder, item, rating
 						<span className="text-[10px] uppercase tracking-widest text-neutral-300 font-mono font-medium">
 							Khalil & Sons
 						</span>
-						{rating && (
-							<div className="flex items-center gap-1 bg-black/50 px-2 py-0.5 rounded-full border border-neutral-700 text-neutral-200 text-[11px] font-mono backdrop-blur-xs">
-								<Star className="size-3 fill-amber-400 text-amber-400" />
-								<span>{Number(rating).toFixed(1)}</span>
-							</div>
-						)}
 					</div>
 					<h3 className="font-headline text-lg sm:text-xl text-white font-medium mb-1 line-clamp-1">
 						{alt}

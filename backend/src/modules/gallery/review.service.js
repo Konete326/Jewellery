@@ -1,15 +1,13 @@
-import { Gallery } from './gallery.model.js';
 import { Product } from '../products/product.model.js';
 
 export class ReviewService {
   async getAllReviews() {
-    const [galleryItems, productItems] = await Promise.all([
-      Gallery.find({ 'reviews.0': { $exists: true } }).select('title imageUrl category reviews').lean(),
-      Product.find({ 'reviews.0': { $exists: true } }).select('title images category reviews').lean()
-    ]);
+    const productItems = await Product.find({ 'reviews.0': { $exists: true } })
+      .select('title images category reviews')
+      .lean();
 
     const allReviews = [];
-    for (const item of [...galleryItems, ...productItems]) {
+    for (const item of productItems) {
       const img = item.imageUrl || (Array.isArray(item.images) && item.images[0]) || '/assets/products/choker-ruby-01.jpg';
       for (const rev of item.reviews || []) {
         allReviews.push({
@@ -27,10 +25,9 @@ export class ReviewService {
   }
 
   async updateReview(pieceId, reviewId, { userName, userEmail, rating, comment }) {
-    let item = await Gallery.findById(pieceId);
-    if (!item) item = await Product.findById(pieceId);
+    const item = await Product.findById(pieceId);
     if (!item) {
-      const error = new Error('Jewellery piece not found');
+      const error = new Error('Shop product not found');
       error.status = 404;
       throw error;
     }
@@ -61,10 +58,9 @@ export class ReviewService {
   }
 
   async deleteReview(pieceId, reviewId) {
-    let item = await Gallery.findById(pieceId);
-    if (!item) item = await Product.findById(pieceId);
+    const item = await Product.findById(pieceId);
     if (!item) {
-      const error = new Error('Jewellery piece not found');
+      const error = new Error('Shop product not found');
       error.status = 404;
       throw error;
     }

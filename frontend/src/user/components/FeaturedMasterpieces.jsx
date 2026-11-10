@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Star, ArrowRight, Eye, Gem } from 'lucide-react'
+import { ArrowRight, Eye, Gem } from 'lucide-react'
 import { LuxuryButton } from './LuxuryButton'
 import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton'
 import { galleryApi } from '@/api/galleryApi'
@@ -23,16 +23,12 @@ export function FeaturedMasterpieces() {
         const badges = ['Featured', 'Popular', 'Signature Design', 'Handmade']
 
         const mapped = validItems.slice(0, 6).map((item, idx) => {
-          const rawRating = Number(item.averageRating || item.rating)
-          const displayRating = rawRating >= 4 ? rawRating : 5.0
-
           return {
             id: item._id || item.id,
             name: item.title,
             material: item.description || 'Certified 22K Solid Gold',
             image: item.imageUrl || item.src,
             badge: badges[idx % badges.length],
-            rating: displayRating,
             offset: idx === 1
           }
         })
@@ -99,8 +95,6 @@ export function FeaturedMasterpieces() {
         ) : (
           <div className={`grid grid-cols-1 ${pieces.length === 1 ? 'md:grid-cols-1 max-w-md mx-auto' : pieces.length === 2 ? 'md:grid-cols-2 max-w-3xl mx-auto' : 'md:grid-cols-3'} gap-10 md:gap-12`}>
             {pieces.map((piece) => {
-              const hasQualifyingRating = piece.rating && piece.rating >= 4
-
               return (
                 <div
                   key={piece.id}
@@ -151,14 +145,6 @@ export function FeaturedMasterpieces() {
                     <h3 className="font-headline text-2xl text-[#2d3435] font-normal group-hover:text-amber-800 transition-colors">
                       {piece.name}
                     </h3>
-                    {hasQualifyingRating && (
-                      <div className="flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
-                        <Star className="size-3 fill-amber-500 text-amber-500" />
-                        <span className="text-[11px] font-mono font-medium text-amber-800">
-                          {piece.rating}
-                        </span>
-                      </div>
-                    )}
                   </div>
                   <p className="text-[#5a6061] text-xs mb-4 font-light line-clamp-2">
                     {piece.material}

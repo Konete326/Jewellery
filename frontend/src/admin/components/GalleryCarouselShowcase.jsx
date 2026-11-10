@@ -14,7 +14,6 @@ export function GalleryCarouselShowcase({
   items = [],
   onEdit,
   onDelete,
-  onInspectReviews,
 }) {
   if (!items || items.length === 0) {
     return null;
@@ -61,7 +60,6 @@ export function GalleryCarouselShowcase({
                   item={item}
                   onEdit={onEdit}
                   onDelete={onDelete}
-                  onInspectReviews={onInspectReviews}
                 />
               </div>
             </CarouselItem>

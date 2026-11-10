@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Star, Plus, Loader2, Gem } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { galleryApi } from '@/api/galleryApi';
 import { fetchProducts } from '@/api/productApi';
 
 export function AddReviewModal({ isOpen, onClose, onSave, loading = false }) {
@@ -18,28 +17,11 @@ export function AddReviewModal({ isOpen, onClose, onSave, loading = false }) {
       const loadPieces = async () => {
         setLoadingPieces(true);
         try {
-          const [galRes, prodRes] = await Promise.allSettled([
-            galleryApi.getAll(),
-            fetchProducts({ limit: 100 })
-          ]);
-          const galItems = galRes.status === 'fulfilled' ? (galRes.value?.data || (Array.isArray(galRes.value) ? galRes.value : [])) : [];
-          const prodItems = prodRes.status === 'fulfilled' ? (prodRes.value?.data?.items || prodRes.value?.data || []) : [];
-          const combined = [];
-          const seen = new Set();
-          for (const item of [...galItems, ...prodItems]) {
-            const id = String(item._id || item.id);
-            if (!seen.has(id)) {
-              seen.add(id);
-              combined.push({
-                ...item,
-                _id: id,
-                imageUrl: item.imageUrl || (Array.isArray(item.images) && item.images[0]) || ''
-              });
-            }
-          }
-          setPieces(combined);
-          if (combined.length > 0 && !selectedPieceId) {
-            setSelectedPieceId(combined[0]._id);
+          const res = await fetchProducts({ limit: 120 });
+          const items = res?.data?.items || res?.data || (Array.isArray(res) ? res : []);
+          setPieces(items);
+          if (items.length > 0 && !selectedPieceId) {
+            setSelectedPieceId(items[0]._id || items[0].id);
           }
         } catch {
           setPieces([]);
@@ -102,7 +84,7 @@ export function AddReviewModal({ isOpen, onClose, onSave, loading = false }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-xs font-medium text-foreground block mb-1.5">Select Piece or Product</label>
+            <label className="text-xs font-medium text-foreground block mb-1.5">Select Shop Product</label>
             {loadingPieces ? (
               <div className="text-xs text-muted-foreground py-2">Loading atelier archive...</div>
             ) : (
@@ -113,8 +95,8 @@ export function AddReviewModal({ isOpen, onClose, onSave, loading = false }) {
                 className="w-full px-3 py-2 rounded-lg border border-border bg-background text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
               >
                 {pieces.map((p) => (
-                  <option key={p._id} value={p._id}>
-                    {p.title} ({p.category || 'Jewellery'})
+                  <option key={p._id || p.id} value={p._id || p.id}>
+                    {p.title} ({p.category || 'Jewellery'}) {p.sku ? `· ${p.sku}` : ''}
                   </option>
                 ))}
               </select>

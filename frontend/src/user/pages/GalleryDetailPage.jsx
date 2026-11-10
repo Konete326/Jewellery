@@ -493,11 +493,13 @@ export function GalleryDetailPage() {
           )}
         </div>
 
-        <GalleryReviewsSection
-          piece={piece}
-          reviews={reviewsList}
-          onOpenReviewModal={() => setIsReviewModalOpen(true)}
-        />
+        {piece.isProduct && (
+          <GalleryReviewsSection
+            piece={piece}
+            reviews={reviewsList}
+            onOpenReviewModal={() => setIsReviewModalOpen(true)}
+          />
+        )}
       </main>
 
       <Footer />
@@ -513,12 +515,14 @@ export function GalleryDetailPage() {
         description={piece.description}
       />
 
-      <MasterpieceReviewModal
-        isOpen={isReviewModalOpen}
-        onClose={() => setIsReviewModalOpen(false)}
-        piece={piece}
-        onReviewSubmitted={handleReviewSubmitted}
-      />
+      {piece.isProduct && (
+        <MasterpieceReviewModal
+          isOpen={isReviewModalOpen}
+          onClose={() => setIsReviewModalOpen(false)}
+          piece={piece}
+          onReviewSubmitted={handleReviewSubmitted}
+        />
+      )}
 
       <MasterpieceInquiryModal
         isOpen={isInquiryModalOpen}

@@ -13,6 +13,7 @@ export function ShopTile({
   onAddToCart,
   className
 }) {
+  const [imageLoaded, setImageLoaded] = React.useState(false);
   if (!piece) return null;
 
   const id = piece._id || piece.id;
@@ -37,16 +38,31 @@ export function ShopTile({
     >
       <Link
         to={`/gallery/${id}`}
-        className="relative block h-full w-full overflow-hidden"
+        className="relative block h-full w-full overflow-hidden bg-muted/30"
       >
+        <div
+          className={cn(
+            "absolute inset-0 z-5 flex items-center justify-center bg-gradient-to-r from-muted/50 via-muted/80 to-muted/50 animate-pulse transition-opacity duration-500 pointer-events-none",
+            imageLoaded ? "opacity-0" : "opacity-100"
+          )}
+        >
+          <span className="font-mono text-[9px] tracking-widest uppercase text-muted-foreground/60">
+            {hallmark}
+          </span>
+        </div>
         <img
           src={imageUrl}
           alt={title}
           loading={priority ? 'eager' : 'lazy'}
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 select-none"
+          onLoad={() => setImageLoaded(true)}
+          className={cn(
+            "h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-105 select-none",
+            imageLoaded ? "opacity-100" : "opacity-0"
+          )}
           onError={(e) => {
             e.currentTarget.onerror = null;
             e.currentTarget.src = '/assets/products/choker-ruby-01.jpg';
+            setImageLoaded(true);
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 opacity-15 group-hover:opacity-30 transition-opacity pointer-events-none" />
