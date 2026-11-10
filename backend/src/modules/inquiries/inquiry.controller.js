@@ -1,10 +1,27 @@
 import { inquiryService } from './inquiry.service.js';
-import { sendSuccess } from '../../utils/apiResponse.js';
+import { sendSuccess, sendError } from '../../utils/apiResponse.js';
+
+export const getBookedSlots = async (req, res, next) => {
+  try {
+    const { date } = req.query;
+    const slots = await inquiryService.getBookedSlots(date);
+    return sendSuccess(res, 200, 'Booked slots retrieved', slots);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getInquiries = async (req, res, next) => {
   try {
-    const { page, limit } = req.query;
-    const result = await inquiryService.listInquiries({ page, limit });
+    const { page, limit, type } = req.query;
+    const filter = {};
+    if (type === 'Appointment') {
+      filter.$or = [{ requestType: 'Appointment' }, { appointmentDate: { $ne: '' } }];
+    } else if (type === 'Inquiry') {
+      filter.requestType = 'Inquiry';
+      filter.appointmentDate = { $in: ['', null] };
+    }
+    const result = await inquiryService.listInquiries({ page, limit }, filter);
     return sendSuccess(res, 200, 'Inquiries retrieved successfully', result);
   } catch (error) {
     next(error);
@@ -16,6 +33,9 @@ export const createInquiry = async (req, res, next) => {
     const inquiry = await inquiryService.submitInquiry(req.body);
     return sendSuccess(res, 201, 'Bespoke consultation inquiry submitted successfully', inquiry);
   } catch (error) {
+    if (error.statusCode === 409 || error.status === 409) {
+      return sendError(res, 409, error.message);
+    }
     next(error);
   }
 };

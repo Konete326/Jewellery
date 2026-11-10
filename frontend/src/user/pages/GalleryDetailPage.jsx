@@ -553,6 +553,7 @@ export function GalleryDetailPage() {
       <BespokeAppointmentModal
         isOpen={isAppointmentModalOpen}
         onClose={() => setIsAppointmentModalOpen(false)}
+        piece={piece}
       />
 
       <SearchModal

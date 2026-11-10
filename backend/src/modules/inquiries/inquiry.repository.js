@@ -15,6 +15,25 @@ export class InquiryRepository {
     return Inquiry.findById(id).lean();
   }
 
+  async findConflictSlot(appointmentDate, appointmentSlot) {
+    if (!appointmentDate || !appointmentSlot) return null;
+    return Inquiry.findOne({
+      requestType: 'Appointment',
+      appointmentDate,
+      appointmentSlot,
+      status: { $nin: ['Cancelled', 'Closed'] }
+    }).lean();
+  }
+
+  async findBookedSlotsByDate(appointmentDate) {
+    if (!appointmentDate) return [];
+    return Inquiry.find({
+      requestType: 'Appointment',
+      appointmentDate,
+      status: { $nin: ['Cancelled', 'Closed'] }
+    }).select('appointmentSlot status').lean();
+  }
+
   async create(data) {
     const inquiry = new Inquiry(data);
     return inquiry.save();

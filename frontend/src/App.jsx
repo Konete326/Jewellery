@@ -91,7 +91,7 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
-      {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}
+      {import.meta.env.VITE_ENABLE_AGENTATION === 'true' && <Agentation endpoint="http://localhost:4747" />}
     </LoadingProvider>
   )
 }

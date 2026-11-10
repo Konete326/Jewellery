@@ -41,8 +41,38 @@ const inquirySchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Pending', 'Contacted', 'Replied', 'In Design', 'Closed'],
+      enum: ['Pending', 'Confirmed', 'Rescheduled', 'Completed', 'Cancelled', 'Contacted', 'Replied', 'In Design', 'Closed'],
       default: 'Pending'
+    },
+    requestType: {
+      type: String,
+      enum: ['Inquiry', 'Appointment'],
+      default: 'Inquiry'
+    },
+    appointmentDate: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    appointmentSlot: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    consultationMode: {
+      type: String,
+      enum: ['In-Store Showroom', 'WhatsApp Video Call'],
+      default: 'In-Store Showroom'
+    },
+    pieceId: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    pieceTitle: {
+      type: String,
+      default: '',
+      trim: true
     },
     replies: [
       {

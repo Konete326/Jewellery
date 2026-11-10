@@ -1,6 +1,6 @@
 import { inquiryRepository } from './inquiry.repository.js';
 import { sendInquiryReplyEmail } from '../../utils/mailer.js';
-import { sendInquiryReceivedEmail } from './inquiry.mailer.js';
+import { sendInquiryReceivedEmail, sendAdminInquiryNotificationEmail } from './inquiry.mailer.js';
 import { normalizePhoneToE164 } from '../../utils/phone.js';
 
 export class InquiryService {
@@ -8,37 +8,40 @@ export class InquiryService {
     this.repo = repo;
   }
 
-  async listInquiries(pagination = { page: 1, limit: 50 }) {
+  async getBookedSlots(date) {
+    if (!date) return [];
+    const items = await this.repo.findBookedSlotsByDate(date);
+    return items.map((it) => it.appointmentSlot).filter(Boolean);
+  }
+
+  async listInquiries(pagination = { page: 1, limit: 50 }, filter = {}) {
     const page = Math.max(1, Number(pagination.page) || 1);
     const limit = Math.max(1, Number(pagination.limit) || 50);
     const skip = (page - 1) * limit;
 
-    const { items, total } = await this.repo.findAll({}, { skip, limit });
+    const { items, total } = await this.repo.findAll(filter, { skip, limit });
     return {
       items,
-      pagination: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit) || 1
-      }
+      pagination: { total, page, limit, totalPages: Math.ceil(total / limit) || 1 }
     };
   }
 
   async submitInquiry(data) {
     const payload = { ...data };
-    if (payload.phone) {
-      payload.phone = normalizePhoneToE164(payload.phone);
+    if (payload.phone) payload.phone = normalizePhoneToE164(payload.phone);
+    if (payload.appointmentDate && payload.appointmentSlot) {
+      payload.requestType = 'Appointment';
+      const conflict = await this.repo.findConflictSlot(payload.appointmentDate, payload.appointmentSlot);
+      if (conflict) {
+        const err = new Error('This appointment time slot is already booked. Please select another available time slot.');
+        err.statusCode = 409;
+        throw err;
+      }
     }
+
     const created = await this.repo.create(payload);
-    if (created?.email) {
-      sendInquiryReceivedEmail({
-        to: created.email,
-        customerName: created.customerName,
-        subject: created.subject || created.jewelryType,
-        inquiryId: created._id
-      }).catch(() => {});
-    }
+    sendInquiryReceivedEmail(created).catch(() => {});
+    sendAdminInquiryNotificationEmail(created).catch(() => {});
     return created;
   }
 

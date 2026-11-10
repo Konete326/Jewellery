@@ -8,6 +8,10 @@ export const submitInquiry = async (inquiryData) => {
   });
 };
 
+export const fetchBookedAppointmentSlots = async (date) => {
+  return apiClient(`${ENDPOINTS.INQUIRIES}/booked-slots?date=${encodeURIComponent(date)}`, { silent: true });
+};
+
 export const fetchInquiries = async () => {
   return apiClient(ENDPOINTS.INQUIRIES);
 };

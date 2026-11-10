@@ -1,55 +1,115 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'sonner'
-import { X, Crown, Calendar, Copy, Check, MessageSquare } from 'lucide-react'
+import { X, Calendar, Copy, Check, MessageSquare, Clock, MapPin, Video, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Field, FieldLabel, FieldDescription, FieldError } from '@/components/ui/field'
-import { submitInquiry } from '@/api/inquiryApi'
+import { Field, FieldLabel, FieldError } from '@/components/ui/field'
+import { submitInquiry, fetchBookedAppointmentSlots } from '@/api/inquiryApi'
 import { normalizePhoneToE164, createWhatsAppInquiryUrl } from '@/utils/phone'
-import { LuxuryButton } from './LuxuryButton'
 import { CountryCodeSelect } from './CountryCodeSelect'
+import { getAuthUser } from '@/lib/auth'
 
-const inquiryFormSchema = z.object({
+const TIME_SLOTS = [
+  '02:00 PM - 03:00 PM',
+  '03:30 PM - 04:30 PM',
+  '05:00 PM - 06:00 PM',
+  '06:30 PM - 07:30 PM',
+  '08:00 PM - 09:00 PM'
+];
+
+const appointmentFormSchema = z.object({
   customerName: z.string().min(2, 'Name must be at least 2 characters').max(100),
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().min(6, 'Phone number must be at least 6 digits').max(20),
+  appointmentDate: z.string().min(1, 'Please select a preferred date'),
+  appointmentSlot: z.string().min(1, 'Please select an appointment time slot'),
+  consultationMode: z.enum(['In-Store Showroom', 'WhatsApp Video Call']),
   jewelryType: z.enum(['Bridal Set', 'Custom Ring', 'Diamond Necklace', 'Bespoke Bracelet', 'Other']),
   preferredMetal: z.enum(['22K Gold', '21K Gold', '18K Gold', '18K White Gold', '18K Rose Gold']),
   estimatedBudget: z.string().min(2, 'Budget estimate is required').max(50),
-  message: z.string().min(10, 'Please share at least 10 characters detailing your vision').max(1000),
-  acceptTerms: z.boolean().refine(val => val === true, {
-    message: 'Please accept the terms to continue.'
-  })
-})
+  message: z.string().max(1000).optional().default('')
+});
 
-export function BespokeAppointmentModal({ isOpen, onClose }) {
+export function BespokeAppointmentModal({ isOpen, onClose, piece = null }) {
   const [countryCode, setCountryCode] = useState('+92')
   const [bookingConfirmation, setBookingConfirmation] = useState(null)
   const [copiedCode, setCopiedCode] = useState(false)
+  const [bookedSlots, setBookedSlots] = useState([])
+  const [checkingSlots, setCheckingSlots] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+
+  const todayStr = new Date().toISOString().split('T')[0]
 
   const form = useForm({
-    resolver: zodResolver(inquiryFormSchema),
+    resolver: zodResolver(appointmentFormSchema),
     defaultValues: {
       customerName: '',
       email: '',
       phone: '',
-      jewelryType: 'Custom Ring',
-      preferredMetal: '22K Gold',
+      appointmentDate: todayStr,
+      appointmentSlot: '',
+      consultationMode: 'In-Store Showroom',
+      jewelryType: piece?.category === 'Bridal Sets' ? 'Bridal Set' : 'Custom Ring',
+      preferredMetal: piece?.purity ? `${piece.purity} Gold` : '22K Gold',
       estimatedBudget: 'PKR 500,000 - 1,500,000',
-      message: '',
-      acceptTerms: false
+      message: piece ? `Interested in consultation for: ${piece.title}` : ''
     }
-  })
+  });
+
+  const selectedDate = form.watch('appointmentDate')
+  const selectedSlot = form.watch('appointmentSlot')
+  const selectedMode = form.watch('consultationMode')
+
+  useEffect(() => {
+    if (isOpen) {
+      const user = getAuthUser()
+      if (user) {
+        if (!form.getValues('customerName') && user.name) form.setValue('customerName', user.name)
+        if (!form.getValues('email') && user.email) form.setValue('email', user.email)
+        if (!form.getValues('phone') && user.phone) form.setValue('phone', user.phone)
+      }
+      if (piece) {
+        form.setValue('message', `Showroom consultation requested for: ${piece.title} [Ref: ${piece._id || piece.id}]`)
+      }
+    }
+  }, [isOpen, piece]);
+
+  useEffect(() => {
+    if (!isOpen || !selectedDate) return
+    const [year, month, day] = selectedDate.split('-').map(Number)
+    const dateObj = new Date(year, month - 1, day)
+    if (dateObj.getDay() === 0) {
+      toast.error('Our Saddar showroom is closed on Sundays. Please choose Monday to Saturday.')
+      setBookedSlots(TIME_SLOTS)
+      return
+    }
+
+    let isMounted = true
+    setCheckingSlots(true)
+    fetchBookedAppointmentSlots(selectedDate)
+      .then((res) => {
+        if (!isMounted) return
+        const list = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : [])
+        setBookedSlots(list)
+      })
+      .catch(() => {
+        if (isMounted) setBookedSlots([])
+      })
+      .finally(() => {
+        if (isMounted) setCheckingSlots(false)
+      })
+
+    return () => { isMounted = false }
+  }, [isOpen, selectedDate]);
 
   if (!isOpen) return null
 
   const handleCopyCode = (code) => {
     navigator.clipboard.writeText(code)
     setCopiedCode(true)
-    toast.success('Appointment reference code copied to clipboard')
+    toast.success('Appointment reference code copied')
     setTimeout(() => setCopiedCode(false), 2000)
   }
 
@@ -59,38 +119,71 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
     onClose()
   }
 
+  const handleSlotClick = (slot) => {
+    if (bookedSlots.includes(slot)) {
+      toast.error('Someone has already booked an appointment at this time. Please choose another slot.')
+      return
+    }
+    form.setValue('appointmentSlot', slot, { shouldValidate: true })
+  }
+
   const onSubmit = async (values) => {
+    if (bookedSlots.includes(values.appointmentSlot)) {
+      toast.error('This appointment time slot is already booked. Please select another slot.')
+      return
+    }
+
+    setSubmitting(true)
     try {
       const fullPhone = normalizePhoneToE164(`${countryCode}${values.phone.trim()}`)
       const payload = {
         customerName: values.customerName.trim(),
         email: values.email.trim(),
         phone: fullPhone,
+        requestType: 'Appointment',
+        appointmentDate: values.appointmentDate,
+        appointmentSlot: values.appointmentSlot,
+        consultationMode: values.consultationMode,
         jewelryType: values.jewelryType,
         preferredMetal: values.preferredMetal,
         estimatedBudget: values.estimatedBudget,
-        message: values.message.trim(),
-        subject: `Bespoke Appointment: ${values.jewelryType} (${values.preferredMetal})`
+        message: values.message?.trim() || 'Showroom consultation request',
+        subject: `Showroom Appointment: ${values.appointmentDate} (${values.appointmentSlot})`,
+        pieceId: piece?._id || piece?.id || '',
+        pieceTitle: piece?.title || ''
       }
 
       const res = await submitInquiry(payload)
-      const generatedId = res?.data?._id || res?.data?.id || Date.now().toString().slice(-6)
+      const data = res?.data || res
+      const generatedId = data?._id || data?.id || Date.now().toString().slice(-6)
       const refCode = `KS-APT-${String(generatedId).slice(-6).toUpperCase()}`
 
       setBookingConfirmation({
         refCode,
         email: values.email.trim(),
         customerName: values.customerName.trim(),
+        appointmentDate: values.appointmentDate,
+        appointmentSlot: values.appointmentSlot,
+        consultationMode: values.consultationMode,
         jewelryType: values.jewelryType,
         preferredMetal: values.preferredMetal,
         budget: values.estimatedBudget
       })
 
-      toast.success('Appointment Request Received', {
-        description: `Confirmation dispatched to ${values.email.trim()}`
+      toast.success('Showroom Appointment Reserved', {
+        description: `Booking reference dispatched to ${values.email.trim()}`
       })
     } catch (err) {
-      toast.error(err.message || 'Failed to submit appointment request')
+      if (err?.status === 409 || err?.message?.includes('already booked')) {
+        toast.error('This time slot was just booked by another client. Please select another time.')
+        fetchBookedAppointmentSlots(values.appointmentDate).then((res) => {
+          setBookedSlots(Array.isArray(res?.data) ? res.data : [])
+        }).catch(() => {})
+      } else {
+        toast.error(err.message || 'Failed to submit appointment request')
+      }
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -100,7 +193,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
         type="button"
         aria-label="Close modal backdrop"
         onClick={handleClose}
-        className="absolute inset-0 bg-black/60 backdrop-blur-xs cursor-default w-full h-full border-0 p-0 focus-visible:outline-none"
+        className="absolute inset-0 bg-black/70 backdrop-blur-xs cursor-default w-full h-full border-0 p-0 focus-visible:outline-none"
         tabIndex={-1}
       />
       <div className="relative w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
@@ -108,7 +201,7 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
           type="button"
           aria-label="Close"
           onClick={handleClose}
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500/50 focus-visible:outline-none rounded-md"
+          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground cursor-pointer rounded-md p-1"
         >
           <X className="size-4" />
         </button>
@@ -117,19 +210,19 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
           <div className="space-y-4 pt-2">
             <div className="flex items-center justify-between pb-3 border-b border-border/70">
               <span className="font-mono text-[9px] uppercase tracking-widest text-amber-900/90 dark:text-amber-200 border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 rounded-full font-medium">
-                AU · APPOINTMENT RESERVED
+                AU · 916.6 · SADDAR SHOWROOM
               </span>
               <span className="text-xs text-muted-foreground font-mono">
-                Showroom Team
+                Confirmed Slot
               </span>
             </div>
 
             <div className="space-y-1">
               <h3 className="text-xl font-serif font-light text-foreground tracking-tight">
-                Appointment Booked
+                Appointment Reserved
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Thank you, <strong className="text-foreground font-medium">{bookingConfirmation.customerName}</strong>. Your consultation has been scheduled with our master jeweller.
+                Thank you, <strong className="text-foreground font-medium">{bookingConfirmation.customerName}</strong>. Your master consultation has been scheduled.
               </p>
             </div>
 
@@ -151,102 +244,76 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                 {bookingConfirmation.refCode}
               </div>
               <div className="text-xs text-muted-foreground pt-1 border-t border-amber-500/20">
-                Confirmation sent to{' '}
-                <strong className="text-foreground font-medium underline underline-offset-2">
-                  {bookingConfirmation.email}
-                </strong>
+                Confirmation dispatched to <strong className="text-foreground font-medium">{bookingConfirmation.email}</strong>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-muted/40 border border-border/70 text-xs text-muted-foreground space-y-1.5">
-              <div className="flex justify-between">
-                <span>Jewellery Consultation:</span>
-                <span className="text-foreground font-medium">{bookingConfirmation.jewelryType}</span>
+            <div className="p-3.5 rounded-xl bg-muted/40 border border-border/70 text-xs text-muted-foreground space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5"><Calendar className="size-3.5 text-amber-600" /> Date:</span>
+                <span className="text-foreground font-medium">{bookingConfirmation.appointmentDate}</span>
               </div>
-              <div className="flex justify-between">
-                <span>Preferred Hallmark:</span>
-                <span className="text-foreground font-medium">{bookingConfirmation.preferredMetal}</span>
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5"><Clock className="size-3.5 text-amber-600" /> Time Slot:</span>
+                <span className="text-foreground font-mono font-medium">{bookingConfirmation.appointmentSlot}</span>
               </div>
-              <div className="flex justify-between">
-                <span>Estimated Range:</span>
-                <span className="text-foreground font-mono font-medium">{bookingConfirmation.budget}</span>
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1.5"><MapPin className="size-3.5 text-amber-600" /> Mode &amp; Venue:</span>
+                <span className="text-foreground font-medium">{bookingConfirmation.consultationMode} (Saddar Karachi)</span>
               </div>
             </div>
 
             <div className="pt-3 border-t border-border flex items-center justify-between gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleClose}
-                className="h-9 px-4 text-xs cursor-pointer"
-              >
+              <Button type="button" variant="outline" onClick={handleClose} className="h-9 px-4 text-xs cursor-pointer">
                 Close
               </Button>
 
               <a
                 href={createWhatsAppInquiryUrl(
-                  '+923331234567',
+                  '+923333213613',
                   bookingConfirmation.customerName,
-                  `${bookingConfirmation.refCode} - ${bookingConfirmation.jewelryType}`
+                  `${bookingConfirmation.refCode} • Showroom Visit on ${bookingConfirmation.appointmentDate} at ${bookingConfirmation.appointmentSlot}`
                 )}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 h-9 px-4 rounded-xl bg-foreground hover:bg-neutral-800 text-background text-xs font-medium transition-colors shadow-xs"
               >
                 <MessageSquare className="size-3.5 text-amber-300" />
-                WhatsApp Showroom
+                WhatsApp Showroom (+92 333 3213613)
               </a>
             </div>
           </div>
         ) : (
           <>
-            <div className="flex items-center gap-2.5 mb-5 pb-4 border-b border-border">
-              <div className="p-2 rounded-lg bg-amber-500/10 text-amber-600">
-                <Crown className="size-4" />
-              </div>
+            <div className="flex items-center justify-between pb-3 mb-4 border-b border-border">
               <div>
-                <h3 className="font-serif text-lg font-semibold text-foreground">
-                  Book an Appointment
+                <span className="px-2 py-0.5 rounded bg-black/85 text-amber-300 font-mono text-[9px] tracking-widest border border-amber-500/30 uppercase">
+                  AU · 916.6 · SADDAR ATELIER
+                </span>
+                <h3 className="font-serif text-lg font-semibold text-foreground mt-1">
+                  Book Showroom Consultation
                 </h3>
-                <p className="text-xs text-muted-foreground">
-                  Meet with our jewelers in person or online for custom jewellery
-                </p>
               </div>
+              {piece && (
+                <div className="text-right max-w-[160px] truncate text-[11px] text-muted-foreground font-mono">
+                  Piece: {piece.title}
+                </div>
+              )}
             </div>
 
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <Controller
-                name="customerName"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="flex-col items-start">
-                    <FieldLabel htmlFor="appointment-name">Full Name</FieldLabel>
-                    <input
-                      id="appointment-name"
-                      {...field}
-                      aria-invalid={fieldState.invalid}
-                      placeholder="e.g. Sarah Jenkins"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Controller
-                  name="email"
+                  name="customerName"
                   control={form.control}
                   render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="flex-col items-start">
-                      <FieldLabel htmlFor="appointment-email">Email Address</FieldLabel>
+                    <Field data-invalid={fieldState.invalid} className="flex-col items-start gap-1">
+                      <FieldLabel htmlFor="appointment-name" className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Full Name *</FieldLabel>
                       <input
-                        id="appointment-email"
-                        type="email"
+                        id="appointment-name"
                         {...field}
-                        aria-invalid={fieldState.invalid}
-                        placeholder="sarah@example.com"
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+                        placeholder="e.g. Eleanor Vance"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-input bg-muted/30 text-foreground focus:outline-none focus:border-amber-500/60"
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
@@ -254,156 +321,211 @@ export function BespokeAppointmentModal({ isOpen, onClose }) {
                 />
 
                 <Controller
+                  name="email"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid} className="flex-col items-start gap-1">
+                      <FieldLabel htmlFor="appointment-email" className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Email Address *</FieldLabel>
+                      <input
+                        id="appointment-email"
+                        type="email"
+                        {...field}
+                        placeholder="eleanor@domain.com"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-input bg-muted/30 text-foreground focus:outline-none focus:border-amber-500/60"
+                      />
+                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    </Field>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Controller
                   name="phone"
                   control={form.control}
                   render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="flex-col items-start">
-                      <FieldLabel htmlFor="appointment-phone">Phone / WhatsApp</FieldLabel>
-                      <div className="flex gap-2 w-full">
-                        <CountryCodeSelect
-                          value={countryCode}
-                          onChange={setCountryCode}
-                        />
+                    <Field data-invalid={fieldState.invalid} className="flex-col items-start gap-1">
+                      <FieldLabel htmlFor="appointment-phone" className="text-xs font-mono uppercase tracking-wider text-muted-foreground">WhatsApp / Phone *</FieldLabel>
+                      <div className="flex gap-1.5 w-full">
+                        <CountryCodeSelect value={countryCode} onChange={setCountryCode} />
                         <input
                           id="appointment-phone"
                           type="tel"
-                          value={field.value}
-                          onChange={(e) => field.onChange(e.target.value.replace(/[^0-9\s\-()]/g, ''))}
-                          aria-invalid={fieldState.invalid}
-                          placeholder="333 1234567"
-                          className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+                          {...field}
+                          placeholder="300 1234567"
+                          className="w-full px-3 py-2 text-xs rounded-xl border border-input bg-muted/30 text-foreground focus:outline-none focus:border-amber-500/60"
                         />
                       </div>
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                     </Field>
                   )}
                 />
+
+                <Controller
+                  name="consultationMode"
+                  control={form.control}
+                  render={({ field }) => (
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Consultation Mode</label>
+                      <div className="grid grid-cols-2 gap-1.5 h-[38px]">
+                        <button
+                          type="button"
+                          onClick={() => field.onChange('In-Store Showroom')}
+                          className={`flex items-center justify-center gap-1 rounded-xl text-[11px] font-medium border cursor-pointer transition-colors ${
+                            field.value === 'In-Store Showroom'
+                              ? 'bg-foreground text-background border-foreground'
+                              : 'bg-muted/30 text-muted-foreground border-input hover:text-foreground'
+                          }`}
+                        >
+                          <MapPin className="size-3" />
+                          <span>Showroom</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => field.onChange('WhatsApp Video Call')}
+                          className={`flex items-center justify-center gap-1 rounded-xl text-[11px] font-medium border cursor-pointer transition-colors ${
+                            field.value === 'WhatsApp Video Call'
+                              ? 'bg-foreground text-background border-foreground'
+                              : 'bg-muted/30 text-muted-foreground border-input hover:text-foreground'
+                          }`}
+                        >
+                          <Video className="size-3" />
+                          <span>Video Call</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2 p-3.5 rounded-xl border border-border/80 bg-muted/20">
+                <div className="flex items-center justify-between">
+                  <label htmlFor="appointment-date" className="text-xs font-mono uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                    <Calendar className="size-3.5 text-amber-600" />
+                    <span>Select Date * (Mon - Sat)</span>
+                  </label>
+                  {checkingSlots && (
+                    <span className="text-[10px] text-muted-foreground flex items-center gap-1 font-mono">
+                      <Loader2 className="size-3 animate-spin text-amber-500" />
+                      Checking slots...
+                    </span>
+                  )}
+                </div>
+
+                <Controller
+                  name="appointmentDate"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <div>
+                      <input
+                        id="appointment-date"
+                        type="date"
+                        min={todayStr}
+                        {...field}
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-input bg-background text-foreground focus:outline-none focus:border-amber-500/60"
+                      />
+                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                    </div>
+                  )}
+                />
+
+                <div className="pt-2">
+                  <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
+                    <Clock className="size-3 text-amber-600" />
+                    <span>Select Time Slot *</span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                    {TIME_SLOTS.map((slot) => {
+                      const isBooked = bookedSlots.includes(slot)
+                      const isSelected = selectedSlot === slot
+                      return (
+                        <button
+                          key={slot}
+                          type="button"
+                          onClick={() => handleSlotClick(slot)}
+                          className={`px-2 py-1.5 rounded-lg text-[10px] font-mono border transition-all cursor-pointer flex flex-col items-center justify-center ${
+                            isBooked
+                              ? 'bg-destructive/10 text-destructive border-destructive/30 line-through opacity-70'
+                              : isSelected
+                              ? 'bg-foreground text-background border-foreground font-semibold shadow-xs'
+                              : 'bg-background text-muted-foreground border-input hover:border-amber-500/50 hover:text-foreground'
+                          }`}
+                        >
+                          <span>{slot}</span>
+                          {isBooked && <span className="text-[8px] font-sans no-underline font-semibold">Reserved</span>}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Controller
                   name="jewelryType"
                   control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="flex-col items-start">
-                      <FieldLabel htmlFor="appointment-type">Jewellery Type</FieldLabel>
+                  render={({ field }) => (
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Jewellery Focus</label>
                       <select
-                        id="appointment-type"
                         {...field}
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-input bg-muted/30 text-foreground focus:outline-none focus:border-amber-500/60"
                       >
-                        <option value="Custom Ring">Custom Ring</option>
-                        <option value="Bridal Set">Bridal Set</option>
-                        <option value="Diamond Necklace">Diamond Necklace</option>
-                        <option value="Bespoke Bracelet">Gold Bracelet</option>
-                        <option value="Other">Other</option>
+                        <option value="Bridal Set">Bridal Jewellery Set</option>
+                        <option value="Custom Ring">Solitaire &amp; Custom Ring</option>
+                        <option value="Diamond Necklace">Polki / Diamond Necklace</option>
+                        <option value="Bespoke Bracelet">Gold Bangles &amp; Kadas</option>
+                        <option value="Other">Artisanal Bullion / Heirloom</option>
                       </select>
-                    </Field>
+                    </div>
                   )}
                 />
 
                 <Controller
                   name="preferredMetal"
                   control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid} className="flex-col items-start">
-                      <FieldLabel htmlFor="appointment-metal">Preferred Metal</FieldLabel>
+                  render={({ field }) => (
+                    <div className="flex flex-col gap-1">
+                      <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Purity / Metal</label>
                       <select
-                        id="appointment-metal"
                         {...field}
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-input bg-muted/30 text-foreground focus:outline-none focus:border-amber-500/60"
                       >
-                        <option value="22K Gold">22K Gold (Traditional & Bridal)</option>
-                        <option value="21K Gold">21K Gold (Heritage Standard)</option>
+                        <option value="22K Gold">22K Pure Gold (AU · 916.6)</option>
+                        <option value="21K Gold">21K Pure Gold (AU · 875.0)</option>
                         <option value="18K Gold">18K Yellow Gold</option>
-                        <option value="18K White Gold">18K White Gold (Diamond Mounts)</option>
+                        <option value="18K White Gold">18K White Gold</option>
                         <option value="18K Rose Gold">18K Rose Gold</option>
                       </select>
-                    </Field>
+                    </div>
                   )}
                 />
               </div>
 
-              <Controller
-                name="estimatedBudget"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="flex-col items-start">
-                    <FieldLabel htmlFor="appointment-budget">Estimated Budget</FieldLabel>
-                    <input
-                      id="appointment-budget"
-                      {...field}
-                      aria-invalid={fieldState.invalid}
-                      placeholder="e.g. PKR 500,000 - 1,500,000"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="message"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className="flex-col items-start">
-                    <FieldLabel htmlFor="appointment-message">Your Ideas & Requirements</FieldLabel>
-                    <textarea
-                      id="appointment-message"
-                      rows={3}
-                      {...field}
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Tell us what you would like us to make, your preferred gemstones, or design ideas..."
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-input bg-background text-foreground shadow-xs focus:outline-none focus:ring-1 focus:ring-ring"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="acceptTerms"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field orientation="horizontal" data-invalid={fieldState.invalid} className="flex-col items-start!">
-                    <div className="flex gap-2">
-                      <Checkbox
-                        id="acceptTerms"
-                        name={field.name}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      <FieldLabel htmlFor="acceptTerms">Agree to Appointment Guidelines</FieldLabel>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <FieldDescription>
-                        We will contact you shortly to confirm your preferred date and time.
-                      </FieldDescription>
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                    </div>
-                  </Field>
-                )}
-              />
-
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  disabled={form.formState.isSubmitting}
-                  className="px-4 py-2 text-xs font-medium rounded-lg border border-border bg-background hover:bg-muted text-foreground transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <LuxuryButton
-                  type="submit"
-                  disabled={form.formState.isSubmitting}
-                  variant="gold"
-                  size="sm"
-                  icon={<Calendar className="size-3.5 text-amber-200" />}
-                >
-                  {form.formState.isSubmitting ? 'Booking...' : 'Book Appointment'}
-                </LuxuryButton>
+              <div className="pt-2 border-t border-border flex items-center justify-between">
+                <span className="text-[11px] text-muted-foreground">
+                  Shop #2, Murshid Sunaar Tower, Saddar
+                </span>
+                <div className="flex items-center gap-2">
+                  <Button type="button" variant="outline" size="sm" onClick={handleClose} disabled={submitting} className="text-xs">
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="sm"
+                    disabled={submitting || !selectedSlot}
+                    className="bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-widest gap-1.5 cursor-pointer"
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="size-3.5 animate-spin text-amber-500" />
+                        <span>Confirming...</span>
+                      </>
+                    ) : (
+                      <span>Reserve Appointment</span>
+                    )}
+                  </Button>
+                </div>
               </div>
             </form>
           </>

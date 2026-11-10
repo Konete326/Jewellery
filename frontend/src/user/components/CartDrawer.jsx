@@ -165,7 +165,11 @@ export function CartDrawer({
       })
       .catch(() => {});
 
-    storeProfileApi.getPublic()
+    const fetchProfile = storeProfileApi?.getPublic
+      ? storeProfileApi.getPublic()
+      : (storeProfileApi?.getProfile ? storeProfileApi.getProfile() : Promise.resolve(null));
+
+    fetchProfile
       .then((res) => {
         if (!isSubscribed) return;
         const data = res?.data || res;
@@ -460,8 +464,8 @@ export function CartDrawer({
             />
           ) : items.length === 0 ? (
             <div className="text-center py-24 flex flex-col items-center justify-center px-4">
-              <div className="size-12 rounded-full border border-border/80 bg-muted/40 flex items-center justify-center mb-3">
-                <Gem className="size-5 text-muted-foreground/60" />
+              <div className="px-3 py-1.5 rounded bg-black/85 text-amber-300 font-mono text-[10px] tracking-widest border border-amber-500/30 uppercase mb-3">
+                AU · 916.6 · ATELIER BAG
               </div>
               <h3 className="font-serif text-base text-foreground font-light mb-1">
                 Your Cart is Empty

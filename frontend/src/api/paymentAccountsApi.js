@@ -6,7 +6,7 @@ export const fetchPaymentAccounts = async () => {
 };
 
 export const fetchActivePaymentAccounts = async () => {
-  return apiClient(ENDPOINTS.PAYMENT_ACCOUNTS_ACTIVE);
+  return apiClient(ENDPOINTS.PAYMENT_ACCOUNTS_ACTIVE, { silent: true });
 };
 
 export const createPaymentAccount = async (data) => {

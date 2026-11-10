@@ -40,6 +40,10 @@ export const storeProfileApi = {
     }
   },
 
+  async getPublic() {
+    return this.getProfile();
+  },
+
   async updateProfile(data) {
     const res = await apiClient('/store-profile', {
       method: 'PUT',

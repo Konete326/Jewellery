@@ -9,7 +9,13 @@ export const createInquirySchema = z.object({
     jewelryType: z.string().optional().default('Other'),
     preferredMetal: z.string().optional().default('22K Gold'),
     estimatedBudget: z.string().optional().default('Consultation'),
-    message: z.string().min(5).max(3000)
+    message: z.string().min(5).max(3000),
+    requestType: z.enum(['Inquiry', 'Appointment']).optional().default('Inquiry'),
+    appointmentDate: z.string().optional().default(''),
+    appointmentSlot: z.string().optional().default(''),
+    consultationMode: z.enum(['In-Store Showroom', 'WhatsApp Video Call']).optional().default('In-Store Showroom'),
+    pieceId: z.string().optional().default(''),
+    pieceTitle: z.string().optional().default('')
   })
 });
 

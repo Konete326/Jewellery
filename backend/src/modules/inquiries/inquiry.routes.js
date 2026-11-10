@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { getInquiries, createInquiry, updateInquiryStatus, replyInquiry, deleteInquiry } from './inquiry.controller.js';
+import { getInquiries, createInquiry, updateInquiryStatus, replyInquiry, deleteInquiry, getBookedSlots } from './inquiry.controller.js';
 import { validateRequest } from '../../middlewares/validateRequest.js';
 import { createInquirySchema, replyInquirySchema } from './inquiry.validation.js';
 import { verifyAuth, requireAdmin } from '../../middlewares/auth.js';
 
 const router = Router();
 
+router.get('/booked-slots', getBookedSlots);
 router.get('/', verifyAuth, requireAdmin, getInquiries);
 router.post('/', validateRequest(createInquirySchema), createInquiry);
 router.patch('/:id/status', verifyAuth, requireAdmin, updateInquiryStatus);
