@@ -12,7 +12,7 @@ import { MasterpieceReviewModal } from '../components/MasterpieceReviewModal';
 import { MasterpieceInquiryModal } from '../components/MasterpieceInquiryModal';
 import { BespokeAppointmentModal } from '../components/BespokeAppointmentModal';
 import { galleryApi } from '@/api/galleryApi';
-import { fetchProductById } from '@/api/productApi';
+import { fetchProductById, fetchProducts } from '@/api/productApi';
 import { PolaroidLineCarousel } from '@/components/ui/polaroid-line-carousel';
 import { updatePageSEO, getProductSchema, removeProductJsonLd } from '@/utils/seo';
 import { LuxuryButton } from '../components/LuxuryButton';
@@ -31,6 +31,7 @@ export function GalleryDetailPage() {
   const [cartItems, setCartItems] = useState(() => getLocalCart());
 
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
@@ -52,53 +53,55 @@ export function GalleryDetailPage() {
       setApiError(false);
 
       let itemData = null;
-      let isGenuineGalleryNotFound = false;
+      let isProduct = false;
 
       try {
         const res = await galleryApi.getById(id, { signal: controller.signal });
         if (!isMounted || controller.signal.aborted) return;
         if (res && res.data) {
           itemData = res.data;
+          isProduct = false;
         }
       } catch (err) {
         if (!isMounted || controller.signal.aborted) return;
-        if (err?.status === 404) {
-          isGenuineGalleryNotFound = true;
-        } else {
-          setApiError(true);
-          setLoading(false);
-          return;
-        }
       }
 
-      if (!itemData && isGenuineGalleryNotFound) {
+      if (!itemData) {
         try {
-          const prodRes = await fetchProductById(id);
+          const prodRes = await fetchProductById(id, { signal: controller.signal });
           if (!isMounted || controller.signal.aborted) return;
-          if (prodRes && prodRes.data) {
-            const p = prodRes.data;
+          const p = prodRes?.data || prodRes?.item || prodRes;
+          if (p && (p._id || p.id)) {
             itemData = {
-              _id: p._id,
-              id: p._id,
-              title: p.name || p.title,
+              _id: p._id || p.id,
+              id: p._id || p.id,
+              title: p.title || p.name || 'Fine Jewellery Piece',
+              sku: p.sku || '',
+              slug: p.slug || '',
               category: p.category || 'Bridal Sets',
               description: p.description || '',
               imageUrl: p.imageUrl || (Array.isArray(p.images) && p.images[0]) || '/assets/products/choker-ruby-01.jpg',
-              images: Array.isArray(p.images) ? p.images : [],
+              images: Array.isArray(p.images) && p.images.length > 0 ? p.images : (p.imageUrl ? [p.imageUrl] : []),
               purity: p.purity || '22K',
               grossWeight: p.grossWeight,
               netWeight: p.netWeight,
               makingCharges: p.makingCharges,
               stoneCharges: p.stoneCharges,
-              wastage: p.wastage,
-              calculatedPrice: p.calculatedPrice,
-              stock: (p.stock !== undefined && p.stock !== null) ? p.stock : (p.stockQuantity ?? p.inventoryQuantity ?? null),
-              stockQuantity: p.stockQuantity ?? p.stock ?? p.inventoryQuantity ?? null,
-              availability: p.availability || null,
+              wastagePercent: p.wastagePercent,
+              price: p.price,
+              calculatedPrice: p.calculatedPrice || p.price,
+              minAdvanceToLock: p.minAdvanceToLock,
+              liveRatePerGram: p.liveRatePerGram,
+              pureGoldCost: p.pureGoldCost,
+              stock: (p.stock !== undefined && p.stock !== null) ? p.stock : (p.stockQuantity ?? null),
+              stockQuantity: p.stockQuantity ?? p.stock ?? null,
+              availability: p.availability || 'In Stock',
+              isPublished: p.isPublished,
               averageRating: Number(p.averageRating) || 0,
               reviewCount: Number(p.reviewCount) || (Array.isArray(p.reviews) ? p.reviews.length : 0),
               reviews: Array.isArray(p.reviews) ? p.reviews : []
             };
+            isProduct = true;
           }
         } catch (err) {
           if (!isMounted || controller.signal.aborted) return;
@@ -120,26 +123,35 @@ export function GalleryDetailPage() {
       }
 
       const itemPayload = {
-        _id: itemData._id,
-        id: itemData._id,
+        _id: itemData._id || itemData.id,
+        id: itemData._id || itemData.id,
         title: itemData.title || itemData.name || 'Fine Jewellery Piece',
+        sku: itemData.sku || '',
+        slug: itemData.slug || '',
         category: itemData.category || 'Bridal Sets',
         description: itemData.description || '',
         imageUrl: itemData.imageUrl || (Array.isArray(itemData.images) && itemData.images[0]) || '/assets/products/choker-ruby-01.jpg',
-        images: Array.isArray(itemData.images) ? itemData.images : [],
+        images: Array.isArray(itemData.images) && itemData.images.length > 0 ? itemData.images : (itemData.imageUrl ? [itemData.imageUrl] : []),
         purity: itemData.purity || '22K',
         grossWeight: itemData.grossWeight,
         netWeight: itemData.netWeight,
         makingCharges: itemData.makingCharges,
         stoneCharges: itemData.stoneCharges,
         wastage: itemData.wastage,
-        calculatedPrice: itemData.calculatedPrice,
+        wastagePercent: itemData.wastagePercent,
+        price: itemData.price,
+        calculatedPrice: itemData.calculatedPrice || itemData.price,
+        minAdvanceToLock: itemData.minAdvanceToLock,
+        liveRatePerGram: itemData.liveRatePerGram,
+        pureGoldCost: itemData.pureGoldCost,
         stock: (itemData.stock !== undefined && itemData.stock !== null) ? itemData.stock : (itemData.stockQuantity ?? itemData.inventoryQuantity ?? null),
         stockQuantity: itemData.stockQuantity ?? itemData.stock ?? itemData.inventoryQuantity ?? null,
         availability: itemData.availability || null,
+        isPublished: itemData.isPublished,
         averageRating: Number(itemData.averageRating) || 0,
         reviewCount: Number(itemData.reviewCount) || (Array.isArray(itemData.reviews) ? itemData.reviews.length : 0),
-        reviews: Array.isArray(itemData.reviews) ? itemData.reviews : []
+        reviews: Array.isArray(itemData.reviews) ? itemData.reviews : [],
+        isProduct
       };
 
       setPiece(itemPayload);
@@ -156,20 +168,38 @@ export function GalleryDetailPage() {
       });
 
       try {
-        const similarRes = await galleryApi.getAll({ limit: 8, page: 1 });
-        if (!isMounted || controller.signal.aborted) return;
-        const list = Array.isArray(similarRes?.data) ? similarRes.data : (Array.isArray(similarRes) ? similarRes : []);
-        const currentId = String(itemPayload._id || itemPayload.id);
-        const filtered = list.filter((it) => String(it._id || it.id) !== currentId && (it.imageUrl || it.src));
-        const formattedSlides = filtered.map((item) => ({
-          id: item._id || item.id,
-          image: item.imageUrl || item.src,
-          title: item.title,
-          caption: item.category || '22K Gold Masterpiece',
-          category: item.category || 'Fine Jewellery',
-          alt: item.title
-        }));
-        setSimilarSlides(formattedSlides);
+        if (isProduct) {
+          const similarRes = await fetchProducts({ limit: 8, isPublished: true });
+          if (!isMounted || controller.signal.aborted) return;
+          const rawItems = similarRes?.data?.items || similarRes?.data || [];
+          const list = Array.isArray(rawItems) ? rawItems : [];
+          const currentId = String(itemPayload._id || itemPayload.id);
+          const filtered = list.filter((it) => String(it._id || it.id) !== currentId);
+          const formattedSlides = filtered.map((item) => ({
+            id: item._id || item.id,
+            image: item.imageUrl || (Array.isArray(item.images) && item.images[0]) || '/assets/products/choker-ruby-01.jpg',
+            title: item.title,
+            caption: item.category || '22K Gold Masterpiece',
+            category: item.category || 'Fine Jewellery',
+            alt: item.title
+          }));
+          setSimilarSlides(formattedSlides);
+        } else {
+          const similarRes = await galleryApi.getAll({ limit: 8, page: 1 });
+          if (!isMounted || controller.signal.aborted) return;
+          const list = Array.isArray(similarRes?.data) ? similarRes.data : (Array.isArray(similarRes) ? similarRes : []);
+          const currentId = String(itemPayload._id || itemPayload.id);
+          const filtered = list.filter((it) => String(it._id || it.id) !== currentId && (it.imageUrl || it.src));
+          const formattedSlides = filtered.map((item) => ({
+            id: item._id || item.id,
+            image: item.imageUrl || item.src,
+            title: item.title,
+            caption: item.category || '22K Gold Masterpiece',
+            category: item.category || 'Fine Jewellery',
+            alt: item.title
+          }));
+          setSimilarSlides(formattedSlides);
+        }
       } catch {}
     };
 
@@ -368,9 +398,14 @@ export function GalleryDetailPage() {
           <p className="text-sm text-muted-foreground leading-relaxed mb-6 font-light">
             This jewellery item is currently unavailable or has been removed from our catalog.
           </p>
-          <LuxuryButton onClick={() => navigate('/gallery')} variant="dark">
-            Return to Gallery
-          </LuxuryButton>
+          <div className="flex items-center justify-center gap-3">
+            <LuxuryButton onClick={() => navigate('/shop')} variant="dark">
+              Explore Shop
+            </LuxuryButton>
+            <LuxuryButton onClick={() => navigate('/gallery')} variant="outline">
+              Return to Gallery
+            </LuxuryButton>
+          </div>
         </div>
         <Footer />
       </div>
@@ -390,7 +425,9 @@ export function GalleryDetailPage() {
           <nav className="flex items-center gap-2 text-xs font-mono tracking-wider text-muted-foreground">
             <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
             <span>/</span>
-            <Link to="/gallery" className="hover:text-foreground transition-colors">Gallery</Link>
+            <Link to={piece.isProduct ? "/shop" : "/gallery"} className="hover:text-foreground transition-colors">
+              {piece.isProduct ? "Shop" : "Gallery"}
+            </Link>
             <span>/</span>
             <span className="text-foreground truncate max-w-[220px] sm:max-w-xs">{piece.title}</span>
           </nav>
@@ -401,19 +438,22 @@ export function GalleryDetailPage() {
               if (window.history.length > 1) {
                 navigate(-1);
               } else {
-                navigate('/gallery');
+                navigate(piece.isProduct ? '/shop' : '/gallery');
               }
             }}
             className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors cursor-pointer group py-1"
           >
             <ArrowLeft className="size-3.5 transition-transform group-hover:-translate-x-1" />
-            <span>Back to Gallery</span>
+            <span>{piece.isProduct ? 'Back to Shop' : 'Back to Gallery'}</span>
           </button>
         </div>
 
         <GalleryMasterpieceHero
           piece={piece}
-          onOpenLightbox={() => setIsLightboxOpen(true)}
+          onOpenLightbox={(img) => {
+            setLightboxImage(img || piece.imageUrl || piece.src);
+            setIsLightboxOpen(true);
+          }}
           onOpenReview={() => setIsReviewModalOpen(true)}
           onOpenInquiry={() => setIsInquiryModalOpen(true)}
           onOpenAppointment={() => setIsAppointmentModalOpen(true)}
@@ -464,8 +504,11 @@ export function GalleryDetailPage() {
 
       <MasterpieceLightboxModal
         isOpen={isLightboxOpen}
-        onClose={() => setIsLightboxOpen(false)}
-        imageUrl={piece.imageUrl || piece.src}
+        onClose={() => {
+          setIsLightboxOpen(false);
+          setLightboxImage(null);
+        }}
+        imageUrl={lightboxImage || piece.imageUrl || piece.src}
         title={piece.title}
         description={piece.description}
       />

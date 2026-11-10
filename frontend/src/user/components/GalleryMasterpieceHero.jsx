@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { getJewellerySizingType } from '@/utils/jewellerySizing';
 import { JewellerySizeSelector } from './sizing/JewellerySizeSelector';
 import { JewelleryMeasurementGuideModal } from './sizing/JewelleryMeasurementGuideModal';
+import { formatPKR, getEstimatedPiecePrice } from '@/utils/pricing';
 import { toast } from 'sonner';
 
 export function GalleryMasterpieceHero({
@@ -21,15 +22,29 @@ export function GalleryMasterpieceHero({
   const [sizeError, setSizeError] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [guideTab, setGuideTab] = useState(() => sizingType || 'ring');
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   if (!piece) return null;
 
+  const isProduct = Boolean(piece.isProduct);
   const title = piece.title || 'Fine Jewellery Piece';
   const description = piece.description || 'Handcrafted fine gold jewellery made with care at Khalil & Sons, Karachi.';
-  const imageUrl = piece.imageUrl || piece.src;
+  const rawImages = Array.isArray(piece.images) && piece.images.length > 0
+    ? piece.images
+    : (piece.imageUrl || piece.src ? [piece.imageUrl || piece.src] : ['/assets/products/choker-ruby-01.jpg']);
+  const activeImageUrl = rawImages[activeImageIndex] || rawImages[0];
+
   const rating = Number(piece.averageRating || piece.rating || 0);
   const reviewCount = piece.reviewCount || (piece.reviews?.length) || 0;
-  const refCode = `KS-${String(piece._id || piece.id || '001').slice(-6).toUpperCase()}`;
+  const purity = piece.purity || '22K';
+  const hallmark = purity === '24K' ? 'AU · 999.0' : purity === '18K' ? 'AU · 750.0' : purity === '21K' ? 'AU · 875.0' : 'AU · 916.6';
+  const refCode = piece.sku || `KS-${String(piece._id || piece.id || '001').slice(-6).toUpperCase()}`;
+
+  const numericVal = Number(piece.calculatedPrice) || Number(piece.price) || 0;
+  const priceDisplay = numericVal > 0 ? formatPKR(numericVal) : getEstimatedPiecePrice(piece).formattedPrice;
+  const minAdvance = Number(piece.minAdvanceToLock) || 0;
+  const isOutOfStock = piece.availability === 'Out of Stock' || (piece.stock !== null && piece.stock !== undefined && Number(piece.stock) <= 0);
+  const availabilityLabel = piece.availability || (isOutOfStock ? 'Out of Stock' : 'In Stock');
 
   const whatsappUrl = getPersonalizedWhatsAppInquiry({
     piece: {
@@ -49,6 +64,7 @@ export function GalleryMasterpieceHero({
   };
 
   const handleAddToCartClick = () => {
+    if (isOutOfStock) return;
     if (sizingType && !selectedSize) {
       setSizeError(true);
       toast.error(`Please select a ${sizingType} size`, {
@@ -68,11 +84,11 @@ export function GalleryMasterpieceHero({
         <div className="lg:col-span-6 xl:col-span-7">
           <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-border/80 bg-muted/20 shadow-xs group">
             <div
-              onClick={onOpenLightbox}
+              onClick={() => onOpenLightbox && onOpenLightbox(activeImageUrl)}
               className="w-full h-full cursor-pointer select-none"
             >
               <img
-                src={imageUrl}
+                src={activeImageUrl}
                 alt={title}
                 className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-102"
                 onError={(e) => {
@@ -84,7 +100,7 @@ export function GalleryMasterpieceHero({
             </div>
 
             <div className="absolute top-4 left-4 z-10 px-3 py-1 rounded-md bg-background/85 backdrop-blur-md border border-border/70 text-foreground text-[10px] font-mono tracking-widest uppercase pointer-events-none">
-              AU · 916.6 · SADDAR
+              {hallmark} · SADDAR
             </div>
 
             <div className="absolute top-4 right-4 z-20">
@@ -93,13 +109,42 @@ export function GalleryMasterpieceHero({
 
             <button
               type="button"
-              onClick={onOpenLightbox}
+              onClick={() => onOpenLightbox && onOpenLightbox(activeImageUrl)}
               className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background/90 text-foreground backdrop-blur-md border border-border/70 text-xs font-mono uppercase tracking-wider hover:bg-background transition-colors cursor-pointer shadow-xs"
             >
               <ZoomIn className="size-3 text-muted-foreground" />
               <span>View Full Image</span>
             </button>
           </div>
+
+          {rawImages.length > 1 && (
+            <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1">
+              {rawImages.map((img, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setActiveImageIndex(idx)}
+                  className={cn(
+                    "relative size-16 sm:size-20 shrink-0 overflow-hidden rounded-xl border transition-all cursor-pointer",
+                    activeImageIndex === idx
+                      ? "border-foreground ring-1 ring-foreground"
+                      : "border-border/70 opacity-70 hover:opacity-100"
+                  )}
+                  aria-label={`View photo ${idx + 1}`}
+                >
+                  <img
+                    src={img}
+                    alt={`${title} view ${idx + 1}`}
+                    className="size-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/assets/products/choker-ruby-01.jpg";
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="lg:col-span-6 xl:col-span-5 flex flex-col justify-center">
@@ -149,50 +194,111 @@ export function GalleryMasterpieceHero({
             )}
           </div>
 
-          <div className="mt-5 p-4 rounded-xl border border-border/80 bg-card/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block">
-                Pricing
-              </span>
-              <span className="font-serif text-xl sm:text-2xl font-light text-foreground">
-                Based on Karachi Gold Market Rate
-              </span>
+          {isProduct ? (
+            <div className="mt-5 p-4 rounded-xl border border-border/80 bg-card/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block">
+                  Direct Atelier Live Price
+                </span>
+                <span className="font-serif text-2xl sm:text-3xl font-light text-foreground">
+                  {priceDisplay}
+                </span>
+                {minAdvance > 0 && (
+                  <span className="text-[11px] font-mono text-muted-foreground block mt-0.5">
+                    90% Gold Lock Advance: <strong className="font-semibold text-foreground">{formatPKR(minAdvance)}</strong>
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-mono uppercase tracking-wider border border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300 shrink-0">
+                  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Live Gold Rate
+                </span>
+                <span className={cn(
+                  "text-[11px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-md border shrink-0",
+                  isOutOfStock
+                    ? "border-destructive/40 bg-destructive/10 text-destructive"
+                    : "border-border/60 bg-muted/40 text-muted-foreground"
+                )}>
+                  {availabilityLabel}
+                </span>
+              </div>
             </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-mono uppercase tracking-wider border border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300 shrink-0">
-                <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Live Gold Rate Price
-              </span>
-              <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground px-2.5 py-1 rounded-md border border-border/60 bg-muted/40 shrink-0">
-                Made to Order
-              </span>
+          ) : (
+            <div className="mt-5 p-4 rounded-xl border border-border/80 bg-card/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block">
+                  Pricing
+                </span>
+                <span className="font-serif text-xl sm:text-2xl font-light text-foreground">
+                  Based on Karachi Gold Market Rate
+                </span>
+                <span className="text-[11px] font-mono text-muted-foreground block mt-0.5">
+                  Showcase & Bespoke Inquiry
+                </span>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-mono uppercase tracking-wider border border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300 shrink-0">
+                  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Live Gold Rate Price
+                </span>
+                <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground px-2.5 py-1 rounded-md border border-border/60 bg-muted/40 shrink-0">
+                  Showcase Piece
+                </span>
+              </div>
             </div>
-          </div>
+          )}
 
           <p className="mt-4 text-sm sm:text-base text-muted-foreground font-light leading-relaxed">
             {description}
           </p>
 
-          <div className="mt-5 grid grid-cols-2 gap-px bg-border/70 rounded-xl overflow-hidden border border-border/70 text-xs">
-            <div className="bg-card p-3 flex flex-col gap-0.5">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Purity Standard</span>
-              <span className="font-medium text-foreground">22K (916.6) & 21K Certified</span>
+          {isProduct ? (
+            <div className="mt-5 grid grid-cols-2 gap-px bg-border/70 rounded-xl overflow-hidden border border-border/70 text-xs">
+              <div className="bg-card p-3 flex flex-col gap-0.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Purity Standard</span>
+                <span className="font-medium text-foreground">{purity} ({hallmark.replace('AU · ', '')}) Certified</span>
+              </div>
+              <div className="bg-card p-3 flex flex-col gap-0.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Net / Gross Weight</span>
+                <span className="font-medium text-foreground">
+                  {piece.netWeight ? `${piece.netWeight}g net` : 'Upon Inquiry'}{piece.grossWeight ? ` / ${piece.grossWeight}g gross` : ''}
+                </span>
+              </div>
+              <div className="bg-card p-3 flex flex-col gap-0.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Making & Wastage</span>
+                <span className="font-medium text-foreground">
+                  {(Number(piece.makingCharges) || 0) > 0 ? `PKR ${formatPKR(piece.makingCharges).replace('PKR ', '')}` : 'Standard Craft'}
+                  {piece.wastagePercent ? ` · ${piece.wastagePercent}% Wastage` : ''}
+                </span>
+              </div>
+              <div className="bg-card p-3 flex flex-col gap-0.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Inventory SKU</span>
+                <span className="font-medium text-foreground font-mono">{piece.sku || refCode}</span>
+              </div>
             </div>
-            <div className="bg-card p-3 flex flex-col gap-0.5">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Made In</span>
-              <span className="font-medium text-foreground">Murshid Sunaar Tower, Saddar</span>
+          ) : (
+            <div className="mt-5 grid grid-cols-2 gap-px bg-border/70 rounded-xl overflow-hidden border border-border/70 text-xs">
+              <div className="bg-card p-3 flex flex-col gap-0.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Purity Standard</span>
+                <span className="font-medium text-foreground">{purity} ({hallmark.replace('AU · ', '')}) Certified</span>
+              </div>
+              <div className="bg-card p-3 flex flex-col gap-0.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Made In</span>
+                <span className="font-medium text-foreground">Murshid Sunaar Tower, Saddar</span>
+              </div>
+              <div className="bg-card p-3 flex flex-col gap-0.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Crafting</span>
+                <span className="font-medium text-foreground">Handmade to Exact Sizing</span>
+              </div>
+              <div className="bg-card p-3 flex flex-col gap-0.5">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Store Service</span>
+                <span className="font-medium text-foreground">Lifetime Polish & Inspection</span>
+              </div>
             </div>
-            <div className="bg-card p-3 flex flex-col gap-0.5">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Crafting</span>
-              <span className="font-medium text-foreground">Handmade to Exact Sizing</span>
-            </div>
-            <div className="bg-card p-3 flex flex-col gap-0.5">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">Store Service</span>
-              <span className="font-medium text-foreground">Lifetime Polish & Inspection</span>
-            </div>
-          </div>
+          )}
 
-          {sizingType && (
+          {isProduct && sizingType && (
             <JewellerySizeSelector
               sizingType={sizingType}
               selectedSize={selectedSize}
@@ -202,25 +308,53 @@ export function GalleryMasterpieceHero({
             />
           )}
 
-          <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <button
-              type="button"
-              onClick={handleAddToCartClick}
-              className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wider font-medium transition-all shadow-xs cursor-pointer"
-            >
-              <ShoppingBag className="size-4" />
-              <span>Add to Atelier Bag</span>
-            </button>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl border border-border bg-card hover:bg-muted text-foreground text-xs uppercase tracking-wider font-medium transition-all cursor-pointer"
-            >
-              <MessageCircle className="size-4" />
-              <span>Inquire on WhatsApp</span>
-            </a>
-          </div>
+          {isProduct ? (
+            <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <button
+                type="button"
+                onClick={handleAddToCartClick}
+                disabled={isOutOfStock}
+                className={cn(
+                  "flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl text-xs uppercase tracking-wider font-medium transition-all shadow-xs",
+                  isOutOfStock
+                    ? "bg-muted text-muted-foreground cursor-not-allowed border border-border/60"
+                    : "bg-foreground text-background hover:bg-foreground/90 cursor-pointer"
+                )}
+              >
+                <ShoppingBag className="size-4" />
+                <span>{isOutOfStock ? 'Sold Out' : 'Add to Atelier Bag'}</span>
+              </button>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl border border-border bg-card hover:bg-muted text-foreground text-xs uppercase tracking-wider font-medium transition-all cursor-pointer"
+              >
+                <MessageCircle className="size-4" />
+                <span>Inquire on WhatsApp</span>
+              </a>
+            </div>
+          ) : (
+            <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wider font-medium transition-all shadow-xs cursor-pointer"
+              >
+                <MessageCircle className="size-4" />
+                <span>Inquire on WhatsApp</span>
+              </a>
+              <button
+                type="button"
+                onClick={onOpenInquiry}
+                className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl border border-border bg-card hover:bg-muted text-foreground text-xs uppercase tracking-wider font-medium transition-all cursor-pointer"
+              >
+                <Mail className="size-4" />
+                <span>Send Inquiry</span>
+              </button>
+            </div>
+          )}
 
           <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground font-mono">
             <button
@@ -232,14 +366,18 @@ export function GalleryMasterpieceHero({
               <span>Book Showroom Visit</span>
             </button>
 
-            <button
-              type="button"
-              onClick={onOpenInquiry}
-              className="inline-flex items-center gap-1 hover:text-foreground transition-colors cursor-pointer underline underline-offset-2"
-            >
-              <Mail className="size-3" />
-              <span>Send Inquiry</span>
-            </button>
+            {isProduct ? (
+              <button
+                type="button"
+                onClick={onOpenInquiry}
+                className="inline-flex items-center gap-1 hover:text-foreground transition-colors cursor-pointer underline underline-offset-2"
+              >
+                <Mail className="size-3" />
+                <span>Send Inquiry</span>
+              </button>
+            ) : (
+              <span className="text-muted-foreground/70">Showroom Exhibition Only</span>
+            )}
           </div>
         </div>
       </div>

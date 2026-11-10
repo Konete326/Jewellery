@@ -14,8 +14,8 @@ export const fetchProducts = async (params = {}) => {
   return apiClient(qs ? `${ENDPOINTS.PRODUCTS}?${qs}` : ENDPOINTS.PRODUCTS);
 };
 
-export const fetchProductById = async (id) => {
-  return apiClient(ENDPOINTS.PRODUCT_BY_ID(id));
+export const fetchProductById = async (id, options = {}) => {
+  return apiClient(ENDPOINTS.PRODUCT_BY_ID(id), options);
 };
 
 export const createProduct = async (data) => {

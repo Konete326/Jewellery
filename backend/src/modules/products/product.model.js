@@ -1,29 +1,21 @@
 import mongoose from 'mongoose';
 
+const productReviewSubSchema = new mongoose.Schema(
+  {
+    userName: { type: String, required: true, trim: true },
+    userEmail: { type: String, required: true, trim: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    comment: { type: String, default: '', trim: true }
+  },
+  { timestamps: true }
+);
+
 const productSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true,
-      trim: true
-    },
-    sku: {
-      type: String,
-      trim: true,
-      default: ''
-    },
-    slug: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true
-    },
-    category: {
-      type: String,
-      required: true,
-      trim: true
-    },
+    title: { type: String, required: true, trim: true },
+    sku: { type: String, trim: true, default: '' },
+    slug: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    category: { type: String, required: true, trim: true },
     purity: {
       type: String,
       enum: ['24K', '22K', '21K', '18K'],
@@ -81,6 +73,21 @@ const productSchema = new mongoose.Schema(
     images: {
       type: [String],
       default: []
+    },
+    reviews: {
+      type: [productReviewSubSchema],
+      default: []
+    },
+    averageRating: {
+      type: Number,
+      default: 5,
+      min: 1,
+      max: 5
+    },
+    reviewCount: {
+      type: Number,
+      default: 0,
+      min: 0
     },
     supplierId: {
       type: mongoose.Schema.Types.ObjectId,

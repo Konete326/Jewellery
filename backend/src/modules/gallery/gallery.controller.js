@@ -18,6 +18,9 @@ export class GalleryController {
     try {
       const { id } = req.params;
       const item = await galleryService.getItemById(id);
+      if (!item) {
+        return res.status(404).json({ success: false, message: 'Gallery item not found' });
+      }
       res.status(200).json({
         success: true,
         data: item

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Gallery } from './gallery.model.js';
+import { Product } from '../products/product.model.js';
 
 export class GalleryRepository {
   async create(data) {
@@ -37,6 +38,18 @@ export class GalleryRepository {
   async addReview(id, { userName, userEmail, rating, comment, title, imageUrl }) {
     let item = await this.findById(id);
     if (!item) {
+      if (mongoose.Types.ObjectId.isValid(id)) {
+        const prod = await Product.findById(id);
+        if (prod) {
+          prod.reviews = prod.reviews || [];
+          prod.reviews.push({ userName, userEmail, rating, comment });
+          prod.reviewCount = prod.reviews.length;
+          const totalScore = prod.reviews.reduce((acc, r) => acc + r.rating, 0);
+          prod.averageRating = Number((totalScore / prod.reviewCount).toFixed(1));
+          await prod.save();
+          return prod;
+        }
+      }
       item = await Gallery.create({
         title: title || 'Haute Joaillerie Masterpiece',
         imageUrl: imageUrl || '/assets/products/choker-ruby-01.jpg',
@@ -54,15 +67,28 @@ export class GalleryRepository {
   }
 
   async getRecentReviews(limit = 15) {
-    const items = await Gallery.find({ 'reviews.0': { $exists: true } }).select('title imageUrl reviews').lean();
+    const [galleryItems, productItems] = await Promise.all([
+      Gallery.find({ 'reviews.0': { $exists: true } }).select('title imageUrl reviews').lean(),
+      Product.find({ 'reviews.0': { $exists: true } }).select('title images reviews').lean()
+    ]);
     const allReviews = [];
-    for (const item of items) {
+    for (const item of galleryItems) {
       for (const rev of item.reviews || []) {
         allReviews.push({
           ...rev,
           masterpieceId: item._id,
           masterpieceTitle: item.title,
           masterpieceImage: item.imageUrl
+        });
+      }
+    }
+    for (const prod of productItems) {
+      for (const rev of prod.reviews || []) {
+        allReviews.push({
+          ...rev,
+          masterpieceId: prod._id,
+          masterpieceTitle: prod.title,
+          masterpieceImage: prod.images?.[0] || '/assets/products/choker-ruby-01.jpg'
         });
       }
     }

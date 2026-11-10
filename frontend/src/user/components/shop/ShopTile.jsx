@@ -71,6 +71,7 @@ export function ShopTile({
         title={title}
         subtitle={category}
         price={priceDisplay}
+        href={`/gallery/${id}`}
         position={position}
         onAddToCart={onAddToCart ? () => onAddToCart(piece) : undefined}
       />

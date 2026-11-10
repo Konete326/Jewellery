@@ -9,7 +9,6 @@ import { ShopTile } from '../components/shop/ShopTile';
 import { ShopThreeItemGrid } from '../components/shop/ShopThreeItemGrid';
 import { ShopCollectionsFilter, ShopSortFilter, MobileFilterTrigger, MobileFilterDrawer } from '../components/shop/ShopFilterSidebar';
 import { ShopSearchHeader } from '../components/shop/ShopSearchHeader';
-import { galleryApi } from '@/api/galleryApi';
 import { fetchProducts } from '@/api/productApi';
 import { fetchCategories } from '@/api/categoryApi';
 import { JEWELLERY_CATEGORIES, normalizeCategory, getCategorySlug, resolveCategoryMeta } from '@/constants/categories';
@@ -92,24 +91,18 @@ export function ShopPage() {
     const loadAllMasterpieces = async () => {
       setLoading(true);
       try {
-        const [prodRes, galleryRes, catRes] = await Promise.allSettled([
+        const [prodRes, catRes] = await Promise.allSettled([
           fetchProducts({ limit: 120, isPublished: true }),
-          galleryApi.getAll({ limit: 120 }),
           fetchCategories({ isActive: true })
         ]);
         if (!isMounted) return;
-        const allItems = [];
-        if (prodRes.status === 'fulfilled' && prodRes.value?.data?.items && Array.isArray(prodRes.value.data.items)) {
-          allItems.push(...prodRes.value.data.items);
-        }
-        if (galleryRes.status === 'fulfilled' && galleryRes.value?.data && Array.isArray(galleryRes.value.data)) {
-          galleryRes.value.data.forEach((g) => {
-            if (!allItems.some((item) => String(item._id || item.id) === String(g._id || g.id))) {
-              allItems.push(g);
-            }
-          });
-        }
-        setGalleryItems(allItems);
+        const rawProducts = prodRes.status === 'fulfilled'
+          ? (prodRes.value?.data?.items || prodRes.value?.data || [])
+          : [];
+        const publishedProducts = Array.isArray(rawProducts)
+          ? rawProducts.filter((p) => p.isPublished !== false)
+          : [];
+        setGalleryItems(publishedProducts);
         if (catRes.status === 'fulfilled' && catRes.value?.data && Array.isArray(catRes.value.data)) {
           const names = catRes.value.data.map((c) => c.name);
           if (names.length > 0) {
