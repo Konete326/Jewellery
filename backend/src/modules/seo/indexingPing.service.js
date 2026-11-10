@@ -63,3 +63,4 @@ export async function notifySearchEngines({ id, type = 'URL_UPDATED' } = {}) {
 
   Promise.allSettled(pingPromises).catch(() => null);
 }
+
