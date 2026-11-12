@@ -1,6 +1,5 @@
 import React from 'react';
-import { Mail, MapPin, Phone, Calendar, MessageCircle, Navigation } from 'lucide-react';
-import { GlobeWireframe } from '@/components/ui/contact-with-globe';
+import { Mail, MapPin, Phone, Calendar, MessageCircle, Navigation, Clock, ExternalLink } from 'lucide-react';
 import { STORE_INFO } from '@/constants/storeInfo';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
 import { LuxuryButton } from './LuxuryButton';
@@ -23,24 +22,46 @@ export function AtelierContactDirectory({ onOpenAppointment }) {
         <StoreStatusBadge variant="pill" className="shrink-0" />
       </div>
 
-      <div className="relative overflow-hidden h-28 rounded-xl border border-neutral-200/80 bg-muted/20 shadow-2xs p-2.5">
-        <div className="absolute top-2 left-2.5 z-10 flex items-center gap-2">
-          <span className="size-1.5 rounded-full bg-amber-600 animate-pulse" />
-          <span className="text-[10px] uppercase font-mono tracking-widest text-muted-foreground">
-            Saddar, Karachi Showroom
-          </span>
+      <div className="relative overflow-hidden rounded-xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-muted/30 p-3.5 shadow-2xs">
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] uppercase font-mono tracking-widest text-amber-900 dark:text-amber-300 font-semibold">
+                Saddar, Karachi Atelier
+              </span>
+              <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.2 rounded border border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-300">
+                AU · 916.6
+              </span>
+            </div>
+            <p className="font-serif text-sm font-medium text-foreground tracking-tight">
+              Murshid Sunaar Tower, Dr. Daud Pota Road
+            </p>
+            <div className="flex items-center gap-2 text-[11px] font-mono text-muted-foreground flex-wrap pt-0.5">
+              <span className="inline-flex items-center gap-1">
+                <MapPin className="size-3 text-amber-600 shrink-0" />
+                Near Regal Chowk, Saddar
+              </span>
+              <span>•</span>
+              <span className="inline-flex items-center gap-1">
+                <Clock className="size-3 text-amber-600 shrink-0" />
+                2:00 PM - 9:00 PM (Fri 3:30 PM)
+              </span>
+            </div>
+          </div>
+
+          <a
+            href={STORE_INFO.social.googleMapsDirections}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-background hover:bg-muted text-foreground text-[10px] font-mono uppercase tracking-wider transition-colors shadow-2xs"
+            title="Open directions in Google Maps"
+          >
+            <Navigation className="size-3 text-amber-600" />
+            <span className="hidden sm:inline">Directions</span>
+            <ExternalLink className="size-2.5 text-muted-foreground" />
+          </a>
         </div>
-        <GlobeWireframe
-          className="w-full aspect-square max-w-full absolute -top-12 left-0 text-neutral-600"
-          variant="wireframesolid"
-          autoRotate
-          autoRotateSpeed={0.4}
-          strokeWidth={0.8}
-          graticuleOpacity={0.12}
-          strokeColor="currentColor"
-          sphereOutlineColor="currentColor"
-        />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-white via-white/80 to-transparent" />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
