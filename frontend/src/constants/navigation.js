@@ -1,9 +1,11 @@
 import { STORE_INFO } from './storeInfo';
 
 export const NAV_LINKS = [
-  { id: 'home', label: 'Home', path: '/' },
-  { id: 'products', label: 'Collections', path: '/gallery' },
-  { id: 'about', label: 'About Us', path: '/about' },
+  { id: 'shop', label: 'Shop', path: '/shop' },
+  { id: 'masterpieces', label: 'Masterpieces', path: '/masterpieces' },
+  { id: 'rates', label: 'Live Rates', path: '/rates' },
+  { id: 'about', label: 'About', path: '/about' },
+  { id: 'reviews', label: 'Reviews', path: '/reviews' },
   { id: 'contact', label: 'Contact', path: '/contact' }
 ];
 

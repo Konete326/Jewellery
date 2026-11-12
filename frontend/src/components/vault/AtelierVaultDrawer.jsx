@@ -252,10 +252,12 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
             const pieceImgs = Array.isArray(piece.images) ? piece.images : (piece.image ? [piece.image] : []);
             const imageSrc = piece.imageUrl || piece.src || pieceImgs[0] || '/assets/products/choker-ruby-01.jpg';
 
+            const detailUrl = piece.isProduct !== false ? `/product/${pieceId}` : `/masterpieces/${pieceId}`;
+
             return (
               <div key={pieceId} className="pt-4 first:pt-0 flex items-center gap-3.5 group">
                 <Link
-                  to={`/gallery/${pieceId}`}
+                  to={detailUrl}
                   onClick={onClose}
                   className="shrink-0 relative overflow-hidden rounded-xl size-18 border border-border bg-muted/30"
                 >
@@ -275,7 +277,7 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
                     {piece.category || 'Bridal Sets'}
                   </span>
                   <Link
-                    to={`/gallery/${pieceId}`}
+                    to={detailUrl}
                     onClick={onClose}
                     className="font-serif text-sm font-semibold text-foreground hover:text-amber-600 transition-colors line-clamp-1"
                   >

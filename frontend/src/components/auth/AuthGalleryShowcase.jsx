@@ -124,7 +124,7 @@ export function AuthGalleryShowcase() {
         {prevImage && (
           <img
             src={prevImage}
-            alt="Khalil & Sons Gallery"
+            alt="Khalil & Sons Masterpieces"
             className="absolute inset-0 size-full object-cover transition-opacity duration-1000 opacity-0"
           />
         )}

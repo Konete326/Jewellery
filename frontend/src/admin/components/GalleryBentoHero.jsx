@@ -131,7 +131,7 @@ export function GalleryBentoHero({ items = [], onOpenUpload, isUploadOpen = fals
             <span>Lifetime Hallmark</span>
           </span>
           <a
-            href="/gallery"
+            href="/masterpieces"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 hover:text-foreground transition-colors cursor-pointer"

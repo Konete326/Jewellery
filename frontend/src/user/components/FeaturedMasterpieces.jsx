@@ -98,7 +98,7 @@ export function FeaturedMasterpieces() {
               return (
                 <div
                   key={piece.id}
-                  onClick={() => navigate(`/gallery/${piece.id}`)}
+                  onClick={() => navigate(`/masterpieces/${piece.id}`)}
                   className={`group cursor-pointer ${piece.offset ? 'translate-y-0 md:translate-y-12' : ''}`}
                 >
                   <div className="bg-white aspect-square p-10 flex items-center justify-center relative mb-6 shadow-sm overflow-hidden border border-neutral-200/60 rounded-xl">
@@ -131,7 +131,7 @@ export function FeaturedMasterpieces() {
                       <LuxuryButton
                         onClick={(e) => {
                           e.stopPropagation()
-                          navigate(`/gallery/${piece.id}`)
+                          navigate(`/masterpieces/${piece.id}`)
                         }}
                         size="sm"
                         variant="gold"

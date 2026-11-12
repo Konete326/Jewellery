@@ -17,7 +17,7 @@ export async function generateSitemapXml() {
   const staticRoutes = [
     { path: '', priority: '1.0', changefreq: 'daily' },
     { path: '/shop', priority: '0.9', changefreq: 'daily' },
-    { path: '/gallery', priority: '0.9', changefreq: 'daily' },
+    { path: '/masterpieces', priority: '0.9', changefreq: 'daily' },
     { path: '/rates', priority: '0.8', changefreq: 'daily' },
     { path: '/reviews', priority: '0.8', changefreq: 'weekly' },
     { path: '/about', priority: '0.7', changefreq: 'monthly' },
@@ -49,7 +49,7 @@ export async function generateSitemapXml() {
 
   const seenIds = new Set();
 
-  const appendItem = (id, title, rawImages, updatedAt) => {
+  const appendItem = (id, title, rawImages, updatedAt, prefix = 'product') => {
     const idStr = String(id);
     if (!idStr || seenIds.has(idStr)) return;
     seenIds.add(idStr);
@@ -59,7 +59,7 @@ export async function generateSitemapXml() {
     const imageList = Array.isArray(rawImages) ? rawImages : (rawImages ? [rawImages] : []);
 
     xml += '  <url>\n';
-    xml += `    <loc>${BASE_URL}/gallery/${idStr}</loc>\n`;
+    xml += `    <loc>${BASE_URL}/${prefix}/${idStr}</loc>\n`;
     xml += `    <lastmod>${itemDate}</lastmod>\n`;
     xml += '    <changefreq>weekly</changefreq>\n';
     xml += '    <priority>0.7</priority>\n';
@@ -76,11 +76,11 @@ export async function generateSitemapXml() {
   };
 
   for (const g of galleryItems) {
-    appendItem(g._id, g.title, g.imageUrl, g.updatedAt);
+    appendItem(g._id, g.title, g.imageUrl, g.updatedAt, 'masterpieces');
   }
 
   for (const p of productItems) {
-    appendItem(p._id, p.title, p.images, p.updatedAt);
+    appendItem(p._id, p.title, p.images, p.updatedAt, 'product');
   }
 
   xml += '</urlset>';

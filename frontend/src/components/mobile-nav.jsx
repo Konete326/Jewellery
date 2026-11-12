@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Portal } from "@/components/portal";
-import { productLinks } from "@/components/nav-links";
 import { getAuthUser, logoutUser } from "@/lib/auth";
 import { XIcon, MenuIcon, ShieldCheck, LogOut, Download, MapPin, Truck } from "lucide-react";
 import { UserIcon, SearchIcon, HeartIcon } from "@/components/icons";
@@ -145,8 +144,16 @@ export function MobileNav({ onOpenSearch, onOpenVault, vaultCount = 0 }) {
 										onClick={() => setOpen(false)}
 										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
 									>
-										<span>All Jewellery Shop</span>
+										<span>Shop All Jewellery</span>
 										<span className="text-muted-foreground text-xs font-mono">02</span>
+									</Link>
+									<Link
+										to="/masterpieces"
+										onClick={() => setOpen(false)}
+										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
+									>
+										<span>Masterpieces &amp; Living Archive</span>
+										<span className="text-muted-foreground text-xs font-mono">03</span>
 									</Link>
 									<Link
 										to="/rates"
@@ -154,14 +161,6 @@ export function MobileNav({ onOpenSearch, onOpenVault, vaultCount = 0 }) {
 										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
 									>
 										<span>Live Gold Rates</span>
-										<span className="text-muted-foreground text-xs font-mono">03</span>
-									</Link>
-									<Link
-										to="/gallery"
-										onClick={() => setOpen(false)}
-										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
-									>
-										<span>Jewellery Gallery</span>
 										<span className="text-muted-foreground text-xs font-mono">04</span>
 									</Link>
 									<Link
@@ -169,44 +168,33 @@ export function MobileNav({ onOpenSearch, onOpenVault, vaultCount = 0 }) {
 										onClick={() => setOpen(false)}
 										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
 									>
-										<span>About Us (Since 1992)</span>
+										<span>About Khalil &amp; Sons</span>
 										<span className="text-muted-foreground text-xs font-mono">05</span>
+									</Link>
+									<Link
+										to="/reviews"
+										onClick={() => setOpen(false)}
+										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
+									>
+										<span>Client Reviews &amp; Appraisals</span>
+										<span className="text-muted-foreground text-xs font-mono">06</span>
 									</Link>
 									<Link
 										to="/contact"
 										onClick={() => setOpen(false)}
 										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
 									>
-										<span>Contact & Showroom</span>
-										<span className="text-muted-foreground text-xs font-mono">06</span>
+										<span>Showroom &amp; Consultation</span>
+										<span className="text-muted-foreground text-xs font-mono">07</span>
 									</Link>
 									<Link
 										to="/track-order"
 										onClick={() => setOpen(false)}
 										className="flex items-center justify-between p-2.5 rounded-lg text-sm font-serif text-foreground hover:bg-muted/60 transition-colors"
 									>
-										<span>Track Your Order</span>
-										<span className="text-muted-foreground text-xs font-mono">07</span>
+										<span>Track Atelier Order</span>
+										<span className="text-muted-foreground text-xs font-mono">08</span>
 									</Link>
-								</div>
-
-								<div className="pt-3 border-t border-border/60">
-									<span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground block mb-2 px-1">
-										Featured Collections
-									</span>
-									<div className="space-y-1">
-										{productLinks.map((link) => (
-											<Link
-												key={`mobile-${link.label}`}
-												to={link.href}
-												onClick={() => setOpen(false)}
-												className="flex items-center justify-between p-2 rounded-lg text-xs text-foreground/80 hover:text-foreground hover:bg-muted/40 transition-colors"
-											>
-												<span>{link.label}</span>
-												<span className="text-[10px] text-muted-foreground font-light">{link.description?.split(' ')[0]}</span>
-											</Link>
-										))}
-									</div>
 								</div>
 							</div>
 						</div>

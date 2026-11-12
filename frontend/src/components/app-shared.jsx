@@ -30,7 +30,7 @@ export const navGroups = [
         icon: <PackageCheckIcon className="size-4" />
       },
       {
-        title: "Gallery",
+        title: "Masterpieces",
         path: "/admin/gallery",
         key: "gallery",
         icon: <ImageIcon className="size-4" />

@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useParams, Navigate } from 'react-router-dom'
 import { UserPanel } from '@/user/UserPanel'
 import { ShopPage } from '@/user/pages/ShopPage'
-import { GalleryPage } from '@/user/pages/GalleryPage'
-import { GalleryDetailPage } from '@/user/pages/GalleryDetailPage'
+import { MasterpiecesPage } from '@/user/pages/MasterpiecesPage'
+import { MasterpieceDetailPage } from '@/user/pages/MasterpieceDetailPage'
+import { ProductDetailPage } from '@/user/pages/ProductDetailPage'
 import { ReviewsPage } from '@/user/pages/ReviewsPage'
 import RatesPage from '@/user/pages/RatesPage'
 import { AboutUsPage } from '@/user/pages/AboutUsPage'
@@ -27,6 +28,11 @@ function ShopRouteWrapper() {
   return <ShopPage key={category || 'all'} />
 }
 
+function LegacyGalleryRedirect() {
+  const { id } = useParams()
+  return <Navigate to={`/masterpieces/${id}`} replace />
+}
+
 export default function App() {
   return (
     <LoadingProvider>
@@ -39,10 +45,13 @@ export default function App() {
         <Routes>
           <Route path="/" element={<UserPanel />} />
           <Route path="/shop" element={<ShopRouteWrapper />} />
-          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/masterpieces" element={<MasterpiecesPage />} />
+          <Route path="/masterpieces/:id" element={<MasterpieceDetailPage />} />
+          <Route path="/gallery" element={<Navigate to="/masterpieces" replace />} />
+          <Route path="/gallery/:id" element={<LegacyGalleryRedirect />} />
           <Route path="/collections" element={<ShopRouteWrapper />} />
           <Route path="/collections/:category" element={<ShopRouteWrapper />} />
-          <Route path="/gallery/:id" element={<GalleryDetailPage />} />
           <Route path="/reviews" element={<ReviewsPage />} />
           <Route path="/rates" element={<RatesPage />} />
           <Route path="/gold-rates" element={<RatesPage />} />

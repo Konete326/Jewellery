@@ -221,7 +221,7 @@ export function getLocalBusinessSchema() {
         name: 'Main Navigation',
         hasPart: [
           { '@type': 'WebPage', 'name': 'Shop Pure Gold Jewellery', 'url': `${BASE_URL}/shop` },
-          { '@type': 'WebPage', 'name': 'Living Archive & Bespoke Gallery', 'url': `${BASE_URL}/gallery` },
+          { '@type': 'WebPage', 'name': 'Living Archive & Bespoke Masterpieces', 'url': `${BASE_URL}/masterpieces` },
           { '@type': 'WebPage', 'name': 'Live Daily Gold Rates', 'url': `${BASE_URL}/rates` },
           { '@type': 'WebPage', 'name': 'Client Appraisals & Reviews', 'url': `${BASE_URL}/reviews` },
           { '@type': 'WebPage', 'name': 'Heritage & Goldsmithing Legacy', 'url': `${BASE_URL}/about` },
@@ -299,7 +299,7 @@ export function getProductSchema(piece) {
     const nextDay = new Date(Date.now() + 86400000).toISOString().split('T')[0];
     const offer = {
       '@type': 'Offer',
-      url: `${BASE_URL}/gallery/${piece._id || piece.id}`,
+      url: `${BASE_URL}/product/${piece._id || piece.id}`,
       priceCurrency: 'PKR',
       price: numPrice.toFixed(2),
       priceValidUntil: nextDay,

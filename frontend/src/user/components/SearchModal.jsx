@@ -111,10 +111,12 @@ export function SearchModal({ isOpen, onClose }) {
 
   const totalResultsCount = matchingPieces.length + matchingPages.length;
 
-  const handleSelectPiece = (pieceId) => {
+  const handleSelectPiece = (piece) => {
     onClose();
     setSearchTerm('');
-    navigate(`/gallery/${pieceId}`);
+    const id = piece?._id || piece?.id || piece;
+    const isProd = piece && typeof piece === 'object' ? piece.isProduct !== false : true;
+    navigate(isProd ? `/product/${id}` : `/masterpieces/${id}`);
   };
 
   const handleSelectPage = (path) => {
@@ -131,7 +133,7 @@ export function SearchModal({ isOpen, onClose }) {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (matchingPieces.length > 0) {
-      handleSelectPiece(matchingPieces[0]._id || matchingPieces[0].id);
+      handleSelectPiece(matchingPieces[0]);
     } else if (matchingPages.length > 0) {
       handleSelectPage(matchingPages[0].path);
     } else if (query) {
@@ -220,7 +222,7 @@ export function SearchModal({ isOpen, onClose }) {
                         return (
                           <div
                             key={id}
-                            onClick={() => handleSelectPiece(id)}
+                            onClick={() => handleSelectPiece(piece)}
                             className="group flex items-center gap-3.5 p-2.5 rounded-2xl border border-border/70 hover:border-amber-500/50 bg-card hover:bg-muted/40 transition-all cursor-pointer shadow-2xs hover:shadow-sm"
                           >
                             <img

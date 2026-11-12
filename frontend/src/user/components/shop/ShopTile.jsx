@@ -37,7 +37,7 @@ export function ShopTile({
       )}
     >
       <Link
-        to={`/gallery/${id}`}
+        to={`/product/${id}`}
         className="relative block h-full w-full overflow-hidden bg-muted/30"
       >
         <div
@@ -87,7 +87,7 @@ export function ShopTile({
         title={title}
         subtitle={category}
         price={priceDisplay}
-        href={`/gallery/${id}`}
+        href={`/product/${id}`}
         position={position}
         onAddToCart={onAddToCart ? () => onAddToCart(piece) : undefined}
       />

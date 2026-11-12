@@ -256,7 +256,7 @@ export function ShopPage() {
       toast.info(`Please select your bespoke ${sizingType} size`, {
         description: 'Opening piece details for accurate measurement...'
       });
-      navigate(`/gallery/${pieceId}`);
+      navigate(`/product/${pieceId}`);
       return;
     }
 
