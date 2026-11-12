@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Search, X, ChevronDown, SlidersHorizontal, Gem } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { SearchModal } from '../components/SearchModal';
@@ -25,6 +26,7 @@ export function MasterpiecesPage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [items, setItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All Pieces');
+  const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [hasMore, setHasMore] = useState(false);
@@ -118,9 +120,18 @@ export function MasterpiecesPage() {
     return pCat.includes(catLower) || pTitle.includes(catLower) || pDesc.includes(catLower);
   };
 
+  const matchesSearch = (piece, query) => {
+    if (!query || !query.trim()) return true;
+    const q = query.trim().toLowerCase();
+    const pTitle = (piece.title || '').toLowerCase();
+    const pCat = (piece.category || '').toLowerCase();
+    const pDesc = (piece.description || '').toLowerCase();
+    return pTitle.includes(q) || pCat.includes(q) || pDesc.includes(q);
+  };
+
   const filteredItems = useMemo(() => {
-    return items.filter((piece) => matchesCategory(piece, selectedCategory));
-  }, [items, selectedCategory]);
+    return items.filter((piece) => matchesCategory(piece, selectedCategory) && matchesSearch(piece, searchQuery));
+  }, [items, selectedCategory, searchQuery]);
 
   const layoutCards = filteredItems.map((piece, index) => {
     const isSpan2 = index % 5 === 0 || index % 5 === 3;
@@ -141,7 +152,7 @@ export function MasterpiecesPage() {
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <Navbar onOpenSearch={() => setIsSearchOpen(true)} />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <main className="flex-1 w-full max-w-[1880px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/5 text-amber-800 dark:text-amber-300 font-mono text-xs uppercase tracking-widest">
             <span>AU · 916.6 &amp; AU · 999.0</span>
@@ -171,49 +182,58 @@ export function MasterpiecesPage() {
           </div>
         ) : (
           <div className="space-y-8">
-            <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-2 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-              {ARCHIVE_CATEGORIES.map((cat) => {
-                const isSelected = selectedCategory === cat;
-                const count = items.filter((p) => matchesCategory(p, cat)).length;
-
-                return (
+            <div className="w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 p-2 sm:p-2.5 rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md shadow-xs">
+              <div className="relative flex-1">
+                <Search className="size-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search masterpieces by title or design..."
+                  className="w-full h-10 pl-10 pr-9 rounded-xl border border-border/70 bg-background text-foreground text-xs font-mono placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground/20"
+                />
+                {searchQuery && (
                   <button
-                    key={cat}
                     type="button"
-                    onClick={() => setSelectedCategory(cat)}
-                    className={cn(
-                      'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer shrink-0',
-                      isSelected
-                        ? 'bg-foreground text-background shadow-xs font-medium'
-                        : 'bg-muted/40 hover:bg-muted text-muted-foreground hover:text-foreground border border-border/70'
-                    )}
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer p-0.5"
+                    aria-label="Clear search"
                   >
-                    <span>{cat}</span>
-                    <span
-                      className={cn(
-                        'text-[10px] px-1.5 py-0.2 rounded-full font-mono',
-                        isSelected
-                          ? 'bg-background/20 text-background'
-                          : 'bg-muted-foreground/15 text-muted-foreground'
-                      )}
-                    >
-                      {count}
-                    </span>
+                    <X className="size-3.5" />
                   </button>
-                );
-              })}
+                )}
+              </div>
+
+              <div className="relative sm:w-64 shrink-0">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full h-10 pl-3.5 pr-9 appearance-none rounded-xl border border-border/70 bg-background text-foreground text-xs font-mono uppercase tracking-wider focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground/20 cursor-pointer"
+                >
+                  {ARCHIVE_CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat} className="bg-background text-foreground">
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="size-4 text-muted-foreground absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
             </div>
 
             {filteredItems.length === 0 ? (
               <div className="py-20 text-center max-w-md mx-auto space-y-4 rounded-2xl border border-border/80 bg-card p-8">
-                <p className="font-serif text-lg font-semibold text-foreground">No Pieces Found in {selectedCategory}</p>
+                <Gem className="size-8 text-muted-foreground mx-auto mb-2 opacity-60" />
+                <p className="font-serif text-lg font-semibold text-foreground">No Pieces Found</p>
                 <p className="text-xs text-muted-foreground">
-                  Our artisans are currently crafting custom commissions in this category. You can browse all pieces or inquire on WhatsApp.
+                  No masterpiece jewellery matched your current search or category filter. Try clearing keywords or viewing all pieces.
                 </p>
                 <button
                   type="button"
-                  onClick={() => setSelectedCategory('All Pieces')}
-                  className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-foreground text-background text-xs font-mono uppercase tracking-wider cursor-pointer"
+                  onClick={() => {
+                    setSelectedCategory('All Pieces');
+                    setSearchQuery('');
+                  }}
+                  className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-foreground text-background text-xs font-mono uppercase tracking-wider cursor-pointer hover:bg-foreground/90 transition-colors"
                 >
                   View All Pieces
                 </button>
@@ -222,7 +242,7 @@ export function MasterpiecesPage() {
               <>
                 <LayoutGrid cards={layoutCards} />
 
-                {selectedCategory === 'All Pieces' && (
+                {selectedCategory === 'All Pieces' && !searchQuery && (
                   <GalleryPagination
                     hasMore={hasMore}
                     isLoading={isLoadingMore}
