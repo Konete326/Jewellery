@@ -31,14 +31,14 @@ export function ShopTile({
   return (
     <div
       className={cn(
-        'group relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border bg-card transition-all duration-300 shadow-2xs',
+        'group relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border bg-card transition-all duration-300 shadow-2xs hover:shadow-md',
         active ? 'border-2 border-foreground ring-1 ring-foreground/20' : 'border-border/80 hover:border-foreground/40',
         className
       )}
     >
       <Link
         to={`/product/${id}`}
-        className="relative block h-full w-full overflow-hidden bg-muted/30"
+        className="relative block h-full w-full overflow-hidden bg-muted/30 focus:outline-none"
       >
         <div
           className={cn(
@@ -65,7 +65,7 @@ export function ShopTile({
             setImageLoaded(true);
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 opacity-15 group-hover:opacity-30 transition-opacity pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20 opacity-40 group-hover:opacity-50 transition-opacity pointer-events-none" />
       </Link>
 
       <div className="absolute top-2 sm:top-3 left-2 sm:left-3 z-10 flex flex-col items-start gap-1 pointer-events-none">
@@ -75,7 +75,7 @@ export function ShopTile({
         <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-mono font-medium tracking-wide uppercase bg-black/80 text-amber-300 border border-amber-500/30 backdrop-blur-md shadow-2xs">
           <span className="size-1 rounded-full bg-emerald-400 animate-pulse" />
           <span className="hidden sm:inline">Dynamic Live Gold Price</span>
-          <span className="sm:hidden">Live Price</span>
+          <span className="sm:hidden">Live Rate</span>
         </span>
       </div>
 
