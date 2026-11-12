@@ -92,6 +92,14 @@ export function MasterpiecesPage() {
     }
   };
 
+  const handleCategoryChange = (newCat) => {
+    setSelectedCategory(newCat);
+    setSearchQuery('');
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 180, behavior: 'smooth' });
+    }
+  };
+
   const matchesCategory = (piece, category) => {
     if (category === 'All Pieces') return true;
     const pCat = (piece.category || '').toLowerCase();
@@ -207,7 +215,7 @@ export function MasterpiecesPage() {
               <div className="relative sm:w-64 shrink-0">
                 <select
                   value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
                   className="w-full h-10 pl-3.5 pr-9 appearance-none rounded-xl border border-border/70 bg-background text-foreground text-xs font-mono uppercase tracking-wider focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground/20 cursor-pointer"
                 >
                   {ARCHIVE_CATEGORIES.map((cat) => (
