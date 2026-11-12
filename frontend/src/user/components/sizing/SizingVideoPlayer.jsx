@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Play, Pause, RotateCcw, Volume2, VolumeX, Maximize2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function SizingVideoPlayer({
@@ -10,107 +10,126 @@ export function SizingVideoPlayer({
   steps = [],
   className
 }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
-  const [videoError, setVideoError] = useState(false);
-  const videoRef = React.useRef(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [hasVideoSource, setHasVideoSource] = useState(Boolean(videoSrc));
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoSrc) return;
+
+    video.muted = true;
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setIsPlaying(true);
+          setVideoLoaded(true);
+        })
+        .catch(() => {
+          setIsPlaying(false);
+        });
+    }
+  }, [videoSrc]);
 
   const togglePlay = () => {
-    if (!videoRef.current) return;
+    const video = videoRef.current;
+    if (!video) {
+      setIsPlaying((prev) => !prev);
+      return;
+    }
     if (isPlaying) {
-      videoRef.current.pause();
+      video.pause();
       setIsPlaying(false);
     } else {
-      videoRef.current.play()
+      video.play()
         .then(() => setIsPlaying(true))
-        .catch(() => setVideoError(true));
+        .catch(() => {});
     }
   };
 
   const handleRestart = () => {
-    if (!videoRef.current) return;
-    videoRef.current.currentTime = 0;
-    videoRef.current.play()
+    const video = videoRef.current;
+    if (!video) return;
+    video.currentTime = 0;
+    video.play()
       .then(() => setIsPlaying(true))
       .catch(() => {});
   };
 
   const toggleMute = () => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = !isMuted;
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !isMuted;
     setIsMuted(!isMuted);
   };
 
   return (
     <div className={cn('space-y-3', className)}>
       <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-border/80 bg-white shadow-xs group">
-        {!videoError && videoSrc ? (
+        {hasVideoSource && (
           <video
             ref={videoRef}
             src={videoSrc}
-            playsInline
-            muted={isMuted}
+            autoPlay
             loop
-            onEnded={() => setIsPlaying(false)}
-            onError={() => setVideoError(true)}
+            muted={isMuted}
+            playsInline
+            onLoadedData={() => setVideoLoaded(true)}
+            onError={() => setHasVideoSource(false)}
             className="w-full h-full object-cover bg-white"
           />
-        ) : null}
+        )}
 
-        {(!isPlaying || videoError || !videoSrc) && (
-          <div className="absolute inset-0 bg-white flex flex-col items-center justify-center p-4">
+        {(!hasVideoSource || !videoLoaded) && (
+          <div className="absolute inset-0 bg-white flex flex-col items-center justify-center p-4 select-none">
             {posterSvg}
-            <div className="absolute inset-0 bg-black/5 flex items-center justify-center">
-              <button
-                type="button"
-                onClick={togglePlay}
-                className="size-12 sm:size-14 rounded-full bg-foreground text-background hover:scale-105 active:scale-95 transition-all flex items-center justify-center shadow-lg cursor-pointer"
-                title="Play Video Guide"
-                aria-label={`Play ${title} guide`}
-              >
-                <Play className="size-5 sm:size-6 ml-0.5 fill-current" />
-              </button>
-            </div>
-            <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-neutral-600 bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-neutral-200">
+            <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-neutral-600 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-neutral-200">
               <span className="font-semibold text-foreground">{title}</span>
-              <span>{duration} • Clean White Studio</span>
+              <span className="flex items-center gap-1.5 text-amber-700 dark:text-amber-500 font-semibold">
+                <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Continuous Studio Loop
+              </span>
             </div>
           </div>
         )}
 
-        {isPlaying && (
-          <div className="absolute bottom-0 inset-x-0 p-2.5 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-center justify-between text-white opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={togglePlay}
-                className="p-1 rounded-md hover:bg-white/20 transition-colors cursor-pointer"
-                title="Pause"
-              >
-                <Pause className="size-4" />
-              </button>
-              <button
-                type="button"
-                onClick={handleRestart}
-                className="p-1 rounded-md hover:bg-white/20 transition-colors cursor-pointer"
-                title="Restart"
-              >
-                <RotateCcw className="size-3.5" />
-              </button>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={toggleMute}
-                className="p-1 rounded-md hover:bg-white/20 transition-colors cursor-pointer"
-                title={isMuted ? 'Unmute' : 'Mute'}
-              >
-                {isMuted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
-              </button>
-            </div>
+        <div className="absolute bottom-0 inset-x-0 p-2.5 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-center justify-between text-white opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={togglePlay}
+              className="p-1 rounded-md hover:bg-white/20 transition-colors cursor-pointer"
+              title={isPlaying ? 'Pause' : 'Play'}
+              aria-label={isPlaying ? 'Pause video' : 'Play video'}
+            >
+              {isPlaying ? <Pause className="size-4" /> : <Play className="size-4 fill-current" />}
+            </button>
+            <button
+              type="button"
+              onClick={handleRestart}
+              className="p-1 rounded-md hover:bg-white/20 transition-colors cursor-pointer"
+              title="Restart"
+              aria-label="Restart video"
+            >
+              <RotateCcw className="size-3.5" />
+            </button>
           </div>
-        )}
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleMute}
+              className="p-1 rounded-md hover:bg-white/20 transition-colors cursor-pointer"
+              title={isMuted ? 'Unmute' : 'Mute'}
+              aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+            >
+              {isMuted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+            </button>
+          </div>
+        </div>
       </div>
 
       {steps.length > 0 && (

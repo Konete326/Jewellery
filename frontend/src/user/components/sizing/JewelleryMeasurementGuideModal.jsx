@@ -134,7 +134,7 @@ export function JewelleryMeasurementGuideModal({
               <div className="space-y-6">
                 <SizingVideoPlayer
                   title="Ring Measurement Guide"
-                  videoSrc="/assets/videos/ring-size-guide.mp4"
+                  videoSrc="/assets/about/founder-story.mp4"
                   duration="0:45"
                   steps={[
                     'Place existing fitting ring flat on metric ruler.',
@@ -207,7 +207,7 @@ export function JewelleryMeasurementGuideModal({
               <div className="space-y-6">
                 <SizingVideoPlayer
                   title="Bangle & Kada Sizing Guide"
-                  videoSrc="/assets/videos/bangle-size-guide.mp4"
+                  videoSrc="/assets/about/founder-story.mp4"
                   duration="0:50"
                   steps={[
                     'Bring thumb and little finger tightly together across palm.',
@@ -276,7 +276,7 @@ export function JewelleryMeasurementGuideModal({
               <div className="space-y-6">
                 <SizingVideoPlayer
                   title="Bracelet Length Guide"
-                  videoSrc="/assets/videos/bracelet-size-guide.mp4"
+                  videoSrc="/assets/about/founder-story.mp4"
                   duration="0:40"
                   steps={[
                     'Wrap flexible tape snugly around wrist above bone.',
@@ -370,7 +370,7 @@ export function JewelleryMeasurementGuideModal({
               <div className="space-y-6">
                 <SizingVideoPlayer
                   title="Necklace & Choker Drop Guide"
-                  videoSrc="/assets/videos/necklace-size-guide.mp4"
+                  videoSrc="/assets/about/founder-story.mp4"
                   duration="0:45"
                   steps={[
                     'Drape ribbon or thread around neck to preferred drop point.',
