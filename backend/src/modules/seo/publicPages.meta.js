@@ -72,3 +72,4 @@ export const PUBLIC_PAGES_META = {
     canonicalUrl: `${BASE_URL}/track-order`
   }
 };
+

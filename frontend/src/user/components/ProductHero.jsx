@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Star, MessageCircle, Calendar, ZoomIn, ShoppingBag } from 'lucide-react';
+import { Star, MessageCircle, Calendar, ZoomIn, Maximize2, ShoppingBag } from 'lucide-react';
 import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton';
 import { ZoomImage } from '@/components/ui/ZoomImage';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
@@ -104,10 +104,11 @@ export function ProductHero({
             <button
               type="button"
               onClick={() => onOpenLightbox && onOpenLightbox(activeImageUrl)}
-              className="absolute bottom-4 right-4 z-20 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background/90 text-foreground backdrop-blur-md border border-border/70 text-xs font-mono uppercase tracking-wider hover:bg-background transition-colors cursor-pointer shadow-xs"
+              className="absolute bottom-4 right-4 z-20 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background/90 text-foreground backdrop-blur-md border border-border/70 text-xs font-mono uppercase tracking-wider hover:bg-background hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-xs"
+              title="Inspect 4K Details at 200% resolution"
             >
-              <ZoomIn className="size-3 text-muted-foreground" />
-              <span>Full View</span>
+              <Maximize2 className="size-3 text-amber-700 dark:text-amber-400" />
+              <span>Inspect 4K Details</span>
             </button>
           </div>
 

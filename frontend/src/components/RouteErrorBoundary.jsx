@@ -72,3 +72,4 @@ export function RouteErrorBoundary({ children }) {
 }
 
 export default RouteErrorBoundary;
+
