@@ -230,9 +230,9 @@ export const CircularTestimonials = ({
               {activeTestimonial.productTitle && (
                 activeTestimonial.productId && !activeTestimonial.isArchived ? (
                   <Link
-                    to={`/gallery/${activeTestimonial.productId}`}
+                    to={`/product/${activeTestimonial.productId}`}
                     className="inline-flex items-center gap-3 pt-2 px-3.5 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-500/60 text-xs transition-all group cursor-pointer shadow-2xs hover:scale-[1.02]"
-                    title={`View ${activeTestimonial.productTitle} in Atelier Gallery`}
+                    title={`View ${activeTestimonial.productTitle} in Shop`}
                   >
                     {activeTestimonial.productImage && (
                       <img

@@ -8,12 +8,12 @@ export const BOUTIQUE_PAGES = [
     keywords: ['gold', 'silver', 'rates', 'price', 'sarafa', 'karachi', 'tola', 'gram', '24k', '22k', 'chandi', 'calculator', 'bullion']
   },
   {
-    id: 'page-gallery',
-    title: 'Jewellery Gallery',
-    path: '/gallery',
-    description: 'Handcrafted 22K bridal sets, gold bangles, and polki jewellery.',
-    category: 'Gallery',
-    keywords: ['gallery', 'collection', 'masterpiece', 'jewellery', 'jewelry', 'bridal', 'necklace', 'choker', 'bangles', 'kadas', 'rings']
+    id: 'page-masterpieces',
+    title: 'Masterpiece Archive',
+    path: '/masterpieces',
+    description: 'Handcrafted 22K bespoke bridal heirlooms, gold bangles, and polki masterpieces.',
+    category: 'Masterpieces',
+    keywords: ['masterpieces', 'archive', 'gallery', 'collection', 'masterpiece', 'jewellery', 'jewelry', 'bridal', 'necklace', 'choker', 'bangles', 'kadas', 'rings']
   },
   {
     id: 'page-reviews',

@@ -83,11 +83,11 @@ export function ContactConfirmationModal({ isOpen, onClose, inquiryData }) {
             type="button"
             onClick={() => {
               onClose();
-              navigate('/gallery');
+              navigate('/masterpieces');
             }}
             className="w-full sm:flex-1 bg-[#2d3435] hover:bg-neutral-800 text-white text-xs uppercase tracking-widest gap-2 font-medium cursor-pointer"
           >
-            <span>Explore Gallery</span>
+            <span>Explore Masterpieces</span>
             <ArrowRight className="size-3.5" />
           </Button>
         </div>

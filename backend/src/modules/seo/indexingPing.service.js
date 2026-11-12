@@ -14,7 +14,8 @@ export async function notifySearchEngines({ id, type = 'URL_UPDATED' } = {}) {
     `${BASE_URL}/gallery`
   ];
   if (id) {
-    targetUrls.unshift(`${BASE_URL}/gallery/${id}`);
+    targetUrls.unshift(`${BASE_URL}/product/${id}`);
+    targetUrls.unshift(`${BASE_URL}/masterpieces/${id}`);
   }
 
   const pingPromises = [];
@@ -50,7 +51,7 @@ export async function notifySearchEngines({ id, type = 'URL_UPDATED' } = {}) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            url: id ? `${BASE_URL}/gallery/${id}` : `${BASE_URL}/shop`,
+            url: id ? `${BASE_URL}/product/${id}` : `${BASE_URL}/shop`,
             type,
             sitemapUrl,
             timestamp: new Date().toISOString()

@@ -114,9 +114,9 @@ export function HistoricAtelier({ onBookClick }) {
           <div
             onClick={() => {
               if (targetId) {
-                navigate(`/gallery/${targetId}`)
+                navigate(`/masterpieces/${targetId}`)
               } else {
-                navigate('/gallery')
+                navigate('/masterpieces')
               }
             }}
             className="group cursor-pointer bg-[#ebeeef] overflow-hidden shadow-2xl rounded-2xl relative aspect-[4/5] sm:aspect-square border border-neutral-300/70"

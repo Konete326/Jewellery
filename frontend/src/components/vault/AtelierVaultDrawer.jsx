@@ -230,7 +230,7 @@ export function AtelierVaultDrawer({ isOpen, onClose }) {
                   onClick={onClose}
                   className="mt-2 bg-foreground text-background text-xs uppercase tracking-widest cursor-pointer"
                 >
-                  <Link to="/gallery">Browse Jewellery</Link>
+                  <Link to="/shop">Browse Shop</Link>
                 </Button>
               ) : (
                 <Button

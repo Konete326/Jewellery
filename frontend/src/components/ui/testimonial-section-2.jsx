@@ -217,7 +217,7 @@ export function TestimonialSection2({
                     </div>
                     {selected.productId && !selected.isArchived ? (
                       <Link
-                        to={`/gallery/${selected.productId}`}
+                        to={`/product/${selected.productId}`}
                         className="inline-flex items-center gap-1 text-[11px] text-amber-400 hover:text-amber-300 font-medium shrink-0 ml-2"
                       >
                         <span>View Piece</span>

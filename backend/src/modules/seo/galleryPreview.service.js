@@ -68,7 +68,9 @@ export async function getPreviewMetadata(id) {
   const record = await resolvePublicRecord(id);
   if (!record) return null;
 
-  const canonicalUrl = `${BASE_URL}/gallery/${record.id}`;
+  const canonicalUrl = record.recordType === 'product'
+    ? `${BASE_URL}/product/${record.id}`
+    : `${BASE_URL}/masterpieces/${record.id}`;
   const escapedCanonicalUrl = escapeHtml(canonicalUrl);
   const escapedTitle = escapeHtml(record.title);
   const escapedFullTitle = escapeHtml(`${record.title} | Khalil & Sons Jewellers`);

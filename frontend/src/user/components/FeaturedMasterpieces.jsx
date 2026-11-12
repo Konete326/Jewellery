@@ -61,7 +61,7 @@ export function FeaturedMasterpieces() {
           </div>
           <button
             type="button"
-            onClick={() => navigate('/gallery')}
+            onClick={() => navigate('/masterpieces')}
             className="text-[#5a6061] hover:text-[#2d3435] text-xs tracking-widest uppercase inline-flex items-center gap-1.5 transition-colors cursor-pointer group"
           >
             <span>View All Pieces</span>
@@ -88,8 +88,8 @@ export function FeaturedMasterpieces() {
             <p className="text-sm text-[#5a6061] leading-relaxed mb-6 font-light">
               Our goldsmiths are crafting new bridal designs. They will appear here once ready.
             </p>
-            <LuxuryButton onClick={() => navigate('/gallery')} variant="gold">
-              Browse Gallery
+            <LuxuryButton onClick={() => navigate('/masterpieces')} variant="gold">
+              Browse Masterpieces
             </LuxuryButton>
           </div>
         ) : (
@@ -123,8 +123,9 @@ export function FeaturedMasterpieces() {
                         </span>
                       )}
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono font-medium tracking-wide uppercase bg-white/90 text-amber-900 border border-amber-500/30 shadow-2xs backdrop-blur-xs">
-                        <span className="size-1 rounded-full bg-emerald-500 animate-pulse" />
-                        Live Gold Rate Price
+                        <span>AU · 916.6</span>
+                        <span className="text-amber-500/50">•</span>
+                        <span>Archive</span>
                       </span>
                     </div>
                     <div className="absolute bottom-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

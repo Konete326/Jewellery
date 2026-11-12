@@ -1,5 +1,6 @@
 import { User } from './user.model.js';
 import { Gallery } from '../gallery/gallery.model.js';
+import { Product } from '../products/product.model.js';
 import { sendSuccess, sendError } from '../../utils/apiResponse.js';
 
 export class WishlistController {
@@ -16,9 +17,20 @@ export class WishlistController {
       if (!user) return sendSuccess(res, 200, 'Wishlist empty', { ids: [], items: [] });
 
       const ids = user.wishlist || [];
-      const items = await Gallery.find({ _id: { $in: ids }, isActive: true })
-        .select('_id title description category imageUrl averageRating reviewCount')
-        .lean();
+      const [galleryItems, productItems] = await Promise.all([
+        Gallery.find({ _id: { $in: ids }, isActive: true })
+          .select('_id title description category imageUrl averageRating reviewCount')
+          .lean(),
+        Product.find({ _id: { $in: ids }, isPublished: true })
+          .select('_id title description category images imageUrl averageRating reviewCount')
+          .lean()
+      ]);
+      const mappedProducts = productItems.map((p) => ({
+        ...p,
+        imageUrl: p.imageUrl || (Array.isArray(p.images) && p.images[0]) || '/assets/products/choker-ruby-01.jpg',
+        isProduct: true
+      }));
+      const items = [...galleryItems, ...mappedProducts];
 
       return sendSuccess(res, 200, 'Wishlist retrieved', { ids, items });
     } catch (error) {

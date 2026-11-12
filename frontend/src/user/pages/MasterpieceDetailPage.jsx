@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
@@ -8,11 +8,13 @@ import { MasterpieceHero } from '../components/MasterpieceHero';
 import { MasterpieceLightboxModal } from '../components/MasterpieceLightboxModal';
 import { BespokeAppointmentModal } from '../components/BespokeAppointmentModal';
 import { galleryApi } from '@/api/galleryApi';
+import { fetchProductById } from '@/api/productApi';
 import { updatePageSEO } from '@/utils/seo';
 import { LumaSpin } from '@/components/ui/luma-spin';
 
 export function MasterpieceDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -38,6 +40,10 @@ export function MasterpieceDetailPage() {
 
         if (res && res.data) {
           const item = res.data;
+          if (item.isProduct) {
+            navigate(`/product/${id}`, { replace: true });
+            return;
+          }
           setPiece(item);
 
           updatePageSEO({
@@ -46,9 +52,26 @@ export function MasterpieceDetailPage() {
             canonical: `https://khalilandsonsjewellers.com/masterpieces/${item._id || item.id}`
           });
         } else {
+          try {
+            const prodRes = await fetchProductById(id, { signal: controller.signal, silent: true });
+            if (!isMounted || controller.signal.aborted) return;
+            if (prodRes?.data || prodRes?._id) {
+              navigate(`/product/${id}`, { replace: true });
+              return;
+            }
+          } catch {}
           setNotFound(true);
         }
       } catch {
+        if (!isMounted || controller.signal.aborted) return;
+        try {
+          const prodRes = await fetchProductById(id, { signal: controller.signal, silent: true });
+          if (!isMounted || controller.signal.aborted) return;
+          if (prodRes?.data || prodRes?._id) {
+            navigate(`/product/${id}`, { replace: true });
+            return;
+          }
+        } catch {}
         if (isMounted) setNotFound(true);
       } finally {
         if (isMounted) setLoading(false);

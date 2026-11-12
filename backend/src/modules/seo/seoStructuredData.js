@@ -53,7 +53,7 @@ const NAV_ENTITY = {
   name: 'Main Navigation',
   hasPart: [
     { '@type': 'WebPage', name: 'Shop Pure Gold Jewellery', url: `${PUBLIC_BASE_URL}/shop` },
-    { '@type': 'WebPage', name: 'Living Archive & Bespoke Gallery', url: `${PUBLIC_BASE_URL}/gallery` },
+    { '@type': 'WebPage', name: 'Masterpiece Living Archive', url: `${PUBLIC_BASE_URL}/masterpieces` },
     { '@type': 'WebPage', name: 'Live Daily Gold Rates', url: `${PUBLIC_BASE_URL}/rates` },
     { '@type': 'WebPage', name: 'Client Appraisals & Reviews', url: `${PUBLIC_BASE_URL}/reviews` },
     { '@type': 'WebPage', name: 'Heritage & Goldsmithing Legacy', url: `${PUBLIC_BASE_URL}/about` },

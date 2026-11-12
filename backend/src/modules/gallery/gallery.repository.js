@@ -24,7 +24,25 @@ export class GalleryRepository {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return await Gallery.findOne({ $or: [{ _id: id }, { title: new RegExp(id, 'i') }] });
     }
-    return await Gallery.findById(id);
+    const item = await Gallery.findById(id);
+    if (item) return item;
+
+    const prod = await Product.findById(id);
+    if (prod) {
+      return {
+        _id: prod._id,
+        id: prod._id,
+        title: prod.title,
+        description: prod.description,
+        category: prod.category,
+        imageUrl: prod.imageUrl || (Array.isArray(prod.images) && prod.images[0]),
+        images: prod.images,
+        purity: prod.purity || '22K',
+        isProduct: true,
+        isActive: prod.isPublished !== false
+      };
+    }
+    return null;
   }
 
   async update(id, data) {

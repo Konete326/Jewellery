@@ -44,11 +44,11 @@ export function NotFoundPage() {
             buttonClassName="bg-[#1a1a1a] hover:bg-[#2b2b2b] text-[#fcfbfa] font-sans font-medium px-6 py-3 rounded-full text-xs tracking-widest uppercase border border-neutral-800 shadow-md transition-all hover:scale-[1.02]"
             extraActions={
               <Link
-                to="/gallery"
+                to="/masterpieces"
                 className="inline-flex items-center rounded-full bg-transparent px-6 py-3 font-medium text-[#1a1a1a] text-xs uppercase tracking-widest transition-all hover:bg-[#f3ede4] border border-[#d8c8b4] shadow-xs cursor-pointer"
               >
                 <Gem className="mr-2 h-4 w-4 text-[#99794d]" />
-                Browse Gallery
+                Browse Masterpieces
               </Link>
             }
           />

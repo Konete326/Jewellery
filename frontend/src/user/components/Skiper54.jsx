@@ -104,7 +104,7 @@ export function Skiper54({
                   className="h-full w-full overflow-hidden rounded-3xl shadow-xl cursor-pointer"
                   onClick={() => {
                     if (current === index) {
-                      navigate(`/gallery/${targetId}`);
+                      navigate(`/masterpieces/${targetId}`);
                     } else {
                       api?.scrollTo(index);
                     }

@@ -351,7 +351,7 @@ export function ReviewsAdminView() {
                   </Button>
                   {rawReview.masterpieceId && (
                     <Link
-                      to={`/gallery/${rawReview.masterpieceId}`}
+                      to={`/product/${rawReview.masterpieceId}`}
                       target="_blank"
                       className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md border border-border bg-background text-xs text-muted-foreground hover:text-foreground cursor-pointer"
                     >
@@ -392,7 +392,7 @@ export function ReviewsAdminView() {
 
                       {rev.masterpieceId && (
                         <Link
-                          to={`/gallery/${rev.masterpieceId}`}
+                          to={`/product/${rev.masterpieceId}`}
                           className="text-muted-foreground hover:text-foreground p-1.5 rounded-lg hover:bg-muted transition-colors cursor-pointer shrink-0"
                           title="View live piece on storefront"
                         >

@@ -47,7 +47,7 @@ export async function loadFeedProducts() {
       availability,
       imageUrl,
       additionalImages,
-      link: `${BASE_URL}/gallery/${id}`,
+      link: `${BASE_URL}/product/${id}`,
       updatedAt: product.updatedAt ? new Date(product.updatedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
     });
   }

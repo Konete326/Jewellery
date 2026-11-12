@@ -18,6 +18,7 @@ apiRouter.use('/products', productRoutes);
 apiRouter.use('/inquiries', inquiryRoutes);
 apiRouter.use('/orders', orderRoutes);
 apiRouter.use('/gallery', galleryRoutes);
+apiRouter.use('/masterpieces', galleryRoutes);
 apiRouter.use('/users', userRoutes);
 apiRouter.use('/rates', rateRoutes);
 apiRouter.use('/payment-accounts', paymentAccountRoutes);

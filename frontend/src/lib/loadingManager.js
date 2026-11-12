@@ -4,6 +4,7 @@ class LoadingManager {
     this.manualCount = 0;
     this.timer = null;
     this.hideTimer = null;
+    this.safetyTimer = null;
     this.startTime = 0;
     this.listeners = new Set();
     this.state = {
@@ -22,6 +23,21 @@ class LoadingManager {
     this.listeners.forEach((listener) => listener(this.state));
   }
 
+  armSafetyWatchdog() {
+    if (this.safetyTimer) clearTimeout(this.safetyTimer);
+    this.safetyTimer = setTimeout(() => {
+      this.safetyTimer = null;
+      this.reset();
+    }, 12000);
+  }
+
+  clearSafetyWatchdog() {
+    if (this.safetyTimer) {
+      clearTimeout(this.safetyTimer);
+      this.safetyTimer = null;
+    }
+  }
+
   startRequest(message = '') {
     this.activeRequests += 1;
     if (this.state.isLoading) {
@@ -38,6 +54,7 @@ class LoadingManager {
         if (this.activeRequests > 0 || this.manualCount > 0) {
           this.startTime = Date.now();
           this.state = { isLoading: true, message };
+          this.armSafetyWatchdog();
           this.notify();
         }
       }, 180);
@@ -57,6 +74,7 @@ class LoadingManager {
     }
     this.startTime = Date.now();
     this.state = { isLoading: true, message };
+    this.armSafetyWatchdog();
     this.notify();
   }
 
@@ -84,6 +102,7 @@ class LoadingManager {
     this.hideTimer = setTimeout(() => {
       this.hideTimer = null;
       if (this.activeRequests === 0 && this.manualCount === 0) {
+        this.clearSafetyWatchdog();
         this.state = { isLoading: false, message: '' };
         this.notify();
       }
@@ -101,6 +120,7 @@ class LoadingManager {
       clearTimeout(this.hideTimer);
       this.hideTimer = null;
     }
+    this.clearSafetyWatchdog();
     this.state = { isLoading: false, message: '' };
     this.notify();
   }

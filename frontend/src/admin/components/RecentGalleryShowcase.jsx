@@ -90,7 +90,7 @@ export function RecentGalleryShowcase({ galleryItems = [], loading = false }) {
 
               <div className="flex items-center gap-1 shrink-0">
                 <Link
-                  to={`/gallery/${item._id}`}
+                  to={`/masterpieces/${item._id}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"

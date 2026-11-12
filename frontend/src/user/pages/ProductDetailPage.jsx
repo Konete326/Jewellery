@@ -11,6 +11,7 @@ import { MasterpieceLightboxModal } from '../components/MasterpieceLightboxModal
 import { MasterpieceReviewModal } from '../components/MasterpieceReviewModal';
 import { BespokeAppointmentModal } from '../components/BespokeAppointmentModal';
 import { fetchProductById, fetchProducts } from '@/api/productApi';
+import { galleryApi } from '@/api/galleryApi';
 import { PolaroidLineCarousel } from '@/components/ui/polaroid-line-carousel';
 import { updatePageSEO, getProductSchema, removeProductJsonLd } from '@/utils/seo';
 import { LumaSpin } from '@/components/ui/luma-spin';
@@ -81,9 +82,26 @@ export function ProductDetailPage() {
             schema: getProductSchema(itemData)
           });
         } else {
+          try {
+            const galRes = await galleryApi.getById(id, { signal: controller.signal, silent: true });
+            if (!isMounted || controller.signal.aborted) return;
+            if (galRes?.data) {
+              navigate(`/masterpieces/${id}`, { replace: true });
+              return;
+            }
+          } catch {}
           setNotFound(true);
         }
       } catch {
+        if (!isMounted || controller.signal.aborted) return;
+        try {
+          const galRes = await galleryApi.getById(id, { signal: controller.signal, silent: true });
+          if (!isMounted || controller.signal.aborted) return;
+          if (galRes?.data) {
+            navigate(`/masterpieces/${id}`, { replace: true });
+            return;
+          }
+        } catch {}
         if (isMounted) setNotFound(true);
       } finally {
         if (isMounted) setLoading(false);

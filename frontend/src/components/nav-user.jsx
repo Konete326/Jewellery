@@ -85,9 +85,9 @@ export function NavUser() {
 						<LifeBuoyIcon />
 						Atelier Support
 					</DropdownMenuItem>
-					<DropdownMenuItem onSelect={() => navigate('/gallery')} className="cursor-pointer">
+					<DropdownMenuItem onSelect={() => navigate('/masterpieces')} className="cursor-pointer">
 						<BookOpenIcon />
-						Live Catalog
+						Masterpiece Archive
 					</DropdownMenuItem>
 					<DropdownMenuItem onSelect={() => navigate('/admin/accounts')} className="cursor-pointer">
 						<CreditCardIcon />

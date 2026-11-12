@@ -12,6 +12,8 @@ router.get('/feed/local-inventory.xml', seoController.getLocalInventoryFeed);
 router.get('/feed/google-business-products.csv', seoController.getGoogleBusinessCsv);
 router.get('/google-merchant-feed.xml', seoController.getMerchantFeed);
 router.get('/gallery/:id', handleGalleryPreview);
+router.get('/masterpieces/:id', handleGalleryPreview);
+router.get('/product/:id', handleGalleryPreview);
 router.get('/google:token.html', (req, res) => {
   const token = `google${req.params.token}.html`;
   res.setHeader('Content-Type', 'text/html');

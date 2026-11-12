@@ -1,4 +1,4 @@
-const CACHE_NAME = 'khalil-sons-pwa-v3';
+const CACHE_NAME = 'khalil-sons-pwa-v4';
 const CACHE_PREFIX = 'khalil-sons-pwa-';
 const MAX_CACHE_ENTRIES = 35;
 const MAX_ENTRY_BYTES = 2.5 * 1024 * 1024;
@@ -272,6 +272,20 @@ self.addEventListener('fetch', (event) => {
         .catch(() => {
           return caches.match('/index.html');
         })
+    );
+    return;
+  }
+
+  if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
+    event.respondWith(
+      fetch(req)
+        .then((networkRes) => {
+          if (networkRes && networkRes.status === 200) {
+            event.waitUntil(safelyPutInCache(CACHE_NAME, req, networkRes.clone()));
+          }
+          return networkRes;
+        })
+        .catch(() => caches.match(req))
     );
     return;
   }
