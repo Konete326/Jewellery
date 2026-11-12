@@ -178,11 +178,12 @@ export function CinematicFooter() {
     mm.add("(min-width: 768px)", () => {
       gsap.fromTo(
         giantTextRef.current,
-        { y: "6vh", scale: 0.92, opacity: 0 },
+        { y: "6vh", scale: 0.92, opacity: 0, xPercent: -50 },
         {
           y: "0vh",
           scale: 1,
           opacity: 1,
+          xPercent: -50,
           ease: "power1.out",
           scrollTrigger: {
             trigger: wrapperRef.current,
@@ -221,6 +222,7 @@ export function CinematicFooter() {
         opacity: 0.08,
         y: 0,
         scale: 1,
+        xPercent: -50,
         clearProps: "transform",
       });
     });
@@ -246,7 +248,7 @@ export function CinematicFooter() {
 
           <div
             ref={giantTextRef}
-            className="footer-giant-bg-text absolute bottom-20 md:bottom-28 left-1/2 -translate-x-1/2 z-0 pointer-events-none select-none font-serif text-center w-full max-w-full px-4"
+            className="footer-giant-bg-text absolute bottom-20 md:bottom-28 left-1/2 z-0 pointer-events-none select-none font-serif text-center w-full max-w-full px-4"
           >
             KHALIL & SONS
           </div>
