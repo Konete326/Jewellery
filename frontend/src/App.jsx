@@ -166,7 +166,7 @@ export default function App() {
           </Suspense>
         </RouteErrorBoundary>
       </BrowserRouter>
-      {import.meta.env.VITE_ENABLE_AGENTATION === 'true' && <Agentation endpoint="http://localhost:4747" />}
+      {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}
     </LoadingProvider>
   )
 }

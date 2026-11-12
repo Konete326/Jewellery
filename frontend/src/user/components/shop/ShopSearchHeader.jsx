@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search, X, RotateCcw } from 'lucide-react';
+import { ShopLiveGoldTicker } from './ShopLiveGoldTicker';
 import { cn } from '@/lib/utils';
 
 export function ShopSearchHeader({
@@ -48,6 +49,10 @@ export function ShopSearchHeader({
         </div>
       </div>
 
+      <div className="mt-4">
+        <ShopLiveGoldTicker />
+      </div>
+
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-muted-foreground">
         <div className="flex items-center gap-2 flex-wrap">
           <span>
@@ -71,7 +76,7 @@ export function ShopSearchHeader({
                 className="hover:text-destructive cursor-pointer"
                 aria-label="Clear category filter"
               >
-                <X className="size-3" />
+                <X className="size-3.5" />
               </button>
             </span>
           )}
@@ -91,4 +96,3 @@ export function ShopSearchHeader({
     </div>
   );
 }
-
