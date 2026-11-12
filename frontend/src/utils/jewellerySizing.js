@@ -67,6 +67,28 @@ export function getSizingOptions(sizingType) {
   }
 }
 
+export function formatDetailedSizeBadge(size, piece) {
+  if (!size) return '';
+  const clean = String(size).trim();
+  const ring = RING_SIZES.find((r) => r.id.toLowerCase() === clean.toLowerCase() || r.label.toLowerCase() === clean.toLowerCase());
+  if (ring) {
+    return `${ring.id} · ${ring.diameterMm}mm`;
+  }
+  const bangle = BANGLE_SIZES.find((b) => b.id.toLowerCase() === clean.toLowerCase() || b.label.toLowerCase().includes(clean.toLowerCase()));
+  if (bangle) {
+    return `${bangle.id} · ${bangle.diameterMm}mm`;
+  }
+  const bracelet = BRACELET_SIZES.find((b) => b.id.toLowerCase() === clean.toLowerCase() || b.label.toLowerCase().includes(clean.toLowerCase()));
+  if (bracelet) {
+    return `${bracelet.inches}" · ${bracelet.cm}cm`;
+  }
+  const necklace = NECKLACE_SIZES.find((n) => n.id.toLowerCase() === clean.toLowerCase() || n.label.toLowerCase().includes(clean.toLowerCase()));
+  if (necklace) {
+    return `${necklace.inches}" · ${necklace.cm}cm`;
+  }
+  return clean;
+}
+
 export function getSizingMeta(sizingType) {
   switch (sizingType) {
     case 'ring':

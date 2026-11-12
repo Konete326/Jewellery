@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Plus, Minus, Trash2 } from 'lucide-react';
 import { formatPKR } from '@/utils/pricing';
+import { formatDetailedSizeBadge } from '@/utils/jewellerySizing';
 
 export function CheckoutOrderSummary({
   items = [],
@@ -32,6 +33,7 @@ export function CheckoutOrderSummary({
             const itemTotal = price * qty;
             const purity = item.purity || '22K';
             const hallmark = purity === '24K' ? 'AU · 999.0' : purity === '18K' ? 'AU · 750.0' : 'AU · 916.6';
+            const sizeBadge = item.size ? formatDetailedSizeBadge(item.size, item) : '';
 
             return (
               <div key={`${item.id}-${item.size || 'default'}`} className="pt-3 first:pt-0 flex gap-3">
@@ -56,11 +58,15 @@ export function CheckoutOrderSummary({
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground">
+                  <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground flex-wrap">
                     <span className="px-1.5 py-0.2 rounded border border-amber-500/30 bg-amber-500/5 text-amber-800 dark:text-amber-300">
                       {hallmark}
                     </span>
-                    {item.size && <span>Size: {item.size}</span>}
+                    {sizeBadge && (
+                      <span className="inline-flex items-center px-1.5 py-0.2 rounded border border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200 font-mono font-medium">
+                        Size: {sizeBadge}
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex items-center justify-between pt-1">
@@ -98,43 +104,36 @@ export function CheckoutOrderSummary({
         <div className="p-3 rounded-xl border border-amber-500/25 bg-amber-500/5 space-y-1.5">
           <div className="flex items-center gap-1.5 text-amber-800 dark:text-amber-300">
             <ShieldCheck className="size-3.5 shrink-0" />
-            <span className="text-[11px] font-mono uppercase tracking-wider font-semibold">
-              Gold Rate Lock Snapshot
+            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider">
+              Assay Guaranteed Bullion & Gold Pricing
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-[11px] font-mono pt-1 text-muted-foreground">
-            <div>
-              <span className="block text-[9px] uppercase">22K Jewellery Tola</span>
-              <span className="font-semibold text-foreground">
-                {rate22kPerTola > 0 ? formatPKR(rate22kPerTola) : 'Active Rate'}
-              </span>
-            </div>
-            <div>
-              <span className="block text-[9px] uppercase">24K Bullion Tola</span>
-              <span className="font-semibold text-foreground">
-                {rate24kPerTola > 0 ? formatPKR(rate24kPerTola) : 'Active Rate'}
-              </span>
-            </div>
-          </div>
-          <p className="text-[10px] text-muted-foreground/90 leading-relaxed pt-0.5">
-            Prices locked at order snapshot. Market fluctuations will not impact your invoice valuation.
+          <p className="text-[11px] text-muted-foreground leading-relaxed">
+            All fine jewellery weights & making charges are certified at Saddar showroom.
+            {rate22kPerTola > 0 && ` Current 22K: ${formatPKR(rate22kPerTola)}/tola.`}
           </p>
         </div>
 
-        <div className="space-y-2 pt-2 border-t border-border/80 text-xs font-mono">
+        <div className="pt-2 border-t border-border space-y-2 text-xs">
           <div className="flex justify-between text-muted-foreground">
-            <span>Total Valuation</span>
-            <span className="font-serif font-semibold text-foreground text-sm">{formatPKR(subtotal)}</span>
+            <span>Piece Subtotal</span>
+            <span className="font-mono text-foreground font-medium">{formatPKR(subtotal)}</span>
+          </div>
+          <div className="flex justify-between text-muted-foreground">
+            <span>Showroom Valuation & Vaulting</span>
+            <span className="font-mono text-emerald-600 dark:text-emerald-400 font-medium">Complimentary</span>
           </div>
           {depositAmount > 0 && (
-            <div className="flex justify-between text-emerald-700 dark:text-emerald-400">
-              <span>Advance Submitted</span>
-              <span className="font-semibold">- {formatPKR(depositAmount)}</span>
+            <div className="flex justify-between text-amber-800 dark:text-amber-300 font-medium">
+              <span>Advance Reservation Paid</span>
+              <span className="font-mono">-{formatPKR(depositAmount)}</span>
             </div>
           )}
-          <div className="flex justify-between pt-2 border-t border-border/60 text-foreground font-semibold">
-            <span className="uppercase tracking-wider text-[11px]">Payable at Showroom</span>
-            <span className="font-serif text-base text-amber-800 dark:text-amber-300">{formatPKR(balanceDue)}</span>
+          <div className="flex justify-between text-foreground font-semibold pt-2 border-t border-border text-sm">
+            <span>{depositAmount > 0 ? 'Balance at Showroom Pickup' : 'Total Amount'}</span>
+            <span className="font-mono text-base font-bold text-amber-800 dark:text-amber-300">
+              {formatPKR(balanceDue)}
+            </span>
           </div>
         </div>
       </div>

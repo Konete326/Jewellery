@@ -1,6 +1,7 @@
 import React from 'react';
 import { Trash2, Plus, Minus } from 'lucide-react';
 import { formatPKR, sanitizeQuantity, isItemPriceConfirmed } from '@/utils/pricing';
+import { formatDetailedSizeBadge } from '@/utils/jewellerySizing';
 
 export function CartDrawerItem({
   item,
@@ -18,7 +19,8 @@ export function CartDrawerItem({
 
   const structuredSize = item.size ? String(item.size).trim() : '';
   const legacyMatch = rawTitle.match(/\[Size:\s*([^\]]+)\]/i);
-  const displaySize = structuredSize || (legacyMatch ? legacyMatch[1].trim() : '');
+  const rawSize = structuredSize || (legacyMatch ? legacyMatch[1].trim() : '');
+  const formattedSize = rawSize ? formatDetailedSizeBadge(rawSize, item) : '';
 
   const rawPurity = item.purity || item.material || '';
   const displayPurity = rawPurity ? rawPurity.replace(/^AU\s*·?\s*/i, '').trim() : '';
@@ -65,11 +67,11 @@ export function CartDrawerItem({
                 <span className="font-serif">AU · {displayPurity}</span>
               </>
             )}
-            {displaySize && (
+            {formattedSize && (
               <>
                 <span>•</span>
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded border border-border/80 bg-muted/60 text-foreground font-mono font-medium">
-                  Size: {displaySize}
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded border border-amber-500/40 bg-amber-500/10 text-amber-900 dark:text-amber-200 font-mono font-medium text-[9px] tracking-wide">
+                  Size: {formattedSize}
                 </span>
               </>
             )}
@@ -99,12 +101,10 @@ export function CartDrawerItem({
               type="text"
               value={qty}
               onChange={(e) => {
-                if (onUpdateQuantity) {
-                  const clean = sanitizeQuantity(e.target.value);
-                  onUpdateQuantity(item.id, clean);
-                }
+                const val = e.target.value.replace(/\D/g, '');
+                if (onUpdateQuantity) onUpdateQuantity(item.id, sanitizeQuantity(val || '1'));
               }}
-              className="w-7 text-center text-xs font-mono bg-transparent text-foreground focus-visible:outline-none"
+              className="w-7 text-center font-mono text-xs bg-transparent focus:outline-none"
               aria-label="Item quantity"
             />
             <button
@@ -118,16 +118,11 @@ export function CartDrawerItem({
           </div>
 
           <div className="text-right">
-            <span className="text-xs font-mono font-medium text-foreground block">
+            <span className="font-serif text-xs sm:text-sm font-semibold text-foreground">
               {formatPKR(lineTotal)}
-              {isEstimate && (
-                <span className="text-[10px] text-muted-foreground ml-1 font-normal font-sans">
-                  (Est.)
-                </span>
-              )}
             </span>
             {qty > 1 && (
-              <span className="text-[9px] font-mono text-muted-foreground block">
+              <span className="block text-[9px] font-mono text-muted-foreground">
                 {formatPKR(unitPrice)} each
               </span>
             )}
