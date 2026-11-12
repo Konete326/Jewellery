@@ -28,7 +28,7 @@ class LoadingManager {
     this.safetyTimer = setTimeout(() => {
       this.safetyTimer = null;
       this.reset();
-    }, 12000);
+    }, 4000);
   }
 
   clearSafetyWatchdog() {

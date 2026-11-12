@@ -2,16 +2,17 @@ import { apiClient } from './client.js';
 import { ENDPOINTS } from './endpoints.js';
 
 export const galleryApi = {
-  getAll: async (params = {}) => {
+  getAll: async (params = {}, options = {}) => {
     const query = new URLSearchParams();
     if (params.page !== undefined) query.set('page', params.page);
     if (params.limit !== undefined) query.set('limit', params.limit);
+    if (params.category !== undefined) query.set('category', params.category);
     const qs = query.toString();
-    return await apiClient(qs ? `${ENDPOINTS.GALLERY}?${qs}` : ENDPOINTS.GALLERY);
+    return await apiClient(qs ? `${ENDPOINTS.GALLERY}?${qs}` : ENDPOINTS.GALLERY, { silent: true, ...options });
   },
 
   getById: async (id, options = {}) => {
-    return await apiClient(ENDPOINTS.GALLERY_BY_ID(id), options);
+    return await apiClient(ENDPOINTS.GALLERY_BY_ID(id), { silent: true, ...options });
   },
 
   create: async (formData) => {

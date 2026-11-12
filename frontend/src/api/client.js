@@ -2,7 +2,7 @@ import { API_BASE_URL } from './endpoints.js';
 import { loadingManager } from '../lib/loadingManager.js';
 import { toast } from 'sonner';
 
-const DEFAULT_TIMEOUT_MS = 12000;
+const DEFAULT_TIMEOUT_MS = 30000;
 
 const getStoredToken = () => {
   try {
@@ -51,7 +51,8 @@ export async function apiClient(endpoint, options = {}) {
     signal: controller.signal
   };
 
-  const isSilent = Boolean(options.silent);
+  const method = (options.method || 'GET').toUpperCase();
+  const isSilent = options.silent !== undefined ? Boolean(options.silent) : (method === 'GET' && !options.loadingMessage);
   if (!isSilent) {
     loadingManager.startRequest(options.loadingMessage || '');
   }
