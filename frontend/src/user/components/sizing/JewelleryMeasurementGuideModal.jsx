@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Portal } from '@/components/portal';
-import { X, Ruler, Sparkles, MessageCircle } from 'lucide-react';
+import { X, Ruler, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RING_SIZES, BANGLE_SIZES, BRACELET_SIZES, NECKLACE_SIZES } from '@/utils/jewellerySizing';
 import { STORE_INFO } from '@/constants/storeInfo';
+import { SizingVideoPlayer } from './SizingVideoPlayer';
 
 export function JewelleryMeasurementGuideModal({
   isOpen,
@@ -131,71 +132,39 @@ export function JewelleryMeasurementGuideModal({
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
             {activeTab === 'ring' && (
               <div className="space-y-6">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="p-4 rounded-2xl border border-border/80 bg-background flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between pb-2 border-b border-border/60 mb-3">
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-medium">
-                          Method 01 • Inner Diameter
-                        </span>
-                        <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                          Most Accurate
-                        </span>
-                      </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                        Select a ring that fits the intended finger comfortably. Lay it flat across a ruler and measure the inside edge to inside edge in millimeters across the widest point.
-                      </p>
-                    </div>
-
-                    <div className="w-full h-24 rounded-xl border border-border/60 bg-muted/30 flex items-center justify-center p-2">
-                      <svg viewBox="0 0 200 80" className="w-full h-full text-foreground/80">
-                        <circle cx="100" cy="40" r="28" fill="none" stroke="currentColor" strokeWidth="3" opacity="0.4" />
-                        <circle cx="100" cy="40" r="25" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                        <line x1="75" y1="40" x2="125" y2="40" stroke="#d97706" strokeWidth="2" strokeDasharray="3 2" />
-                        <line x1="75" y1="34" x2="75" y2="46" stroke="#d97706" strokeWidth="2" />
-                        <line x1="125" y1="34" x2="125" y2="46" stroke="#d97706" strokeWidth="2" />
-                        <text x="100" y="32" textAnchor="middle" fontSize="9" fontFamily="monospace" fill="#d97706">Ø Inside mm</text>
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-2xl border border-border/80 bg-background flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between pb-2 border-b border-border/60 mb-3">
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-medium">
-                          Method 02 • Finger Circumference
-                        </span>
-                        <span className="text-[10px] font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded border border-border/60">
-                          Flexible Tape
-                        </span>
-                      </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                        Wrap a narrow strip of paper or non-stretching string around the base of your finger. Mark where the ends meet, then measure the flat strip length against a metric ruler.
-                      </p>
-                    </div>
-
-                    <div className="w-full h-24 rounded-xl border border-border/60 bg-muted/30 flex items-center justify-center p-2">
-                      <svg viewBox="0 0 200 80" className="w-full h-full text-foreground/80">
-                        <ellipse cx="100" cy="40" rx="36" ry="18" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.3" />
-                        <path d="M 64 40 C 64 26 136 26 136 40 C 136 54 80 56 68 46" fill="none" stroke="#d97706" strokeWidth="2" />
-                        <circle cx="68" cy="46" r="3" fill="#d97706" />
-                        <text x="100" y="34" textAnchor="middle" fontSize="9" fontFamily="monospace" fill="#d97706">Mark Overlap</text>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
+                <SizingVideoPlayer
+                  title="Ring Measurement Guide"
+                  videoSrc="/assets/videos/ring-size-guide.mp4"
+                  duration="0:45"
+                  steps={[
+                    'Place existing fitting ring flat on metric ruler.',
+                    'Read exact millimeter inside diameter.',
+                    'Match diameter with US/Pak size chart below.'
+                  ]}
+                  posterSvg={
+                    <svg viewBox="0 0 320 180" className="w-48 h-28 text-neutral-800">
+                      <circle cx="160" cy="90" r="42" fill="none" stroke="#d97706" strokeWidth="4" />
+                      <line x1="118" y1="90" x2="202" y2="90" stroke="#111" strokeWidth="2" strokeDasharray="4 3" />
+                      <line x1="118" y1="80" x2="118" y2="100" stroke="#111" strokeWidth="2" />
+                      <line x1="202" y1="80" x2="202" y2="100" stroke="#111" strokeWidth="2" />
+                      <text x="160" y="78" textAnchor="middle" fontSize="11" fontFamily="monospace" fill="#111" fontWeight="bold">Inner Diameter (mm)</text>
+                    </svg>
+                  }
+                />
 
                 <div className="p-4 rounded-2xl border border-amber-500/30 bg-amber-500/5">
                   <div className="flex items-center gap-2 mb-2">
-                    <Sparkles className="size-3.5 text-amber-600 dark:text-amber-400" />
+                    <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded border border-amber-500/30 bg-amber-500/10 text-amber-900 dark:text-amber-200 font-semibold">
+                      AU · 916.6
+                    </span>
                     <span className="text-xs font-mono uppercase tracking-wider font-medium text-amber-900 dark:text-amber-200">
                       Saddar Goldsmith Sizing Rules
                     </span>
                   </div>
                   <ul className="text-xs text-muted-foreground space-y-1.5 list-disc pl-4 font-light">
-                    <li>Measure at room temperature at the end of the day when your fingers are comfortably full.</li>
-                    <li>Always account for the knuckle so the ring slides over smoothly without forcing.</li>
-                    <li>For wide bands (6mm+), consider selecting a half size larger for comfort.</li>
+                    <li>Measure at room temperature at the end of the day when fingers are at normal size.</li>
+                    <li>Always account for the knuckle so the ring slides over without force.</li>
+                    <li>For wide bands (6mm+), consider selecting a half size larger for maximum comfort.</li>
                   </ul>
                 </div>
 
@@ -236,33 +205,33 @@ export function JewelleryMeasurementGuideModal({
 
             {activeTab === 'bangle' && (
               <div className="space-y-6">
-                <div className="p-4 rounded-2xl border border-border/80 bg-background">
-                  <div className="flex items-center justify-between pb-2 border-b border-border/60 mb-3">
-                    <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-medium">
-                      Traditional Hand Measurement Technique
-                    </span>
-                    <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                      Crucial Step
-                    </span>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2 items-center">
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      Unlike bracelets, closed circular bangles must pass over the widest part of your hand, not your wrist. Bring your thumb and little finger together tightly across your palm as if slipping on a bangle. Wrap measuring tape around the knuckles and base of the thumb.
-                    </p>
-                    <div className="w-full h-24 rounded-xl border border-border/60 bg-muted/30 flex items-center justify-center p-2">
-                      <svg viewBox="0 0 200 80" className="w-full h-full text-foreground/80">
-                        <path d="M 50 55 C 60 30 90 20 120 25 C 145 30 160 50 150 65 C 130 75 70 75 50 55 Z" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
-                        <ellipse cx="105" cy="45" rx="35" ry="18" fill="none" stroke="#d97706" strokeWidth="2" strokeDasharray="3 2" />
-                        <text x="105" y="47" textAnchor="middle" fontSize="9" fontFamily="monospace" fill="#d97706">Widest Hand Perimeter</text>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
+                <SizingVideoPlayer
+                  title="Bangle & Kada Sizing Guide"
+                  videoSrc="/assets/videos/bangle-size-guide.mp4"
+                  duration="0:50"
+                  steps={[
+                    'Bring thumb and little finger tightly together across palm.',
+                    'Wrap measuring tape around widest part of hand knuckles.',
+                    'Match hand circumference to Pakistani anna size (2.4, 2.6, 2.8).'
+                  ]}
+                  posterSvg={
+                    <svg viewBox="0 0 320 180" className="w-48 h-28 text-neutral-800">
+                      <path d="M 90 120 C 105 70 155 50 205 60 C 245 70 270 110 250 140 C 215 160 120 160 90 120 Z" fill="none" stroke="#bbb" strokeWidth="2" />
+                      <ellipse cx="175" cy="100" rx="60" ry="30" fill="none" stroke="#d97706" strokeWidth="3" strokeDasharray="5 3" />
+                      <text x="175" y="104" textAnchor="middle" fontSize="11" fontFamily="monospace" fill="#111" fontWeight="bold">Widest Hand Perimeter</text>
+                    </svg>
+                  }
+                />
 
                 <div className="p-4 rounded-2xl border border-border/80 bg-muted/20">
-                  <h4 className="text-xs font-mono uppercase tracking-wider font-medium text-foreground mb-1.5">
-                    Traditional Pakistani Bangle Notation
-                  </h4>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded border border-border bg-card text-foreground font-semibold">
+                      AU · 916.6
+                    </span>
+                    <h4 className="text-xs font-mono uppercase tracking-wider font-medium text-foreground">
+                      Traditional Pakistani Bangle Notation
+                    </h4>
+                  </div>
                   <p className="text-xs text-muted-foreground font-light leading-relaxed">
                     Pakistani sarafa markets express bangle sizes in anna fractions of an inch. For example, <strong>2.6</strong> represents 2 inches and 6 sixteenths (2-6/16" or 2.375 inches inner diameter).
                   </p>
@@ -305,29 +274,24 @@ export function JewelleryMeasurementGuideModal({
 
             {activeTab === 'bracelet' && (
               <div className="space-y-6">
-                <div className="p-4 rounded-2xl border border-border/80 bg-background">
-                  <div className="flex items-center justify-between pb-2 border-b border-border/60 mb-3">
-                    <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-medium">
-                      Wrist Circumference Measurement
-                    </span>
-                    <span className="text-[10px] font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded border border-border/60">
-                      Tape Measure
-                    </span>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2 items-center">
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      Wrap a soft measuring tape snugly around your wrist just above the wrist bone. Note your exact measurement, then add your preferred allowance for comfort drape.
-                    </p>
-                    <div className="w-full h-24 rounded-xl border border-border/60 bg-muted/30 flex items-center justify-center p-2">
-                      <svg viewBox="0 0 200 80" className="w-full h-full text-foreground/80">
-                        <rect x="50" y="30" width="100" height="24" rx="12" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
-                        <line x1="85" y1="20" x2="85" y2="60" stroke="#d97706" strokeWidth="2" strokeDasharray="3 2" />
-                        <circle cx="85" cy="40" r="3" fill="#d97706" />
-                        <text x="130" y="44" textAnchor="middle" fontSize="9" fontFamily="monospace" fill="#d97706">Tape Wrap</text>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
+                <SizingVideoPlayer
+                  title="Bracelet Length Guide"
+                  videoSrc="/assets/videos/bracelet-size-guide.mp4"
+                  duration="0:40"
+                  steps={[
+                    'Wrap flexible tape snugly around wrist above bone.',
+                    'Add 0.5" for snug fit or 0.75" for standard comfort.',
+                    'Check against standard clasp lengths below.'
+                  ]}
+                  posterSvg={
+                    <svg viewBox="0 0 320 180" className="w-48 h-28 text-neutral-800">
+                      <rect x="80" y="65" width="160" height="50" rx="25" fill="none" stroke="#bbb" strokeWidth="2" />
+                      <line x1="140" y1="45" x2="140" y2="135" stroke="#d97706" strokeWidth="3" strokeDasharray="4 3" />
+                      <circle cx="140" cy="90" r="5" fill="#d97706" />
+                      <text x="200" y="94" textAnchor="middle" fontSize="11" fontFamily="monospace" fill="#111" fontWeight="bold">Wrist + Drape</text>
+                    </svg>
+                  }
+                />
 
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div className="p-3 rounded-xl border border-border/80 bg-card">
@@ -404,44 +368,24 @@ export function JewelleryMeasurementGuideModal({
 
             {activeTab === 'necklace' && (
               <div className="space-y-6">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="p-4 rounded-2xl border border-border/80 bg-background flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between pb-2 border-b border-border/60 mb-3">
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-medium">
-                          Method 01 • Measuring Tape
-                        </span>
-                        <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                          Recommended
-                        </span>
-                      </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                        Wrap a soft, flexible measuring tape gently around the base of your neck where you want the necklace or choker to rest. Keep one finger between the tape and neck for comfortable ease.
-                      </p>
-                      <div className="p-3 rounded-xl bg-muted/30 border border-border/60 text-[11px] font-mono space-y-1">
-                        <span className="text-foreground block font-medium">Pro Tip for Chokers:</span>
-                        <span className="text-muted-foreground block">For a snug choker fit, measure exact neck circumference and add 2 inches (5 cm).</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-2xl border border-border/80 bg-background flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center justify-between pb-2 border-b border-border/60 mb-3">
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-medium">
-                          Method 02 • String &amp; Ruler
-                        </span>
-                      </div>
-                      <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                        Use a piece of non-stretchy string or ribbon. Drape it around your neck to your preferred drop point, mark where the ends meet, and lay it flat against a standard metric or imperial ruler.
-                      </p>
-                      <div className="p-3 rounded-xl bg-muted/30 border border-border/60 text-[11px] font-mono space-y-1">
-                        <span className="text-foreground block font-medium">Standard Princess Length:</span>
-                        <span className="text-muted-foreground block">18" (45 cm) is the classic collarbone length that fits over 90% of necklines.</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <SizingVideoPlayer
+                  title="Necklace & Choker Drop Guide"
+                  videoSrc="/assets/videos/necklace-size-guide.mp4"
+                  duration="0:45"
+                  steps={[
+                    'Drape ribbon or thread around neck to preferred drop point.',
+                    'Keep one finger ease for comfortable collarbone resting.',
+                    'Measure flat length against ruler (18" is standard).'
+                  ]}
+                  posterSvg={
+                    <svg viewBox="0 0 320 180" className="w-48 h-28 text-neutral-800">
+                      <ellipse cx="160" cy="50" rx="45" ry="35" fill="none" stroke="#bbb" strokeWidth="2" />
+                      <path d="M 125 60 C 130 115 190 115 195 60" fill="none" stroke="#d97706" strokeWidth="3" />
+                      <circle cx="160" cy="100" r="4" fill="#d97706" />
+                      <text x="160" y="125" textAnchor="middle" fontSize="11" fontFamily="monospace" fill="#111" fontWeight="bold">Princess Drop (18")</text>
+                    </svg>
+                  }
+                />
 
                 <div>
                   <div className="flex items-center justify-between mb-3">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { X, Upload, Trash2, Calculator, Sparkles, Check, AlertCircle, RefreshCw } from 'lucide-react';
+import { X, Upload, Trash2, Calculator, Check, AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { fetchCategories } from '@/api/categoryApi';
 import { ratesApi } from '@/api/ratesApi';
@@ -384,7 +384,7 @@ export function ProductModal({
                     className="inline-flex items-center gap-1 text-[11px] font-mono text-amber-800 dark:text-amber-400 hover:underline cursor-pointer"
                     title="Generate fresh unique SKU"
                   >
-                    <Sparkles className="size-3" />
+                    <RefreshCw className="size-3" />
                     <span>Auto Generate</span>
                   </button>
                 </div>

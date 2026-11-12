@@ -1,5 +1,5 @@
 import React from 'react';
-import { Store, Check, Sparkles, CheckCircle2, Lock } from 'lucide-react';
+import { Store, Check, CheckCircle2, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const ALL_ORDER_STATUSES = [
@@ -76,7 +76,7 @@ export function OrderWorkflowSection({
               onClick={() => onQuickStatusChange('Processing')}
               className="h-8 px-3 text-xs gap-1.5 text-purple-700 dark:text-purple-400 border-purple-500/30 hover:bg-purple-500/10 cursor-pointer"
             >
-              <Sparkles className="size-3" />
+              <Store className="size-3" />
               <span>Start Workshop Crafting</span>
             </Button>
           )}

@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Plus, X, ExternalLink, ShieldCheck, Sparkles } from 'lucide-react';
+import { Plus, X, ExternalLink, ShieldCheck } from 'lucide-react';
 
 export function GalleryBentoHero({ items = [], onOpenUpload, isUploadOpen = false }) {
   const totalCount = items.length;

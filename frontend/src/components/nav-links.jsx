@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles, Crown, Gem, BookOpen, ShieldCheck, Landmark, Search, Calendar, Star, Compass, Phone } from "lucide-react";
+import { Crown, Gem, BookOpen, ShieldCheck, Landmark, Search, Calendar, Star, Compass, Phone } from "lucide-react";
 
 export const collectionLinks = [
   {
@@ -18,7 +18,7 @@ export const collectionLinks = [
     label: "Gold Bangles & Kadas",
     href: "/collections/Bangles",
     description: "Solid gold bangles and traditional kadas",
-    icon: <Sparkles className="size-4 text-amber-700 dark:text-amber-400" />
+    icon: <span className="font-mono text-[9px] font-semibold text-amber-700 dark:text-amber-400">AU</span>
   },
   {
     label: "Custom Made Jewellery",

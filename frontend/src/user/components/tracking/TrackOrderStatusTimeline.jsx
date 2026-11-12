@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, MapPin, Sparkles } from 'lucide-react';
+import { Check, MapPin, Store } from 'lucide-react';
 import { getVerifiedStoreProfile } from '@/utils/storeConfig';
 
 const TRACKING_STEPS = [
@@ -74,7 +74,7 @@ export function TrackOrderStatusTimeline({ order }) {
       {isReady && (
         <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-2">
           <div className="flex items-center gap-2 text-foreground font-serif text-base font-medium">
-            <Sparkles className="size-4 text-amber-600 shrink-0" />
+            <Store className="size-4 text-amber-600 shrink-0" />
             <span>Ready for Showroom Pickup</span>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
