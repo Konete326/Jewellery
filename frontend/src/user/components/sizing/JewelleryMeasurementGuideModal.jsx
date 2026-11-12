@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Portal } from '@/components/portal';
 import { X, Ruler, Sparkles, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { RING_SIZES, BANGLE_SIZES, BRACELET_SIZES } from '@/utils/jewellerySizing';
+import { RING_SIZES, BANGLE_SIZES, BRACELET_SIZES, NECKLACE_SIZES } from '@/utils/jewellerySizing';
 import { STORE_INFO } from '@/constants/storeInfo';
 
 export function JewelleryMeasurementGuideModal({
@@ -81,7 +81,7 @@ export function JewelleryMeasurementGuideModal({
                 type="button"
                 onClick={() => setActiveTab('ring')}
                 className={cn(
-                  'flex-1 py-1.5 px-3 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer text-center',
+                  'flex-1 py-1.5 px-2 sm:px-3 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer text-center',
                   activeTab === 'ring'
                     ? 'bg-foreground text-background font-medium shadow-xs'
                     : 'text-muted-foreground hover:text-foreground hover:bg-background/60'
@@ -93,7 +93,7 @@ export function JewelleryMeasurementGuideModal({
                 type="button"
                 onClick={() => setActiveTab('bangle')}
                 className={cn(
-                  'flex-1 py-1.5 px-3 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer text-center',
+                  'flex-1 py-1.5 px-2 sm:px-3 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer text-center',
                   activeTab === 'bangle'
                     ? 'bg-foreground text-background font-medium shadow-xs'
                     : 'text-muted-foreground hover:text-foreground hover:bg-background/60'
@@ -105,13 +105,25 @@ export function JewelleryMeasurementGuideModal({
                 type="button"
                 onClick={() => setActiveTab('bracelet')}
                 className={cn(
-                  'flex-1 py-1.5 px-3 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer text-center',
+                  'flex-1 py-1.5 px-2 sm:px-3 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer text-center',
                   activeTab === 'bracelet'
                     ? 'bg-foreground text-background font-medium shadow-xs'
                     : 'text-muted-foreground hover:text-foreground hover:bg-background/60'
                 )}
               >
                 Bracelets
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('necklace')}
+                className={cn(
+                  'flex-1 py-1.5 px-2 sm:px-3 rounded-lg text-xs font-mono uppercase tracking-wider transition-all cursor-pointer text-center',
+                  activeTab === 'necklace'
+                    ? 'bg-foreground text-background font-medium shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-background/60'
+                )}
+              >
+                Necklaces
               </button>
             </div>
           </div>
@@ -381,6 +393,84 @@ export function JewelleryMeasurementGuideModal({
                             <td className="py-2.5 px-3 text-foreground">{size.cm} cm</td>
                             <td className="py-2.5 px-3 text-muted-foreground">{size.wristFit}</td>
                             <td className="py-2.5 px-3 text-muted-foreground">{size.fitTag}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'necklace' && (
+              <div className="space-y-6">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="p-4 rounded-2xl border border-border/80 bg-background flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between pb-2 border-b border-border/60 mb-3">
+                        <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-medium">
+                          Method 01 • Measuring Tape
+                        </span>
+                        <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                          Recommended
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                        Wrap a soft, flexible measuring tape gently around the base of your neck where you want the necklace or choker to rest. Keep one finger between the tape and neck for comfortable ease.
+                      </p>
+                      <div className="p-3 rounded-xl bg-muted/30 border border-border/60 text-[11px] font-mono space-y-1">
+                        <span className="text-foreground block font-medium">Pro Tip for Chokers:</span>
+                        <span className="text-muted-foreground block">For a snug choker fit, measure exact neck circumference and add 2 inches (5 cm).</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl border border-border/80 bg-background flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between pb-2 border-b border-border/60 mb-3">
+                        <span className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground font-medium">
+                          Method 02 • String &amp; Ruler
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                        Use a piece of non-stretchy string or ribbon. Drape it around your neck to your preferred drop point, mark where the ends meet, and lay it flat against a standard metric or imperial ruler.
+                      </p>
+                      <div className="p-3 rounded-xl bg-muted/30 border border-border/60 text-[11px] font-mono space-y-1">
+                        <span className="text-foreground block font-medium">Standard Princess Length:</span>
+                        <span className="text-muted-foreground block">18" (45 cm) is the classic collarbone length that fits over 90% of necklines.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-mono uppercase tracking-wider font-medium text-foreground">
+                      Standard Necklace &amp; Chain Length Chart
+                    </span>
+                    <span className="text-[11px] font-mono text-muted-foreground">
+                      Inches &amp; Centimeters
+                    </span>
+                  </div>
+                  <div className="overflow-x-auto rounded-xl border border-border/80">
+                    <table className="w-full text-left text-xs font-mono">
+                      <thead className="bg-muted/40 border-b border-border/80 text-[10px] uppercase tracking-wider text-muted-foreground">
+                        <tr>
+                          <th className="py-2.5 px-3">Length</th>
+                          <th className="py-2.5 px-3">Metric (cm)</th>
+                          <th className="py-2.5 px-3">Resting Position</th>
+                          <th className="py-2.5 px-3">Style Recommendation</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border/60 bg-card">
+                        {NECKLACE_SIZES.map((size) => (
+                          <tr key={size.id} className="hover:bg-muted/30 transition-colors">
+                            <td className="py-2.5 px-3 font-medium text-foreground">{size.label}</td>
+                            <td className="py-2.5 px-3 text-foreground">{size.cm} cm</td>
+                            <td className="py-2.5 px-3 text-muted-foreground">{size.fitTag}</td>
+                            <td className="py-2.5 px-3 text-muted-foreground">
+                              {size.id === '16"' ? 'Choker fit, high necklines' : size.id === '18"' ? 'Universal standard for bridal & daily pendants' : size.id === '20"' ? 'Plunging necklines & statement pendants' : size.id === '22"' ? 'Layering & low necklines' : 'Royal bridal heirloom mala'}
+                            </td>
                           </tr>
                         ))}
                       </tbody>

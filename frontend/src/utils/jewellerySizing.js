@@ -26,6 +26,14 @@ export const BRACELET_SIZES = [
   { id: '8.0"', label: '8.0" (20.3 cm)', inches: 8.0, cm: 20.3, wristFit: '7.25" - 7.5"', fitTag: 'Relaxed' }
 ];
 
+export const NECKLACE_SIZES = [
+  { id: '16"', label: '16" (40 cm)', inches: 16, cm: 40.6, fitTag: 'Choker / Collarbone' },
+  { id: '18"', label: '18" (45 cm)', inches: 18, cm: 45.7, fitTag: 'Princess (Standard)', isDefaultPopular: true },
+  { id: '20"', label: '20" (50 cm)', inches: 20, cm: 50.8, fitTag: 'Matinee' },
+  { id: '22"', label: '22" (55 cm)', inches: 22, cm: 55.9, fitTag: 'Long Matinee' },
+  { id: '24"', label: '24" (60 cm)', inches: 24, cm: 61.0, fitTag: 'Opera / Royal Mala' }
+];
+
 export function getJewellerySizingType(piece) {
   if (!piece) return null;
   const rawCat = (piece.category || '').toLowerCase().trim();
@@ -34,10 +42,12 @@ export function getJewellerySizingType(piece) {
   if (rawCat.includes('ring')) return 'ring';
   if (rawCat.includes('bangle') || rawCat.includes('kara') || rawCat.includes('kada') || rawCat.includes('choori')) return 'bangle';
   if (rawCat.includes('bracelet') || rawCat.includes('cuff')) return 'bracelet';
+  if (rawCat.includes('necklace') || rawCat.includes('choker') || rawCat.includes('chain') || rawCat.includes('mala') || rawCat.includes('guluband')) return 'necklace';
 
   if (rawTitle.includes('ring') || rawTitle.includes('angothi') || rawTitle.includes('chhalla') || rawTitle.includes('solitaire')) return 'ring';
   if (rawTitle.includes('bangle') || rawTitle.includes('kara') || rawTitle.includes('kada') || rawTitle.includes('choori')) return 'bangle';
   if (rawTitle.includes('bracelet') || rawTitle.includes('cuff')) return 'bracelet';
+  if (rawTitle.includes('necklace') || rawTitle.includes('choker') || rawTitle.includes('chain') || rawTitle.includes('mala') || rawTitle.includes('guluband')) return 'necklace';
 
   return null;
 }
@@ -50,6 +60,8 @@ export function getSizingOptions(sizingType) {
       return BANGLE_SIZES;
     case 'bracelet':
       return BRACELET_SIZES;
+    case 'necklace':
+      return NECKLACE_SIZES;
     default:
       return [];
   }
@@ -60,7 +72,7 @@ export function getSizingMeta(sizingType) {
     case 'ring':
       return {
         title: 'Ring Sizing',
-        label: 'Finger Size',
+        label: 'Ring Finger Size',
         unitLabel: 'Inner Diameter (mm)',
         guideTab: 'ring'
       };
@@ -77,6 +89,13 @@ export function getSizingMeta(sizingType) {
         label: 'Wrist Length',
         unitLabel: 'Length (inches & cm)',
         guideTab: 'bracelet'
+      };
+    case 'necklace':
+      return {
+        title: 'Necklace Length',
+        label: 'Necklace / Chain Length',
+        unitLabel: 'Length (inches & cm)',
+        guideTab: 'necklace'
       };
     default:
       return null;

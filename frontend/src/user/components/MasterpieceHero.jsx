@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { MessageCircle, Calendar, ZoomIn, Maximize2, ShieldCheck } from 'lucide-react';
+import { MessageCircle, Calendar, ZoomIn, Maximize2, ShieldCheck, Ruler } from 'lucide-react';
 import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton';
 import { ZoomImage } from '@/components/ui/ZoomImage';
 import { openWhatsAppChat } from '@/utils/whatsapp';
 import { STORE_INFO } from '@/constants/storeInfo';
 import { cn } from '@/lib/utils';
+import { getJewellerySizingType, getSizingMeta } from '@/utils/jewellerySizing';
+import { JewelleryMeasurementGuideModal } from './sizing/JewelleryMeasurementGuideModal';
 
 export function MasterpieceHero({
   piece,
@@ -12,7 +14,10 @@ export function MasterpieceHero({
   onOpenAppointment
 }) {
   const pieceId = piece?._id || piece?.id;
+  const sizingType = getJewellerySizingType(piece);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const [guideTab, setGuideTab] = useState(() => sizingType || 'ring');
 
   useEffect(() => {
     setActiveImageIndex(0);
@@ -121,6 +126,33 @@ export function MasterpieceHero({
             </p>
           </div>
 
+          <div className="flex items-center justify-between p-3 rounded-xl border border-border/70 bg-card/60 hover:bg-muted/30 transition-colors">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="size-7 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 flex items-center justify-center shrink-0">
+                <Ruler className="size-3.5" />
+              </span>
+              <div className="min-w-0">
+                <span className="text-xs font-medium text-foreground block truncate">
+                  {sizingType ? `${getSizingMeta(sizingType)?.title} & Measurement Guide` : 'Jewellery Sizing & Measurement Guide'}
+                </span>
+                <span className="text-[10px] font-mono text-muted-foreground block truncate">
+                  How to measure rings, bangles, bracelets &amp; chains
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setGuideTab(sizingType || 'ring');
+                setIsGuideOpen(true);
+              }}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-border bg-background hover:bg-muted font-mono text-[11px] uppercase tracking-wider text-foreground hover:text-amber-700 transition-colors shrink-0 cursor-pointer shadow-2xs font-semibold"
+            >
+              <span>Size Guide</span>
+            </button>
+          </div>
+
           <div className="space-y-3 pt-2">
             <button
               type="button"
@@ -163,6 +195,12 @@ export function MasterpieceHero({
           </div>
         </div>
       </div>
+
+      <JewelleryMeasurementGuideModal
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+        initialTab={guideTab}
+      />
     </section>
   );
 }

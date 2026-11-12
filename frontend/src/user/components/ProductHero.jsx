@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Star, MessageCircle, Calendar, ZoomIn, Maximize2, ShoppingBag } from 'lucide-react';
+import { Star, MessageCircle, Calendar, ZoomIn, Maximize2, ShoppingBag, Ruler } from 'lucide-react';
 import { SaveToVaultButton } from '@/components/ui/SaveToVaultButton';
 import { ZoomImage } from '@/components/ui/ZoomImage';
 import { getPersonalizedWhatsAppInquiry } from '@/utils/whatsapp';
 import { cn } from '@/lib/utils';
-import { getJewellerySizingType } from '@/utils/jewellerySizing';
+import { getJewellerySizingType, getSizingMeta } from '@/utils/jewellerySizing';
 import { JewellerySizeSelector } from './sizing/JewellerySizeSelector';
 import { JewelleryMeasurementGuideModal } from './sizing/JewelleryMeasurementGuideModal';
 import { formatPKR, getEstimatedPiecePrice } from '@/utils/pricing';
@@ -58,6 +58,11 @@ export function ProductHero({
       selectedSize: selectedSize || undefined
     }
   });
+
+  const handleOpenGuide = (tab) => {
+    setGuideTab(tab || sizingType || 'ring');
+    setIsGuideOpen(true);
+  };
 
   const handleSelectSize = (size) => {
     setSelectedSize(size);
@@ -187,6 +192,7 @@ export function ProductHero({
           {sizingType && (
             <div className="space-y-2">
               <JewellerySizeSelector
+                sizingType={sizingType}
                 piece={piece}
                 selectedSize={selectedSize}
                 onSelectSize={handleSelectSize}
@@ -195,6 +201,30 @@ export function ProductHero({
               />
             </div>
           )}
+
+          <div className="flex items-center justify-between p-3 rounded-xl border border-border/70 bg-card/60 hover:bg-muted/30 transition-colors">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="size-7 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 flex items-center justify-center shrink-0">
+                <Ruler className="size-3.5" />
+              </span>
+              <div className="min-w-0">
+                <span className="text-xs font-medium text-foreground block truncate">
+                  {sizingType ? `${getSizingMeta(sizingType)?.title} & Measurement Guide` : 'Jewellery Sizing & Measurement Guide'}
+                </span>
+                <span className="text-[10px] font-mono text-muted-foreground block truncate">
+                  How to measure rings, bangles, bracelets &amp; chains
+                </span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => handleOpenGuide(sizingType || 'ring')}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-border bg-background hover:bg-muted font-mono text-[11px] uppercase tracking-wider text-foreground hover:text-amber-700 transition-colors shrink-0 cursor-pointer shadow-2xs font-semibold"
+            >
+              <span>Size Guide</span>
+            </button>
+          </div>
 
           <div className="space-y-3 pt-2">
             <button

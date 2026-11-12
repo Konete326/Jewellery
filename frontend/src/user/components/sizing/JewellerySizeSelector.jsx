@@ -1,15 +1,17 @@
 import React from 'react';
 import { Ruler, AlertCircle, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { getSizingOptions, getSizingMeta } from '@/utils/jewellerySizing';
+import { getSizingOptions, getSizingMeta, getJewellerySizingType } from '@/utils/jewellerySizing';
 
 export function JewellerySizeSelector({
-  sizingType,
+  sizingType: explicitType,
+  piece,
   selectedSize,
   onSelectSize,
   onOpenGuide,
   hasError = false
 }) {
+  const sizingType = explicitType || (piece ? getJewellerySizingType(piece) : null);
   const options = getSizingOptions(sizingType);
   const meta = getSizingMeta(sizingType);
 
